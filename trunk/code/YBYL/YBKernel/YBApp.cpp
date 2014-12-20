@@ -72,6 +72,7 @@ BOOL CYBApp::IniEnv()
 	PathAppend(szXar, _T("..\\xar\\")); 
 	if (!::PathFileExists(szXar) || !::PathIsDirectory(szXar) )
 	{
+		MessageBoxA(NULL,"获取界面皮肤路径失败","错误",MB_OK|MB_ICONERROR);
 		return FALSE;
 	}
 	m_strXarPath = szXar;
@@ -112,6 +113,7 @@ void CYBApp::InternalLoadXAR()
 	}
 	else
 	{
+		MessageBoxA(NULL,"无法获取界面皮肤","错误",MB_OK|MB_ICONERROR);
 		TSDEBUG(_T("XLUE_XARExist main) return FALSE"));
 		TerminateProcess(GetCurrentProcess(), (UINT)-30);
 	}
