@@ -1,0 +1,84 @@
+<xlue>
+    <control class="BrowserHeadCtrl">
+        <method_def>
+			
+        </method_def>
+		
+        <event_def>
+		
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="root.layout" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.MainWnd.Head.Bkg</texture>
+					</attr>		
+					<children>
+						<obj id="BrowserHeadCtrl.Caption.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-10-26</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationClose" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Caption.MaxBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-10-26*2</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.MaxBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.MaxBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.MaxBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.MaxBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationMax" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Caption.MinBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-10-26*3</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.MinBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.MinBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.MinBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.MinBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationMin" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.AddressBar" class="AddressBarCtrl">
+							<attr>
+								<left>250</left>
+								<top>30</top>
+								<width>father.width/2</width>
+								<height>36</height>
+							</attr>	
+						</obj>
+						
+						
+					</children>
+				</obj>
+            </children>
+        </objtemplate>
+    </control>
+</xlue>
