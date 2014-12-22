@@ -37,6 +37,32 @@ function SetActiveStyle(self, bActive)
 end
 
 
+function BindBrowserCtrl(self, objWebBrowser)
+	if not objWebBrowser then
+		return
+	end
+
+	local attr = self:GetAttribute()
+	attr.objBrowserCtrl = objWebBrowser
+	
+	attr.objBrowserCtrl:AttachListener("Fire_OnNavigateComplete2", false, 
+		function (objBrowser, strEventName, strURL)
+			SetTabIco(self, strURL)
+		end)
+	
+	attr.objBrowserCtrl:AttachListener("Fire_OnTitleChange", false, 
+		function (objBrowser, strEventName, strTitle)
+			SetTabTitle(self, strTitle)
+		end)
+end
+
+
+function GetBindBrowserCtrl(self, objWebBrowser)
+	local attr = self:GetAttribute()	
+	return attr.objBrowserCtrl
+end
+
+
 -----事件----
 function OnInitControl(self)
 	self:SetSelfID(0)
@@ -77,6 +103,21 @@ end
 function GetActiveState(objRootCtrl)
 	local attr = objRootCtrl:GetAttribute()
 	return attr.bTabActive
+end
+
+
+function SetTabTitle(objRootCtrl, strTitle)
+	if not IsRealString(strTitle) then
+		return
+	end
+
+	local objText = objRootCtrl:GetControlObject("WebTabCtrl.Text")
+	objText:SetText(strTitle)
+end
+
+
+function SetTabIco(objRootCtrl, strURL)
+	
 end
 
 

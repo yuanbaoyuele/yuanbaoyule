@@ -68,6 +68,7 @@ function OnCloseTabItem(self, strFunName, nTabID)
 	CloseTabByID(objRootCtrl, nTabID)
 end
 
+
 ----内部实现---
 function OpenURLInNewTab(objRootCtrl, strURL)
 	local nNewTabID = GetCurMaxTabID(objRootCtrl) + 1
@@ -82,6 +83,8 @@ function OpenURLInNewTab(objRootCtrl, strURL)
 	end
 	
 	objWebBrower:Navigate(strURL)
+	objNewTab:BindBrowserCtrl(objWebBrower)
+	
 	return nNewTabID
 end
 
@@ -113,7 +116,7 @@ function CreateNewTab(objRootCtrl, nNewID)
 end
 
 
---用相同的ID标记 tabctrl和与其对应的browserctrl
+
 function CreateNewBrowser(objRootCtrl, nNewID)
 	local objFather = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
 	
@@ -191,11 +194,12 @@ function ShowTabAndBrowser(objRootCtrl, nCtrlID, bShow)
 	tFunHelper.TipLog("[ShowTabAndBrowser] nCtrlID:" .. tostring(nCtrlID) .. " bShow:"..tostring(bShow))
 
 	local objTab = GetTabCtrlByID(objRootCtrl, nCtrlID)
-	if objTab then
-		objTab:SetActiveStyle(bShow)
+	if not objTab then
+		return
 	end
 	
-	local objBrowser = GetBrowserCtrlByID(nCtrlID)	
+	objTab:SetActiveStyle(bShow)
+	local objBrowser = objTab:GetBindBrowserCtrl()
 	if objBrowser then
 		objBrowser:SetVisible(bShow)
 		objBrowser:SetChildrenVisible(bShow)
@@ -301,15 +305,16 @@ end
 
 function DestroyTabAndBrowByID(objRootCtrl, nID)
 	local objTabCtrl = GetTabCtrlByID(objRootCtrl, nID)
-	local objTabFather = objRootCtrl:GetControlObject("TabContainerCtrl.Container")
-	if objTabCtrl and objTabFather then
-		objTabFather:RemoveChild(objTabCtrl)
-	end
-	
-	local objBrowserCtrl = GetBrowserCtrlByID(nID)
+		
+	local objBrowserCtrl = objTabCtrl:GetBindBrowserCtrl()
 	local objBrowserFather = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
 	if objBrowserCtrl and objBrowserFather then
 		objBrowserFather:RemoveChild(objBrowserCtrl)
+	end
+	
+	local objTabFather = objRootCtrl:GetControlObject("TabContainerCtrl.Container")
+	if objTabCtrl and objTabFather then
+		objTabFather:RemoveChild(objTabCtrl)
 	end
 end
 
@@ -318,13 +323,6 @@ function GetTabCtrlByID(objRootCtrl, nTabID)
 	local strTabKey = GetTabCtrlKey(nTabID)
 	local objContainer = objRootCtrl:GetControlObject("TabContainerCtrl.Container")
 	return objContainer:GetObject(strTabKey)
-end
-
-
-function GetBrowserCtrlByID(nID)
-	local strBrowserKey = GetWebBrowserCtrlKey(nID)
-	local objContainer = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
-	return objContainer:GetObject(strBrowserKey)
 end
 
 

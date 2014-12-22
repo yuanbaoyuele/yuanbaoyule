@@ -35,7 +35,9 @@ function Navigate( self, url )
 												end
 												return true
 											 end)
-	browser:AttachListener( "OnNavigateComplete2", false, function( self, URL )
+	browser:AttachListener( "OnNavigateComplete2", false, function( obj, URL )
+													FunctionObj.TipLog("WebBrowserctrl: OnNavigateComplete2 " .. URL)
+													self:FireExtEvent( "Fire_OnNavigateComplete2", URL)
 													local error_ = false
 													for i = 1, #attr.ErrorUrls do
 														if attr.ErrorUrls[ i ] == URL then
@@ -88,8 +90,17 @@ function Navigate( self, url )
 										end
 									end
 								end
-						   end, 500 )
+						   end, 500 )  
+						   
+	browser:AttachListener( "OnTitleChange", false, 
+		function(obj, title)
+			FunctionObj.TipLog("WebBrowserctrl: OnTitleChange " .. title)
+			attr.Title = title 
+			self:FireExtEvent("Fire_OnTitleChange", title)
+			return true
+		end)			   
 end
+
 
 function OnDestroy( self )
 	local attr = self:GetAttribute()
