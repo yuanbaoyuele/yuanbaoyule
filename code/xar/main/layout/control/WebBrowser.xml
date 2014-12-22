@@ -12,6 +12,16 @@
 					<bool/>
 				</param>
 			</OnCommandStateChange>
+			<Fire_OnNavigateComplete2>
+				<param>
+					<string/>
+				</param>
+			</Fire_OnNavigateComplete2>
+			<Fire_OnTitleChange>
+				<param>
+					<string/>
+				</param>
+			</Fire_OnTitleChange>
         </event_def>
         <objtemplate>
             <children>

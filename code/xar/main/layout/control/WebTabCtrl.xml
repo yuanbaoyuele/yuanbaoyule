@@ -4,12 +4,15 @@
 			<attr name="bTabActive" type="bool" />
 			<attr name="bTabID" type="int" />
 			<attr name="DragState" type="string" />
+			<attr name="objBrowserCtrl"  />
 		</attr_def>		
 		<method_def>
 			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
 			<SetActiveStyle file="WebTabCtrl.xml.lua" func="SetActiveStyle"/>
 			<SetSelfID file="WebTabCtrl.xml.lua" func="SetSelfID"/>
 			<GetSelfID file="WebTabCtrl.xml.lua" func="GetSelfID"/>
+			<BindBrowserCtrl file="WebTabCtrl.xml.lua" func="BindBrowserCtrl"/>
+			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
 		</method_def>		
 		
 		<event_def>
@@ -63,13 +66,14 @@
 
 				<obj id="WebTabCtrl.Text" class="TextObject">
 					<attr>
-						<left>40</left>
+						<left>30</left>
 						<top>0</top>
-						<width>father.width-9-10</width>
+						<width>father.width-30-9-10</width>
 						<height>father.height</height>
 						<valign>center</valign>
 						<font>font.tab.normal</font>
 						<textcolor>color.tab.normal</textcolor>
+						<endellipsis>1</endellipsis>
 					</attr>
 				</obj>   	
 
