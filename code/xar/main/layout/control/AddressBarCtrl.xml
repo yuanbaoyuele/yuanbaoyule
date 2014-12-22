@@ -1,0 +1,97 @@
+<xlue>
+	<control class="AddressBarCtrl">
+		<attr_def>
+		</attr_def>		
+		<method_def>
+		</method_def>		
+		
+		<objtemplate>
+			<children>
+				<obj id="root" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+					<children>		
+						<obj id="AddressBarCtrl.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<texture>YBYL.AddressBar.UrlSearch.Bkg.Normal</texture>
+							</attr>						
+							<children>	
+								<!--url栏开头的网页图片-->
+								<obj id="AddressBarCtrl.Image" class="ImageObject">
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>5</width>
+										<height>father.height</height>
+									</attr>
+								</obj>
+							
+								<obj id="AddressBarCtrl.UrlEdit" class="EditObject">
+									<attr>
+										<left>25</left>
+										<top>10</top>
+										<width>father.width-80</width>
+										<height>father.height-20</height>
+										<transparent>1</transparent>
+										<textcolor>system.white</textcolor>
+										<autourldetect>0</autourldetect>
+									</attr>
+									<eventlist>
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnKeyDown" file="AddressBarCtrl.xml.lua" func="OnUrlEditKeyDown" />
+									</eventlist>
+								</obj>
+
+								<obj id="AddressBarCtrl.Collect" class="TextureObject">
+									<attr>
+										<left>father.width-50</left>
+										<top>8</top>
+										<width>19</width>
+										<height>19</height>
+										<texture>YBYL.AddressBar.Collect.Normal</texture>
+									</attr>
+									<eventlist>
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="OnMouseEnterCllct" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="OnMouseLeaveCllct" />
+										<event name="OnLButtonUp" file="AddressBarCtrl.xml.lua" func="OOnLButtonUpCllct" />
+									</eventlist>
+								</obj>
+								
+								<obj id="AddressBarCtrl.DropArrow" class="TipAddin.Button">
+									<attr>
+										<left>father.width-24</left>
+										<top>16</top>
+										<width>7</width>
+										<height>4</height>
+										<NormalBkgID>YBYL.AddressBarCtrl.DropArrow.Normal</NormalBkgID>
+										<DownBkgID>YBYL.AddressBarCtrl.DropArrow.Down</DownBkgID>
+										<HoverBkgID>YBYL.AddressBarCtrl.DropArrow.Hover</HoverBkgID>
+										<DisableBkgID>YBYL.AddressBarCtrl.DropArrow.Disable</DisableBkgID>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="AddressBarCtrl.xml.lua" func="OnClickDropArrow" />
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+									</eventlist>
+								</obj>
+							</children>
+							
+							<eventlist>
+								<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="OnMouseEnterBkg" />
+								<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="OnMouseLeaveBkg" />
+							</eventlist>
+						</obj> 
+					</children>
+				</obj>   					
+			</children>
+		</objtemplate>
+	</control>
+</xlue>

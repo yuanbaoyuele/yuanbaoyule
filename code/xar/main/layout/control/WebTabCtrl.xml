@@ -1,0 +1,112 @@
+<xlue>
+	<control class="WebTabCtrl">
+		<attr_def>
+			<attr name="bTabActive" type="bool" />
+			<attr name="bTabID" type="int" />
+			<attr name="DragState" type="string" />
+		</attr_def>		
+		<method_def>
+			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
+			<SetActiveStyle file="WebTabCtrl.xml.lua" func="SetActiveStyle"/>
+			<SetSelfID file="WebTabCtrl.xml.lua" func="SetSelfID"/>
+			<GetSelfID file="WebTabCtrl.xml.lua" func="GetSelfID"/>
+		</method_def>		
+		
+		<event_def>
+			<OnClickTabItem>
+				<param>
+					<int/>
+				</param>
+			</OnClickTabItem>
+			<OnCloseTabItem>
+				<param>
+					<int/>
+				</param>
+			</OnCloseTabItem>
+			<OnDrag>
+				<param>
+					<string/>
+					<int/>
+					<int/>
+				</param>
+			</OnDrag>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="WebTabCtrl.Active.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+				</obj>  
+				
+				<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+				</obj>  
+				
+				<obj id="WebTabCtrl.HeadImg" class="ImageObject">
+					<attr>
+						<left>15</left>
+						<top>0</top>
+						<width>15</width>
+						<height>father.height</height>
+					</attr>
+				</obj>   	
+
+				<obj id="WebTabCtrl.Text" class="TextObject">
+					<attr>
+						<left>40</left>
+						<top>0</top>
+						<width>father.width-9-10</width>
+						<height>father.height</height>
+						<valign>center</valign>
+						<font>font.tab.normal</font>
+						<textcolor>color.tab.normal</textcolor>
+					</attr>
+				</obj>   	
+
+				<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-9-10</left>
+						<top>(father.height-9)/2</top>
+						<width>9</width>
+						<height>9</height>
+						<NormalBkgID>YBYL.Tab.CloseBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Tab.CloseBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.Tab.CloseBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Tab.CloseBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="WebTabCtrl.xml.lua" func="OnClickCloseTab" />
+					</eventlist>
+				</obj>
+				
+				<!--分割线-->
+				<obj id="WebTabCtrl.Split" class="TextureObject">
+					<attr>
+						<left>father.width-1</left>
+						<top>father.height-25</top>
+						<width>1</width>
+						<height>25</height>
+						<texture>YBYL.Tab.Split</texture>
+					</attr>
+				</obj>   
+				
+			</children>
+			<eventlist>
+				<event name="OnLButtonUp" file="WebTabCtrl.xml.lua" func="OnClickTab" />
+				<event name="OnMouseEnter" file="WebTabCtrl.xml.lua" func="OnMouseEnterTab" />
+				<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="OnMouseLeaveTab" />
+				<event name="OnInitControl" file="WebTabCtrl.xml.lua" func="OnInitControl" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

@@ -1,0 +1,16 @@
+<XLUE>
+	<resource>
+		<color id="system.black" red="0" green="0" blue="0" alpha="255" />
+		<color id="system.gray" red="204" green="211" blue="214" alpha="255"/>
+		<color id="system.blue" red="0" green="0" blue="255" alpha="255" />
+		<color id="system.white" red="255" green="255" blue="255" alpha="255" />
+		<color id="system.red" red="255" green="0" blue="0" alpha="255" />
+			
+		<color id="2A2825" value="#2A2825" />
+		
+		
+		<color id="color.tab.normal" red="204" green="211" blue="214" alpha="255" />
+		<color id="color.tab.hover" red="255" green="255" blue="255" alpha="255" />
+			
+	</resource>
+</XLUE>
