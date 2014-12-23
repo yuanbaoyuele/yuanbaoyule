@@ -9,6 +9,31 @@ function SetTabText(self, strText)
 	end
 end
 
+function GetTabText(self)
+	local objText = self:GetControlObject("WebTabCtrl.Text")
+	return objText
+end
+
+
+function GetLocalURL(self)
+	local objWebBrowser = self:GetBindBrowserCtrl()
+	if objWebBrowser then
+		local strURL = objWebBrowser:GetLocationURL()
+		if IsRealString(strURL) then
+			return strURL
+		end
+	end
+	
+	local attr = self:GetAttribute()
+	return attr.strInputURL   
+end
+
+--用户输入的url
+function SaveInputURL(self, strURL)
+	local attr = self:GetAttribute()
+	attr.strInputURL = strURL
+end
+
 
 function SetSelfID(self, nID)
 	local attr = self:GetAttribute()
@@ -25,6 +50,7 @@ function SetActiveStyle(self, bActive)
 	local objActvieBkg = self:GetControlObject("WebTabCtrl.Active.Bkg")
 	
 	if bActive then
+		FocusOnBrowser(self)
 		objActvieBkg:SetTextureID("YBYL.Tab.Active")
 		self:SetCursorID("IDC_ARROW")
 	else
@@ -33,7 +59,7 @@ function SetActiveStyle(self, bActive)
 	end
 		
 	ShowMouseEnterBkg(self, false)
-	SetActiveState(self, bActive)
+	SetActiveState(self, bActive)	
 end
 
 
@@ -47,13 +73,22 @@ function BindBrowserCtrl(self, objWebBrowser)
 	
 	attr.objBrowserCtrl:AttachListener("Fire_OnNavigateComplete2", false, 
 		function (objBrowser, strEventName, strURL)
-			SetTabIco(self, strURL)
+			SetAddressBarText(self, strURL)
+			DownloadTabIco(self, strURL)
 		end)
 	
 	attr.objBrowserCtrl:AttachListener("Fire_OnTitleChange", false, 
 		function (objBrowser, strEventName, strTitle)
 			SetTabTitle(self, strTitle)
 		end)
+		
+	attr.objBrowserCtrl:AttachListener("Fire_OnNewWindow3", false, 
+		function (objBrowser, strEventName, nFlags, strUrlContext, strUrl)
+			if IsRealString(strUrl)	then
+				tFunHelper.OpenURL(strUrl)
+			end
+		end)	
+	
 end
 
 
@@ -95,10 +130,19 @@ function OnClickCloseTab(self)
 end
 
 ------
+function FocusOnBrowser(objRootCtrl)
+	local objBrowser = objRootCtrl:GetBindBrowserCtrl()
+	if objBrowser then
+		objBrowser:SetRealFocus(true)
+	end
+end
+
+
 function SetActiveState(objRootCtrl, bActive)
 	local attr = objRootCtrl:GetAttribute()
 	attr.bTabActive = bActive
 end
+
 
 function GetActiveState(objRootCtrl)
 	local attr = objRootCtrl:GetAttribute()
@@ -116,8 +160,78 @@ function SetTabTitle(objRootCtrl, strTitle)
 end
 
 
-function SetTabIco(objRootCtrl, strURL)
+function SetTabIco(objRootCtrl, strIcoPath)
+	if not tipUtil:QueryFileExists(tostring(strIcoPath)) then
+		return
+	end
 	
+	local xlgraphic = XLGetObject("Xunlei.XLGraphic.Factory.Object")
+	local objBitmap = xlgraphic:CreateBitmap(strIcoPath,"ARGB32")
+	
+	local objImage = objRootCtrl:GetControlObject("WebTabCtrl.HeadImg")
+	if objImage then
+		objImage:SetBitmap(objBitmap)
+	end		
+end
+
+
+function SetAddressBarText(objRootCtrl, strURL)
+	if not IsRealString(strURL) then
+		return
+	end
+
+	local bActive = GetActiveState(objRootCtrl)
+	if not bActive then
+		return
+	end
+
+	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objAddressBar = objHeadCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")
+	if not objAddressBar then
+		return
+	end
+	
+	objAddressBar:SetText(strURL)
+end
+
+
+function DownloadTabIco(objRootCtrl, strURL)
+	if not IsRealString(strURL) then
+		return 
+	end
+	
+	local strLocalURL = objRootCtrl:GetLocalURL()
+	if strURL ~= strLocalURL then
+		return
+	end
+	
+	local strDomain = string.match(strURL, "(http://[^/]+)")		
+	if not IsRealString(strDomain) then	
+		return
+	end
+	
+	local strIconURL = strDomain .. "/favicon.ico"	
+	local strTempDir = tFunHelper.GetProgramTempDir("webbrowser\\ico")
+	local strIcoID = tipUtil:GetStringMD5(strIconURL)
+	local strIcoSuffix = tostring(strIcoID)..".ico" 
+	local strSavePath = tipUtil:PathCombine(strTempDir, strIcoSuffix)
+	
+	if tipUtil:QueryFileExists(strSavePath) then
+		SetTabIco(objRootCtrl, strSavePath)
+	else
+		tFunHelper.NewAsynGetHttpFile(strIconURL, strSavePath, false, 
+		function(bRet, strIcoPath)
+			tFunHelper.TipLog("[DownloadTabIco] strURL=" .. strIconURL .. " saveIcoPath=",strSavePath)
+			if bRet == 0 then
+				SetTabIco(objRootCtrl, strIcoPath)
+			end
+		
+		end, 60*1000)
+	end			
 end
 
 

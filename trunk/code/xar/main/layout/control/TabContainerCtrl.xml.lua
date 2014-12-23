@@ -83,6 +83,7 @@ function OpenURLInNewTab(objRootCtrl, strURL)
 	end
 	
 	objWebBrower:Navigate(strURL)
+	objNewTab:SaveInputURL(strURL)
 	objNewTab:BindBrowserCtrl(objWebBrower)
 	
 	return nNewTabID
@@ -177,6 +178,13 @@ function SetActiveTab(objRootCtrl, nNewActiveID)
 	tFunHelper.TipLog("[SetActiveTab] nNewActiveID:" .. tostring(nNewActiveID))
 
 	local objNewActiveTab = GetTabCtrlByID(objRootCtrl, nNewActiveID)
+	if nNewActiveID == 0 then
+		objRootCtrl:FireExtEvent("OnActiveTabChange", 0)
+		return
+	else
+		objRootCtrl:FireExtEvent("OnActiveTabChange", objNewActiveTab)
+	end
+	
 	if not objNewActiveTab then
 		return
 	end

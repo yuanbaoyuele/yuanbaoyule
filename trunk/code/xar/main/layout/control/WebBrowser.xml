@@ -3,6 +3,8 @@
         <method_def>
 			<Navigate file="WebBrowser.xml.lua" function="Navigate" />
 			<SetExternal file="WebBrowser.xml.lua" function="SetExternal" />
+			<GetLocationURL file="WebBrowser.xml.lua" function="GetLocationURL" />
+			<SetRealFocus file="WebBrowser.xml.lua" function="SetRealFocus" />
         </method_def>
 		
         <event_def>
@@ -22,6 +24,13 @@
 					<string/>
 				</param>
 			</Fire_OnTitleChange>
+			<Fire_OnNewWindow3>
+				<param>
+					<int/>
+					<string/>
+					<string/>
+				</param>
+			</Fire_OnNewWindow3>
         </event_def>
         <objtemplate>
             <children>

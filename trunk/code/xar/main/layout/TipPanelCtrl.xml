@@ -67,6 +67,9 @@
 												<width>father.width-10</width>
 												<height>31</height>
 											</attr>		
+											<eventlist>
+												<event name="OnActiveTabChange" file="TipPanelCtrl.xml.lua" func="OnActiveTabChange" />
+											</eventlist>
 										</obj>
 										<obj id="MainPanel.WebContainer" class="LayoutObject">
 											<attr>

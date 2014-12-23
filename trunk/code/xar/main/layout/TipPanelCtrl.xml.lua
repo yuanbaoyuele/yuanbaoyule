@@ -20,6 +20,24 @@ function SetTipData(self, infoTab)
 end
 
 
+
+--tabcontainer事件
+function OnActiveTabChange(self, strEvntName,objActiveTab)
+	if not objActiveTab then
+		return
+	end
+
+	local objRootCtrl = self:GetOwnerControl()
+	local objHeadCtrl = objRootCtrl:GetControlObject("MainPanel.Head")
+	if not objHeadCtrl then
+		tFunHelper.TipLog("[OnActiveTabChange] get objHeadCtrl failed")
+		return
+	end
+	
+	objHeadCtrl:ProcessTabChange(objActiveTab)
+end
+
+
 function IsNilString(AString)
 	if AString == nil or AString == "" then
 		return true

@@ -98,7 +98,31 @@ function Navigate( self, url )
 			attr.Title = title 
 			self:FireExtEvent("Fire_OnTitleChange", title)
 			return true
-		end)			   
+		end)	
+
+	browser:AttachListener( "OnNewWindow3", false, 
+		function(obj, flags, urlContext, url)
+			self:FireExtEvent("Fire_OnNewWindow3", flags, urlContext, url)
+			return 0, nil, true, true
+		end)
+end
+
+
+function GetLocationURL(self)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		return browser:GetLocationURL()
+	end
+	
+	return ""
+end
+
+
+function SetRealFocus(self, bFocus)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		browser:SetRealFocus(bFocus)
+	end
 end
 
 

@@ -6,6 +6,8 @@
 		<texture id="YBYL.Tab.Active" image="bitmap\YBYL.Tab.Active.png" />
 		<texture id="YBYL.Tab.MouseEnter" image="bitmap\YBYL.Tab.MouseEnter.png" />
 		<texture id="YBYL.Tab.Split" image="bitmap\YBYL.Tab.Split.png" />
+		<texture id="YBYL.Head.Logo.Default" image="bitmap\YBYL.Head.Logo.Default.png" />
+		<texture id="YBYL.Head.RightBkg" image="bitmap\YBYL.Head.RightBkg.png" />
 		
 		<imagelist id="YBYL.Caption.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.CloseBtn.png"/>
 			<texture id="YBYL.Caption.CloseBtn.Normal" imagelist="YBYL.Caption.CloseBtn" index="1" />
@@ -69,6 +71,36 @@
 			<texture id="YBYL.AddressBar.Collect.Normal" imagelist="YBYL.AddressBar.Collect" index="1" />
 			<texture id="YBYL.AddressBar.Collect.Hover" imagelist="YBYL.AddressBar.Collect" index="2" />
 		
+		<imagelist id="YBYL.Head.GoBack" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoBack.png"/>
+			<texture id="YBYL.Head.GoBack.Normal" imagelist="YBYL.Head.GoBack" index="1" />
+			<texture id="YBYL.Head.GoBack.Hover"  imagelist="YBYL.Head.GoBack" index="2" />
+			<texture id="YBYL.Head.GoBack.Down"   imagelist="YBYL.Head.GoBack" index="3" />
+			<texture id="YBYL.Head.GoBack.Disable"   imagelist="YBYL.Head.GoBack" index="4" />
 			
+		<imagelist id="YBYL.Head.GoForward" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoForward.png"/>
+			<texture id="YBYL.Head.GoForward.Normal" imagelist="YBYL.Head.GoForward" index="1" />
+			<texture id="YBYL.Head.GoForward.Hover"  imagelist="YBYL.Head.GoForward" index="2" />
+			<texture id="YBYL.Head.GoForward.Down"   imagelist="YBYL.Head.GoForward" index="3" />
+			<texture id="YBYL.Head.GoForward.Disable"   imagelist="YBYL.Head.GoForward" index="4" />	
+		
+		<imagelist id="YBYL.Head.Refresh" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Refresh.png"/>
+			<texture id="YBYL.Head.Refresh.Normal" imagelist="YBYL.Head.Refresh" index="1" />
+			<texture id="YBYL.Head.Refresh.Hover"  imagelist="YBYL.Head.Refresh" index="2" />
+			<texture id="YBYL.Head.Refresh.Down"   imagelist="YBYL.Head.Refresh" index="3" />
+			<texture id="YBYL.Head.Refresh.Disable"   imagelist="YBYL.Head.Refresh" index="4" />			
+	
+		<imagelist id="YBYL.Head.Stop" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Stop.png"/>
+			<texture id="YBYL.Head.Stop.Normal" imagelist="YBYL.Head.Stop" index="1" />
+			<texture id="YBYL.Head.Stop.Hover"  imagelist="YBYL.Head.Stop" index="2" />
+			<texture id="YBYL.Head.Stop.Down"   imagelist="YBYL.Head.Stop" index="3" />
+			<texture id="YBYL.Head.Stop.Disable"   imagelist="YBYL.Head.Stop" index="4" />	
+			
+		<imagelist id="YBYL.Head.Logo.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Logo.Bkg.png"/>
+			<texture id="YBYL.Head.Logo.Bkg.Normal" imagelist="YBYL.Head.Logo.Bkg" index="1" />
+			<texture id="YBYL.Head.Logo.Bkg.Hover"  imagelist="YBYL.Head.Logo.Bkg" index="2" />
+			<texture id="YBYL.Head.Logo.Bkg.Down"   imagelist="YBYL.Head.Logo.Bkg" index="3" />
+			<texture id="YBYL.Head.Logo.Bkg.Disable"   imagelist="YBYL.Head.Logo.Bkg" index="4" />		
+			
+		
 	</resource>
 </XLUE>
