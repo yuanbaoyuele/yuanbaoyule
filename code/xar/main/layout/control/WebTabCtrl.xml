@@ -5,6 +5,7 @@
 			<attr name="bTabID" type="int" />
 			<attr name="DragState" type="string" />
 			<attr name="objBrowserCtrl"  />
+			<attr name="strInputURL"  />
 		</attr_def>		
 		<method_def>
 			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
@@ -13,6 +14,8 @@
 			<GetSelfID file="WebTabCtrl.xml.lua" func="GetSelfID"/>
 			<BindBrowserCtrl file="WebTabCtrl.xml.lua" func="BindBrowserCtrl"/>
 			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
+			<GetLocalURL file="WebTabCtrl.xml.lua" func="GetLocalURL"/>
+			<SaveInputURL file="WebTabCtrl.xml.lua" func="SaveInputURL"/>
 		</method_def>		
 		
 		<event_def>
@@ -58,17 +61,19 @@
 				<obj id="WebTabCtrl.HeadImg" class="ImageObject">
 					<attr>
 						<left>15</left>
-						<top>0</top>
-						<width>15</width>
-						<height>father.height</height>
+						<top>(father.height-16)/2</top>
+						<width>16</width>
+						<height>16</height>
+						<drawmode>1</drawmode>
+						<antialias>2</antialias>
 					</attr>
 				</obj>   	
 
 				<obj id="WebTabCtrl.Text" class="TextObject">
 					<attr>
-						<left>30</left>
+						<left>40</left>
 						<top>0</top>
-						<width>father.width-30-9-10</width>
+						<width>father.width-40-35</width>
 						<height>father.height</height>
 						<valign>center</valign>
 						<font>font.tab.normal</font>
@@ -79,7 +84,7 @@
 
 				<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
 					<attr>
-						<left>father.width-9-10</left>
+						<left>father.width-19</left>
 						<top>(father.height-9)/2</top>
 						<width>9</width>
 						<height>9</height>
@@ -103,6 +108,7 @@
 						<texture>YBYL.Tab.Split</texture>
 					</attr>
 				</obj>   
+				
 				
 			</children>
 			<eventlist>

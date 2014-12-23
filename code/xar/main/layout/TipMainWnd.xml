@@ -59,7 +59,7 @@
             <active>0</active>
             <maxbox>0</maxbox>
             <minbox>1</minbox>
-            <minwidth>50</minwidth>
+            <minwidth>250</minwidth>
             <minheight>50</minheight>
 			<sysmenu>0</sysmenu>
 			<appwindow>1</appwindow>

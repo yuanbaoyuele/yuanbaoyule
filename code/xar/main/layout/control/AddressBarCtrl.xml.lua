@@ -1,8 +1,29 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 
------事件----
 
+---方法---
+function SetText(self, strURL)
+	local objUrlEdit = self:GetControlObject("AddressBarCtrl.UrlEdit")
+	if objUrlEdit then
+		objUrlEdit:SetText(strURL)
+	end
+end
+
+
+function ProcessTabChange(self, objTabCtrl)
+	if tonumber(objTabCtrl) ~= nil and objTabCtrl == 0 then
+		self:SetText("")
+		
+	elseif objTabCtrl then
+		local strURL = objTabCtrl:GetLocalURL()
+		if IsRealString(strURL) then
+			self:SetText(strURL)
+		end
+	end
+end
+
+-----事件----
 --背景框
 function OnMouseEnterBkg(self)
 	self:SetTextureID("YBYL.AddressBar.UrlSearch.Bkg.Hover")
@@ -22,7 +43,7 @@ function OnMouseLeaveCllct(self)
 	self:SetTextureID("YBYL.AddressBar.Collect.Normal")
 end
 
-function OOnLButtonUpCllct(self)
+function OnLButtonUpCllct(self)
 	
 end
 

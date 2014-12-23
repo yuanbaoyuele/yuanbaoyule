@@ -8,7 +8,16 @@
 		</attr_def>		
 		<method_def>
 			<OpenURL file="TabContainerCtrl.xml.lua" func="OpenURL"/>
-		</method_def>		
+		</method_def>	
+
+		<event_def>
+			<OnActiveTabChange>
+				<param>
+					<userdata/>
+				</param>
+			</OnActiveTabChange>
+		</event_def>
+		
 		
 		<objtemplate>
 			<children>

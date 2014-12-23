@@ -1,6 +1,21 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 
+
+---方法---
+function ProcessTabChange(self, objTabCtrl)
+	local objAddressBar = self:GetControlObject("BrowserHeadCtrl.AddressBar")
+	if objAddressBar then
+		objAddressBar:ProcessTabChange(objTabCtrl)
+	end
+
+	SetNavgateBtnStyle(self, objTabCtrl)
+end
+
+
+
+
+
 ----事件--
 function OnClickCpationClose(self)
 	tFunHelper.ExitProcess()	
@@ -21,7 +36,19 @@ function OnClickCpationMax(self)
 	end
 end
 
+function OnClickLogo(self)
 
+end
+
+
+
+
+
+--------
+function SetNavgateBtnStyle(objRootCtrl, objTabCtrl)
+
+
+end
 
 ------辅助函数---
 function GetHostWndByUIElem(objUIElem)
@@ -35,7 +62,5 @@ end
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
 end
-
-
 
 

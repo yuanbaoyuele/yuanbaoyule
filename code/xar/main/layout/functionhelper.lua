@@ -82,6 +82,44 @@ function GetMainCtrlChildObj(strObjName)
 end
 
 
+function NewAsynGetHttpFile(strUrl, strSavePath, bDelete, funCallback, nTimeoutInMS)
+	local bHasAlreadyCallback = false
+	local timerID = nil
+	
+	tipAsynUtil:AsynGetHttpFile(strUrl, strSavePath, bDelete, 
+		function (nRet, strTargetFilePath, strHeaders)
+			if timerID ~= nil then
+				tipAsynUtil:KillTimer(timerID)
+			end
+			if not bHasAlreadyCallback then
+				bHasAlreadyCallback = true
+				funCallback(nRet, strTargetFilePath, strHeaders)
+			end
+		end)
+	
+	timerID = tipAsynUtil:SetTimer(nTimeoutInMS or 2 * 60 * 1000,
+		function (nTimerId)
+			tipAsynUtil:KillTimer(nTimerId)
+			timerID = nil
+			if not bHasAlreadyCallback then
+				bHasAlreadyCallback = true
+				funCallback(-2)
+			end
+		end)
+end
+
+
+function GetProgramTempDir(strSubDir)
+	local strSysTempDir = tipUtil:GetSystemTempPath()
+	local strProgramTempDir = tipUtil:PathCombine(strSysTempDir, strSubDir)
+	if not tipUtil:QueryFileExists(strProgramTempDir) then
+		tipUtil:CreateDir(strProgramTempDir)
+	end
+	
+	return strProgramTempDir
+end
+
+
 
 function TipLog(strLog)
 	if type(tipUtil.Log) == "function" then
@@ -91,13 +129,16 @@ end
 
 
 local obj = {}
+obj.tipUtil = tipUtil
+obj.tipAsynUtil = tipAsynUtil
 obj.TipLog = TipLog
 obj.OpenURL = OpenURL
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.ExitProcess = ExitProcess
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
-obj.tipUtil = tipUtil
+obj.NewAsynGetHttpFile = NewAsynGetHttpFile
+obj.GetProgramTempDir = GetProgramTempDir
 
 XLSetGlobal("YBYL.FunctionHelper", obj)
 
