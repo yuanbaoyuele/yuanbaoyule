@@ -125,9 +125,18 @@ function OnInitControl(self)
 	self:SetGoForwardState(false)
 end
 
-function OnClickTab(self)
+function OnLButtonDown(self)
+	self:SetCaptureMouse(true)
+end
+
+function OnClickTab(self, x, y)   --LButtonUp
 	local nTabID = self:GetSelfID()
 	self:FireExtEvent("OnClickTabItem", nTabID)
+	
+	local attr = self:GetAttribute()
+	attr.strDragState = "cancel"
+	self:FireExtEvent("OnDrag", attr.strDragState, x, y)
+	self:SetCaptureMouse(false)
 end
 
 function OnMouseEnterTab(self)
@@ -137,6 +146,20 @@ end
 function OnMouseLeaveTab(self)
 	ShowMouseEnterBkg(self, false)
 end
+
+function OnMouseMoveTab(self, x, y, nFlag)
+    local attr = self:GetAttribute()
+
+	if nFlag == 0x0001 then --左键按下
+		if attr.strDragState == nil or attr.strDragState == "cancel" then
+			attr.strDragState = "start"
+		elseif attr.strDragState == "start" then
+			attr.strDragState = "draging"
+		end
+		self:FireExtEvent("OnDrag", attr.strDragState, x, y)
+	end
+end
+
 
 
 --只隐藏控件， 是否销毁交给父控件决定
@@ -273,6 +296,11 @@ function ShowMouseEnterBkg(objRootCtrl, bShow)
 	end
 end
 
+
+
+function RouteToFather(self)
+	self:RouteToFather()
+end
 ------辅助函数---
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""

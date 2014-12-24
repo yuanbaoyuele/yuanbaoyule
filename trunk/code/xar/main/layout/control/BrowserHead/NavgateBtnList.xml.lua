@@ -48,7 +48,7 @@ end
 function GetCurrentBrowser(objRootCtrl)
 	local attr = objRootCtrl:GetAttribute()
 	local objWebTabCtrl = attr.objCurrentWebTab
-	if objWebTabCtrl then
+	if objWebTabCtrl and objWebTabCtrl ~= 0 then
 		return objWebTabCtrl:GetBindBrowserCtrl()
 	end
 end

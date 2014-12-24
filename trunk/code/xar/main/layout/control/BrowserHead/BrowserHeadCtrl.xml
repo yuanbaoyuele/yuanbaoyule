@@ -126,6 +126,26 @@
 							</attr>	
 						</obj>
 						
+						<obj id="BrowserHeadCtrl.FuncBtnList" class="FuncBtnList">
+							<attr>
+								<left>245+father.width/2+5</left>
+								<top>38</top>
+								<width>300</width>
+								<height>38</height>
+							</attr>	
+						</obj>
+						
+						
+						<obj id="BrowserHeadCtrl.RightBkg" class="TextureObject">
+							<attr>
+								<left>father.width-759</left>
+								<top>0</top>
+								<width>759</width>
+								<height>father.height</height>
+								<texture>YBYL.Head.RightBkg</texture>
+							</attr>	
+						</obj>
+						
 					</children>
 				</obj>
             </children>

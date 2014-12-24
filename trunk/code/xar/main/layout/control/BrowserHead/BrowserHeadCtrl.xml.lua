@@ -37,7 +37,9 @@ function OnClickLogo(self)
 end
 
 
+function OnClickAccelerate(self)
 
+end
 
 
 --------
