@@ -24,6 +24,7 @@ private:
 	static XMLib::CriticalSection cs;
 	static std::set<SOCKET> TcpSocketSet;
 	static std::map<SOCKET, LPFN_CONNECTEX> Connect_Ex_Funcs;
+	static std::map<SOCKET, USHORT> SocketToLocalPortMap;
 	static std::map<USHORT, std::pair<u_long, USHORT> > LocalPortToRemoteAddressMap;
 	static bool IsHooked;
 	static bool IsFilterEnable;
