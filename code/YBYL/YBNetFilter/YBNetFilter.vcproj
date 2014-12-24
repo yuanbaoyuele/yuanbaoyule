@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../inc"
-				PreprocessorDefinitions="DETOURS_X86;DETOURS_32BIT"
+				PreprocessorDefinitions="DETOURS_X86;DETOURS_32BIT;YBNETFILTER_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -118,7 +118,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="../../inc"
-				PreprocessorDefinitions="DETOURS_X86;DETOURS_32BIT"
+				PreprocessorDefinitions="DETOURS_X86;DETOURS_32BIT;YBNETFILTER_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -294,6 +294,10 @@
 			</File>
 			<File
 				RelativePath=".\WinsockHooker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\YBNetFilter.h"
 				>
 			</File>
 		</Filter>
