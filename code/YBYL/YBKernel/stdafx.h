@@ -69,6 +69,7 @@
 #include <XLI18N.h>
 #include <XLUE.h>
 #include <XLGraphic.h>
+#include <XLGraphicPlus.h>
 #include <XLLuaRuntime.h>
 
 #include <XLFS.h>

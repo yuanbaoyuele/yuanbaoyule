@@ -17,6 +17,10 @@
 //#include <openssl/evp.h>
 //#pragma comment(lib,"libeay32.lib")
 //#pragma comment(lib,"ssleay32.lib")
+#include <MsHtmcid.h>
+
+#include <mshtml.h> 
+#include <Exdisp.h>
 
 extern CYBApp theApp;
 
@@ -72,6 +76,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 
 	//文件
 	{"GetMD5Value", GetMD5Value},
+	{"GetStringMD5", GetStringMD5},
 	{"GetFileVersionString", GetFileVersionString},
 	{"GetSystemTempPath", GetSystemTempPath},
 	{"GetFileSize", GetFileSize},
@@ -136,8 +141,6 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"EncryptAESToFile", EncryptAESToFile},
 	{"DecryptFileAES", DecryptFileAES},
 
-
-
 	//INI配置文件操作
 	{"ReadINI", ReadINI},
 	{"WriteINI", WriteINI},
@@ -145,8 +148,12 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"ReadSections", ReadSections},
 	{"ReadKeyValueInSection", ReadKeyValueInSection},
 	{"ReadINIInteger", ReadINIInteger},
-
 	
+	//文件对话框操作
+	{"FileDialog", FileDialog},
+	{"BrowserForFile", BrowserForFile},
+	{"IEMenu_SaveAs", IEMenu_SaveAs},
+	{"IEMenu_Zoom", IEMenu_Zoom},
 	{NULL, NULL}
 };
 
@@ -420,6 +427,28 @@ int LuaAPIUtil::GetMD5Value(lua_State* pLuaState)
 			if (GetMd5(wstrPath,pszMD5))
 			{
 
+				std::string utf8MD5;
+				BSTRToLuaString(pszMD5, utf8MD5);
+				lua_pushstring(pLuaState, utf8MD5.c_str());
+			}
+			return 1;
+		}
+	}
+	lua_pushnil(pLuaState);
+	return 1;
+}
+
+int LuaAPIUtil::GetStringMD5(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		const char* utf8str = lua_tostring(pLuaState,2);
+		if (utf8str != NULL)
+		{
+			wchar_t pszMD5[MAX_PATH] = {0};
+			if (GetStringMd5(utf8str,pszMD5))
+			{
 				std::string utf8MD5;
 				BSTRToLuaString(pszMD5, utf8MD5);
 				lua_pushstring(pLuaState, utf8MD5.c_str());
@@ -3316,7 +3345,6 @@ int LuaAPIUtil::PostWndMessageByHandle( lua_State *pLuaState )
 	return 1;
 }
 
-
 int LuaAPIUtil::SendMessageByHwnd( lua_State *pLuaState )
 {
 
@@ -3803,6 +3831,163 @@ int LuaAPIUtil::ReadINIInteger(lua_State* pLuaState)
 		int nRet = GetPrivateProfileInt(bstrAppName.m_str, bstrKeyName.m_str, nDefault, bstrIniPath.m_str);
 		lua_pushinteger(pLuaState, nRet);
 		return 1;
+	}
+	return 0;
+}
+
+
+int LuaAPIUtil::FileDialog(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		BOOL bOpenFileDialog = lua_toboolean(pLuaState, 2);
+		const char* pszFilter = lua_tostring(pLuaState, 3);
+		std::wstring strFilter;
+		CComBSTR bstrFilter;
+		LuaStringToCComBSTR(pszFilter, bstrFilter);
+		strFilter = bstrFilter.m_str;
+		std::replace(strFilter.begin(), strFilter.end(), L'|', L'\0');
+
+		const char* pszDefExt = NULL;
+		CComBSTR bstrDefExt=L"";
+		if (lua_type(pLuaState, 4) == LUA_TSTRING)
+		{
+			pszDefExt = lua_tostring(pLuaState, 4);
+			LuaStringToCComBSTR(pszDefExt, bstrDefExt);
+		}
+		const char* pszFileName = NULL;
+		CComBSTR bstrFileName=L"";
+		if (lua_type(pLuaState, 5) == LUA_TSTRING)
+		{
+			pszFileName = lua_tostring(pLuaState, 5);
+			LuaStringToCComBSTR(pszFileName, bstrFileName);
+		}
+
+		WTL::CFileDialog dlg(bOpenFileDialog, bstrDefExt.m_str, bstrFileName.m_str, OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, strFilter.c_str());
+		INT_PTR idlg = dlg.DoModal();
+		if (IDOK == idlg)
+		{
+			std::string utf8FilePath;
+			BSTRToLuaString(dlg.m_szFileName,utf8FilePath);
+			lua_pushstring(pLuaState, utf8FilePath.c_str());
+			return 1;
+		}
+	}
+	lua_pushnil(pLuaState);
+	return 1;
+}
+
+int LuaAPIUtil::BrowserForFile(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		const char* lpszTitle = lua_tostring(pLuaState,2);
+		CComBSTR bstrTitle=L"";
+		if (lpszTitle != NULL)
+		{
+			LuaStringToCComBSTR(lpszTitle, bstrTitle);
+		}
+		const char* lpszFilter = lua_tostring(pLuaState,3);
+		std::wstring wstrFilter;
+		CComBSTR bstrFilter=L"";
+		if (lpszFilter != NULL)
+		{
+			LuaStringToCComBSTR(lpszFilter, bstrFilter);
+		}	
+		wstrFilter = bstrFilter.m_str;
+		//L"所有文件(*.*)|*.*|"
+		std::string strFilePath;
+		CComBSTR bstrFilePath=L"";
+		//std::wstring wstrFilePath = L"";
+		int nType = -1;
+		nType = lua_type(pLuaState, 4);
+		if(nType != LUA_TNONE && nType != LUA_TNIL)
+		{
+			strFilePath = lua_tostring(pLuaState, 4);
+			LuaStringToCComBSTR(strFilePath.c_str(), bstrFilePath);
+		}
+		std::wstring wstrFilePath = bstrFilePath.m_str;
+		OPENFILENAME ofn;       // 公共对话框结构。
+		wchar_t szFile[MAX_PATH] = {0}; // 保存获取文件名称的缓冲区。        
+		if (wstrFilePath.size() > 0 && wstrFilePath.size() < MAX_PATH)
+		{
+			wcscpy(szFile, wstrFilePath.c_str());
+		}
+		// 初始化选择文件对话框。
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = NULL;
+		ofn.lpstrFile = szFile;
+
+		std::wstring::size_type nPos = 0;
+		while (true)
+		{
+			nPos = wstrFilter.find(_T('|'), nPos);
+			if (nPos == std::wstring::npos)
+			{
+				break;
+			}
+			wstrFilter.replace(nPos, 1, 1, _T('\0'));
+		}
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = wstrFilter.data();
+		ofn.nFilterIndex = 1;
+		ofn.lpstrTitle = bstrTitle.m_str;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+		// 显示打开选择文件对话框
+		BOOL bRet = FALSE;
+		bRet = GetOpenFileName(&ofn);
+		if (bRet)
+		{
+			//显示选择的文件。
+			std::string utf8FilePath;
+			BSTRToLuaString(szFile,utf8FilePath);
+			lua_pushstring(pLuaState, utf8FilePath.c_str());
+			return 1;
+		}
+	}
+	lua_pushnil(pLuaState);
+	return 1;
+}
+
+int LuaAPIUtil::IEMenu_SaveAs(lua_State *pLuaState)
+{
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil)
+	{	
+		IWebBrowser2 **lpWeb2 = (IWebBrowser2**)lua_touserdata(pLuaState, 2);
+		if (lpWeb2)
+		{
+			(*lpWeb2)->ExecWB(OLECMDID_SAVEAS, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
+		}
+		
+	}
+	return 0;
+}
+
+
+int LuaAPIUtil::IEMenu_Zoom(lua_State *pLuaState)
+{
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil)
+	{	
+		IWebBrowser2 **lpWeb2 = (IWebBrowser2**)lua_touserdata(pLuaState, 2);
+		if (lpWeb2)
+		{
+			int nZoom = 100; //100表示100%，也就是原始比例
+			if ( !lua_isnoneornil( pLuaState, 3))
+			{
+				nZoom = (int)lua_tointeger( pLuaState, 3);
+			}
+
+			CComVariant varZoom((int)nZoom);  // nZoom是要设置的缩放比例
+			
+			(*lpWeb2)->ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DODEFAULT, &varZoom, NULL);
+		}
 	}
 	return 0;
 }
