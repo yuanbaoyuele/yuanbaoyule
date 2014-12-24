@@ -96,6 +96,7 @@ public:
 
 	//文件
 	static int GetMD5Value(lua_State* pLuaState);
+	static int GetStringMD5(lua_State* pLuaState);
 	static int GetFileVersionString(lua_State* pLuaState);
 	static int GetSystemTempPath(lua_State* pLuaState);
 	static int GetFileSize(lua_State* pLuaState);
@@ -172,6 +173,14 @@ public:
 	static int ReadKeyValueInSection(lua_State* pLuaState);
 	static int ReadINIInteger(lua_State* pLuaState);
 	
+	//文件对话框操作
+	static int FileDialog(lua_State* pLuaState);
+	//static int FolderDialog(lua_State* pLuaState);
+	static int BrowserForFile(lua_State* pLuaState);
+
+	//IE菜单
+	static int IEMenu_SaveAs(lua_State* pLuaState);
+	static int IEMenu_Zoom(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 };
