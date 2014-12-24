@@ -1,0 +1,48 @@
+<xlue>
+    <control class="WebBrowser">
+        <method_def>
+			<Navigate file="WebBrowser.xml.lua" function="Navigate" />
+			<SetExternal file="WebBrowser.xml.lua" function="SetExternal" />
+			<GetLocationURL file="WebBrowser.xml.lua" function="GetLocationURL" />
+			<SetRealFocus file="WebBrowser.xml.lua" function="SetRealFocus" />
+			<GoBack file="WebBrowser.xml.lua" function="GoBack" />
+			<GoForward file="WebBrowser.xml.lua" function="GoForward" />
+			<Refresh file="WebBrowser.xml.lua" function="Refresh" />
+			<Stop file="WebBrowser.xml.lua" function="Stop" />
+			<GetBusy file="WebBrowser.xml.lua" function="GetBusy" />
+        </method_def>
+		
+        <event_def>
+			<Fire_OnCommandStateChange>
+				<param>
+					<string/>
+					<bool/>
+				</param>
+			</Fire_OnCommandStateChange>
+			<Fire_OnNavigateComplete2>
+				<param>
+					<string/>
+				</param>
+			</Fire_OnNavigateComplete2>
+			<Fire_OnTitleChange>
+				<param>
+					<string/>
+				</param>
+			</Fire_OnTitleChange>
+			<Fire_OnNewWindow3>
+				<param>
+					<int/>
+					<string/>
+					<string/>
+				</param>
+			</Fire_OnNewWindow3>
+        </event_def>
+        <objtemplate>
+            <children>
+            </children>
+			<eventlist>
+				<event name="OnDestroy" file="WebBrowser.xml.lua" function="OnDestroy" />
+			</eventlist>
+        </objtemplate>
+    </control>
+</xlue>

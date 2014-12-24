@@ -8,6 +8,8 @@
 		<texture id="YBYL.Tab.Split" image="bitmap\YBYL.Tab.Split.png" />
 		<texture id="YBYL.Head.Logo.Default" image="bitmap\YBYL.Head.Logo.Default.png" />
 		<texture id="YBYL.Head.RightBkg" image="bitmap\YBYL.Head.RightBkg.png" />
+		<texture id="YBYL.DropMenu.ItemBkg.Normal" type="NineInOne" image="bitmap\YBYL.DropMenu.ItemBkg.Normal.png" />
+		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.DropMenu.ItemBkg.Hover.png" />
 		
 		<imagelist id="YBYL.Caption.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.CloseBtn.png"/>
 			<texture id="YBYL.Caption.CloseBtn.Normal" imagelist="YBYL.Caption.CloseBtn" index="1" />
@@ -71,6 +73,10 @@
 			<texture id="YBYL.AddressBar.Collect.Normal" imagelist="YBYL.AddressBar.Collect" index="1" />
 			<texture id="YBYL.AddressBar.Collect.Hover" imagelist="YBYL.AddressBar.Collect" index="2" />
 		
+		<imagelist id="YBYL.Head.FuncBtn.ImgList" splitter="1" varyblock="1" image="bitmap\YBYL.Head.FuncBtn.ImgList.png"/>
+			<bitmap id="YBYL.Head.FuncBtn.Accelarate.Img" imagelist="YBYL.Head.FuncBtn.ImgList" index="1" />
+			<bitmap id="YBYL.Head.FuncBtn.AdvFilter.Img" imagelist="YBYL.Head.FuncBtn.ImgList" index="2" />
+		
 		<imagelist id="YBYL.Head.GoBack" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoBack.png"/>
 			<texture id="YBYL.Head.GoBack.Normal" imagelist="YBYL.Head.GoBack" index="1" />
 			<texture id="YBYL.Head.GoBack.Hover"  imagelist="YBYL.Head.GoBack" index="2" />
@@ -101,6 +107,11 @@
 			<texture id="YBYL.Head.Logo.Bkg.Down"   imagelist="YBYL.Head.Logo.Bkg" index="3" />
 			<texture id="YBYL.Head.Logo.Bkg.Disable"   imagelist="YBYL.Head.Logo.Bkg" index="4" />		
 			
+		<imagelist id="YBYL.Head.FuncBtn.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.Head.FuncBtn.Bkg.png"/>
+			<texture id="YBYL.Head.FuncBtn.Bkg.Normal" type="ThreeInOneH" imagelist="YBYL.Head.FuncBtn.Bkg" index="1" />
+			<texture id="YBYL.Head.FuncBtn.Bkg.Hover" type="ThreeInOneH" imagelist="YBYL.Head.FuncBtn.Bkg" index="2" />
+			<texture id="YBYL.Head.FuncBtn.Bkg.Down" type="ThreeInOneH"  imagelist="YBYL.Head.FuncBtn.Bkg" index="3" />
+			<texture id="YBYL.Head.FuncBtn.Bkg.Disable" type="ThreeInOneH"  imagelist="YBYL.Head.FuncBtn.Bkg" index="4" />		
 		
 	</resource>
 </XLUE>

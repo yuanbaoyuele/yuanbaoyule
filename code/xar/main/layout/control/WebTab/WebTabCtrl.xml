@@ -8,6 +8,7 @@
 			<attr name="strInputURL"  />
 			<attr name="bGoBackState" type="bool" />
 			<attr name="bGoForwardState" type="bool" />
+			<attr name="strDragState" type="string" />
 		</attr_def>		
 		<method_def>
 			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
@@ -53,6 +54,9 @@
 						<width>father.width</width>
 						<height>father.height</height>
 					</attr>
+					<eventlist>
+						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
+					</eventlist>
 				</obj>  
 				
 				<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
@@ -62,6 +66,9 @@
 						<width>father.width</width>
 						<height>father.height</height>
 					</attr>
+					<eventlist>
+						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
+					</eventlist>
 				</obj>  
 				
 				<obj id="WebTabCtrl.HeadImg" class="ImageObject">
@@ -73,6 +80,9 @@
 						<drawmode>1</drawmode>
 						<antialias>2</antialias>
 					</attr>
+					<eventlist>
+						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
+					</eventlist>
 				</obj>   	
 
 				<obj id="WebTabCtrl.Text" class="TextObject">
@@ -86,6 +96,9 @@
 						<textcolor>color.tab.normal</textcolor>
 						<endellipsis>1</endellipsis>
 					</attr>
+					<eventlist>
+						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
+					</eventlist>
 				</obj>   	
 
 				<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
@@ -115,13 +128,14 @@
 					</attr>
 				</obj>   
 				
-				
 			</children>
 			<eventlist>
 				<event name="OnLButtonUp" file="WebTabCtrl.xml.lua" func="OnClickTab" />
 				<event name="OnMouseEnter" file="WebTabCtrl.xml.lua" func="OnMouseEnterTab" />
+				<event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="OnMouseMoveTab" />
 				<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="OnMouseLeaveTab" />
 				<event name="OnInitControl" file="WebTabCtrl.xml.lua" func="OnInitControl" />
+				<event name="OnLButtonDown" file="WebTabCtrl.xml.lua" func="OnLButtonDown" />
 			</eventlist>
 		</objtemplate>
 	</control>

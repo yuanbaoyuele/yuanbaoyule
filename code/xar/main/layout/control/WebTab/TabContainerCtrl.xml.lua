@@ -69,6 +69,69 @@ function OnCloseTabItem(self, strFunName, nTabID)
 end
 
 
+function OnDragTabItem(self, strFunName, strDragState, nPosX, nPosY)
+	local objTabItemCtrl = self
+	local objFather = self:GetFather()
+	local objRootCtrl = objFather:GetOwnerControl()
+	local attr = objRootCtrl:GetAttribute()
+	if attr == nil then
+		return
+	end
+	
+	local objAddBtn = objRootCtrl:GetControlObject("TabContainerCtrl.AddNewTab")
+	local nTabID = objTabItemCtrl:GetSelfID()
+	local nShowIndex = GetTabShowIndexByID(objRootCtrl, nTabID)
+	if nShowIndex == 0 then
+		return
+	end
+	
+	local nFatherLeft, top, nFatherRight, bottom = objFather:GetObjPos()
+	local nSelfL, nSelfT, nSelfR, nSelfB = objTabItemCtrl:GetObjPos()
+	
+	if strDragState == "start" then
+		attr.DragData = {}
+		attr.DragTabZorder = objTabItemCtrl:GetZorder()
+		attr.DragData["x"] = nSelfL + nPosX
+		objTabItemCtrl:SetZorder(attr.DragTabZorder + 9999)	
+		
+	elseif strDragState == "draging" then
+		local strDirect = ""
+		
+		if tonumber(attr.DragData["x"]) == nil then
+			return
+		end
+	
+		objAddBtn:SetVisible(false)
+		objAddBtn:SetChildrenVisible(false)
+		local diffx = nSelfL + nPosX - attr.DragData["x"]
+		if diffx == 0 then 
+			
+		elseif diffx < 0 then
+			strDirect = "left"		
+			if nSelfL + diffx <= nFatherLeft then
+				diffx = 0
+			end
+		else		
+			strDirect = "right"
+			if nSelfR + diffx >= nFatherRight then
+				diffx = 0
+			end				
+		end
+		
+		objTabItemCtrl:SetObjPos(nSelfL + diffx, nSelfT, nSelfR + diffx, nSelfB)
+		attr.DragData["x"] = nSelfL + nPosX
+		TryChangeDragPos(objRootCtrl, objTabItemCtrl, nShowIndex, strDirect)
+		
+	elseif strDragState == "cancel" then
+		objAddBtn:SetVisible(true)
+		objAddBtn:SetChildrenVisible(true)
+		attr.DragData = {}
+		AdjustTabSize(objRootCtrl)
+		objTabItemCtrl:SetZorder(attr.DragTabZorder)
+	end
+end
+
+
 ----内部实现---
 function OpenURLInNewTab(objRootCtrl, strURL)
 	local nNewTabID = GetCurMaxTabID(objRootCtrl) + 1
@@ -112,6 +175,7 @@ function CreateNewTab(objRootCtrl, nNewID)
 	objTab:SetSelfID(nNewID)
 	objTab:AttachListener("OnClickTabItem", false, OnClickTabItem)
 	objTab:AttachListener("OnCloseTabItem", false, OnCloseTabItem)
+	objTab:AttachListener("OnDrag", false, OnDragTabItem)
 	
 	return objTab
 end
@@ -167,6 +231,7 @@ function AdjustTabSize(objRootCtrl)
 	for nIndex, objTabCtrl in ipairs(tTabShowList) do
 		local nLeft = (nIndex-1)*nTabWidth
 		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
+		objTabCtrl:SetZorder(10)
 	end
 	
 	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan
@@ -310,7 +375,6 @@ function CloseTabByID(objRootCtrl, nTabID)
 end
 
 
-
 function DestroyTabAndBrowByID(objRootCtrl, nID)
 	local objTabCtrl = GetTabCtrlByID(objRootCtrl, nID)
 		
@@ -325,6 +389,63 @@ function DestroyTabAndBrowByID(objRootCtrl, nID)
 		objTabFather:RemoveChild(objTabCtrl)
 	end
 end
+
+
+function TryChangeDragPos(objRootCtrl, objTabItemCtrl, nShowIndex, strDirect)
+	local tTabShowList = GetTabShowList(objRootCtrl)
+	local nSelfL, _, nSelfR = objTabItemCtrl:GetObjPos()
+	
+	if tostring(strDirect) == "left" then
+		local objPreWebCtrl = tTabShowList[nShowIndex-1]
+		if not objPreWebCtrl then
+			return
+		end
+		
+		local nMiddlePos = GetTabMiddlePos(objPreWebCtrl)
+		if nSelfL < nMiddlePos then
+			ChangeTabPos(objRootCtrl, nShowIndex, nShowIndex-1, strDirect)
+		end
+	
+	elseif tostring(strDirect) == "right" then
+		local objRightWebCtrl = tTabShowList[nShowIndex+1]
+		if not objRightWebCtrl then
+			return
+		end
+		
+		local nMiddlePos = GetTabMiddlePos(objRightWebCtrl)
+		if nSelfR > nMiddlePos then
+			ChangeTabPos(objRootCtrl, nShowIndex, nShowIndex+1, strDirect)
+		end
+	
+	end	
+end
+
+
+function GetTabMiddlePos(objWebCtrl)
+	local nSelfL, _, nSelfR = objWebCtrl:GetObjPos() 
+	local nWidth = nSelfR - nSelfL
+	return nSelfL+nWidth/2
+end
+
+
+function ChangeTabPos(objRootCtrl, nActiveIndex, nToMoveIndex, strActiveDrct)
+	local tTabShowList = GetTabShowList(objRootCtrl)
+	local objActiveTab = tTabShowList[nActiveIndex]
+	local objToMoveTab = tTabShowList[nToMoveIndex]
+
+	local nMoveL, nMoveT, nMoveR, nMoveB = objToMoveTab:GetObjPos()  
+	local nWidth = nMoveR - nMoveL
+	
+	if strActiveDrct == "left" then
+		objToMoveTab:SetObjPos(nMoveL+nWidth, nMoveT, nMoveR+nWidth, nMoveB)
+	elseif strActiveDrct == "right" then
+		objToMoveTab:SetObjPos(nMoveL-nWidth, nMoveT, nMoveR-nWidth, nMoveB)
+	end
+	
+	tTabShowList[nActiveIndex] = objToMoveTab
+	tTabShowList[nToMoveIndex] = objActiveTab
+end
+
 
 
 function GetTabCtrlByID(objRootCtrl, nTabID)
@@ -352,7 +473,6 @@ function SetCurMaxTabID(objRootCtrl, nCurMaxTabID)
 	local attr = objRootCtrl:GetAttribute()
 	attr.nCurMaxTabID = nCurMaxTabID
 end
-
 
 
 ------辅助函数---
