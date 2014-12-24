@@ -17,6 +17,7 @@ WinsockHooker::WSAIoctl_FuncType WinsockHooker::Real_WSAIoctl = ::WSAIoctl;
 XMLib::CriticalSection WinsockHooker::cs;
 std::set<SOCKET> WinsockHooker::TcpSocketSet;
 std::map<SOCKET, LPFN_CONNECTEX> WinsockHooker::Connect_Ex_Funcs;
+std::map<SOCKET, USHORT> WinsockHooker::SocketToLocalPortMap;
 std::map<USHORT, std::pair<u_long, USHORT> > WinsockHooker::LocalPortToRemoteAddressMap;
 bool WinsockHooker::IsHooked = false;
 bool WinsockHooker::IsFilterEnable = false;
@@ -106,6 +107,7 @@ int WSAAPI WinsockHooker::Hooked_connect(SOCKET s, const struct sockaddr *name, 
 			proxy_addr.sin_port = htons(proxy_port);
 			{
 				XMLib::CriticalSectionLockGuard lck(cs);
+				SocketToLocalPortMap[s] = local_port;
 				LocalPortToRemoteAddressMap[local_port] = std::make_pair(ntohl(remote_ip), remote_port);
 			}
 			int connect_result = Real_connect(s, reinterpret_cast<const sockaddr*>(&proxy_addr), sizeof(proxy_addr));
@@ -133,6 +135,15 @@ int WSAAPI WinsockHooker::Hooked_closesocket(SOCKET s)
 			TcpSocketSet.erase(socket_iter);
 		}
 
+		std::map<SOCKET, USHORT>::const_iterator s2p_iter = SocketToLocalPortMap.find(s);
+		if(s2p_iter != SocketToLocalPortMap.end()) {
+			USHORT local_port = s2p_iter->second;
+			SocketToLocalPortMap.erase(s2p_iter);
+			std::map<USHORT, std::pair<u_long, USHORT> >::const_iterator s2a_iter = LocalPortToRemoteAddressMap.find(local_port);
+			if(s2a_iter != LocalPortToRemoteAddressMap.end()) {
+				LocalPortToRemoteAddressMap.erase(s2a_iter);
+			}
+		}
 	}
 	return Real_closesocket(s);
 }
@@ -222,6 +233,7 @@ BOOL WSAAPI WinsockHooker::Hooked_ExtendConnectEx(SOCKET s, const struct sockadd
 				proxy_addr.sin_port = htons(proxy_port);
 				{
 					XMLib::CriticalSectionLockGuard lck(cs);
+					SocketToLocalPortMap[s] = local_port;
 					LocalPortToRemoteAddressMap[local_port] = std::make_pair(ntohl(remote_ip), remote_port);
 				}
 				BOOL connect_result = real_connect_ex(s, reinterpret_cast<const sockaddr*>(&proxy_addr), sizeof(proxy_addr), lpSendBuffer, dwSendDataLength, lpdwBytesSent, lpOverlapped);
