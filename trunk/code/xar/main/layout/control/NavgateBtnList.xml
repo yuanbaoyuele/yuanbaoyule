@@ -1,0 +1,89 @@
+<xlue>
+	<control class="NavgateBtnList">
+		<attr_def>
+			<attr name="objCurrentWebTab" type="userdata" />
+			<attr name="hEvntListener" type="userdata" />
+		</attr_def>		
+		<method_def>
+			<SetCurrentWebTab file="NavgateBtnList.xml.lua" func="SetCurrentWebTab"/>
+		</method_def>		
+		
+		<event_def>
+		
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="NavgateBtnList.GobackBtn" class="TipAddin.Button">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>30</width>
+						<height>30</height>
+						<NormalBkgID>YBYL.Head.GoBack.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.GoBack.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.GoBack.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.GoBack.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGobackBtn" />
+					</eventlist>
+				</obj>
+				
+				<obj id="NavgateBtnList.GoForwardBtn" class="TipAddin.Button">
+					<attr>
+						<left>7+30</left>
+						<top>0</top>
+						<width>30</width>
+						<height>30</height>
+						<NormalBkgID>YBYL.Head.GoForward.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.GoForward.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.GoForward.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.GoForward.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGoForwardBtn" />
+					</eventlist>
+				</obj>
+				
+				<obj id="NavgateBtnList.StopBtn" class="TipAddin.Button">
+					<attr>
+						<left>(7+30)*2</left>
+						<top>0</top>
+						<width>30</width>
+						<height>30</height>
+						<NormalBkgID>YBYL.Head.Stop.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.Stop.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.Stop.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.Stop.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickStopBtn" />
+					</eventlist>
+				</obj>
+				
+				<obj id="NavgateBtnList.RefreshBtn" class="TipAddin.Button">
+					<attr>
+						<left>(7+30)*3</left>
+						<top>0</top>
+						<width>30</width>
+						<height>30</height>
+						<NormalBkgID>YBYL.Head.Refresh.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.Refresh.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.Refresh.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.Refresh.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickRefreshBtn" />
+					</eventlist>
+				</obj>
+			</children>
+			<eventlist>
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

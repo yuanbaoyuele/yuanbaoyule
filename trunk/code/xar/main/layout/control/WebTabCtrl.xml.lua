@@ -87,8 +87,7 @@ function BindBrowserCtrl(self, objWebBrowser)
 			if IsRealString(strUrl)	then
 				tFunHelper.OpenURL(strUrl)
 			end
-		end)	
-	
+		end)		
 end
 
 
@@ -97,11 +96,33 @@ function GetBindBrowserCtrl(self, objWebBrowser)
 	return attr.objBrowserCtrl
 end
 
+function GetGoBackState(self)
+	local attr = self:GetAttribute()
+	return attr.bGoBackState	
+end
+
+function SetGoBackState(self, bGoBackState)
+	local attr = self:GetAttribute()
+	attr.bGoBackState = bGoBackState
+end
+
+function GetGoForwardState(self)
+	local attr = self:GetAttribute()
+	return attr.bGoForwardState	
+end
+
+function SetGoForwardState(self, bGoForwardState)
+	local attr = self:GetAttribute()
+	attr.bGoForwardState = bGoForwardState
+end
+
 
 -----事件----
 function OnInitControl(self)
 	self:SetSelfID(0)
 	SetActiveState(self, false)
+	self:SetGoBackState(false)
+	self:SetGoForwardState(false)
 end
 
 function OnClickTab(self)
@@ -176,10 +197,6 @@ end
 
 
 function SetAddressBarText(objRootCtrl, strURL)
-	if not IsRealString(strURL) then
-		return
-	end
-
 	local bActive = GetActiveState(objRootCtrl)
 	if not bActive then
 		return
@@ -195,7 +212,10 @@ function SetAddressBarText(objRootCtrl, strURL)
 		return
 	end
 	
-	objAddressBar:SetText(strURL)
+	strLocalURL = objRootCtrl:GetLocalURL()
+	if IsRealString(strLocalURL) then
+		objAddressBar:SetText(strLocalURL)
+	end
 end
 
 

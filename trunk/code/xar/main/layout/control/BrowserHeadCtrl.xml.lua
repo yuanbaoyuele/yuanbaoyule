@@ -4,12 +4,8 @@ local tipUtil = tFunHelper.tipUtil
 
 ---方法---
 function ProcessTabChange(self, objTabCtrl)
-	local objAddressBar = self:GetControlObject("BrowserHeadCtrl.AddressBar")
-	if objAddressBar then
-		objAddressBar:ProcessTabChange(objTabCtrl)
-	end
-
-	SetNavgateBtnStyle(self, objTabCtrl)
+	ProecssAddressBar(self, objTabCtrl)
+	ProecssNavgateBtnList(self, objTabCtrl)
 end
 
 
@@ -45,10 +41,20 @@ end
 
 
 --------
-function SetNavgateBtnStyle(objRootCtrl, objTabCtrl)
-
-
+function ProecssAddressBar(objRootCtrl, objTabCtrl)
+	local objAddressBar = objRootCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")
+	if objAddressBar then
+		objAddressBar:ProcessTabChange(objTabCtrl)
+	end
 end
+
+function ProecssNavgateBtnList(objRootCtrl, objTabCtrl)
+	local objNavgateBtnList = objRootCtrl:GetControlObject("BrowserHeadCtrl.NavgateBtnList")
+	if objNavgateBtnList then
+		objNavgateBtnList:SetCurrentWebTab(objTabCtrl)
+	end
+end
+
 
 ------辅助函数---
 function GetHostWndByUIElem(objUIElem)
