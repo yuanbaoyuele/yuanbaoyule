@@ -51,7 +51,7 @@ function Navigate( self, url )
 													return true
 												 end )
 	browser:AttachListener( "OnCommandStateChange", false, function( obj, command, enable )
-																self:FireExtEvent( "OnCommandStateChange", command, enable )
+																self:FireExtEvent( "Fire_OnCommandStateChange", command, enable )
 																return true
 														   end )
 	browser:Navigate( url )
@@ -115,6 +115,41 @@ function GetLocationURL(self)
 	end
 	
 	return ""
+end
+
+function GoBack(self)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		return browser:GoBack()
+	end
+end
+
+function GoForward(self)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		return browser:GoForward()
+	end
+end
+
+function Refresh(self)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		return browser:Refresh()
+	end
+end
+
+function Stop(self)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		return browser:Stop()
+	end
+end
+
+function GetBusy(self)
+	local browser = self:GetControlObject( "browser" )
+	if browser then
+		return browser:GetBusy()
+	end
 end
 
 

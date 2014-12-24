@@ -6,6 +6,8 @@
 			<attr name="DragState" type="string" />
 			<attr name="objBrowserCtrl"  />
 			<attr name="strInputURL"  />
+			<attr name="bGoBackState" type="bool" />
+			<attr name="bGoForwardState" type="bool" />
 		</attr_def>		
 		<method_def>
 			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
@@ -16,6 +18,10 @@
 			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
 			<GetLocalURL file="WebTabCtrl.xml.lua" func="GetLocalURL"/>
 			<SaveInputURL file="WebTabCtrl.xml.lua" func="SaveInputURL"/>
+			<GetGoBackState file="WebTabCtrl.xml.lua" func="GetGoBackState"/>
+			<SetGoBackState file="WebTabCtrl.xml.lua" func="SetGoBackState"/>
+			<GetGoForwardState file="WebTabCtrl.xml.lua" func="GetGoForwardState"/>
+			<SetGoForwardState file="WebTabCtrl.xml.lua" func="SetGoForwardState"/>
 		</method_def>		
 		
 		<event_def>

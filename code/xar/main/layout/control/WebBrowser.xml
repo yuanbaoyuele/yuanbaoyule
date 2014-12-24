@@ -5,15 +5,20 @@
 			<SetExternal file="WebBrowser.xml.lua" function="SetExternal" />
 			<GetLocationURL file="WebBrowser.xml.lua" function="GetLocationURL" />
 			<SetRealFocus file="WebBrowser.xml.lua" function="SetRealFocus" />
+			<GoBack file="WebBrowser.xml.lua" function="GoBack" />
+			<GoForward file="WebBrowser.xml.lua" function="GoForward" />
+			<Refresh file="WebBrowser.xml.lua" function="Refresh" />
+			<Stop file="WebBrowser.xml.lua" function="Stop" />
+			<GetBusy file="WebBrowser.xml.lua" function="GetBusy" />
         </method_def>
 		
         <event_def>
-			<OnCommandStateChange>
+			<Fire_OnCommandStateChange>
 				<param>
 					<string/>
 					<bool/>
 				</param>
-			</OnCommandStateChange>
+			</Fire_OnCommandStateChange>
 			<Fire_OnNavigateComplete2>
 				<param>
 					<string/>
