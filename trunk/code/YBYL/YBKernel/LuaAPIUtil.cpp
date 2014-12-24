@@ -4008,14 +4008,14 @@ int LuaAPIUtil::YbSpeedInitialize(lua_State* pLuaState)
 
 int LuaAPIUtil::YbSpeedHook(lua_State* pLuaState)
 {
-	YbSpeedHook::AttachHook();
-	return 0;
+	lua_pushboolean(pLuaState, YbSpeedHook::AttachHook());
+	return 1;
 }
 
 int LuaAPIUtil::YbSpeedUnhook(lua_State* pLuaState)
 {
-	YbSpeedHook::DetachHook();
-	return 0;
+	lua_pushboolean(pLuaState, YbSpeedHook::DetachHook());
+	return 1;
 }
 
 int LuaAPIUtil::YbSpeedChangeRate(lua_State* pLuaState)
