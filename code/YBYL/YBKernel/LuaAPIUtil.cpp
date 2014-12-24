@@ -27,6 +27,7 @@ extern CYBApp theApp;
 //#include "YBKernelHelper\CYBMsgWnd.h"
 #include "base64.h"
 
+#include "YbSpeed\YbSpeedHook.h"
 
 LuaAPIUtil::LuaAPIUtil(void)
 {
@@ -154,6 +155,12 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"BrowserForFile", BrowserForFile},
 	{"IEMenu_SaveAs", IEMenu_SaveAs},
 	{"IEMenu_Zoom", IEMenu_Zoom},
+
+	// 变速相关
+	{"YbSpeedInitialize", YbSpeedInitialize},
+	{"YbSpeedHook", YbSpeedHook},
+	{"YbSpeedUnhook", YbSpeedUnhook},
+	{"YbSpeedChangeRate", YbSpeedChangeRate},
 	{NULL, NULL}
 };
 
@@ -3990,4 +3997,30 @@ int LuaAPIUtil::IEMenu_Zoom(lua_State *pLuaState)
 		}
 	}
 	return 0;
+}
+
+
+int LuaAPIUtil::YbSpeedInitialize(lua_State* pLuaState)
+{
+	YbSpeedHook::Initialize();
+	return 0;
+}
+
+int LuaAPIUtil::YbSpeedHook(lua_State* pLuaState)
+{
+	YbSpeedHook::AttachHook();
+	return 0;
+}
+
+int LuaAPIUtil::YbSpeedUnhook(lua_State* pLuaState)
+{
+	YbSpeedHook::DetachHook();
+	return 0;
+}
+
+int LuaAPIUtil::YbSpeedChangeRate(lua_State* pLuaState)
+{
+	double rate = luaL_checknumber(pLuaState, 1);
+	return YbSpeedHook::ChangeSpeedRate(rate);
+	return 1;
 }

@@ -181,6 +181,12 @@ public:
 	//IE菜单
 	static int IEMenu_SaveAs(lua_State* pLuaState);
 	static int IEMenu_Zoom(lua_State* pLuaState);
+
+	// 变速相关
+	static int YbSpeedInitialize(lua_State* pLuaState);
+	static int YbSpeedHook(lua_State* pLuaState);
+	static int YbSpeedUnhook(lua_State* pLuaState);
+	static int YbSpeedChangeRate(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 };
