@@ -61,6 +61,7 @@ public:
 	//static int RegisterFilterWnd(lua_State* pLuaState);
 	static int MsgBox(lua_State* pLuaState);
 	static int LoadVideoRules(lua_State* pLuaState);
+	static int FYBFilter(lua_State* pLuaState);
 
 	static int Exit(lua_State* pLuaState);
 	static int GetPeerId(lua_State* pLuaState);
