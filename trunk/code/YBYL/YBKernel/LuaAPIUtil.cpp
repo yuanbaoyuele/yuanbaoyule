@@ -4021,6 +4021,6 @@ int LuaAPIUtil::YbSpeedUnhook(lua_State* pLuaState)
 int LuaAPIUtil::YbSpeedChangeRate(lua_State* pLuaState)
 {
 	double rate = luaL_checknumber(pLuaState, 1);
-	return YbSpeedHook::ChangeSpeedRate(rate);
+	lua_pushnumber(pLuaState, YbSpeedHook::ChangeSpeedRate(rate));
 	return 1;
 }
