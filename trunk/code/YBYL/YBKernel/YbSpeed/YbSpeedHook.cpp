@@ -1,7 +1,11 @@
+
 #include "YbSpeedHook.h"
 #include "detours.h"
 #include <sstream>
 #include <string>
+#define TSLOG
+#define YB_GROUP "YB"
+#include <tslog/tslog.h>
 
 YbSpeedHook::GetTickCount_FuncType YbSpeedHook::Real_GetTickCount = ::GetTickCount;
 YbSpeedHook::timeGetTime_FuncType YbSpeedHook::Real_timeGetTime = ::timeGetTime;
@@ -18,6 +22,7 @@ double YbSpeedHook::Rate = 1.0;
 
 DWORD WINAPI YbSpeedHook::Hooked_GetTickCount()
 {
+	TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	DWORD dwTickCount = YbSpeedHook::Real_GetTickCount();
 	if(dwTickCount > dwLastGetTickCountRealValue) {
@@ -29,6 +34,7 @@ DWORD WINAPI YbSpeedHook::Hooked_GetTickCount()
 
 DWORD WINAPI YbSpeedHook::Hooked_timeGetTime()
 {
+	TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	DWORD dwTime = YbSpeedHook::Real_timeGetTime();
 	if(dwTime > dwLasttimeGetTimeRealValue) {
@@ -40,6 +46,7 @@ DWORD WINAPI YbSpeedHook::Hooked_timeGetTime()
 
 BOOL WINAPI YbSpeedHook::Hooked_QueryPerformanceCounter(LARGE_INTEGER *lpPerformanceCount)
 {
+	TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	BOOL ret = YbSpeedHook::Real_QueryPerformanceCounter(lpPerformanceCount);
 	if(ret) {
@@ -52,6 +59,7 @@ BOOL WINAPI YbSpeedHook::Hooked_QueryPerformanceCounter(LARGE_INTEGER *lpPerform
 
 void YbSpeedHook::Initialize()
 {
+	TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	dwLastGetTickCountRealValue = Real_GetTickCount();
 	dwLastGetTickCountCheatValue = dwLastGetTickCountRealValue;
