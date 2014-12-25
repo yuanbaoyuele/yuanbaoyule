@@ -20,6 +20,12 @@ function OpenURL(self, strURL, bInNewTab)
 end
 
 
+function GetActiveTabCtrl(self)
+	local nCurActiveTabID = GetActiveTabID(self)
+	local objTabCtrl = GetTabCtrlByID(self, nCurActiveTabID)
+	return objTabCtrl
+end
+
 -----事件----
 function OnInitControl(self)
 	SetCurMaxTabID(self, 0)
@@ -30,7 +36,7 @@ end
 
 function OnClickAddNewTab(self)
 	local objRootCtrl = self:GetOwnerControl()
-	local strDefURL = "www.hao123.com"
+	local strDefURL = tFunHelper.GetHomePage()
 	objRootCtrl:OpenURL(strDefURL, true)
 end
 
@@ -43,7 +49,7 @@ end
 
 
 function OnClickFullScrn(self)
-
+	tFunHelper.FullScreen()
 end
 
 

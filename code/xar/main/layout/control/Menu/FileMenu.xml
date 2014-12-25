@@ -1,0 +1,64 @@
+<xlue>
+	<objtemplate id="filemenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>0</ItemTop>
+		</attr>
+		<children>
+			<obj id="AddNewTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建选项卡</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewTab" />
+				</eventlist>
+			</obj>
+			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打开...</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Open" />
+				</eventlist>
+			</obj>
+			
+			<obj id="exit" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>退出</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Exit" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="FileMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>200</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>225</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>29</top>
+						<width>200</width>
+						<height>196</height>
+						<ContextID>filemenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

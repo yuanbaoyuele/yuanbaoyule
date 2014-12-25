@@ -8,6 +8,7 @@
 		</attr_def>		
 		<method_def>
 			<OpenURL file="TabContainerCtrl.xml.lua" func="OpenURL"/>
+			<GetActiveTabCtrl file="TabContainerCtrl.xml.lua" func="GetActiveTabCtrl"/>
 		</method_def>	
 
 		<event_def>

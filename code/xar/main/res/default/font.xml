@@ -12,5 +12,6 @@
 		<font id="font.tab.normal" height="12" facename="微软雅黑" /> 
 		<font id="font.head.caption" height="14" facename="微软雅黑" /> 
 		<font id="font.funcbtn.text" height="12" facename="微软雅黑" /> 
+		<font id="font.menubar.text" height="12" facename="微软雅黑" /> 
 	</resource>
 </XLUE>

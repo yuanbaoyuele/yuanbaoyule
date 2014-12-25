@@ -19,8 +19,8 @@ function Navigate( self, url )
 		self:AddChild( browser )
 	end
 	browser:EnableContextMenu(true)
-	browser:SetVisible( false )
-	browser:SetChildrenVisible( false )
+	browser:SetVisible( true )
+	browser:SetChildrenVisible( true )
 	if attr.External ~= nil then
 		browser:SetExternal( attr.External )
 	end
@@ -54,44 +54,8 @@ function Navigate( self, url )
 																self:FireExtEvent( "Fire_OnCommandStateChange", command, enable )
 																return true
 														   end )
-	browser:Navigate( url )
-	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
-	attr.timer = timerManager:SetTimer( function ( item, id )
-								if not browser:GetBusy() then
-									timerManager:KillTimer( id )
-									attr.timer = nil
-									for i = 1, #attr.ErrorUrls do
-										for j = 1, #attr.CompleteUrls do
-											if attr.ErrorUrls[ i ] == attr.CompleteUrls[ j ] then
-												table.remove( attr.CompleteUrls, j )
-												break
-											end
-										end
-									end
-									
-									if #attr.CompleteUrls > 0 then
-										browser:SetVisible( true )
-										browser:SetChildrenVisible( true )
-										if type(FunctionObj.ShowTipWnd) == "function" then
-											FunctionObj.ShowTipWnd()
-										else
-											-- FunctionObj:FailExitTipWnd(9)
-										end
-									else
-										browser:SetVisible( false )
-										browser:SetChildrenVisible( false )
-										self:RemoveChild( browser )
-										attr.errorurl = url
-										if gCurRetryTimes < gTotalRetryTimes then
-											gCurRetryTimes = gCurRetryTimes + 1
-											ReloadPage(self)
-										else
-											-- FunctionObj:FailExitTipWnd(10)
-										end
-									end
-								end
-						   end, 500 )  
-						   
+
+	
 	browser:AttachListener( "OnTitleChange", false, 
 		function(obj, title)
 			FunctionObj.TipLog("WebBrowserctrl: OnTitleChange " .. title)
@@ -105,6 +69,8 @@ function Navigate( self, url )
 			self:FireExtEvent("Fire_OnNewWindow3", flags, urlContext, url)
 			return 0, nil, true, true
 		end)
+		
+	browser:Navigate( url )
 end
 
 

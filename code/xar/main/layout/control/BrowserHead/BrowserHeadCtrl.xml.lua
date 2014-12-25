@@ -9,9 +9,6 @@ function ProcessTabChange(self, objTabCtrl)
 end
 
 
-
-
-
 ----事件--
 function OnClickCpationClose(self)
 	tFunHelper.ExitProcess()	

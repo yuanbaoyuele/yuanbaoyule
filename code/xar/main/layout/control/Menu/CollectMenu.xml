@@ -1,0 +1,47 @@
+<xlue>
+	<objtemplate id="collectmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>0</ItemTop>
+		</attr>
+		<children>
+			<obj id="AddToCollect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>添加到收藏夹</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="CollectMenu.xml.lua" function="OnSelect_AddToCollect" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="CollectMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>200</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>225</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>29</top>
+						<width>200</width>
+						<height>196</height>
+						<ContextID>collectmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
