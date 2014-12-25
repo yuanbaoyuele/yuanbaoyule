@@ -69,7 +69,8 @@ bool YbUpdateConfigVideoHost(const std::string& url,int istate)
 	if(m == NULL) {
 		return false;
 	}
-	return m->updateConfigVideoHost(url.c_str(), istate);
+	//return m->updateConfigVideoHost(url.c_str(), istate);
+	return false;
 }
 
 bool YbUpdateConfigWhiteHost(const std::string& url,bool bEnable)
@@ -78,7 +79,8 @@ bool YbUpdateConfigWhiteHost(const std::string& url,bool bEnable)
 	if(m == NULL) {
 		return false;
 	}
-	return m->updateConfigWhiteHost(url.c_str(), bEnable);
+	//return m->updateConfigWhiteHost(url.c_str(), bEnable);
+	return false;
 }
 
 bool YbGetWebRules(const std::wstring& filename)
@@ -87,7 +89,8 @@ bool YbGetWebRules(const std::wstring& filename)
 	if(m == NULL) {
 		return false;
 	}
-	return m->getWebRules(filename);
+	//return m->getWebRules(filename);
+	return false;
 }
 
 bool YbGetVideoRules(const std::wstring& filename)
@@ -105,5 +108,6 @@ bool YbGetUsersRules(const std::wstring& filename)
 	if(m == NULL) {
 		return false;
 	}
-	return m->getUsersRules(filename);
+	//return m->getUsersRules(filename);
+	return false;
 }
