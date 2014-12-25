@@ -9,7 +9,7 @@
 			Name="Debug|Win32"
 			>
 			<DebugSettings
-				Command=""
+				Command="F:\ybbrowser\googlecode\trunk\code\YBYL\Debug\YBYL.exe"
 				WorkingDirectory=""
 				CommandArguments=""
 				Attach="false"
