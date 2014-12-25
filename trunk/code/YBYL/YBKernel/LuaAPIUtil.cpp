@@ -28,6 +28,7 @@ extern CYBApp theApp;
 #include "base64.h"
 
 #include "YbSpeed\YbSpeedHook.h"
+#include "..\YBNetFilter\YBNetFilter.h"
 
 LuaAPIUtil::LuaAPIUtil(void)
 {
@@ -44,7 +45,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"MsgBox",MsgBox},
 
 	{"LoadVideoRules",LoadVideoRules},
-
+	{"FYBFilter",FYBFilter},
 	{"Exit", Exit},	
 	{"GetPeerId", GetPeerId},
 	{"Log", Log},
@@ -209,6 +210,51 @@ int LuaAPIUtil::LoadVideoRules(lua_State* pLuaState)
 	LuaStringToCComBSTR(utf8CfgPath,bstrPath);
 	if (::PathFileExists(bstrPath.m_str))
 	{
+		if (YbGetVideoRules(bstrPath.m_str))
+		{
+			bRet = TRUE;
+		}
+	}
+	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+int LuaAPIUtil::FYBFilter(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	BOOL bRet = FALSE;
+	int nFilter = lua_toboolean(pLuaState, 2);
+	BOOL bFilter = (nFilter == 0) ? FALSE : TRUE;
+	if (bFilter)
+	{
+		static BOOL bOnce  = FALSE;
+		static USHORT listen_port = 0;
+
+		if (!bOnce)
+		{	
+			if (YbSetHook())
+			{
+				HANDLE hThread = YbStartProxy(&listen_port);
+
+				if (NULL != hThread)
+				{
+					bRet = YbEnable(TRUE, listen_port);
+					bOnce = TRUE;
+				}
+			}
+		}
+		else
+		{
+			bRet = YbEnable(TRUE, listen_port);
+		}
+	}
+	else
+	{
+		bRet = YbEnable(FALSE, 0);
 	}
 	lua_pushboolean(pLuaState, bRet);
 	return 1;
