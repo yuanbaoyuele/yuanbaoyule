@@ -68,7 +68,16 @@
 								<height>30</height>
 							</attr>	
 						</obj>
-					
+						
+						<obj id="BrowserHeadCtrl.MenuBarCtrl" class="MenuBarCtrl">
+							<attr>
+								<left>father.width-90-200</left>
+								<top>0</top>
+								<width>200</width>
+								<height>35</height>
+							</attr>	
+						</obj>
+						
 						<obj id="BrowserHeadCtrl.Caption.CloseBtn" class="TipAddin.Button">
 							<attr>
 								<left>father.width-10-26</left>

@@ -1,0 +1,83 @@
+<xlue>
+	<objtemplate id="lookupmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>0</ItemTop>
+		</attr>
+		<children>
+			<obj id="Stop" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>停止</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Stop" />
+				</eventlist>
+			</obj>
+			<obj id="Refresh" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>刷新</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Refresh" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>缩放</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom" />
+				</eventlist>
+			</obj>
+			
+			<obj id="SourceCode" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>源文件</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_SourceCode" />
+				</eventlist>
+			</obj>
+			
+			<obj id="FullScreen" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>全屏</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_FullScreen" />
+				</eventlist>
+			</obj>
+			
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="LookupMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>200</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>225</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>29</top>
+						<width>200</width>
+						<height>196</height>
+						<ContextID>lookupmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

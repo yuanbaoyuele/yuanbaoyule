@@ -1,0 +1,55 @@
+<xlue>
+	<objtemplate id="toolmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>0</ItemTop>
+		</attr>
+		<children>
+			<obj id="Profile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>选项</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_Profile" />
+				</eventlist>
+			</obj>
+			<obj id="InternetProfile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>Internet选项</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InternetPro" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="ToolMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>200</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>225</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>29</top>
+						<width>200</width>
+						<height>196</height>
+						<ContextID>toolmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
