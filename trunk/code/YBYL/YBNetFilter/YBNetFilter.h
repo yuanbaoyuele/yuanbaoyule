@@ -9,6 +9,7 @@
 YBNETFILTER_API BOOL YbEnable(BOOL bEnable, USHORT listen_port);
 YBNETFILTER_API HANDLE YbStartProxy(USHORT* listen_port);
 YBNETFILTER_API BOOL YbSetHook();
+YBNETFILTER_API BOOL YbSetWebRoot(const wchar_t* root_path);
 
 //YBNETFILTER_API bool YbUpdateConfigVideoHost(const std::string& url,int istate = 0);
 //YBNETFILTER_API bool YbUpdateConfigWhiteHost(const std::string& url,bool bEnable);
