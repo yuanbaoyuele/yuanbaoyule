@@ -22,7 +22,7 @@ double YbSpeedHook::Rate = 1.0;
 
 DWORD WINAPI YbSpeedHook::Hooked_GetTickCount()
 {
-	TSAUTO();
+	// TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	DWORD dwTickCount = YbSpeedHook::Real_GetTickCount();
 	if(dwTickCount > dwLastGetTickCountRealValue) {
@@ -34,7 +34,7 @@ DWORD WINAPI YbSpeedHook::Hooked_GetTickCount()
 
 DWORD WINAPI YbSpeedHook::Hooked_timeGetTime()
 {
-	TSAUTO();
+	// TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	DWORD dwTime = YbSpeedHook::Real_timeGetTime();
 	if(dwTime > dwLasttimeGetTimeRealValue) {
@@ -46,7 +46,7 @@ DWORD WINAPI YbSpeedHook::Hooked_timeGetTime()
 
 BOOL WINAPI YbSpeedHook::Hooked_QueryPerformanceCounter(LARGE_INTEGER *lpPerformanceCount)
 {
-	TSAUTO();
+	// TSAUTO();
 	XMLib::CriticalSectionLockGuard lck(cs);
 	BOOL ret = YbSpeedHook::Real_QueryPerformanceCounter(lpPerformanceCount);
 	if(ret) {
@@ -76,7 +76,7 @@ bool YbSpeedHook::AttachHook()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	DetourAttach(reinterpret_cast<LPVOID*>(&Real_GetTickCount), Hooked_GetTickCount);
+	// DetourAttach(reinterpret_cast<LPVOID*>(&Real_GetTickCount), Hooked_GetTickCount);
 	DetourAttach(reinterpret_cast<LPVOID*>(&Real_timeGetTime), Hooked_timeGetTime);
 	DetourAttach(reinterpret_cast<LPVOID*>(&Real_QueryPerformanceCounter), Hooked_QueryPerformanceCounter);
 	DetourTransactionCommit();
@@ -87,7 +87,7 @@ bool YbSpeedHook::DetachHook()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	DetourDetach(reinterpret_cast<LPVOID*>(&Real_GetTickCount), Hooked_GetTickCount);
+	// DetourDetach(reinterpret_cast<LPVOID*>(&Real_GetTickCount), Hooked_GetTickCount);
 	DetourDetach(reinterpret_cast<LPVOID*>(&Real_timeGetTime), Hooked_timeGetTime);
 	DetourDetach(reinterpret_cast<LPVOID*>(&Real_QueryPerformanceCounter), Hooked_QueryPerformanceCounter);
 	DetourTransactionCommit();
