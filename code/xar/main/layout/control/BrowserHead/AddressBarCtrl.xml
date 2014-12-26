@@ -5,6 +5,8 @@
 		<method_def>
 			<ProcessTabChange file="AddressBarCtrl.xml.lua" func="ProcessTabChange"/>
 			<SetText file="AddressBarCtrl.xml.lua" func="SetText"/>
+			<GetText file="AddressBarCtrl.xml.lua" func="GetText"/>
+			<AdjustCollectBtnStyle file="AddressBarCtrl.xml.lua" func="AdjustCollectBtnStyle"/>
 		</method_def>		
 		
 		<objtemplate>
@@ -59,11 +61,10 @@
 										<top>8</top>
 										<width>19</width>
 										<height>19</height>
+										<cursor>IDC_HAND</cursor>
 										<texture>YBYL.AddressBar.Collect.Normal</texture>
 									</attr>
 									<eventlist>
-										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="OnMouseEnterCllct" />
-										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="OnMouseLeaveCllct" />
 										<event name="OnLButtonUp" file="AddressBarCtrl.xml.lua" func="OnLButtonUpCllct" />
 									</eventlist>
 								</obj>

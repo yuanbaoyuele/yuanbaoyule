@@ -38,7 +38,7 @@ end
 
 
 function OnSelect_FullScreen(self)
-	tFunHelper.FullScreen()
+	tFunHelper.SetBrowserFullScrn()
 end
 
 

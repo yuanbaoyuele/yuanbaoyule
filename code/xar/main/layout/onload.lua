@@ -85,7 +85,11 @@ function TipMain()
 		tipUtil:Exit("Exit")
 	end
 	
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+	FunctionObj.ReadAllConfigInfo()
+	
 	CreateMainTipWnd()
 end
+
 
 TipMain()

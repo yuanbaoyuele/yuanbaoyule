@@ -17,7 +17,7 @@
 						<height>father.height</height>
 					</attr>				
 					<children>	
-						<obj id="shadow" class="TextureObject">
+						<!--obj id="shadow" class="TextureObject">
 							<attr>
 								<left>0</left>
 								<top>0</top>
@@ -25,13 +25,13 @@
 								<height>father.height</height>
 								<texture>YBYL.MainWnd.Bkg.Shadow</texture>
 							</attr>		
-						</obj>
+						</obj-->
 						<obj id="bkg" class="TextureObject">
 							<attr>
-								<left>16</left>
-								<top>15</top>
-								<width>father.width-16*2</width>
-								<height>father.height-15*2</height>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width> 
+								<height>father.height</height>
 								<texture>YBYL.MainWnd.Bkg</texture>
 							</attr>		
 							<children>	
@@ -54,10 +54,10 @@
 								
 								<obj id="MainPanel.Center" class="LayoutObject">
 									<attr>
-										<left>0</left>
+										<left>1</left>
 										<top>128-31</top>
-										<width>father.width</width>
-										<height>father.height-(128-31)</height>
+										<width>father.width-2</width>
+										<height>father.height-(128-30)</height>
 									</attr>
 									<children>	
 										<obj id="MainPanel.TabContainer" class="TabContainerCtrl">
@@ -76,7 +76,7 @@
 												<left>0</left>
 												<top>31</top>
 												<width>father.width</width>
-												<height>father.height-31</height>
+												<height>father.height-32</height>
 											</attr>		
 										</obj>
 									</children>
@@ -84,6 +84,9 @@
 							</children>
 						</obj><!--bkg end-->
 					</children>
+					<eventlist>
+						<event name="OnLButtonDbClick" file="TipPanelCtrl.xml.lua" func="OnLButtonDbClick" />
+					</eventlist>
 				</obj><!--root layout end-->
 			</children>
         </objtemplate>

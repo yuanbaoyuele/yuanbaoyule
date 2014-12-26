@@ -89,6 +89,22 @@
 					</eventlist>
 				</obj>
 				
+				<obj id="TabContainerCtrl.RestoreBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-21*2-22</left>
+						<top>0</top>
+						<width>21</width>
+						<height>21</height>
+						<NormalBkgID>YBYL.TabContainer.RestoreBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.TabContainer.RestoreBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.TabContainer.RestoreBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.TabContainer.RestoreBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickRestore" />
+					</eventlist>
+				</obj>
+				
 			</children>
 			<eventlist>
 				<event name="OnInitControl" file="TabContainerCtrl.xml.lua" func="OnInitControl" />

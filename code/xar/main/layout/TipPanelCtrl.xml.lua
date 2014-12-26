@@ -3,23 +3,15 @@ local tipUtil = tFunHelper.tipUtil
 
 ----方法----
 function SetTipData(self, infoTab) 
-	-- if infoTab == nil or type(infoTab) ~= "table" then
-		-- return false
-	-- end
-	
-	local strLink = "www.hao123.com"
-	local objFrame = self:GetControlObject("frame")
-	local webCtrl = objFrame:GetObject("MainWnd.WebCtrl")
-	
-	if not IsNilString(strLink) and webCtrl ~= nil then
-		webCtrl:Navigate(strLink)
-		bRet = true
-	end
 	
 	return true
 end
 
 
+---事件--
+function OnLButtonDbClick(self)
+	
+end
 
 --tabcontainer事件
 function OnActiveTabChange(self, strEvntName,objActiveTab)
@@ -33,7 +25,6 @@ function OnActiveTabChange(self, strEvntName,objActiveTab)
 		tFunHelper.TipLog("[OnActiveTabChange] get objHeadCtrl failed")
 		return
 	end
-	
 	objHeadCtrl:ProcessTabChange(objActiveTab)
 end
 

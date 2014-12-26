@@ -73,7 +73,7 @@ function BindBrowserCtrl(self, objWebBrowser)
 	
 	attr.objBrowserCtrl:AttachListener("Fire_OnNavigateComplete2", false, 
 		function (objBrowser, strEventName, strURL)
-			SetAddressBarText(self, strURL)
+			SetAddressBarState(self, strURL)
 			DownloadTabIco(self, strURL)
 		end)
 	
@@ -219,7 +219,7 @@ function SetTabIco(objRootCtrl, strIcoPath)
 end
 
 
-function SetAddressBarText(objRootCtrl, strURL)
+function SetAddressBarState(objRootCtrl, strURL)
 	local bActive = GetActiveState(objRootCtrl)
 	if not bActive then
 		return
@@ -238,6 +238,7 @@ function SetAddressBarText(objRootCtrl, strURL)
 	strLocalURL = objRootCtrl:GetLocalURL()
 	if IsRealString(strLocalURL) then
 		objAddressBar:SetText(strLocalURL)
+		objAddressBar:AdjustCollectBtnStyle(strLocalURL)
 	end
 end
 
