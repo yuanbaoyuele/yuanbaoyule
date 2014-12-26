@@ -37,8 +37,9 @@
 #define CON_MSG_LOG(MSG)
 #endif
 
-TcpProxyConnection::TcpProxyConnection(boost::asio::io_service& io_service) : 
-	m_userAgentSocket(io_service),
+TcpProxyConnection::TcpProxyConnection(boost::asio::io_service& io_service, boost::shared_ptr<boost::asio::ip::tcp::socket>& clientSocketPtr) : 
+	m_userAgentSocketPtr(clientSocketPtr),
+	m_userAgentSocket(*m_userAgentSocketPtr),
 	m_targetServerSocket(io_service),
 	m_state(CS_ESTABLISHING),
 	m_targetServerPort(80),
@@ -57,9 +58,9 @@ TcpProxyConnection::~TcpProxyConnection()
 {
 }
 
-boost::shared_ptr<TcpProxyConnection> TcpProxyConnection::CreateConnection(boost::asio::io_service& io_service)
+boost::shared_ptr<TcpProxyConnection> TcpProxyConnection::CreateConnection(boost::asio::io_service& io_service, boost::shared_ptr<boost::asio::ip::tcp::socket>& clientSocketPtr)
 {
-	return boost::shared_ptr<TcpProxyConnection>(new TcpProxyConnection(io_service));
+	return boost::shared_ptr<TcpProxyConnection>(new TcpProxyConnection(io_service, clientSocketPtr));
 }
 
 boost::asio::ip::tcp::socket& TcpProxyConnection::GetUserAgentSocketRef()
@@ -67,34 +68,9 @@ boost::asio::ip::tcp::socket& TcpProxyConnection::GetUserAgentSocketRef()
 	return this->m_userAgentSocket;
 }
 
-void TcpProxyConnection::AsyncStart(unsigned short listen_port)
+void TcpProxyConnection::AsyncStart(unsigned short listen_port, const boost::asio::ip::address& remoteIPAddr, unsigned short remotePort)
 {
-	boost::asio::ip::tcp::socket::endpoint_type userAgentEnpoint = this->m_userAgentSocket.remote_endpoint();
-    unsigned short userAgentPort = userAgentEnpoint.port();
-	boost::asio::ip::address userAgentIP = userAgentEnpoint.address();
-	if(userAgentIP != boost::asio::ip::address_v4::from_string("127.0.0.1")) {
-		boost::system::error_code ec;
-		this->m_userAgentSocket.close(ec);
-		return;
-	}
 
-	std::pair<u_long, USHORT> remoteAddressPair = WinsockHooker::GetRemoteAddressPair(userAgentPort);
-	
-	if(remoteAddressPair.first == 0ul) {
-		boost::system::error_code ec;
-		this->m_userAgentSocket.close(ec);
-		return;
-	}
-
-	boost::asio::ip::address_v4 remoteIPAddr(remoteAddressPair.first);
-	unsigned short remotePort = remoteAddressPair.second;
-	if(remoteIPAddr == boost::asio::ip::address_v4::from_string("127.0.0.1") && remotePort == listen_port)
-	{
-		// ·ÀÖ¹·Å´ó¹¥»÷
-		boost::system::error_code ec;
-		this->m_userAgentSocket.close(ec);
-		return;
-	}
 	this->m_targetServerAddress = remoteIPAddr.to_string();
 	this->m_targetServerPort = remotePort;
 
@@ -104,11 +80,9 @@ void TcpProxyConnection::AsyncStart(unsigned short listen_port)
 		this->m_userAgentSocket.close(ec);
 		return;
 	}
-
+	
 	WinsockHooker::TryRemoveSocketFromTcpSocketSet(this->m_targetServerSocket.native_handle());
 
-	TSINFO4CXX("Connect: IP:" << remoteIPAddr.to_string() << ", Port: " << remotePort);
-	
 	this->m_targetServerSocket.async_connect(boost::asio::ip::tcp::endpoint(remoteIPAddr, remotePort),
 		boost::bind(&TcpProxyConnection::HandleConnect, this->shared_from_this(), _1));
 }
@@ -2190,14 +2164,5 @@ std::vector<std::string> TcpProxyConnection::GetReplaceRule(const std::string& u
 
 void TcpProxyConnection::SendNotify(const std::string& url) const
 {
-	static HWND hNotifyWnd = ::FindWindow(L"{B239B46A-6EDA-4a49-8CEE-E57BB352F933}_dsmainmsg", NULL);
-	if(hNotifyWnd != NULL) 
-	{
-		char* szUrl = new char[url.size() + 1];
-		std::copy(url.begin(), url.end(), szUrl);
-		szUrl[url.size()] = '\0';
-		if(::PostMessage(hNotifyWnd, WM_USER + 201, WPARAM(1), LPARAM(szUrl))== FALSE) {
-			delete szUrl;
-		}
-	}
+	return;
 }

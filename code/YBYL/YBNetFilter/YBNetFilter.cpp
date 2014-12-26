@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "YbNetFilter.h"
 #include "HttpRequestFilter.h"
+#include "HttpRequestHandler.h"
 #include "WinsockHooker.h"
 #include "TcpProxyServer.h"
 #include "./ParseABP/FilterManager.h"
@@ -60,6 +61,12 @@ HANDLE YbStartProxy(USHORT* listen_port)
 BOOL YbSetHook()
 {
 	WinsockHooker::AttachHook();
+	return TRUE;
+}
+
+BOOL YbSetWebRoot(const wchar_t* root_path)
+{
+	HttpRequestHandler::SetWebRoot(root_path);
 	return TRUE;
 }
 

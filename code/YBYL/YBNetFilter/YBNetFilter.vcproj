@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HttpRequestHandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Lock.cpp"
 				>
 			</File>
@@ -266,6 +270,10 @@
 			</File>
 			<File
 				RelativePath=".\HttpRequestFilter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HttpRequestHandler.h"
 				>
 			</File>
 			<File

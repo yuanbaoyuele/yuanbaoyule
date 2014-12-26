@@ -172,7 +172,8 @@ public:
 class TcpProxyConnection : public boost::enable_shared_from_this<TcpProxyConnection> {
 	typedef std::multimap<std::string, std::string, HttpHeadersFieldNameCompare> HttpHeaderContainerType;
 private:
-	boost::asio::ip::tcp::socket m_userAgentSocket;
+	boost::shared_ptr<boost::asio::ip::tcp::socket> m_userAgentSocketPtr;
+	boost::asio::ip::tcp::socket& m_userAgentSocket;
 	boost::asio::ip::tcp::socket m_targetServerSocket;
 	char m_upstreamBuffer[10240];
 	char m_downstreamBuffer[10240];
@@ -201,12 +202,12 @@ private:
 	bool m_isThisRequestNeedModifyResponse;
 	std::string m_responseContentDecoded;
 private:
-	TcpProxyConnection(boost::asio::io_service& io_service);
+	TcpProxyConnection(boost::asio::io_service& io_service, boost::shared_ptr<boost::asio::ip::tcp::socket>& clientSocketPtr);
 public:
-	static boost::shared_ptr<TcpProxyConnection> CreateConnection(boost::asio::io_service& io_service);
+	static boost::shared_ptr<TcpProxyConnection> CreateConnection(boost::asio::io_service& io_service, boost::shared_ptr<boost::asio::ip::tcp::socket>& clientSocketPtr);
 	~TcpProxyConnection();
 	boost::asio::ip::tcp::socket& GetUserAgentSocketRef();
-	void AsyncStart(unsigned short listen_port);
+	void AsyncStart(unsigned short listen_port, const boost::asio::ip::address& remoteIPAddr, unsigned short remotePort);
 private:
 	void HandleConnect(const boost::system::error_code& error);
 	void AsyncReadDataFromUserAgent();

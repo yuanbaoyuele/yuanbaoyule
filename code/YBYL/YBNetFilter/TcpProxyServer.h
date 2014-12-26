@@ -16,5 +16,6 @@ public:
     void Run();
 private:
 	void AsyncAccept();
-	void HandleAccept(boost::shared_ptr<TcpProxyConnection> connection_ptr, const boost::system::error_code& error);
+	void HandleAccept(boost::shared_ptr<boost::asio::ip::tcp::socket> clientSocket, const boost::system::error_code& error);
+	bool GetRemoteAddressAndPort(boost::asio::ip::tcp::socket& clientSocket, boost::asio::ip::address& remoteAddress, unsigned short& remotePort);
 };
