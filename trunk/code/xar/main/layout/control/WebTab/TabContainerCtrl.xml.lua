@@ -49,12 +49,18 @@ end
 
 
 function OnClickFullScrn(self)
-	tFunHelper.FullScreen()
+	tFunHelper.SetBrowserFullScrn()
+end
+
+
+function OnClickRestore(self)
+	tFunHelper.RestoreWndSize()
 end
 
 
 function OnContainerPosChange(self)
 	AdjustTabSize(self)
+	AdjustFullScrnStyle(self)	
 end
 
 
@@ -133,7 +139,8 @@ function OnDragTabItem(self, strFunName, strDragState, nPosX, nPosY)
 		objAddBtn:SetChildrenVisible(true)
 		attr.DragData = {}
 		AdjustTabSize(objRootCtrl)
-		objTabItemCtrl:SetZorder(attr.DragTabZorder)
+		local Zorder = attr.DragTabZorder or 0
+		objTabItemCtrl:SetZorder(Zorder)
 	end
 end
 
@@ -478,6 +485,29 @@ end
 function SetCurMaxTabID(objRootCtrl, nCurMaxTabID)
 	local attr = objRootCtrl:GetAttribute()
 	attr.nCurMaxTabID = nCurMaxTabID
+end
+
+
+--全屏按钮
+function ShowFullScreenBtn(objRootCtrl, bShowFullScrn)
+	local objFullScreen = objRootCtrl:GetControlObject("TabContainerCtrl.FullScrn")
+	local objRestore = objRootCtrl:GetControlObject("TabContainerCtrl.RestoreBtn")
+	local bShowRestore = not bShowFullScrn
+	
+	if objFullScreen and objRestore then
+		objFullScreen:SetVisible(bShowFullScrn)
+		objRestore:SetVisible(bShowRestore)
+		objFullScreen:SetChildrenVisible(bShowFullScrn)
+		objRestore:SetChildrenVisible(bShowRestore)
+	end	
+end
+
+
+function AdjustFullScrnStyle(objRootCtrl)
+	local bIsFullScreen = tFunHelper.IsBrowserFullScrn()
+	local bShowFullScrn = not bIsFullScreen
+	
+	ShowFullScreenBtn(objRootCtrl, bShowFullScrn)
 end
 
 

@@ -87,7 +87,7 @@
 						<zorder>100000001</zorder>
 					</attr>
 				</obj>
-				<obj id="mainwnd.caption" class="CaptionObject" templateid = "caption.failhittest">
+				<!--obj id="mainwnd.caption" class="CaptionObject" templateid = "caption.failhittest">
 					<attr>
 						<left>0</left> 
 						<top>0</top> 
@@ -95,7 +95,7 @@
 						<height>father.height</height> 
 						<zorder>0</zorder>
 					</attr>
-				</obj>
+				</obj-->
 			</children>
 		</objtemplate>
 	</control>

@@ -36,6 +36,12 @@
 			<texture id="YBYL.Caption.RestoreBtn.Hover"  imagelist="YBYL.Caption.RestoreBtn" index="2" />
 			<texture id="YBYL.Caption.RestoreBtn.Down"   imagelist="YBYL.Caption.RestoreBtn" index="3" />
 			<texture id="YBYL.Caption.RestoreBtn.Disable"   imagelist="YBYL.Caption.RestoreBtn" index="4" />
+		
+		<imagelist id="YBYL.TabContainer.RestoreBtn" splitter="1" varyblock="1" image="bitmap\YBYL.TabContainer.RestoreBtn.png"/>
+			<texture id="YBYL.TabContainer.RestoreBtn.Normal" imagelist="YBYL.TabContainer.RestoreBtn" index="1" />
+			<texture id="YBYL.TabContainer.RestoreBtn.Hover"  imagelist="YBYL.TabContainer.RestoreBtn" index="2" />
+			<texture id="YBYL.TabContainer.RestoreBtn.Down"   imagelist="YBYL.TabContainer.RestoreBtn" index="3" />
+			<texture id="YBYL.TabContainer.RestoreBtn.Disable"   imagelist="YBYL.TabContainer.RestoreBtn" index="4" />		
 			
 		<imagelist id="YBYL.AddressBarCtrl.DropArrow" splitter="1" varyblock="1" image="bitmap\YBYL.AddressBarCtrl.DropArrow.png"/>
 			<texture id="YBYL.AddressBarCtrl.DropArrow.Normal" imagelist="YBYL.AddressBarCtrl.DropArrow" index="1" />
