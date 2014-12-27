@@ -11,6 +11,7 @@ function OnInitControl(self)
 		local contextObj = contextTemplate:CreateInstance("context_menu")
 		if contextObj ~= nil then
 			local bkn = self:GetControlObject("menu.bkn")
+			contextObj:SetObjPos("father.left", "father.top", "father.right", "father.bottom")
 			bkn:AddChild(contextObj)
 		end
 	end
@@ -92,20 +93,10 @@ function UpdateSize( self )
 		local menu_bkn = self:GetControlObject("menu.bkn")
 		local menu_frame = self:GetControlObject("menu.frame")
 
-		-- if XMP.Helper.IsNotTransparent() 
-			-- and XMP.Helper.isXp 
-			-- and XMP.PlayCtrl.IsPlaying() then
-			----没有阴影
-			 -- self:SetObjPos( self_left, self_top, self_left + right - left, self_top + bottom - top)
-			 menu_frame:SetObjPos(0,0,self_right - self_left,bottom - top)
-			 menu_bkn:SetObjPos(0,0,"father.width","father.height")
-		-- else
-			----有阴影
-			-- self:SetObjPos( self_left, self_top, self_left + right - left, self_top + bottom - top + 13)
-			-- menu_frame:SetObjPos(0,0,right - left,bottom - top + 13)
-			-- menu_bkn:SetObjPos(0,0,"father.width","father.height-13")
-		-- end
+		menu_frame:SetObjPos(0,0,self_right - self_left,bottom - top)
 		
+		--注 图片有阴影
+		menu_bkn:SetObjPos(0,0,"father.width","father.height+7")
 	end
 end
 

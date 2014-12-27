@@ -1,4 +1,4 @@
-
+local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 
 -------事件---
 function OnSelect_Profile(self)
@@ -6,9 +6,8 @@ function OnSelect_Profile(self)
 end
 
 function OnSelect_InternetPro(self)
-	
+	tIEMenuHelper:ExecuteCMD("Options")
 end
-
 
 
 -----

@@ -2,6 +2,7 @@
 	<objtemplate id="menu.text" class="TextObject">
 		<attr>
 			<valign>center</valign>
+			<endellipsis>1</endellipsis>
 		</attr>
 	</objtemplate>
 	
@@ -15,6 +16,8 @@
 			</attr>
 			<attr name="Icon" type="string" desc="该条目的图标"/>
 			<attr name="Text" type="string" desc="该条目的文本"/>
+			
+			<attr name="RightText" type="string" desc="该条目的右侧文本"/>
 			
 			<attr name="NormalArrow" type="string" desc="如果存在子菜单时的箭头图标" >
 				<!--default>bitmap.menu.arrow.normal</default-->
@@ -35,6 +38,15 @@
 			</attr>
 			<attr name="TextPos" type="int" desc="文本的左边起始位置">
 				<default>13</default>
+			</attr>
+			
+			<attr name="RightTextPos" type="int" desc="右侧文本的右边起始位置">
+				<default>10</default>
+			</attr>
+			
+			<attr name="RightTextFont" type="string">
+			</attr>
+			<attr name="RightTextColor" type="string">
 			</attr>
 			<attr name="FontColorNormal" type="string">
 			</attr>
@@ -112,7 +124,7 @@
 
 		<objtemplate>
 			<children>
-
+				
 			</children>
 
 			<eventlist>

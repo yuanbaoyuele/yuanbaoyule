@@ -31,16 +31,16 @@
 								<zorder>20</zorder>
 							</attr>
 							<children>
-								<!--obj id="BrowserHeadCtrl.Caption.Logo" class="TextureObject">
+								<obj id="BrowserHeadCtrl.Caption.Logo" class="TextureObject">
 									<attr>
-										<left>0</left>
-										<top>0</top>
-										<width>54</width>
-										<height>54</height>
+										<left>7</left>
+										<top>7</top>
+										<width>50</width>
+										<height>50</height>
 										<texture>YBYL.Head.Logo.Default</texture>
 										<zorder>2000</zorder>
 									</attr>
-								</obj-->
+								</obj>
 							</children>
 							
 							<eventlist>
