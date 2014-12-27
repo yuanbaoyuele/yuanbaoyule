@@ -62,6 +62,7 @@ public:
 	static int MsgBox(lua_State* pLuaState);
 	static int LoadVideoRules(lua_State* pLuaState);
 	static int FYBFilter(lua_State* pLuaState);
+	static int FYbSetWebRoot(lua_State* pLuaState);
 
 	static int Exit(lua_State* pLuaState);
 	static int GetPeerId(lua_State* pLuaState);
@@ -69,6 +70,7 @@ public:
 	static int SaveLuaTableToLuaFile(lua_State* pLuaState);
 	static int GetCommandLine(lua_State* pLuaState);
 	static int CommandLineToList(lua_State* pLuaState);
+	static int GetModuleExeName(lua_State* pLuaState);
 
 
 	//´°¿Ú

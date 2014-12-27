@@ -46,12 +46,14 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 
 	{"LoadVideoRules",LoadVideoRules},
 	{"FYBFilter",FYBFilter},
+	{"FYbSetWebRoot",FYbSetWebRoot},
 	{"Exit", Exit},	
 	{"GetPeerId", GetPeerId},
 	{"Log", Log},
 	{"SaveLuaTableToLuaFile", SaveLuaTableToLuaFile},
 	{"GetCommandLine", GetCommandLine},
 	{"CommandLineToList", CommandLineToList},
+	{"GetModuleExeName", GetModuleExeName},
 
 	{"GetWorkArea", GetWorkArea},
 	{"GetScreenArea", GetScreenArea},
@@ -256,6 +258,25 @@ int LuaAPIUtil::FYBFilter(lua_State* pLuaState)
 	{
 		bRet = YbEnable(FALSE, 0);
 	}
+	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+int LuaAPIUtil::FYbSetWebRoot(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	const char* utf8WebRoot = luaL_checkstring(pLuaState, 2);
+	if (utf8WebRoot == NULL) 
+	{
+		return 0;
+	}
+	CComBSTR bstrWebRoot;
+	LuaStringToCComBSTR(utf8WebRoot,bstrWebRoot);
+	BOOL bRet = YbSetWebRoot(bstrWebRoot.m_str);
 	lua_pushboolean(pLuaState, bRet);
 	return 1;
 }
@@ -1077,6 +1098,23 @@ int LuaAPIUtil::CommandLineToList(lua_State* pLuaState)
 	return 0;
 }
 
+int LuaAPIUtil::GetModuleExeName(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		TCHAR szExePath[MAX_PATH] = {0};
+		if (0 != GetModuleFileName(NULL, szExePath, MAX_PATH))
+		{
+			std::string strExePath;
+			BSTRToLuaString(szExePath,strExePath);
+			lua_pushstring(pLuaState, strExePath.c_str());
+			return 1;
+		}
+	}
+	lua_pushnil(pLuaState);
+	return 1;
+}
 
 int LuaAPIUtil::GetOSVersionInfo(lua_State* pLuaState)
 {
