@@ -4,7 +4,7 @@
 #include "stdafx.h"
 //#include "resource.h"
 #include "YBPretender.h"
-
+#include "ParseCmd.h"
 CAppModule _Module;
 
 int Run(LPTSTR lpstrCmdLine = NULL, int nCmdShow = SW_SHOWDEFAULT)
@@ -35,6 +35,15 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 	// make the EXE free threaded. This means that calls come in on a random RPC thread.
 	//	HRESULT hRes = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	ATLASSERT(SUCCEEDED(hRes));
+	
+	int nArg = 0;
+	BOOL bHandle = CParseCmd::PreHandleCmdline(lpstrCmdLine);
+	TSDEBUG4CXX(" bHandle : "<<bHandle);
+	if(bHandle)
+	{		
+		TerminateProcess(GetCurrentProcess(), 1);
+		return 1;
+	}
 
 	// this resolves ATL window thunking problem when Microsoft Layer for Unicode (MSLU) is used
 	::DefWindowProc(NULL, 0, 0, 0L);
