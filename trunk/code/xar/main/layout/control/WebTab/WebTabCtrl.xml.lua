@@ -1,6 +1,7 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 
+
 -----方法----
 function SetTabText(self, strText)
 	local objText = self:GetControlObject("WebTabCtrl.Text")

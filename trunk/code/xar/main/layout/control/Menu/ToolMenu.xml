@@ -1,7 +1,8 @@
 <xlue>
 	<objtemplate id="toolmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>0</ItemTop>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
 		</attr>
 		<children>
 			<obj id="Profile" class="MenuItemObject" templateid="menu.context.item">
@@ -44,7 +45,7 @@
 						<left>0</left>
 						<top>29</top>
 						<width>200</width>
-						<height>196</height>
+						<height>father.height</height>
 						<ContextID>toolmenu.context</ContextID>
 						<BknID>YBYL.Menu.Bkg</BknID>
 					</attr>

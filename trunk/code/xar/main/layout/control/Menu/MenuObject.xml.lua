@@ -29,9 +29,9 @@ end
 -- 遍历当前菜单项，得出最宽项
 function GetMaxWidth(self)
 	local attr = self:GetAttribute()
-	local pos_x = attr.ItemLeft
-	local pos_y = attr.ItemRight
-	local max_width = 0
+	local nL, nT, nR, nB = self:GetObjPos()
+	local max_width = nR-nL
+
 	IterateItems(self, function(item)
 		local temp_width = item:GetMinWidth()
 		if temp_width ~= nil and item:IsVisible() and max_width < temp_width then
@@ -48,20 +48,22 @@ function AdjustItemPos( self )
 	local attr = self:GetAttribute()
 	local pos_x = attr.ItemLeft
 	local pos_y = attr.ItemTop
+	local pos_shadowW = attr.ShadowBkgWidth
+	local pos_shadowH = attr.ShadowBkgHeight
 	
-	--local max_width = GetMaxWidth( self )  fix
-	local max_width = 210
-	
+	local max_width = GetMaxWidth( self )
+	local max_widthfix = max_width - pos_shadowW
+		
 	IterateItems(self, function(item)
 		--Set item pos when it is visible
 		if item:IsVisible() then
 			local left, top, right, bottom = item:GetObjPos()
-			item:SetObjPos( pos_x, pos_y, pos_x + max_width, pos_y + bottom - top )
+			item:SetObjPos( pos_x, pos_y, pos_x + max_widthfix, pos_y + bottom - top-pos_shadowH )
 			pos_y = pos_y + bottom - top
 		end
 	end)
 	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
-	self:SetObjPos( self_left, self_top, self_left + max_width + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom )
+	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom )
 	if attr.HoverItem then
 		local itembkn = self:GetControlObject("ItemBkn")
 		local left, top, right, bottom = attr.HoverItem:GetObjPos()
@@ -237,14 +239,14 @@ function SetHoverItem(self, item, show_sub )
 	attr.HoverItem = item
 	
 	if oldItem == nil then
-		local left,top,right,bottom = item:GetObjPos() 
+		local left,top,right,bottom = item:GetObjPos() 	
 		itembkn:SetObjPos(left,top,right,bottom)
 		itembkn:SetVisible( true )
 		itembkn:SetChildrenVisible( true )
 		attr.HoverItem:ChangeState( 1 )
 	else
 		oldItem:ChangeState( 0 )
-		local left, top, right, bottom = attr.HoverItem:GetObjPos()
+		local left, top, right, bottom = attr.HoverItem:GetObjPos()	
 		itembkn:SetObjPos(left,top,right,bottom)
 		itembkn:SetVisible( true )
 		itembkn:SetChildrenVisible( true )

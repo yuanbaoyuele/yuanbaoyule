@@ -27,20 +27,6 @@ function OnSize(self, _type, width, height)
 	local objRootCtrl = objTree:GetUIObject("root.layout:root.ctrl")
 	objRootCtrl:SetObjPos(0, 0, width, height)
 	local objBkg = objRootCtrl:GetControlObject("bkg")
-	
-	
-	if "max" == _type then
-		-- YSDQ.MainWnd.Status = "max"
-		-- objBkg:SetObjPos(0,0,"father.width","father.height")
-		-- YSDQ.EventSource:dispatchEvent("OnMainWndStateChange",_type)		
-	elseif  "restored" == _type then		
-		-- YSDQ.MainWnd.Status = "normal"
-		-- objBkg:SetObjPos(0,0,"father.width-0","father.height-0")
-		-- YSDQ.EventSource:dispatchEvent("OnMainWndStateChange",_type)
-		-- SaveOldPos()
-	else
-		-- YSDQ.MainWnd.Status = "min"
-	end 
 end
 
 
@@ -57,17 +43,9 @@ function PopupInDeskCenter(self)
 	local nRtCtrlL, nRtCtrlT, nRtCtrlR, nRtCtrlB = objRootCtrl:GetAbsPos()
 	local nRtCtrlW, nRtCtrlH = nRtCtrlR - nRtCtrlL, nRtCtrlB - nRtCtrlT
 	
-	local objBkg = objRootCtrl:GetControlObject("bkg")
-	local nBkgL, nBkgT, nBkgR, nBkgB = objBkg:GetObjPos()
-	local nBkgW = nBkgR - nBkgL
-	local nBkgH = nBkgB - nBkgT
-	local nDiffW = nRtCtrlW - nBkgW
-	local nDiffH = nRtCtrlH - nBkgH
-	
-	self:SetMaxTrackSize(nScreenW+nDiffW, nScreenH+nDiffH)
-	
 	local wndleft = (nScreenW-nRtCtrlW)/2-nRtCtrlL
 	local wndtop = (nScreenH-nRtCtrlH)/2-nRtCtrlT
+	
 	self:Move(wndleft, wndtop, wndwidth, wndheight)
 end
 

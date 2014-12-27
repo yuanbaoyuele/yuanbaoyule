@@ -40,14 +40,6 @@ function OnClickHelp(self)
 end
 
 ----
-
-function GetMenuHostWnd(strMenuKey)
-	local strHostWndName = strMenuKey..".HostWnd.Instance"
-	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
-	return hostwndManager:GetHostWnd(strHostWndName)	
-end
-
-
 function TryDestroyOldMenu(objMenuText, strMenuKey)
 	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")

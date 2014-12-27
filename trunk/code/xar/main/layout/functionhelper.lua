@@ -152,7 +152,6 @@ end
 
 ----UI相关---
 local g_bIsBrowserFullScrn = false
-local g_bIsWindowFullScrn = false
 
 function GetMainWndInst()
 	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
@@ -170,10 +169,6 @@ end
 
 function IsBrowserFullScrn()
 	return g_bIsBrowserFullScrn
-end
-
-function IsWindowFullScrn()
-	return g_bIsWindowFullScrn
 end
 
 

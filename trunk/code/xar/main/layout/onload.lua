@@ -16,6 +16,12 @@ function RegisterFunctionObject()
 end
 
 
+function LoadIEHelper()
+	local strIEHelperPath = __document.."\\..\\IEMenuHelper.lua"
+	XLLoadModule(strIEHelperPath)
+end
+
+
 function IsNilString(AString)
 	if AString == nil or AString == "" then
 		return true
@@ -84,6 +90,8 @@ function TipMain()
 	if not RegisterFunctionObject() then
 		tipUtil:Exit("Exit")
 	end
+	
+	LoadIEHelper()
 	
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
 	FunctionObj.ReadAllConfigInfo()

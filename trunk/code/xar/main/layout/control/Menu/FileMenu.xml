@@ -1,12 +1,14 @@
 <xlue>
 	<objtemplate id="filemenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>0</ItemTop>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
 		</attr>
 		<children>
 			<obj id="AddNewTab" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>新建选项卡</Text>
+					<RightText>Ctrl+T</RightText>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewTab" />
@@ -15,9 +17,82 @@
 			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>打开...</Text>
+					<RightText>Ctrl+O</RightText>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Open" />
+				</eventlist>
+			</obj>
+			
+			<obj id="SaveAs" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>另存为</Text>
+					<RightText>Ctrl+S</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_SaveAs" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="PageSetup" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>页面设置</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_PageSetup" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Print" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印</Text>
+					<RightText>Ctrl+P</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Print" />
+				</eventlist>
+			</obj>
+			
+			<obj id="PrintReview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印预览</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_PrintReview" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="CreateShortCut" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>发送到桌面快捷方式</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_ShortCut" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Properties" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>属性</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Properties" />
 				</eventlist>
 			</obj>
 			
@@ -36,24 +111,24 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>210</width>
-			<height>200</height>
+			<width>244+10</width>
+			<height>350</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>200</width>
-				<height>225</height>
+				<width>244+10</width>
+				<height>350</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">
 					<attr>
 						<left>0</left>
-						<top>29</top>
-						<width>200</width>
-						<height>196</height>
+						<top>32</top>
+						<width>244+10</width>
+						<height>father.height</height>
 						<ContextID>filemenu.context</ContextID>
 						<BknID>YBYL.Menu.Bkg</BknID>
 					</attr>

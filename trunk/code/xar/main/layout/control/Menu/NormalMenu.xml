@@ -52,6 +52,8 @@
 					<attr>
 						<left>0</left>
 						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
 						<limitchild>1</limitchild>
 					</attr>	
 					<children>
@@ -63,13 +65,13 @@
 								<height>father.height</height>
 							</attr>
 						</obj>
+						<!--注 图片有阴影，需调整-->
 						<obj id="menu.bkn" class="TextureObject">
 							<attr>
 								<left>0</left>
 								<top>0</top>
 								<width>father.width</width>
 								<height>father.height</height>
-								<!-- <alpha>250</alpha> -->
 							</attr>
 							<children>
 								<obj id="menu.shading" class="ImageObject">
@@ -100,11 +102,14 @@
 	
 	<objtemplate class="MenuItemObject" id="menu.context.item">
 		<attr>
-			<height>27</height>
+			<height>30</height>
 			<width>father.width</width>
-			<TextPos>28</TextPos>
+			<TextPos>25</TextPos>
 			<Font>font.yahei12</Font>
-			<FontColorNormal>4D4D4D</FontColorNormal>
+			<FontColorNormal>333333</FontColorNormal>
+			<RightTextColor>666666</RightTextColor>
+			<RightTextFont>font.yahei12</RightTextFont>
+			<RightTextPos>25</RightTextPos>
 		</attr>
 	</objtemplate>
 
@@ -112,7 +117,7 @@
     <objtemplate id="menu.main.itemex" class="MenuItemObject">
         <attr>
             <height>20</height>
-            <width>155</width>
+            <width>20</width>
 			<IconPos>0</IconPos>
 			<TextPos>13</TextPos>
 			<IconWidth>16</IconWidth>
@@ -121,19 +126,17 @@
     </objtemplate>
 	<objtemplate id="menu.object.template" >
 		<attr>
-			<ItemLeft>2</ItemLeft>
+			<ItemLeft>0</ItemLeft>
 			<ItemTop>0</ItemTop>
-			<ItemRight>2</ItemRight>
-			<ItemBottom>5</ItemBottom>
+			<ItemRight>0</ItemRight>
+			<ItemBottom>0</ItemBottom>
 		</attr>
 	</objtemplate>
 	<objtemplate id="menu.splitter" class="MenuItemObject">
         <attr>
-            <height>4</height>
-			<SeparatorHeight>2</SeparatorHeight>
-            <width>155</width>
+			<SeparatorHeight>1</SeparatorHeight>
 			<Type>1</Type>
-			<Icon>bitmap.menu.splitter</Icon>
+			<Icon>YBYL.Menu.Splitter.Bkg</Icon>
         </attr>
     </objtemplate>
 	

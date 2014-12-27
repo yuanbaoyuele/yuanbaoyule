@@ -50,7 +50,7 @@ function SetShowType( self, type_ )
 	attr.Type = type_
 	if attr.Type == 0 then
 		if attr.Text ~= nil then
-			self:SetText(attr.Text)
+			self:SetText(attr.Text, attr.RightText)
 		end
 		if attr.Icon ~= nil then
 			self:SetIconID(attr.Icon)
@@ -83,7 +83,7 @@ function SetShowType( self, type_ )
 				separator:SetResProvider(xarManager)
 				separator:SetDrawMode(1)
 				self:AddChild( separator )
-				separator:SetObjPos( "0", "(father.height - "..attr.SeparatorHeight..")/2", "father.width", "(father.height + "..attr.SeparatorHeight..")/2" )
+				separator:SetObjPos( "2", "(father.height - "..attr.SeparatorHeight..")/2", "father.width-1", "(father.height + "..attr.SeparatorHeight..")/2" )
 			end
 		end
 		if attr.Icon ~= nil then
@@ -138,12 +138,14 @@ function SetFont(self,font)
 	end
 end
 
-function SetText(self, text_)
+function SetText(self, text_, strRightText)
 	local attr = self:GetAttribute()
 	if attr == nil then
 		return
 	end
 	attr.Text = text_
+	attr.RightText = strRightText
+	
 	if attr.Type == 0 then
 		local item = self:GetControlObject("text")
 		if item == nil then
@@ -153,7 +155,9 @@ function SetText(self, text_)
 			item = text_template:CreateInstance( "text" )
 			self:AddChild( item )
 			item:SetResProvider(xarManager)
-			item:SetObjPos( ""..attr.TextPos, "0", "father.width", "father.height" )
+			
+			item:SetObjPos( ""..attr.TextPos, "0", "father.width/2", "father.height" )
+			
 			if attr.Font ~= nil and attr.Font ~= "" then
 				item:SetTextFontResID( attr.Font )
 			end
@@ -163,30 +167,37 @@ function SetText(self, text_)
 			text_ = text_ .. "(" .. attr.AccKey .. ")"
 		end
 		item:SetText(text_)
-		-- if not attr.SubMenuID then
-			-- local text = XMP.HotKey.GetHotkeyString(self:GetID())
-			-- if text and text ~= "" then
-				-- local hotkeyText = self:GetControlObject( "text.hotkey" )
-				-- if hotkeyText == nil then
-					-- local xarManager = XLGetObject("Xunlei.UIEngine.XARManager")
-					-- local templateManager = XLGetObject("Xunlei.UIEngine.TemplateManager")
-					-- local text_template = templateManager:GetTemplate( "menu.text", "ObjectTemplate" )
-					-- hotkeyText = text_template:CreateInstance( "text.hotkey" )
-					-- self:AddChild( hotkeyText )
-					-- hotkeyText:SetResProvider(xarManager)
-					-- hotkeyText:SetHAlign("right")
-					-- hotkeyText:SetObjPos( 0, 0, "father.width-"..attr.TextPos, "father.height" )
-					-- if attr.Font ~= nil and attr.Font ~= "" then
-						-- hotkeyText:SetTextFontResID( attr.Font )
-					-- end
-					-- hotkeyText:SetTextColorResID( attr.FontColorNormal )
-				-- end
-				-- hotkeyText:SetText(text)
-			-- end
-		-- end
+
+		SetRightText(self, strRightText)
+		
 		self:SetEnable(attr.Enable)
 	end
 end
+
+function SetRightText(objRootCtrl, strRightText)
+	local attr = objRootCtrl:GetAttribute()
+	local item = objRootCtrl:GetControlObject("righttext")
+	if item == nil then
+		local xarManager = XLGetObject("Xunlei.UIEngine.XARManager")
+		local templateManager = XLGetObject("Xunlei.UIEngine.TemplateManager")
+		local text_template = templateManager:GetTemplate( "menu.text", "ObjectTemplate" )
+		item = text_template:CreateInstance( "righttext" )
+		objRootCtrl:AddChild( item )
+		item:SetResProvider(xarManager)
+		
+		item:SetObjPos( "father.width/2", "0", "father.width-"..tostring(attr.RightTextPos), "father.height")
+		
+		if attr.RightTextFont ~= nil and attr.RightTextFont ~= "" then
+			item:SetTextFontResID( attr.RightTextFont )
+		end
+		item:SetTextColorResID( attr.RightTextColor )
+		item:SetText(strRightText)
+		item:SetHAlign("right")
+		
+	end
+end
+
+
 function SetTipsText(self, text_)
 	local attr = self:GetAttribute()
 	if attr == nil then
@@ -270,24 +281,6 @@ function SetEnable(self, enable)
 	end
 end
 
--- 初始化菜单，图标，文字及这两的位置
-function InitMenu(self)
-	local attr = self:GetAttribute()
-			
-	local iconObj = self:GetControlObject("icon")
-	if attr.Icon ~= nil then
-		iconObj:SetBitmapResID(attr.Icon)
-	end
-			
-	local textObj = self:GetControlObject("text")
-	if attr.Icon ~= nil then
-		textObj:SetText(attr.Text)
-	end
-	
-	local size = iconObj:GetSize()
-	iconObj:SetObjPos(attr.IconPos, 0, attr.IconPos + size.cx, "father.height")
-	textObj:SetObjPos(attr.TextPos, 0, "father.width -"..(father.width - attr.TextPos),"father.height")		
-end
 
 -- 得到菜单项的宽度（此方法给MenuObject调，遍历计算出最宽的值，用以调整整个菜单的宽度）
 function GetMinWidth(self)
@@ -424,7 +417,7 @@ function OnMouseMove(self)
 		if not attr.Visible then
 			return
 		end
-		local menu = self:GetFather()
+		local menu = self:GetFather()	
 		menu:SetHoverItem(self)
 		self:SetFocus( true )
 		if attr.TipsText then
