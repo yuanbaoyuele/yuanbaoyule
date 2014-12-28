@@ -1,0 +1,109 @@
+<xlue>
+	<objtemplate id="acceleratemenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>10</ItemTop>
+			<ItemBottom>20</ItemBottom>
+			<ItemLeft>6</ItemLeft>
+		</attr>
+		<children>
+			<obj id="Accelerate1" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速1x  (默认)</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate1" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Accelerate2" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速2x</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate2" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Accelerate5" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速5x</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate5" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Accelerate10" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速10x</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate10" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="Accelerate0_9" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速0.9x</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate0_9" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Accelerate0_5" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速0.5x</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate0_5" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Accelerate0_1" class="MenuItemObject" templateid="droplist.context.item">
+				<attr>
+					<Text>游戏加速0.1x</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate0_1" />
+				</eventlist>
+			</obj>			
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="AccelerateMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>154</width>
+			<height>213</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>154</width>
+				<height>213</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>29</top>
+						<width>154</width>
+						<height>father.height</height>
+						<ContextID>acceleratemenu.context</ContextID>
+						<BknID>YBYL.DropMenu.ItemBkg.Normal</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

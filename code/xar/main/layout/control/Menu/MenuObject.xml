@@ -15,10 +15,10 @@
 			<attr name="ItemBottom" type="int" desc="菜单条底边空白">
 				<default>0</default>
 			</attr>
-			<attr name="ShadowBkgWidth" type="int" desc="菜单条底边空白">
+			<attr name="ShadowBkgWidth" type="int" desc="背景阴影宽度">
 				<default>13</default>
 			</attr>
-			<attr name="ShadowBkgHeight" type="int" desc="菜单条底边空白">
+			<attr name="ShadowBkgHeight" type="int" desc="背景阴影高度">
 				<default>2</default>
 			</attr>
 		</attr_def>

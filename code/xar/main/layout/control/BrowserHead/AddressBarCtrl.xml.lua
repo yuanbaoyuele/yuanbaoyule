@@ -1,5 +1,4 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
-local tipUtil = tFunHelper.tipUtil
 
 
 ---方法---
@@ -27,17 +26,41 @@ function AdjustCollectBtnStyle(self, strURL)
 	end	 
 end
 
+function SetIcoImage(self, strIcoName)
+	local objImage = self:GetControlObject("AddressBarCtrl.Image")	
+	if not objImage then
+		return
+	end
+	
+	if not IsRealString(strIcoName) then
+		objImage:SetResID("")
+		return
+	end
+	
+	
+	local objBitmap = tFunHelper.GetIcoBitmapObj(strIcoName)
+	if objBitmap then
+		objImage:SetBitmap(objBitmap)
+	else
+		local strDefResID = tFunHelper.GetDefaultIcoImgID()
+		objImage:SetResID(strDefResID)
+	end
+end
 
 
 function ProcessTabChange(self, objTabCtrl)
 	if tonumber(objTabCtrl) ~= nil and objTabCtrl == 0 then
 		self:SetText("")
+		self:SetIcoImage("")
 		
 	elseif objTabCtrl then
 		local strURL = objTabCtrl:GetLocalURL()
+		local strIcoName = objTabCtrl:GetIcoName()
 		if IsRealString(strURL) then
 			self:SetText(strURL)
 		end
+
+		self:SetIcoImage(strIcoName)
 		self:AdjustCollectBtnStyle(strURL)
 	end
 end
@@ -82,8 +105,8 @@ function OnClickDropArrow(self)
 	local objRootCtrl = self:GetOwnerControl()
 	local objEditBkg = objRootCtrl:GetControlObject("AddressBarCtrl.Bkg")
 
-	TryDestroyOldMenu(objEditBkg, "UrlHistoryMenu")
-	CreateAndShowMenu(objEditBkg, "UrlHistoryMenu")
+	tFunHelper.TryDestroyOldMenu(objEditBkg, "UrlHistoryMenu")
+	tFunHelper.CreateAndShowMenu(objEditBkg, "UrlHistoryMenu")
 end
 
 
@@ -101,7 +124,6 @@ function OnUrlEditKeyDown(self, nKeyCode)
 end
 
 
-
 ----------------
 function SetCollectBtnStyle(objRootCtrl, strState)
 	local objCollectBtn = objRootCtrl:GetControlObject("AddressBarCtrl.Collect")
@@ -114,10 +136,12 @@ function SetCollectBtnStyle(objRootCtrl, strState)
 end
 
 
-function CheckHasCollect(strURL)
-	if not IsRealString(strURL) then
+function CheckHasCollect(strInputURL)
+	if not IsRealString(strInputURL) then
 		return false
 	end
+	
+	local strURL = tFunHelper.FormatURL(strInputURL)
 	
 	local tUserCollect = tFunHelper.ReadConfigFromMemByKey("tUserCollect")
 	if type(tUserCollect) ~= "table" then
@@ -140,19 +164,7 @@ function RemoveCollect(objRootCtrl, strURL)
 		return
 	end
 	
-	local tUserCollect = tFunHelper.ReadConfigFromMemByKey("tUserCollect")
-	if type(tUserCollect) ~= "table" then
-		tUserCollect= {}
-		return
-	end
-
-	for nIndex, tCollectInfo in pairs(tUserCollect) do
-		if type(tCollectInfo) == "table" and tCollectInfo["strURL"] == strURL then
-			table.remove(tUserCollect, nIndex)
-			tFunHelper.SaveConfigToFileByKey("tUserCollect")
-			break
-		end
-	end
+	tFunHelper.RemoveUserCollectURL(strURL)
 end
 
 
@@ -161,98 +173,7 @@ function AddCollect(objRootCtrl, strURL)
 		return
 	end
 	
-	local tUserCollect = tFunHelper.ReadConfigFromMemByKey("tUserCollect")
-	if type(tUserCollect) ~= "table" then
-		tUserCollect= {}
-		return
-	end
-
-	local tCollectInfo = {}
-	tCollectInfo.strURL = strURL
-	
-	table.insert(tUserCollect, tCollectInfo)
-	tFunHelper.SaveConfigToFileByKey("tUserCollect")
-end
-
-
---下拉菜单
-function TryDestroyOldMenu(objMenuBtn, strMenuKey)
-	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
-	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
-	local strHostWndName = strMenuKey..".HostWnd.Instance" 
-	local strObjTreeName = strMenuKey..".Tree.Instance"
-
-	if uHostWndMgr:GetHostWnd(strHostWndName) then
-		uHostWndMgr:RemoveHostWnd(strHostWndName)
-	end
-	
-	if uObjTreeMgr:GetUIObjectTree(strObjTreeName) then
-		uObjTreeMgr:DestroyTree(strObjTreeName)
-	end
-end
-
-
-function CreateAndShowMenu(objMenuBtn, strMenuKey)
-	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
-	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
-	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
-
-	if uTempltMgr and uHostWndMgr and uObjTreeMgr then
-		local uHostWnd = nil
-		local strHostWndName = strMenuKey..".HostWnd.Instance"
-		local strHostWndTempltName = "MenuHostWnd"
-		local strHostWndTempltClass = "HostWndTemplate"
-		local uHostWndTemplt = uTempltMgr:GetTemplate(strHostWndTempltName, strHostWndTempltClass)
-		if uHostWndTemplt then
-			uHostWnd = uHostWndTemplt:CreateInstance(strHostWndName)
-		end
-
-		local uObjTree = nil
-		local strObjTreeTempltName = strMenuKey.."Tree"
-		local strObjTreeTempltClass = "ObjectTreeTemplate"
-		local strObjTreeName = strMenuKey..".Tree.Instance"
-		local uObjTreeTemplt = uTempltMgr:GetTemplate(strObjTreeTempltName, strObjTreeTempltClass)
-		if uObjTreeTemplt then
-			uObjTree = uObjTreeTemplt:CreateInstance(strObjTreeName)
-		end
-
-		if uHostWnd and uObjTree then
-			--函数会阻塞
-			local bSucc = ShowMenuHostWnd(objMenuBtn, uHostWnd, uObjTree)
-			
-			if bSucc and uHostWnd:GetMenuMode() == "manual" then
-				uObjTreeMgr:DestroyTree(strObjTreeName)
-				uHostWndMgr:RemoveHostWnd(strHostWndName)
-			end
-		end
-	end
-end
-
-
-function ShowMenuHostWnd(objMenuBtn, uHostWnd, uObjTree)
-	uHostWnd:BindUIObjectTree(uObjTree)
-					
-	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
-	if not objMainLayout then
-	    return false
-	end	
-	local nL, nT, nR, nB = objMainLayout:GetObjPos()				
-	local nMenuContainerWidth = nR - nL
-	local nMenuContainerHeight = nB - nT
-	local nMenuLeft, nMenuTop = GetScreenAbsPos(objMenuBtn)
-	
-	uHostWnd:SetFocus(false) --先失去焦点，否则存在菜单不会消失的bug
-	
-	--函数会阻塞
-	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight)
-	return bOk
-end
-
-function GetScreenAbsPos(objUIElem)
-	local objTree = objUIElem:GetOwner()
-	local objHostWnd = objTree:GetBindHostWnd()
-	local nL, nT, nR, nB = objUIElem:GetAbsPos()
-	return objHostWnd:HostWndPtToScreenPt(nL, nT)
+	tFunHelper.SaveUserCollectURL(strURL)
 end
 
 

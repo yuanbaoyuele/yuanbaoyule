@@ -144,6 +144,12 @@ function GetText(self)
 end
 
 
+function GetExtraData(self)
+	local attr = self:GetAttribute()
+	return attr.ExtraData
+end
+
+
 function SetText(self, text_, strRightText)
 	local attr = self:GetAttribute()
 	if attr == nil then
@@ -161,8 +167,11 @@ function SetText(self, text_, strRightText)
 			item = text_template:CreateInstance( "text" )
 			self:AddChild( item )
 			item:SetResProvider(xarManager)
-			
-			item:SetObjPos( ""..attr.TextPos, "0", "father.width/2", "father.height" )
+			if IsRealString(strRightText) then
+				item:SetObjPos( ""..attr.TextPos, "0", "father.width/2-20", "father.height" )
+			else
+				item:SetObjPos( ""..attr.TextPos, "0", "father.width", "father.height" )
+			end	
 			
 			if attr.Font ~= nil and attr.Font ~= "" then
 				item:SetTextFontResID( attr.Font )
@@ -191,7 +200,7 @@ function SetRightText(objRootCtrl, strRightText)
 		objRootCtrl:AddChild( item )
 		item:SetResProvider(xarManager)
 		
-		item:SetObjPos( "father.width/2", "0", "father.width-"..tostring(attr.RightTextPos), "father.height")
+		item:SetObjPos( "father.width/2+5", "0", "father.width-"..tostring(attr.RightTextPos), "father.height")
 		
 		if attr.RightTextFont ~= nil and attr.RightTextFont ~= "" then
 			item:SetTextFontResID( attr.RightTextFont )
@@ -216,7 +225,6 @@ end
 function SetIconBitmap(self, objBitmap )
 	local icon = self:GetControlObject( "icon" )
 	if icon ~= nil then
-	XLMessageBox(tostring(objBitmap))
 		icon:SetBitmap(objBitmap)
 	end	
 end
@@ -481,10 +489,17 @@ function OnLButtonDown(self)
 	if not attr.Visible then
 	    return
 	end
---	if self:IsEnable() then
---		self:SetCaptureMouse(true)
---	end
+	if self:IsEnable() then
+		self:SetCaptureMouse(true)
+	end
 end
+
+function OnRButtonUp(self)
+
+end
+
+
+
 
 -- 设置submenuid,MenuObject的templateid来设置
 function SetSubMenu( self, menuid )
@@ -641,4 +656,8 @@ end
 function GetUserData(self)
 	local attr = self:GetAttribute()
 	return attr.Data
+end
+
+function IsRealString(str)
+	return type(str) == "string" and str ~= ""
 end

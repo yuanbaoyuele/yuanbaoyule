@@ -5,6 +5,21 @@
 			<ItemLeft>6</ItemLeft> <!--阴影-->
 		</attr>
 		<children>
+			<obj id="ClearHistory" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>清空历史记录</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearHistory" />
+				</eventlist>
+			</obj>
+		
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
 			<obj id="Profile" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>选项</Text>

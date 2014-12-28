@@ -6,6 +6,7 @@
 			<ProcessTabChange file="AddressBarCtrl.xml.lua" func="ProcessTabChange"/>
 			<SetText file="AddressBarCtrl.xml.lua" func="SetText"/>
 			<GetText file="AddressBarCtrl.xml.lua" func="GetText"/>
+			<SetIcoImage file="AddressBarCtrl.xml.lua" func="SetIcoImage"/>
 			<AdjustCollectBtnStyle file="AddressBarCtrl.xml.lua" func="AdjustCollectBtnStyle"/>
 		</method_def>		
 		
@@ -31,18 +32,20 @@
 								<!--url栏开头的网页图片-->
 								<obj id="AddressBarCtrl.Image" class="ImageObject">
 									<attr>
-										<left>0</left>
-										<top>0</top>
-										<width>5</width>
-										<height>father.height</height>
+										<left>15</left>
+										<top>(father.height-16)/2</top>
+										<width>16</width>
+										<height>16</height>
+										<drawmode>1</drawmode>
+										<antialias>2</antialias>
 									</attr>
 								</obj>
 							
 								<obj id="AddressBarCtrl.UrlEdit" class="EditObject">
 									<attr>
-										<left>25</left>
+										<left>28</left>
 										<top>10</top>
-										<width>father.width-80</width>
+										<width>father.width-85</width>
 										<height>father.height-20</height>
 										<transparent>1</transparent>
 										<textcolor>system.white</textcolor>

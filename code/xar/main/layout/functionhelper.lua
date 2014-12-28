@@ -446,6 +446,92 @@ end
 
 ------------UI--
 
+----菜单--
+function TryDestroyOldMenu(objMenuText, strMenuKey)
+	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
+	local strHostWndName = strMenuKey..".HostWnd.Instance" 
+	local strObjTreeName = strMenuKey..".Tree.Instance"
+
+	if uHostWndMgr:GetHostWnd(strHostWndName) then
+		uHostWndMgr:RemoveHostWnd(strHostWndName)
+	end
+	
+	if uObjTreeMgr:GetUIObjectTree(strObjTreeName) then
+		uObjTreeMgr:DestroyTree(strObjTreeName)
+	end
+end
+
+
+function CreateAndShowMenu(objMenuText, strMenuKey)
+	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
+	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
+
+	if uTempltMgr and uHostWndMgr and uObjTreeMgr then
+		local uHostWnd = nil
+		local strHostWndName = strMenuKey..".HostWnd.Instance"
+		local strHostWndTempltName = "MenuHostWnd"
+		local strHostWndTempltClass = "HostWndTemplate"
+		local uHostWndTemplt = uTempltMgr:GetTemplate(strHostWndTempltName, strHostWndTempltClass)
+		if uHostWndTemplt then
+			uHostWnd = uHostWndTemplt:CreateInstance(strHostWndName)
+		end
+
+		local uObjTree = nil
+		local strObjTreeTempltName = strMenuKey.."Tree"
+		local strObjTreeTempltClass = "ObjectTreeTemplate"
+		local strObjTreeName = strMenuKey..".Tree.Instance"
+		local uObjTreeTemplt = uTempltMgr:GetTemplate(strObjTreeTempltName, strObjTreeTempltClass)
+		if uObjTreeTemplt then
+			uObjTree = uObjTreeTemplt:CreateInstance(strObjTreeName)
+		end
+
+		if uHostWnd and uObjTree then
+			--函数会阻塞
+			local bSucc = ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree)
+			
+			if bSucc and uHostWnd:GetMenuMode() == "manual" then
+				uObjTreeMgr:DestroyTree(strObjTreeName)
+				uHostWndMgr:RemoveHostWnd(strHostWndName)
+			end
+		end
+	end
+end
+
+
+function ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree)
+	uHostWnd:BindUIObjectTree(uObjTree)
+					
+	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
+	if not objMainLayout then
+	    return false
+	end	
+	local nL, nT, nR, nB = objMainLayout:GetObjPos()				
+	local nMenuContainerWidth = nR - nL
+	local nMenuContainerHeight = nB - nT
+	local nMenuLeft, nMenuTop = GetScreenAbsPos(objMenuText)
+	
+	uHostWnd:SetFocus(false) --先失去焦点，否则存在菜单不会消失的bug
+	
+	--函数会阻塞
+	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight)
+	return bOk
+end
+
+function GetScreenAbsPos(objUIElem)
+	local objTree = objUIElem:GetOwner()
+	local objHostWnd = objTree:GetBindHostWnd()
+	local nL, nT, nR, nB = objUIElem:GetAbsPos()
+	return objHostWnd:HostWndPtToScreenPt(nL, nT)
+end
+
+
+
+-----
+
+
+
 -------文件操作---
 local g_bLoadCfgSucc = false
 local g_tConfigFileStruct = {
@@ -550,10 +636,12 @@ function SetHomePage(strURL)
 end
 
 
-function SaveUrlToHistory(strURL)
-	if not IsRealString(strURL) then
+function SaveUrlToHistory(strInputURL)
+	if not IsRealString(strInputURL) then
 		return
 	end
+	
+	local strURL = FormatURL(strInputURL)
 	
 	local nCurrentTime = tipUtil:GetCurrentUTCTime()
 	local tHistInfo = {}
@@ -567,7 +655,7 @@ function SaveUrlToHistory(strURL)
 			tHistInfo["strLocationName"] = tInfo["strLocationName"]
 			
 			table.remove(tUrlHistory, nIndex)
-
+			break
 		end	
 	end
 	
@@ -578,18 +666,21 @@ function SaveUrlToHistory(strURL)
 end
 
 
-function SaveLctnNameToHistory(strURL, strLctnName)
-	if not IsRealString(strLctnName) or not IsRealString(strURL) then
+function SaveLctnNameToFile(strInputURL, strLctnName, strFileKey)
+	if not IsRealString(strLctnName) or not IsRealString(strInputURL) 
+		or not IsRealString(strFileKey) then
 		return
 	end
 	
-	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
-	for nIndex, tInfo in ipairs(tUrlHistory) do
+	local strURL = FormatURL(strInputURL)
+	
+	local tFileInfo = ReadConfigFromMemByKey(strFileKey) or {}
+	for nIndex, tInfo in ipairs(tFileInfo) do
 		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
 		
 			if not IsRealString(tInfo["strLocationName"]) then
-				tUrlHistory[nIndex]["strLocationName"] = strLctnName
-				SaveConfigToFileByKey("tUrlHistory")
+				tFileInfo[nIndex]["strLocationName"] = strLctnName
+				SaveConfigToFileByKey(tFileInfo)
 			end
 			return
 		end	
@@ -597,24 +688,102 @@ function SaveLctnNameToHistory(strURL, strLctnName)
 end
 
 
-function SaveIcoNameToHistory(strURL, strIcoName)
-	if not IsRealString(strIcoName) or not IsRealString(strURL) then
+function SaveIcoNameToFile(strInputURL, strIcoName, strFileKey)
+	if not IsRealString(strIcoName) or not IsRealString(strInputURL) 
+		or not IsRealString(strFileKey) then
 		return
 	end
 	
-	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
-	for nIndex, tInfo in ipairs(tUrlHistory) do
+	local strURL = FormatURL(strInputURL)
+	
+	local tFileInfo = ReadConfigFromMemByKey(strFileKey) or {}
+	for nIndex, tInfo in ipairs(tFileInfo) do
 		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
 		
 			if not IsRealString(tInfo["strIcoName"]) then
-				tUrlHistory[nIndex]["strIcoName"] = strIcoName
-				SaveConfigToFileByKey("tUrlHistory")
+				tFileInfo[nIndex]["strIcoName"] = strIcoName
+				SaveConfigToFileByKey(strFileKey)
 			end
 			
 			return
 		end	
 	end
 end
+
+
+function ClearFileInfo(strFileKey)
+	if type(g_tConfigFileStruct[strFileKey]) ~= "table" then
+		return
+	end
+
+	g_tConfigFileStruct[strFileKey]["tContent"] = {}
+	SaveConfigToFileByKey(strFileKey)
+end
+
+
+function GetURLInfoFromHistory(strInputURL)
+	local strURL = FormatURL(strInputURL)
+
+	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
+	for nIndex, tInfo in ipairs(tUrlHistory) do
+		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
+			return tInfo
+		end	
+	end
+
+	return nil
+end
+
+
+function SaveUserCollectURL(strInputURL)
+	if not IsRealString(strInputURL) then
+		return 
+	end	
+
+	local strURL = FormatURL(strInputURL)
+
+	local tCollectInfo = GetURLInfoFromHistory(strURL)
+	if type(tCollectInfo) ~= "table" then
+		TipLog("[SaveUserCollectURL] add collect failed:"..tostring(strURL))
+		return
+	end
+	
+	local nCurrentTime = tipUtil:GetCurrentUTCTime()
+	tCollectInfo["nCollectUTC"] = nCurrentTime
+
+	local tUserCollect = ReadConfigFromMemByKey("tUserCollect") or {}
+	for nIndex, tInfo in ipairs(tUserCollect) do
+		if type(tInfo) == "table" and tInfo["strURL"] == tostring(tCollectInfo["strURL"]) then
+			table.remove(tUserCollect, nIndex)
+			break
+		end	
+	end
+		
+	table.insert(tUserCollect, 1, tCollectInfo)	
+	
+	LimitCollectSize(tUserCollect)
+	SaveConfigToFileByKey("tUserCollect")
+end
+
+
+function RemoveUserCollectURL(strInputURL)
+	local strURL = FormatURL(strInputURL)
+	
+	local tUserCollect = ReadConfigFromMemByKey("tUserCollect")
+	if type(tUserCollect) ~= "table" then
+		tUserCollect= {}
+		return
+	end
+
+	for nIndex, tCollectInfo in pairs(tUserCollect) do
+		if type(tCollectInfo) == "table" and tCollectInfo["strURL"] == strURL then
+			table.remove(tUserCollect, nIndex)
+			SaveConfigToFileByKey("tUserCollect")
+			break
+		end
+	end
+end
+
 
 
 function GetIcoDir()
@@ -635,6 +804,32 @@ function LimitHistorySize(tUrlHistory)
 end
 
 
+function LimitCollectSize(tUserCollect)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local nMaxUserCollect = tUserConfig["nMaxUserCollect"] or 100
+	
+	if nMaxUserCollect >= #tUserCollect then
+		return
+	end	
+
+	for i=nMaxUrlHistroy+1, #tUserCollect do
+		table.remove(tUserCollect, i)
+	end	
+end
+
+function FormatURL(strURL)
+	if not IsRealString(strURL) then
+		return nil
+	end
+
+	local strURLFix = string.gsub(strURL, "^http://", "")
+	strURLFix = string.gsub(strURLFix, "^https://", "")
+	strURLFix = string.gsub(strURLFix, "/$", "")
+	
+	return strURLFix
+end
+
+
 ------------------文件--
 local obj = {}
 obj.tipUtil = tipUtil
@@ -651,18 +846,26 @@ obj.GetProgramTempDir = GetProgramTempDir
 obj.GetYBYLVersion = GetYBYLVersion
 
 obj.OpenURL = OpenURL
+obj.FormatURL = FormatURL
 obj.OpenURLInNewWindow = OpenURLInNewWindow
 obj.GetHomePage = GetHomePage
 obj.SetHomePage = SetHomePage
 obj.GetActiveTabCtrl = GetActiveTabCtrl
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
 obj.ShowPopupWndByName = ShowPopupWndByName
+
+obj.SaveUserCollectURL = SaveUserCollectURL
+obj.RemoveUserCollectURL = RemoveUserCollectURL
 obj.SaveUrlToHistory = SaveUrlToHistory
-obj.SaveLctnNameToHistory = SaveLctnNameToHistory
-obj.SaveIcoNameToHistory = SaveIcoNameToHistory
+obj.ClearFileInfo = ClearFileInfo
+obj.SaveLctnNameToFile = SaveLctnNameToFile
+obj.SaveIcoNameToFile = SaveIcoNameToFile
 obj.GetIcoDir = GetIcoDir
 obj.GetIcoBitmapObj = GetIcoBitmapObj
 obj.GetDefaultIcoImgID = GetDefaultIcoImgID
+
+obj.TryDestroyOldMenu = TryDestroyOldMenu
+obj.CreateAndShowMenu = CreateAndShowMenu
 
 obj.SetBrowserFullScrn = SetBrowserFullScrn
 obj.RestoreWndSize = RestoreWndSize
