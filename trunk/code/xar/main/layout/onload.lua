@@ -39,6 +39,67 @@ function ShowMainTipWnd(objMainWnd)
 end
 
 
+
+--µ¯³ö´°¿Ú--
+local g_tPopupWndList = {
+	[1] = {"TipConfigWnd", "TipConfigTree"},
+	-- [2] = {"TipAboutWnd", "TipAboutTree"},
+}
+
+
+function CreatePopupTipWnd()
+	for key, tItem in pairs(g_tPopupWndList) do
+		local strHostWndName = tItem[1]
+		local strTreeName = tItem[2]
+		local bSucc = CreateWndByName(strHostWndName, strTreeName)
+	end
+	
+	return true
+end
+
+function CreateWndByName(strHostWndName, strTreeName)
+	local bSuccess = false
+	local strInstWndName = strHostWndName..".Instance"
+	local strInstTreeName = strTreeName..".Instance"
+	
+	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
+	local frameHostWndTemplate = templateMananger:GetTemplate(strHostWndName, "HostWndTemplate" )
+	if frameHostWndTemplate then
+		local frameHostWnd = frameHostWndTemplate:CreateInstance(strInstWndName)
+		if frameHostWnd then
+			local objectTreeTemplate = nil
+			objectTreeTemplate = templateMananger:GetTemplate(strTreeName, "ObjectTreeTemplate")
+			if objectTreeTemplate then
+				local uiObjectTree = objectTreeTemplate:CreateInstance(strInstTreeName)
+				if uiObjectTree then
+					frameHostWnd:BindUIObjectTree(uiObjectTree)
+					local iRet = frameHostWnd:Create()
+					if iRet ~= nil and iRet ~= 0 then
+						bSuccess = true
+					end
+				end
+			end
+		end
+	end
+
+	return bSuccess
+end
+
+function DestroyPopupWnd()
+	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
+
+	for key, tItem in pairs(g_tPopupWndList) do
+		local strPopupWndName = tItem[1]
+		local strPopupInst = strPopupWndName..".Instance"
+		
+		local objPopupWnd = hostwndManager:GetHostWnd(strPopupInst)
+		if objPopupWnd then
+			hostwndManager:RemoveHostWnd(strPopupInst)
+		end
+	end
+end
+
+
 function PopTipWnd(OnCreateFunc)
 	local bSuccess = false
 	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
@@ -72,6 +133,15 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
+function ProcessCommandLine()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
+	if bRet and IsRealString(strURL) then
+		FunctionObj.OpenURL(strURL)
+	end
+end
+
+
 function CreateMainTipWnd()
 	local function OnCreateFuncF(treectrl)
 		local rootctrl = treectrl:GetUIObject("root.layout:root.ctrl")
@@ -97,6 +167,8 @@ function TipMain()
 	FunctionObj.ReadAllConfigInfo()
 	
 	CreateMainTipWnd()
+	CreatePopupTipWnd()
+	ProcessCommandLine()
 end
 
 

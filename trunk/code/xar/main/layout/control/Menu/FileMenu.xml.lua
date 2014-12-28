@@ -7,6 +7,10 @@ function OnSelect_AddNewTab(self)
 	tFunHelper.OpenURL(strHomePage)
 end
 
+function OnSelect_AddNewWindow(self)
+	tFunHelper.OpenURLInNewWindow()
+end
+
 function OnSelect_Open(self)
 	local strURL = tIEMenuHelper:ExecuteCMD("Open")
 	tFunHelper.OpenURL(strURL)

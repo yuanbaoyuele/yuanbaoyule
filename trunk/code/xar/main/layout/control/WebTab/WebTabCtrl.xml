@@ -18,7 +18,8 @@
 			<BindBrowserCtrl file="WebTabCtrl.xml.lua" func="BindBrowserCtrl"/>
 			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
 			<GetLocalURL file="WebTabCtrl.xml.lua" func="GetLocalURL"/>
-			<SaveInputURL file="WebTabCtrl.xml.lua" func="SaveInputURL"/>
+			<SaveUserInputURL file="WebTabCtrl.xml.lua" func="SaveUserInputURL"/>
+			<GetUserInputURL file="WebTabCtrl.xml.lua" func="GetUserInputURL"/>
 			<GetGoBackState file="WebTabCtrl.xml.lua" func="GetGoBackState"/>
 			<SetGoBackState file="WebTabCtrl.xml.lua" func="SetGoBackState"/>
 			<GetGoForwardState file="WebTabCtrl.xml.lua" func="GetGoForwardState"/>

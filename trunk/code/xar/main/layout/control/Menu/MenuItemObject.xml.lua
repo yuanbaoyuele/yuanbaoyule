@@ -138,6 +138,12 @@ function SetFont(self,font)
 	end
 end
 
+function GetText(self)
+	local item = self:GetControlObject("text")
+	return item:GetText()
+end
+
+
 function SetText(self, text_, strRightText)
 	local attr = self:GetAttribute()
 	if attr == nil then
@@ -192,7 +198,7 @@ function SetRightText(objRootCtrl, strRightText)
 		end
 		item:SetTextColorResID( attr.RightTextColor )
 		item:SetText(strRightText)
-		item:SetHAlign("right")
+		item:SetHAlign(attr.RightTextHAligh)
 		
 	end
 end
@@ -205,6 +211,18 @@ function SetTipsText(self, text_)
 	end
 	attr.TipsText = text_
 end
+
+
+function SetIconBitmap(self, objBitmap )
+	local icon = self:GetControlObject( "icon" )
+	if icon ~= nil then
+	XLMessageBox(tostring(objBitmap))
+		icon:SetBitmap(objBitmap)
+	end	
+end
+
+
+
 function SetIconID( self, iconID )
 	local attr = self:GetAttribute()
 	if attr == nil then
@@ -221,6 +239,7 @@ function SetIconID( self, iconID )
 				if icon ~= nil then
 					icon:SetResProvider(xarManager)
 					icon:SetDrawMode( 1 )
+					icon:SetAntialias( 2 )
 					self:AddChild( icon )
 					icon:SetObjPos( ""..attr.IconPos, "(father.height-"..attr.IconHeight..")/2", ""..attr.IconPos.."+"..attr.IconWidth, "(father.height+"..attr.IconHeight..")/2" )
 				end

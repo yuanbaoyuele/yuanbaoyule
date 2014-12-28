@@ -71,9 +71,9 @@
 						
 						<obj id="BrowserHeadCtrl.MenuBarCtrl" class="MenuBarCtrl">
 							<attr>
-								<left>father.width-90-200</left>
+								<left>father.width-125-220</left>
 								<top>0</top>
-								<width>200</width>
+								<width>220</width>
 								<height>35</height>
 							</attr>	
 						</obj>
@@ -96,7 +96,7 @@
 						
 						<obj id="BrowserHeadCtrl.Caption.MaxBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-10-26*2</left>
+								<left>father.width-15-26*2</left>
 								<top>5</top>
 								<width>26</width>
 								<height>24</height>
@@ -110,9 +110,27 @@
 							</eventlist>
 						</obj>
 						
+						
+						<obj id="BrowserHeadCtrl.Caption.Restore" class="TipAddin.Button">
+							<attr>
+								<left>father.width-15-26*2</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.RestoreBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.RestoreBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.RestoreBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.RestoreBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationRestore" />
+							</eventlist>
+						</obj>
+						
+						
 						<obj id="BrowserHeadCtrl.Caption.MinBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-10-26*3</left>
+								<left>father.width-20-26*3</left>
 								<top>5</top>
 								<width>26</width>
 								<height>24</height>
@@ -144,7 +162,6 @@
 							</attr>	
 						</obj>
 						
-						
 						<obj id="BrowserHeadCtrl.RightBkg" class="TextureObject">
 							<attr>
 								<left>father.width-759</left>
@@ -156,8 +173,11 @@
 						</obj>
 						
 					</children>
-				</obj>
+				</obj> <!--end root.layout-->
             </children>
+			<eventlist>
+				<event name="OnPosChange" file="BrowserHeadCtrl.xml.lua" func="OnPosChange" />
+			</eventlist>
         </objtemplate>
     </control>
 </xlue>

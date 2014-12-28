@@ -10,107 +10,135 @@
 		
 		<objtemplate>
 			<children>
-				<obj id="MenuBarCtrl.HideBtn" class="TipAddin.Button">
+				<obj id="root.layout" class="LayoutObject">
 					<attr>
 						<left>0</left>
-						<top>(father.height-10)/2+1</top>
-						<width>6</width>
-						<height>10</height>
-						<NormalBkgID>YBYL.MenuBar.HideBtn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.MenuBar.HideBtn.Down</DownBkgID>
-						<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.MenuBar.HideBtn.Disable</DisableBkgID>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<limitchild>1</limitchild>
 					</attr>
-					<eventlist>
-						<event name="OnClick" file="MenuBarCtrl.xml.lua" func="OnClickHideBtn" />
-					</eventlist>
-				</obj>
+					<children>
+						<obj id="MenuBarCtrl.HideBtn" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>(father.height-10)/2+1</top>
+								<width>6</width>
+								<height>10</height>
+								<NormalBkgID>YBYL.MenuBar.HideBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.MenuBar.HideBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.MenuBar.HideBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="MenuBarCtrl.xml.lua" func="OnClickHideBtn" />
+							</eventlist>
+						</obj>
 						
-				<obj id="MenuBarCtrl.HideBtn.File" class="TextObject">
-					<attr>
-						<left>15</left>
-						<top>0</top>
-						<width>30</width>
-						<height>father.height</height>
-						<valign>center</valign>
-						<halign>center</halign>
-						<font>font.menubar.text</font>
-						<textcolor>color.menubar.text</textcolor>
-						<text>文件</text>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickFile" />
-					</eventlist>
-				</obj>
-				
-				<obj id="MenuBarCtrl.HideBtn.Lookup" class="TextObject">
-					<attr>
-						<left>15+35</left>
-						<top>0</top>
-						<width>30</width>
-						<height>father.height</height>
-						<valign>center</valign>
-						<halign>center</halign>
-						<font>font.menubar.text</font>
-						<textcolor>color.menubar.text</textcolor>
-						<text>查看</text>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickLookup" />
-					</eventlist>
-				</obj>
-				
-				<obj id="MenuBarCtrl.HideBtn.Collect" class="TextObject">
-					<attr>
-						<left>15+35*2</left>
-						<top>0</top>
-						<width>30</width>
-						<height>father.height</height>
-						<valign>center</valign>
-						<halign>center</halign>
-						<font>font.menubar.text</font>
-						<textcolor>color.menubar.text</textcolor>
-						<text>收藏</text>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickCollect" />
-					</eventlist>
-				</obj>
-				
-				<obj id="MenuBarCtrl.HideBtn.Tool" class="TextObject">
-					<attr>
-						<left>15+35*3</left>
-						<top>0</top>
-						<width>30</width>
-						<height>father.height</height>
-						<valign>center</valign>
-						<halign>center</halign>
-						<font>font.menubar.text</font>
-						<textcolor>color.menubar.text</textcolor>
-						<text>工具</text>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickTool" />
-					</eventlist>
-				</obj>
-				
-				<obj id="MenuBarCtrl.HideBtn.Help" class="TextObject">
-					<attr>
-						<left>15+35*4</left>
-						<top>0</top>
-						<width>30</width>
-						<height>father.height</height>
-						<valign>center</valign>
-						<halign>center</halign>
-						<font>font.menubar.text</font>
-						<textcolor>color.menubar.text</textcolor>
-						<text>帮助</text>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickHelp" />
-					</eventlist>
-				</obj>
-			
+						<obj id="MenuBarCtrl.ShowBtn" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>(father.height-10)/2+1</top>
+								<width>6</width>
+								<height>10</height>
+								<NormalBkgID>YBYL.MenuBar.ShowBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.MenuBar.ShowBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.MenuBar.ShowBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.MenuBar.ShowBtn.Disable</DisableBkgID>
+								<Visible>false</Visible>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="MenuBarCtrl.xml.lua" func="OnClickShowBtn" />
+							</eventlist>
+						</obj>
+						
+								
+						<obj id="MenuBarCtrl.HideBtn.File" class="TextObject">
+							<attr>
+								<left>15</left>
+								<top>0</top>
+								<width>30</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<halign>center</halign>
+								<font>font.menubar.text</font>
+								<textcolor>color.menubar.text</textcolor>
+								<text>文件</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickFile" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Lookup" class="TextObject">
+							<attr>
+								<left>15+40</left>
+								<top>0</top>
+								<width>30</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<halign>center</halign>
+								<font>font.menubar.text</font>
+								<textcolor>color.menubar.text</textcolor>
+								<text>查看</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickLookup" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Collect" class="TextObject">
+							<attr>
+								<left>15+40*2</left>
+								<top>0</top>
+								<width>30</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<halign>center</halign>
+								<font>font.menubar.text</font>
+								<textcolor>color.menubar.text</textcolor>
+								<text>收藏</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickCollect" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Tool" class="TextObject">
+							<attr>
+								<left>15+40*3</left>
+								<top>0</top>
+								<width>30</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<halign>center</halign>
+								<font>font.menubar.text</font>
+								<textcolor>color.menubar.text</textcolor>
+								<text>工具</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickTool" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Help" class="TextObject">
+							<attr>
+								<left>15+40*4</left>
+								<top>0</top>
+								<width>30</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<halign>center</halign>
+								<font>font.menubar.text</font>
+								<textcolor>color.menubar.text</textcolor>
+								<text>帮助</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickHelp" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj> <!--end root.layout-->
 			</children>
 			<eventlist>
 			</eventlist>

@@ -1,18 +1,30 @@
 -- NormalMenu 包住MenuObject，里面很多方法是直接调MenuObject的方法
-function OnInitControl(self)
+function OnInitControl(self, objMenuContext)
 	local attr = self:GetAttribute()
+	if attr.bHasInit then
+		return
+	end
+	
 	attr.v_status = 1
 	attr.h_status = 1
+
+	--注意objMenuContext的id必须是context_menu
+	if objMenuContext ~= nil then
+		local bkn = self:GetControlObject("menu.bkn")
+		objMenuContext:SetObjPos("father.left", "father.top", "father.right", "father.bottom")
+		bkn:AddChild(objMenuContext)
+	else
 	
-	local contextid = attr.ContextID
-	if contextid ~= nil then
-		local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")	
-		local contextTemplate = templateMananger:GetTemplate(contextid, "ObjectTemplate")
-		local contextObj = contextTemplate:CreateInstance("context_menu")
-		if contextObj ~= nil then
-			local bkn = self:GetControlObject("menu.bkn")
-			contextObj:SetObjPos("father.left", "father.top", "father.right", "father.bottom")
-			bkn:AddChild(contextObj)
+		local contextid = attr.ContextID
+		if contextid ~= nil then
+			local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")	
+			local contextTemplate = templateMananger:GetTemplate(contextid, "ObjectTemplate")
+			local contextObj = contextTemplate:CreateInstance("context_menu")
+			if contextObj ~= nil then
+				local bkn = self:GetControlObject("menu.bkn")
+				contextObj:SetObjPos("father.left", "father.top", "father.right", "father.bottom")
+				bkn:AddChild(contextObj)
+			end
 		end
 	end
 	
@@ -77,6 +89,7 @@ function OnInitControl(self)
 	
 	UpdateSize( self )
 	
+	attr.bHasInit = true
 	return true
 end
 
