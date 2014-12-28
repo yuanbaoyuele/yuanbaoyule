@@ -6,18 +6,6 @@ function OnInitControl(self)
 	ShowUrlHistory(self)
 end
 
-
-
-
-
-
-
-function OnSelect_Stop(self)
-
-end
-
-
-
 --
 
 function ShowUrlHistory(self)
@@ -75,7 +63,7 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	attr.RightText = tHistoryInfo["strLocationName"]
 	attr.RightTextColor = "404040"
 	attr.RightTextHAligh = "left"
-	attr.TextRightWidth = 20
+	attr.TextRightWidth = 40
 	attr.FontColorNormal = "949494"
 	attr.TextPos = 30
 	

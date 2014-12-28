@@ -18,6 +18,7 @@
 			<attr name="Text" type="string" desc="该条目的文本"/>
 			
 			<attr name="RightText" type="string" desc="该条目的右侧文本"/>
+			<attr name="ExtraData" type="string" />
 			
 			<attr name="NormalArrow" type="string" desc="如果存在子菜单时的箭头图标" >
 				<!--default>bitmap.menu.arrow.normal</default-->
@@ -82,6 +83,7 @@
 			<GetSubMenu file="MenuItemObject.xml.lua" function="GetSubMenu"/>
 			<SetText file="MenuItemObject.xml.lua" function="SetText"/>
 			<GetText file="MenuItemObject.xml.lua" function="GetText"/>
+			<GetExtraData file="MenuItemObject.xml.lua" function="GetExtraData"/>
 			<SetTipsText file="MenuItemObject.xml.lua" function="SetTipsText"/>
 			<SetIconID file="MenuItemObject.xml.lua" function="SetIconID" />
 			<GetIconID file="MenuItemObject.xml.lua" function="GetIconID" />
@@ -139,7 +141,7 @@
 				<event name="OnMouseHover" />
 				<event name="OnLButtonDown" />
 				<event name="OnLButtonUp" file="MenuItemObject.xml.lua" function="OnLButtonUp" />
-				<event name="OnRButtonUp" file="MenuItemObject.xml.lua" function="OnLButtonUp" />
+				<event name="OnRButtonUp" file="MenuItemObject.xml.lua" function="OnRButtonUp" />
 				<event name="OnKeyDown" file="MenuItemObject.xml.lua" func="OnKeyDown" />
 			</eventlist>
 		</objtemplate>

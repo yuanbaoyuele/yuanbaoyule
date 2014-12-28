@@ -32,12 +32,12 @@ function GetMaxWidth(self)
 	local nL, nT, nR, nB = self:GetObjPos()
 	local max_width = nR-nL
 
-	IterateItems(self, function(item)
-		local temp_width = item:GetMinWidth()
-		if temp_width ~= nil and item:IsVisible() and max_width < temp_width then
-			max_width = temp_width
-		end
-	end)
+	-- IterateItems(self, function(item)
+		-- local temp_width = item:GetMinWidth()
+		-- if temp_width ~= nil and item:IsVisible() and max_width < temp_width then
+			-- max_width = temp_width
+		-- end
+	-- end)
 	
 	return max_width
 end
@@ -62,8 +62,12 @@ function AdjustItemPos( self )
 			pos_y = pos_y + bottom - top
 		end
 	end)
+	
 	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
 	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom )
+	
+	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
+	
 	if attr.HoverItem then
 		local itembkn = self:GetControlObject("ItemBkn")
 		local left, top, right, bottom = attr.HoverItem:GetObjPos()

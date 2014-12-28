@@ -16,6 +16,12 @@ function GetTabText(self)
 end
 
 
+function GetIcoName(self)
+	local attr = self:GetAttribute()
+	return attr.strIcoName
+end
+
+
 function GetLocalURL(self)
 	local objWebBrowser = self:GetBindBrowserCtrl()
 	if objWebBrowser then
@@ -78,7 +84,7 @@ function BindBrowserCtrl(self, objWebBrowser)
 	
 	attr.objBrowserCtrl:AttachListener("Fire_OnNavigateComplete2", false, 
 		function (objBrowser, strEventName, strURL)
-			SetAddressBarState(self, strURL)
+			SetAddressBarState(self)
 			DownloadTabIco(self, strURL)
 		end)
 	
@@ -201,12 +207,19 @@ end
 
 function SaveTitleToHistory(objRootCtrl, strTitle)
 	local strURL = objRootCtrl:GetUserInputURL()
-	tFunHelper.SaveLctnNameToHistory(strURL, strTitle)
+	if string.find(strTitle, strURL) then --简单过滤
+		return
+	end
+	
+	local strFileKey = "tUrlHistory"
+	tFunHelper.SaveLctnNameToFile(strURL, strTitle, strFileKey)
 end
 
 function SaveIcoNameToHistory(objRootCtrl, strIcoName)
 	local strURL = objRootCtrl:GetUserInputURL()
-	tFunHelper.SaveIcoNameToHistory(strURL, strIcoName)
+	
+	local strFileKey = "tUrlHistory"
+	tFunHelper.SaveIcoNameToFile(strURL, strIcoName, strFileKey)
 end
 
 
@@ -219,6 +232,12 @@ function SetTabTitle(objRootCtrl, strTitle)
 	objText:SetText(strTitle)
 	
 	SaveTitleToHistory(objRootCtrl, strTitle)
+end
+
+
+function SetIcoName(objRootCtrl, strIcoName)
+	local attr = objRootCtrl:GetAttribute()
+	attr.strIcoName = strIcoName
 end
 
 
@@ -235,11 +254,12 @@ function SetTabIco(objRootCtrl, strIcoPath, strIcoName)
 		objImage:SetBitmap(objBitmap)
 	end		
 	
+	SetIcoName(objRootCtrl, strIcoName)
 	SaveIcoNameToHistory(objRootCtrl, strIcoName)
 end
 
 
-function SetAddressBarState(objRootCtrl, strURL)
+function SetAddressBarState(objRootCtrl)
 	local bActive = GetActiveState(objRootCtrl)
 	if not bActive then
 		return
@@ -260,6 +280,26 @@ function SetAddressBarState(objRootCtrl, strURL)
 		objAddressBar:SetText(strLocalURL)
 		objAddressBar:AdjustCollectBtnStyle(strLocalURL)
 	end
+end
+
+
+function SetAddressBarImage(objRootCtrl, strIcoName)
+	local bActive = GetActiveState(objRootCtrl)
+	if not bActive then
+		return
+	end
+
+	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objAddressBar = objHeadCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")
+	if not objAddressBar then
+		return
+	end
+	
+	objAddressBar:SetIcoImage(strIcoName)
 end
 
 
@@ -286,12 +326,14 @@ function DownloadTabIco(objRootCtrl, strURL)
 	
 	if tipUtil:QueryFileExists(strSavePath) then
 		SetTabIco(objRootCtrl, strSavePath, strIcoName)
+		SetAddressBarImage(objRootCtrl, strIcoName)
 	else
 		tFunHelper.NewAsynGetHttpFile(strIconURL, strSavePath, false, 
 		function(bRet, strIcoPath)
 			tFunHelper.TipLog("[DownloadTabIco] strURL=" .. strIconURL .. " saveIcoPath=",strSavePath)
 			if bRet == 0 then
 				SetTabIco(objRootCtrl, strIcoPath, strIcoName)
+				SetAddressBarImage(objRootCtrl, strIcoName)
 			end
 		
 		end, 60*1000)

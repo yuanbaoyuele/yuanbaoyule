@@ -18,7 +18,7 @@
 						<height>father.height</height>
 					</attr>
 					<children>
-						<!--obj id="FuncBtnList.Accelerate" class="TipAddin.Button">
+						<obj id="FuncBtnList.Accelerate" class="TipAddin.Button">
 							<attr>
 								<left>0</left>
 								<top>0</top>
@@ -65,35 +65,7 @@
 								<height>4</height>
 								<texture>YBYL.AddressBarCtrl.DropArrow.Hover</texture>
 							</attr>
-						</obj-->
-						
-						<obj id="FuncBtnList.Accelerate.ComboBox" class="TipAddin.ComboBox">
-							<attr>
-								<left>0</left>
-								<top>0</top>
-								<width>father.width</width>
-								<height>father.height</height>
-								<NormalBkgID>YBYL.Head.FuncBtn.Bkg.Normal</NormalBkgID>
-								<HoverBkgID>YBYL.Head.FuncBtn.Bkg.Hover</HoverBkgID>
-								<DisableBkgID>YBYL.Head.FuncBtn.Bkg.Disable</DisableBkgID>
-								<ItemNormalBkgID>YBYL.DropMenu.ItemBkg.Normal</ItemNormalBkgID>
-								<ItemHoverBkgID>YBYL.DropMenu.ItemBkg.Hover</ItemHoverBkgID>
-								<IconResID>YBYL.Head.FuncBtn.Accelarate.Img</IconResID>
-								<IconWidth>16</IconWidth>
-								<IconVisible>true</IconVisible>
-								<TopMargin>6</TopMargin>
-								<LeftMargin>10</LeftMargin>
-								<EnableHScroll>false</EnableHScroll>
-								<EnableEdit>false</EnableEdit>
-								<ListHeight>120</ListHeight>
-								<cursor>IDC_HAND</cursor>
-							</attr>
-							<eventlist>
-								<event name="OnSelectItemChanged" file="FuncBtnList.xml.lua" func="OnSelectItemChanged" />
-								<event name="OnInitControl" file="FuncBtnList.xml.lua" func="OnInitComboBox" />
-							</eventlist>
 						</obj>
-						
 					</children>
 				</obj>
 			

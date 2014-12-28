@@ -105,7 +105,7 @@ function UpdateSize( self )
 		local self_left, self_top, self_right, self_bottom = self:GetObjPos()
 		local menu_bkn = self:GetControlObject("menu.bkn")
 		local menu_frame = self:GetControlObject("menu.frame")
-
+		
 		menu_frame:SetObjPos(0,0,self_right - self_left,bottom - top)
 		
 		--注 图片有阴影

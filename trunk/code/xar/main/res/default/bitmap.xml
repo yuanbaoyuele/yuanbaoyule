@@ -9,7 +9,7 @@
 		<texture id="YBYL.Head.Logo.Default" image="bitmap\YBYL.Head.Logo.Default.png" />
 		<texture id="YBYL.Head.RightBkg" image="bitmap\YBYL.Head.RightBkg.png" />
 		<texture id="YBYL.DropMenu.ItemBkg.Normal" type="NineInOne" image="bitmap\YBYL.DropMenu.ItemBkg.Normal.png" />
-		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.DropMenu.ItemBkg.Hover.png" />
+		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
 		<texture id="YBYL.Menu.Select.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />

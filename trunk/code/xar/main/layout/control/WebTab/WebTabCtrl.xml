@@ -6,6 +6,7 @@
 			<attr name="DragState" type="string" />
 			<attr name="objBrowserCtrl"  />
 			<attr name="strInputURL"  />
+			<attr name="strIcoName"  />
 			<attr name="bGoBackState" type="bool" />
 			<attr name="bGoForwardState" type="bool" />
 			<attr name="strDragState" type="string" />
@@ -18,6 +19,7 @@
 			<BindBrowserCtrl file="WebTabCtrl.xml.lua" func="BindBrowserCtrl"/>
 			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
 			<GetLocalURL file="WebTabCtrl.xml.lua" func="GetLocalURL"/>
+			<GetIcoName file="WebTabCtrl.xml.lua" func="GetIcoName"/>
 			<SaveUserInputURL file="WebTabCtrl.xml.lua" func="SaveUserInputURL"/>
 			<GetUserInputURL file="WebTabCtrl.xml.lua" func="GetUserInputURL"/>
 			<GetGoBackState file="WebTabCtrl.xml.lua" func="GetGoBackState"/>
@@ -55,9 +57,6 @@
 						<width>father.width</width>
 						<height>father.height</height>
 					</attr>
-					<eventlist>
-						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
-					</eventlist>
 				</obj>  
 				
 				<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
@@ -67,9 +66,6 @@
 						<width>father.width</width>
 						<height>father.height</height>
 					</attr>
-					<eventlist>
-						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
-					</eventlist>
 				</obj>  
 				
 				<obj id="WebTabCtrl.HeadImg" class="ImageObject">
@@ -81,9 +77,6 @@
 						<drawmode>1</drawmode>
 						<antialias>2</antialias>
 					</attr>
-					<eventlist>
-						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
-					</eventlist>
 				</obj>   	
 
 				<obj id="WebTabCtrl.Text" class="TextObject">
@@ -97,9 +90,6 @@
 						<textcolor>color.tab.normal</textcolor>
 						<endellipsis>1</endellipsis>
 					</attr>
-					<eventlist>
-						<!--event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="RouteToFather" /-->
-					</eventlist>
 				</obj>   	
 
 				<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
