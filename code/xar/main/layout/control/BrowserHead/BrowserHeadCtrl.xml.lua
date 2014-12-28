@@ -24,13 +24,32 @@ end
 
 function OnClickCpationMax(self)
 	local objHostWnd = GetHostWndByUIElem(self)
-	if objHostWnd then
-		objHostWnd:Max()
+	if not objHostWnd then
+		return
 	end
+
+	objHostWnd:Max()
+	
+	local objRootCtrl = self:GetOwnerControl()
+	SetMaxBtnStyle(objRootCtrl, false)
 end
 
-function OnClickLogo(self)
 
+function OnClickCpationRestore(self)
+	local objHostWnd = GetHostWndByUIElem(self)
+	if not objHostWnd then
+		return
+	end
+
+	objHostWnd:Restore()
+	
+	local objRootCtrl = self:GetOwnerControl()
+	SetMaxBtnStyle(objRootCtrl, true)
+end
+
+
+function OnClickLogo(self)
+	tFunHelper.ShowPopupWndByName("TipConfigWnd.Instance", true)
 end
 
 
@@ -38,6 +57,20 @@ function OnClickAccelerate(self)
 
 end
 
+
+function OnPosChange(self)
+	local objHostWnd = GetHostWndByUIElem(self)
+	if not objHostWnd then
+		return
+	end
+	
+	local strState = objHostWnd:GetWindowState()
+	if strState == "max" then
+		SetMaxBtnStyle(self, false)
+	else
+		SetMaxBtnStyle(self, true)
+	end
+end
 
 --------
 function ProecssAddressBar(objRootCtrl, objTabCtrl)
@@ -61,6 +94,18 @@ function GetHostWndByUIElem(objUIElem)
 	if objTree then
 		return objTree:GetBindHostWnd()
 	end
+end
+
+
+function SetMaxBtnStyle(objRootCtrl, bShowMax)	
+	local objMax = objRootCtrl:GetControlObject("BrowserHeadCtrl.Caption.MaxBtn")
+	local objRestore = objRootCtrl:GetControlObject("BrowserHeadCtrl.Caption.Restore")
+	local bShowRestore = not bShowMax
+	
+	objMax:SetVisible(bShowMax)
+	objMax:SetChildrenVisible(bShowMax)
+	objRestore:SetVisible(bShowRestore)
+	objRestore:SetChildrenVisible(bShowRestore)
 end
 
 

@@ -14,6 +14,15 @@
 					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewTab" />
 				</eventlist>
 			</obj>
+			<obj id="AddNewWindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建窗口</Text>
+					<RightText>Ctrl+N</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewWindow" />
+				</eventlist>
+			</obj>
 			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>打开...</Text>

@@ -12,7 +12,11 @@
 		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.DropMenu.ItemBkg.Hover.png" />
 		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
 		<texture id="YBYL.Menu.Select.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
+		
 		<bitmap id="YBYL.Menu.Splitter.Bkg" path="bitmap\YBYL.Menu.Splitter.Bkg.png" />
+		<bitmap id="YBYL.UrlIco.Default" path="bitmap\YBYL.Head.Logo.Default.png" />
+		<bitmap id="test" imagelist="YBYL.Head.FuncBtn.ImgList" index="2" />
 		
 		<imagelist id="YBYL.Caption.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.CloseBtn.png" />
 			<texture id="YBYL.Caption.CloseBtn.Normal" imagelist="YBYL.Caption.CloseBtn" index="1" />
@@ -128,5 +132,25 @@
 			<texture id="YBYL.MenuBar.HideBtn.Down"   imagelist="YBYL.MenuBar.HideBtn" index="3" />
 			<texture id="YBYL.MenuBar.HideBtn.Disable"  imagelist="YBYL.MenuBar.HideBtn" index="4" />		
 		
+		<imagelist id="YBYL.MenuBar.ShowBtn" splitter="1" varyblock="1" image="bitmap\YBYL.MenuBar.ShowBtn.png"/>
+			<texture id="YBYL.MenuBar.ShowBtn.Normal"  imagelist="YBYL.MenuBar.ShowBtn" index="1" />
+			<texture id="YBYL.MenuBar.ShowBtn.Hover"  imagelist="YBYL.MenuBar.ShowBtn" index="2" />
+			<texture id="YBYL.MenuBar.ShowBtn.Down"   imagelist="YBYL.MenuBar.ShowBtn" index="3" />
+			<texture id="YBYL.MenuBar.ShowBtn.Disable"  imagelist="YBYL.MenuBar.ShowBtn" index="4" />	
+		
 	</resource>
 </XLUE>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -50,12 +50,42 @@ function FetchValueByPath(obj, path)
 	return cursor
 end
 
+function GetCommandStrValue(strKey)
+	local bRet, strValue = false, nil
+	local cmdString = tipUtil:GetCommandLine()
+	
+	if string.find(cmdString, strKey .. " ") then
+		local cmdList = tipUtil:CommandLineToList(cmdString)
+		if cmdList ~= nil then	
+			for i = 1, #cmdList, 2 do
+				local strTmp = tostring(cmdList[i])
+				if strTmp == strKey 
+					and not string.find(tostring(cmdList[i + 1]), "^/") then		
+					bRet = true
+					strValue = tostring(cmdList[i + 1])
+					break
+				end
+			end
+		end
+	end
+	return bRet, strValue
+end
+
 
 function ExitProcess()
 	SaveAllConfig()
 
 	TipLog("************ Exit ************")
 	tipUtil:Exit("Exit")
+end
+
+
+function IsUserFullScreen()
+	local bRet = false
+	if type(tipUtil.IsNowFullScreen) == "function" then
+		bRet = tipUtil:IsNowFullScreen()
+	end
+	return bRet
 end
 
 
@@ -149,6 +179,31 @@ function QueryAllUsersDir()
 	return bRet, strRet
 end
 
+function GetExePath()
+	return RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\path")
+end
+
+function GetYBYLVersion()
+	local strEXEPath = GetExePath()
+	if not IsRealString(strEXEPath) or not tipUtil:QueryFileExists(strEXEPath) then
+		return ""
+	end
+
+	return tipUtil:GetFileVersionString(strEXEPath)
+end
+
+
+function RegQueryValue(sPath)
+	if IsRealString(sPath) then
+		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
+		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
+			return tipUtil:QueryRegValue(sRegRoot, sRegPath, sRegKey or "") or ""
+		end
+	end
+	return ""
+end
+
+
 
 ----UI相关---
 local g_bIsBrowserFullScrn = false
@@ -157,13 +212,6 @@ function GetMainWndInst()
 	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local objMainWnd = hostwndManager:GetHostWnd("YBYLTipWnd.MainFrame")
 	return objMainWnd
-end
-
-
-function GetHomePage()
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local strHomePage = tUserConfig["strHomePage"]
-	return strHomePage
 end
 
 
@@ -287,6 +335,18 @@ function GetActiveTabCtrl()
 end
 
 
+function GetCurrentURL()
+	local strURL = GetHomePage()
+	local objActiveTabCtrl = GetActiveTabCtrl()
+		
+	if objActiveTabCtrl ~= nil and objActiveTabCtrl ~= 0 then
+		strURL = objActiveTabCtrl:GetLocalURL()
+	end
+	
+	return strURL
+end
+
+
 function OpenURL(strURL)
 	if not IsRealString(strURL) then
 		return
@@ -294,6 +354,17 @@ function OpenURL(strURL)
 	
 	local objTabContainer = GetMainCtrlChildObj("MainPanel.TabContainer")
 	objTabContainer:OpenURL(strURL, true)
+end
+
+
+function OpenURLInNewWindow(strURL)
+	if not IsRealString(strURL) then
+		strURL = GetCurrentURL()
+	end
+
+	local strBrowserExePath = GetExePath()
+	strCMD = " /openlink "..tostring(strURL)
+	tipUtil:ShellExecute(0, "open", strBrowserExePath, strCMD, 0, "SW_SHOW")
 end
 
 
@@ -318,6 +389,60 @@ function GetMainCtrlChildObj(strObjName)
 
 	return objRootCtrl:GetControlObject(tostring(strObjName))
 end
+
+function ShowPopupWndByName(strWndName, bSetTop)
+	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	local frameHostWnd = hostwndManager:GetHostWnd(tostring(strWndName))
+	if frameHostWnd == nil then
+		TipLog("[ShowPopupWindow] GetHostWnd failed: "..tostring(strWndName))
+		return
+	end
+
+	if not IsUserFullScreen() then
+		if type(tipUtil.SetWndPos) == "function" then
+			local hWnd = frameHostWnd:GetWndHandle()
+			if hWnd ~= nil then
+				TipLog("[ShowPopupWndByName] success")
+				if bSetTop then
+					frameHostWnd:SetTopMost(true)
+					tipUtil:SetWndPos(hWnd, 0, 0, 0, 0, 0, 0x0043)
+				else
+					tipUtil:SetWndPos(hWnd, -2, 0, 0, 0, 0, 0x0043)
+				end
+			end
+		end
+	elseif type(tipUtil.GetForegroundProcessInfo) == "function" then
+		local hFrontHandle, strPath = tipUtil:GetForegroundProcessInfo()
+		if hFrontHandle ~= nil then
+			frameHostWnd:BringWindowToBack(hFrontHandle)
+		end
+	end
+	
+	frameHostWnd:Show(5)
+end
+
+
+function GetIcoBitmapObj(strIcoName)
+	if not IsRealString(strIcoName) then
+		return nil
+	end
+
+	local strIcoDir = GetIcoDir()
+	local strIcoPath = tipUtil:PathCombine(strIcoDir, strIcoName)
+	if not tipUtil:QueryFileExists(strIcoPath) then
+		return nil	
+	end
+	
+	local xlgraphic = XLGetObject("Xunlei.XLGraphic.Factory.Object")
+	local objBitmap = xlgraphic:CreateBitmap(strIcoPath,"ARGB32")
+	return objBitmap
+end
+
+function GetDefaultIcoImgID()
+	local strDefaultImgID = "YBYL.UrlIco.Default"
+	return strDefaultImgID
+end
+
 
 ------------UI--
 
@@ -411,9 +536,106 @@ function SaveAllConfig()
 	end
 end
 
+
+function GetHomePage()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local strHomePage = tUserConfig["strHomePage"]
+	return strHomePage
+end
+
+function SetHomePage(strURL)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["strHomePage"] = strURL
+	SaveConfigToFileByKey("tUserConfig")
+end
+
+
+function SaveUrlToHistory(strURL)
+	if not IsRealString(strURL) then
+		return
+	end
+	
+	local nCurrentTime = tipUtil:GetCurrentUTCTime()
+	local tHistInfo = {}
+	tHistInfo["strURL"] = strURL
+	tHistInfo["nVisitUTC"] = nCurrentTime
+	
+	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
+	for nIndex, tInfo in ipairs(tUrlHistory) do
+		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
+			tHistInfo["strIcoName"] = tInfo["strIcoName"]
+			tHistInfo["strLocationName"] = tInfo["strLocationName"]
+			
+			table.remove(tUrlHistory, nIndex)
+
+		end	
+	end
+	
+	table.insert(tUrlHistory, 1, tHistInfo)	
+	
+	LimitHistorySize(tUrlHistory)
+	SaveConfigToFileByKey("tUrlHistory")
+end
+
+
+function SaveLctnNameToHistory(strURL, strLctnName)
+	if not IsRealString(strLctnName) or not IsRealString(strURL) then
+		return
+	end
+	
+	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
+	for nIndex, tInfo in ipairs(tUrlHistory) do
+		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
+		
+			if not IsRealString(tInfo["strLocationName"]) then
+				tUrlHistory[nIndex]["strLocationName"] = strLctnName
+				SaveConfigToFileByKey("tUrlHistory")
+			end
+			return
+		end	
+	end
+end
+
+
+function SaveIcoNameToHistory(strURL, strIcoName)
+	if not IsRealString(strIcoName) or not IsRealString(strURL) then
+		return
+	end
+	
+	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
+	for nIndex, tInfo in ipairs(tUrlHistory) do
+		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
+		
+			if not IsRealString(tInfo["strIcoName"]) then
+				tUrlHistory[nIndex]["strIcoName"] = strIcoName
+				SaveConfigToFileByKey("tUrlHistory")
+			end
+			
+			return
+		end	
+	end
+end
+
+
+function GetIcoDir()
+	return GetProgramTempDir("webbrowser\\ico")
+end
+
+function LimitHistorySize(tUrlHistory)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local nMaxUrlHistroy = tUserConfig["nMaxUrlHistroy"] or 100
+	
+	if nMaxUrlHistroy >= #tUrlHistory then
+		return
+	end	
+
+	for i=nMaxUrlHistroy+1, #tUrlHistory do
+		table.remove(tUrlHistory, i)
+	end	
+end
+
+
 ------------------文件--
-
-
 local obj = {}
 obj.tipUtil = tipUtil
 obj.tipAsynUtil = tipAsynUtil
@@ -422,14 +644,25 @@ obj.TipLog = TipLog
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.ExitProcess = ExitProcess
+obj.GetCommandStrValue = GetCommandStrValue
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir
+obj.GetYBYLVersion = GetYBYLVersion
 
 obj.OpenURL = OpenURL
+obj.OpenURLInNewWindow = OpenURLInNewWindow
 obj.GetHomePage = GetHomePage
+obj.SetHomePage = SetHomePage
 obj.GetActiveTabCtrl = GetActiveTabCtrl
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
+obj.ShowPopupWndByName = ShowPopupWndByName
+obj.SaveUrlToHistory = SaveUrlToHistory
+obj.SaveLctnNameToHistory = SaveLctnNameToHistory
+obj.SaveIcoNameToHistory = SaveIcoNameToHistory
+obj.GetIcoDir = GetIcoDir
+obj.GetIcoBitmapObj = GetIcoBitmapObj
+obj.GetDefaultIcoImgID = GetDefaultIcoImgID
 
 obj.SetBrowserFullScrn = SetBrowserFullScrn
 obj.RestoreWndSize = RestoreWndSize

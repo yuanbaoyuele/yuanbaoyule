@@ -25,14 +25,18 @@ function GetLocalURL(self)
 		end
 	end
 	
-	local attr = self:GetAttribute()
-	return attr.strInputURL   
+	return self:GetUserInputURL()
 end
 
 --用户输入的url
-function SaveInputURL(self, strURL)
+function SaveUserInputURL(self, strURL)
 	local attr = self:GetAttribute()
 	attr.strInputURL = strURL
+end
+
+function GetUserInputURL(self)
+	local attr = self:GetAttribute()
+	return attr.strInputURL
 end
 
 
@@ -195,6 +199,17 @@ function GetActiveState(objRootCtrl)
 end
 
 
+function SaveTitleToHistory(objRootCtrl, strTitle)
+	local strURL = objRootCtrl:GetUserInputURL()
+	tFunHelper.SaveLctnNameToHistory(strURL, strTitle)
+end
+
+function SaveIcoNameToHistory(objRootCtrl, strIcoName)
+	local strURL = objRootCtrl:GetUserInputURL()
+	tFunHelper.SaveIcoNameToHistory(strURL, strIcoName)
+end
+
+
 function SetTabTitle(objRootCtrl, strTitle)
 	if not IsRealString(strTitle) then
 		return
@@ -202,10 +217,12 @@ function SetTabTitle(objRootCtrl, strTitle)
 
 	local objText = objRootCtrl:GetControlObject("WebTabCtrl.Text")
 	objText:SetText(strTitle)
+	
+	SaveTitleToHistory(objRootCtrl, strTitle)
 end
 
 
-function SetTabIco(objRootCtrl, strIcoPath)
+function SetTabIco(objRootCtrl, strIcoPath, strIcoName)
 	if not tipUtil:QueryFileExists(tostring(strIcoPath)) then
 		return
 	end
@@ -217,6 +234,8 @@ function SetTabIco(objRootCtrl, strIcoPath)
 	if objImage then
 		objImage:SetBitmap(objBitmap)
 	end		
+	
+	SaveIcoNameToHistory(objRootCtrl, strIcoName)
 end
 
 
@@ -260,19 +279,19 @@ function DownloadTabIco(objRootCtrl, strURL)
 	end
 	
 	local strIconURL = strDomain .. "/favicon.ico"	
-	local strTempDir = tFunHelper.GetProgramTempDir("webbrowser\\ico")
+	local strIcoDir = tFunHelper.GetIcoDir()
 	local strIcoID = tipUtil:GetStringMD5(strIconURL)
-	local strIcoSuffix = tostring(strIcoID)..".ico" 
-	local strSavePath = tipUtil:PathCombine(strTempDir, strIcoSuffix)
+	local strIcoName = tostring(strIcoID)..".ico" 
+	local strSavePath = tipUtil:PathCombine(strIcoDir, strIcoName)
 	
 	if tipUtil:QueryFileExists(strSavePath) then
-		SetTabIco(objRootCtrl, strSavePath)
+		SetTabIco(objRootCtrl, strSavePath, strIcoName)
 	else
 		tFunHelper.NewAsynGetHttpFile(strIconURL, strSavePath, false, 
 		function(bRet, strIcoPath)
 			tFunHelper.TipLog("[DownloadTabIco] strURL=" .. strIconURL .. " saveIcoPath=",strSavePath)
 			if bRet == 0 then
-				SetTabIco(objRootCtrl, strIcoPath)
+				SetTabIco(objRootCtrl, strIcoPath, strIcoName)
 			end
 		
 		end, 60*1000)

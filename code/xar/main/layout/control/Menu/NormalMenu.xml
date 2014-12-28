@@ -22,6 +22,7 @@
 			</attr>
 			<attr name="DefaultItemTemplate" type="string" />
 			<attr name="DefaultSpliterTemplate" type="string" />
+			<attr name="bHasInit" type="bool" ><default>false</default></attr>
 		</attr_def>
 		
 		<method_def>

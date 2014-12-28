@@ -1,6 +1,6 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
-local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
+
 
 -----方法----
 function OpenURL(self, strURL, bInNewTab)
@@ -159,7 +159,7 @@ function OpenURLInNewTab(objRootCtrl, strURL)
 	end
 	
 	objWebBrower:Navigate(strURL)
-	objNewTab:SaveInputURL(strURL)
+	objNewTab:SaveUserInputURL(strURL)
 	objNewTab:BindBrowserCtrl(objWebBrower)
 	
 	return nNewTabID
@@ -273,16 +273,8 @@ function SetActiveTab(objRootCtrl, nNewActiveID)
 	ShowTabAndBrowser(objRootCtrl, nNewActiveID, true)
 
 	SetCurActiveTabID(objRootCtrl, nNewActiveID)
-	InitMenuHelper(objNewActiveTab)
 end
 
-function InitMenuHelper(objActiveTab)
-	local objBrowserCtrl = objActiveTab:GetBindBrowserCtrl()
-	if objBrowserCtrl then
-		local objUEBrowser = objBrowserCtrl:GetControlObject("browser")
-		tIEMenuHelper:Init(objUEBrowser)
-	end
-end
 
 
 function ShowTabAndBrowser(objRootCtrl, nCtrlID, bShow)

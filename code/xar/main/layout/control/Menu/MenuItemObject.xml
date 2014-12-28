@@ -48,6 +48,9 @@
 			</attr>
 			<attr name="RightTextColor" type="string">
 			</attr>
+			<attr name="RightTextHAligh" type="string">
+				<default>right</default>
+			</attr>
 			<attr name="FontColorNormal" type="string">
 			</attr>
 			<attr name="FontColorDisable" type="string">
@@ -78,9 +81,11 @@
 			<CancelItem file="MenuItemObject.xml.lua" function="CancelItem"/>
 			<GetSubMenu file="MenuItemObject.xml.lua" function="GetSubMenu"/>
 			<SetText file="MenuItemObject.xml.lua" function="SetText"/>
+			<GetText file="MenuItemObject.xml.lua" function="GetText"/>
 			<SetTipsText file="MenuItemObject.xml.lua" function="SetTipsText"/>
 			<SetIconID file="MenuItemObject.xml.lua" function="SetIconID" />
 			<GetIconID file="MenuItemObject.xml.lua" function="GetIconID" />
+			<SetIconBitmap file="MenuItemObject.xml.lua" function="SetIconBitmap" />
 			<Show file="MenuItemObject.xml.lua" function="Show" />
 			<IsVisible file="MenuItemObject.xml.lua" function="IsVisible" />
 			<SetEnable/>

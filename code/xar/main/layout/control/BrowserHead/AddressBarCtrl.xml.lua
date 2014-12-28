@@ -74,7 +74,16 @@ end
 
 --下拉箭头
 function OnClickDropArrow(self)
-	
+	local tUrlHistory = tFunHelper.ReadConfigFromMemByKey("tUrlHistory") or {}
+	if #tUrlHistory < 1 then
+		return
+	end
+
+	local objRootCtrl = self:GetOwnerControl()
+	local objEditBkg = objRootCtrl:GetControlObject("AddressBarCtrl.Bkg")
+
+	TryDestroyOldMenu(objEditBkg, "UrlHistoryMenu")
+	CreateAndShowMenu(objEditBkg, "UrlHistoryMenu")
 end
 
 
@@ -87,6 +96,8 @@ function OnUrlEditKeyDown(self, nKeyCode)
 	if IsRealString(strURL) then
 		tFunHelper.OpenURL(strURL)
 	end
+	
+	tFunHelper.SaveUrlToHistory(strURL)
 end
 
 
@@ -163,6 +174,86 @@ function AddCollect(objRootCtrl, strURL)
 	tFunHelper.SaveConfigToFileByKey("tUserCollect")
 end
 
+
+--下拉菜单
+function TryDestroyOldMenu(objMenuBtn, strMenuKey)
+	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
+	local strHostWndName = strMenuKey..".HostWnd.Instance" 
+	local strObjTreeName = strMenuKey..".Tree.Instance"
+
+	if uHostWndMgr:GetHostWnd(strHostWndName) then
+		uHostWndMgr:RemoveHostWnd(strHostWndName)
+	end
+	
+	if uObjTreeMgr:GetUIObjectTree(strObjTreeName) then
+		uObjTreeMgr:DestroyTree(strObjTreeName)
+	end
+end
+
+
+function CreateAndShowMenu(objMenuBtn, strMenuKey)
+	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
+	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
+
+	if uTempltMgr and uHostWndMgr and uObjTreeMgr then
+		local uHostWnd = nil
+		local strHostWndName = strMenuKey..".HostWnd.Instance"
+		local strHostWndTempltName = "MenuHostWnd"
+		local strHostWndTempltClass = "HostWndTemplate"
+		local uHostWndTemplt = uTempltMgr:GetTemplate(strHostWndTempltName, strHostWndTempltClass)
+		if uHostWndTemplt then
+			uHostWnd = uHostWndTemplt:CreateInstance(strHostWndName)
+		end
+
+		local uObjTree = nil
+		local strObjTreeTempltName = strMenuKey.."Tree"
+		local strObjTreeTempltClass = "ObjectTreeTemplate"
+		local strObjTreeName = strMenuKey..".Tree.Instance"
+		local uObjTreeTemplt = uTempltMgr:GetTemplate(strObjTreeTempltName, strObjTreeTempltClass)
+		if uObjTreeTemplt then
+			uObjTree = uObjTreeTemplt:CreateInstance(strObjTreeName)
+		end
+
+		if uHostWnd and uObjTree then
+			--函数会阻塞
+			local bSucc = ShowMenuHostWnd(objMenuBtn, uHostWnd, uObjTree)
+			
+			if bSucc and uHostWnd:GetMenuMode() == "manual" then
+				uObjTreeMgr:DestroyTree(strObjTreeName)
+				uHostWndMgr:RemoveHostWnd(strHostWndName)
+			end
+		end
+	end
+end
+
+
+function ShowMenuHostWnd(objMenuBtn, uHostWnd, uObjTree)
+	uHostWnd:BindUIObjectTree(uObjTree)
+					
+	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
+	if not objMainLayout then
+	    return false
+	end	
+	local nL, nT, nR, nB = objMainLayout:GetObjPos()				
+	local nMenuContainerWidth = nR - nL
+	local nMenuContainerHeight = nB - nT
+	local nMenuLeft, nMenuTop = GetScreenAbsPos(objMenuBtn)
+	
+	uHostWnd:SetFocus(false) --先失去焦点，否则存在菜单不会消失的bug
+	
+	--函数会阻塞
+	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight)
+	return bOk
+end
+
+function GetScreenAbsPos(objUIElem)
+	local objTree = objUIElem:GetOwner()
+	local objHostWnd = objTree:GetBindHostWnd()
+	local nL, nT, nR, nB = objUIElem:GetAbsPos()
+	return objHostWnd:HostWndPtToScreenPt(nL, nT)
+end
 
 
 function RouteToFather(self)
