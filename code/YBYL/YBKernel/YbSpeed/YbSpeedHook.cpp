@@ -55,8 +55,10 @@ BOOL WINAPI YbSpeedHook::Hooked_QueryPerformanceCounter(LARGE_INTEGER *lpPerform
 		if(_isnan(local_rate)) {
 			return FALSE;
 		}
-		llLastQueryPerformanceCounterCheatValue = static_cast<LONGLONG>(static_cast<double>(llLastQueryPerformanceCounterCheatValue) + static_cast<double>(lpPerformanceCount->QuadPart - llLastQueryPerformanceCounterRealValue) * local_rate);
-		llLastQueryPerformanceCounterRealValue = lpPerformanceCount->QuadPart;
+		if(lpPerformanceCount->QuadPart > llLastQueryPerformanceCounterRealValue) {
+			llLastQueryPerformanceCounterCheatValue = static_cast<LONGLONG>(static_cast<double>(llLastQueryPerformanceCounterCheatValue) + static_cast<double>(lpPerformanceCount->QuadPart - llLastQueryPerformanceCounterRealValue) * local_rate);
+			llLastQueryPerformanceCounterRealValue = lpPerformanceCount->QuadPart;
+		}
 		lpPerformanceCount->QuadPart = llLastQueryPerformanceCounterCheatValue;
 	}
 	return ret;
