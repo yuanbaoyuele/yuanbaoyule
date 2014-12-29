@@ -819,7 +819,7 @@ function LimitCollectSize(tUserCollect)
 		return
 	end	
 
-	for i=nMaxUrlHistroy+1, #tUserCollect do
+	for i=nMaxUserCollect+1, #tUserCollect do
 		table.remove(tUserCollect, i)
 	end	
 end

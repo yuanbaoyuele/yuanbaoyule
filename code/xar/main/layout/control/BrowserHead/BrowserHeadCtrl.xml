@@ -166,7 +166,7 @@
 							<attr>
 								<left>20+64</left>
 								<top>34*2</top>
-								<width>father.width/2</width>
+								<width>father.width-200</width>
 								<height>24</height>
 							</attr>	
 						</obj>

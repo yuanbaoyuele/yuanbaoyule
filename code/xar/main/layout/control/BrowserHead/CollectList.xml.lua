@@ -1,18 +1,15 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 
 -----方法----
-function AddCollectItem(self)
-	
-
-
+function UpdateCollectList(self)
+	DestroyOldList(self)
+	ShowUserCollect(self)
 end
 
 -----事件----
 function OnInitControl(self)
 	ShowUserCollect(self)
 end
-
-
 
 
 ---collect item--
@@ -39,7 +36,6 @@ end
 function OnMouseLeaveItem(self)
 	self:SetTextureID("")
 end
-
 
 ----
 
@@ -81,7 +77,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	objLayout:AddChild(objURL)
 	
 	objImage:SetObjPos(5, "(father.height-16)/2", 21, "(father.height-16)/2+16")
-	objText:SetObjPos(3+21, 0, "father.width-5", "father.height")
+	objText:SetObjPos(3+21, 0, "father.width", "father.height")
 	objURL:SetObjPos(0, 0, 0, 0)
 	
 	objLayout:SetCursorID("IDC_HAND")
@@ -118,17 +114,61 @@ function SetIcoImage(objImage, tCollectInfo)
 	end
 end
 
-
+--nIndex 从1 开始
 function SetMenuItemPos(objRootCtrl, objMenuItem, nIndex)
 	local attr = objRootCtrl:GetAttribute()
-	local nWidth = attr.ItemWidth
+	local nMaxWidth = attr.ItemWidth
 	local nSpan = attr.RightSpan
+	local nWidth = GetSuitWidth(objMenuItem, nMaxWidth)
 	
-	local nL = (nIndex-1)*(nWidth+nSpan)
+	local nLastR = 0
+	local nLastObjIndex = nIndex-2
+	if nLastObjIndex >= 0 then   --取上一个空间的right
+		local objContainer = objRootCtrl:GetControlObject("CollectList.Container") 
+		local objLastItem = objContainer:GetChildByIndex(nLastObjIndex)
+		local nL, _, nR, _ = objLastItem:GetObjPos()
+		nLastR = nR
+	end
+	
+	local nL = nLastR+nSpan
 	local nR = nL + nWidth
-	
+
 	objMenuItem:SetObjPos(nL, 0, nR, "father.height")
+	
+	local nRootL, _, nRootR, _ = objRootCtrl:GetObjPos()
+	if nR > nRootR then
+		objMenuItem:SetVisible(false)
+		objMenuItem:SetChildrenVisible(false)
+	end
 end
+
+
+function GetSuitWidth(objMenuItem, nMaxWidth)
+	local objImage = objMenuItem:GetChildByIndex(0)
+	local objText = objMenuItem:GetChildByIndex(1)
+
+	local nImgL, nImgT, nImgR, nImgB = objImage:GetObjPos()
+	local nTextWidth, _ = objText:GetTextExtent()
+	
+	local nSuitWidth = nImgR+nTextWidth+5
+	if nSuitWidth > nMaxWidth then
+		nSuitWidth = nMaxWidth
+	end
+	
+	return nSuitWidth
+end
+
+
+function DestroyOldList(objRootCtrl)
+	local objContainer = objRootCtrl:GetControlObject("CollectList.Container")
+	if not objContainer then
+		return false
+	end 
+	
+	objContainer:RemoveAllChild()
+end
+
+
 
 ------辅助函数---
 function IsRealString(str)

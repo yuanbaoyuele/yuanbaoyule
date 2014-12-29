@@ -14,7 +14,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>552</width>
-			<height>300</height>
+			<height>350</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -22,7 +22,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>552</width>
-				<height>300</height>
+				<height>350</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">
