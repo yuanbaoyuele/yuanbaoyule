@@ -204,6 +204,13 @@ function RegQueryValue(sPath)
 end
 
 
+function AccelerateFlash(fRate)
+	tipUtil:YbSpeedInitialize()
+	tipUtil:YbSpeedHook()
+	tipUtil:YbSpeedChangeRate(fRate)
+end
+
+
 
 ----UI相关---
 local g_bIsBrowserFullScrn = false
@@ -844,6 +851,7 @@ obj.GetCommandStrValue = GetCommandStrValue
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir
 obj.GetYBYLVersion = GetYBYLVersion
+obj.AccelerateFlash = AccelerateFlash
 
 obj.OpenURL = OpenURL
 obj.FormatURL = FormatURL

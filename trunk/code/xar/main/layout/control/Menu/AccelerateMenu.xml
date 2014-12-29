@@ -1,4 +1,17 @@
 <xlue>
+	<objtemplate class="MenuItemObject" id="droplist.context.item">
+		<attr>
+			<height>25</height>
+			<width>father.width</width>
+			<TextPos>25</TextPos>
+			<Font>font.yahei12</Font>
+			<Icon>YBYL.DropMenu.Check</Icon>
+			<IconPos>8</IconPos>
+			<IconVisible>false</IconVisible>
+			<FontColorNormal>ADACAA</FontColorNormal>
+		</attr>
+	</objtemplate>
+
 	<objtemplate id="acceleratemenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
 			<ItemTop>10</ItemTop>
@@ -8,7 +21,8 @@
 		<children>
 			<obj id="Accelerate1" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
-					<Text>游戏加速1x  (默认)</Text>
+					<Text>游戏加速1x （默认）</Text>
+					<ExtraData>1</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate1" />
@@ -18,6 +32,7 @@
 			<obj id="Accelerate2" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
 					<Text>游戏加速2x</Text>
+					<ExtraData>2</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate2" />
@@ -27,6 +42,7 @@
 			<obj id="Accelerate5" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
 					<Text>游戏加速5x</Text>
+					<ExtraData>5</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate5" />
@@ -36,21 +52,25 @@
 			<obj id="Accelerate10" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
 					<Text>游戏加速10x</Text>
+					<ExtraData>10</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate10" />
 				</eventlist>
 			</obj>
 			
-			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+			<obj id="droplist.splitter" class="MenuItemObject">
 				<attr>
-	
+					<SeparatorHeight>1</SeparatorHeight>
+					<Type>1</Type>
+					<Icon>YBYL.DropList.Splitter.Bkg</Icon>
 				</attr>
 			</obj>
 			
 			<obj id="Accelerate0_9" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
 					<Text>游戏加速0.9x</Text>
+					<ExtraData>0.9</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate0_9" />
@@ -60,6 +80,7 @@
 			<obj id="Accelerate0_5" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
 					<Text>游戏加速0.5x</Text>
+					<ExtraData>0.5</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate0_5" />
@@ -69,6 +90,7 @@
 			<obj id="Accelerate0_1" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
 					<Text>游戏加速0.1x</Text>
+					<ExtraData>0.1</ExtraData>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="AccelerateMenu.xml.lua" function="OnSelect_Accelerate0_1" />
@@ -76,6 +98,37 @@
 			</obj>			
 		</children>
 	</objtemplate>
+	
+	
+	<control class="AccelerateListCtrl">
+		<attr_def>
+			<attr name="objSelItem" desc="当前选中的菜单项" />
+		</attr_def>
+
+		<method_def>
+			<OnInitControl file="AccelerateMenu.xml.lua" function="OnInitControl"/>
+		</method_def>
+
+		<event_def>
+			
+		</event_def>
+
+		<objtemplate>
+			<children>
+				<obj id="MenuContext" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>acceleratemenu.context</ContextID>
+						<BknID>YBYL.DropMenu.ItemBkg.Normal</BknID>
+					</attr>
+				</obj>
+			</children>
+		</objtemplate>
+	</control>
+	
 	
 	<objtreetemplate id="AccelerateMenuTree" class="ObjectTreeTemplate">
 		<attr>
@@ -93,14 +146,12 @@
 				<height>213</height>
 			</attr>
 			<children>
-				<obj id="Menu.Context" class="NormalMenu">
+				<obj id="Menu.Context" class="AccelerateListCtrl">
 					<attr>
 						<left>0</left>
 						<top>29</top>
 						<width>154</width>
 						<height>father.height</height>
-						<ContextID>acceleratemenu.context</ContextID>
-						<BknID>YBYL.DropMenu.ItemBkg.Normal</BknID>
 					</attr>
 				</obj>
 			</children>

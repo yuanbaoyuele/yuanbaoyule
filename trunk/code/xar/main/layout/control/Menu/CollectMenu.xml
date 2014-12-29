@@ -13,7 +13,7 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>210</width>
+			<width>260</width>
 			<height>300</height>
 		</attr>
 		
@@ -21,7 +21,7 @@
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>210</width>
+				<width>260</width>
 				<height>300</height>
 			</attr>
 			<children>
@@ -29,7 +29,7 @@
 					<attr>
 						<left>0</left>
 						<top>29</top>
-						<width>210</width>
+						<width>260</width>
 						<height>father.height</height>
 						<!--ContextID>collectmenu.context</ContextID-->
 						<BknID>YBYL.Menu.Bkg</BknID>

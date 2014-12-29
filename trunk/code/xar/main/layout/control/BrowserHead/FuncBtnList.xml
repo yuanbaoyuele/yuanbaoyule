@@ -55,6 +55,9 @@
 								<textcolor>system.white</textcolor>
 								<text>游戏加速 1x</text>
 							</attr>	
+							<eventlist>
+								<event name="OnInitControl" file="FuncBtnList.xml.lua" func="OnInitAccText" />
+							</eventlist>
 						</obj>
 						
 						<obj id="FuncBtnList.Accelerate.DropArrow" class="TextureObject">

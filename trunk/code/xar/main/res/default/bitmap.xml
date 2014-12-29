@@ -15,8 +15,9 @@
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
 		
 		<bitmap id="YBYL.Menu.Splitter.Bkg" path="bitmap\YBYL.Menu.Splitter.Bkg.png" />
+		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
 		<bitmap id="YBYL.UrlIco.Default" path="bitmap\YBYL.Head.Logo.Default.png" />
-		<bitmap id="test" imagelist="YBYL.Head.FuncBtn.ImgList" index="2" />
+		<bitmap id="YBYL.DropMenu.Check" path="bitmap\YBYL.DropMenu.Check.png" />
 		
 		<imagelist id="YBYL.Caption.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.CloseBtn.png" />
 			<texture id="YBYL.Caption.CloseBtn.Normal" imagelist="YBYL.Caption.CloseBtn" index="1" />
