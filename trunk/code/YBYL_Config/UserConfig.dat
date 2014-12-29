@@ -1,0 +1,10 @@
+function GetSubTable()
+	local t = {
+		["strServerConfigURL"] = "", 
+		["nMaxUrlHistroy"] = 100, 
+		["nAccelerateRate"] = 1, 
+		["nMaxUserCollect"] = 100, 
+		["strHomePage"] = "www.baidu.com", 
+	}
+	return t
+end
