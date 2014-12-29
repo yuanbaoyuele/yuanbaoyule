@@ -17,21 +17,29 @@ function ShowUrlHistory(self)
 	end
 
 	local nMaxShowHistory = tUserConfig["nMaxShowHistory"] or 9
-	if nMaxShowHistory > #tUrlHistory then
-		nMaxShowHistory = #tUrlHistory
-	end
 	
-	for nIndex=1, nMaxShowHistory do
+	local nCount = 1
+	for nIndex=1, #tUrlHistory do
 		local tHistoryInfo = tUrlHistory[nIndex]
-		if type(tHistoryInfo) == "table" then
+		if type(tHistoryInfo) == "table" and tHistoryInfo["bInAddressBar"] then
 			local objMenuItem = CreateMenuItem(tHistoryInfo, nIndex)	
 			if objMenuItem then
 				objMenuContainer:AddChild(objMenuItem)
+				
+				nCount = nCount+1
+				if nCount > nMaxShowHistory then
+					break
+				end
 			end			
 		end	
 	end
 	
-	BindMenuContainer(self, objMenuContainer)
+	if nCount <= 1 then
+		self:SetVisible(false)
+		self:SetChildrenVisible(false)
+	else
+		BindMenuContainer(self, objMenuContainer)
+	end
 end
 
 

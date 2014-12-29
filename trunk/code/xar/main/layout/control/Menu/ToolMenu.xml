@@ -13,6 +13,15 @@
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearHistory" />
 				</eventlist>
 			</obj>
+			
+			<obj id="ClearCollect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>清空收藏夹</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearCollect" />
+				</eventlist>
+			</obj>
 		
 			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
 				<attr>
