@@ -87,9 +87,11 @@ function OnLButtonUpCllct(self)
 	local bHasCollected = CheckHasCollect(strURL)
 	if bHasCollected then
 		RemoveCollect(objRootCtrl, strURL)
+		UpdateCollectList()
 		SetCollectBtnStyle(objRootCtrl, "normal")
 	else
 		AddCollect(objRootCtrl, strURL)
+		UpdateCollectList()
 		SetCollectBtnStyle(objRootCtrl, "hover")
 	end	
 end
@@ -174,6 +176,21 @@ function AddCollect(objRootCtrl, strURL)
 	end
 	
 	tFunHelper.SaveUserCollectURL(strURL)
+end
+
+
+function UpdateCollectList()
+	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objCollectList = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectList")
+	if not objCollectList then
+		return
+	end
+
+	objCollectList:UpdateCollectList()
 end
 
 

@@ -51,7 +51,7 @@
 			<attr name="ItemWidth" type="int" ><default>100</default></attr>
 		</attr_def>		
 		<method_def>
-			<AddCollectItem file="CollectList.xml.lua" func="AddCollectItem" />
+			<UpdateCollectList file="CollectList.xml.lua" func="UpdateCollectList" />
 		</method_def>		
 		
 		<event_def>
@@ -65,6 +65,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
+						<limitchild>0</limitchild>
 					</attr>
 				</obj>
 			</children>
