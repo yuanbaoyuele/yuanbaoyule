@@ -37,6 +37,10 @@
 			<attr name="IconHeight" type="int">
 				<default>10</default>
 			</attr>
+			<attr name="IconVisible" type="bool">
+				<default>true</default>
+			</attr>
+			
 			<attr name="TextPos" type="int" desc="文本的左边起始位置">
 				<default>13</default>
 			</attr>
@@ -88,6 +92,7 @@
 			<SetIconID file="MenuItemObject.xml.lua" function="SetIconID" />
 			<GetIconID file="MenuItemObject.xml.lua" function="GetIconID" />
 			<SetIconBitmap file="MenuItemObject.xml.lua" function="SetIconBitmap" />
+			<SetIconVisible file="MenuItemObject.xml.lua" function="SetIconVisible" />
 			<Show file="MenuItemObject.xml.lua" function="Show" />
 			<IsVisible file="MenuItemObject.xml.lua" function="IsVisible" />
 			<SetEnable/>

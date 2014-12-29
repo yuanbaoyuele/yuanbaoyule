@@ -229,6 +229,13 @@ function SetIconBitmap(self, objBitmap )
 	end	
 end
 
+function SetIconVisible(self, bVisible )
+	local icon = self:GetControlObject( "icon" )
+	if icon ~= nil then
+		icon:SetVisible(bVisible)
+	end	
+end
+
 
 
 function SetIconID( self, iconID )
@@ -253,6 +260,7 @@ function SetIconID( self, iconID )
 				end
 			end
 			icon:SetResID( iconID )
+			icon:SetVisible( attr.IconVisible )
 		else
 			local icon = self:GetControlObject( "icon" )
 			if icon ~= nil then

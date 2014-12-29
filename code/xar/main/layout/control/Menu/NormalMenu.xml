@@ -113,17 +113,6 @@
 			<RightTextPos>25</RightTextPos>
 		</attr>
 	</objtemplate>
-	
-	<objtemplate class="MenuItemObject" id="droplist.context.item">
-		<attr>
-			<height>25</height>
-			<width>father.width</width>
-			<TextPos>30</TextPos>
-			<Font>font.yahei12</Font>
-			<FontColorNormal>ADACAA</FontColorNormal>
-		</attr>
-	</objtemplate>
-
 
     <objtemplate id="menu.main.itemex" class="MenuItemObject">
         <attr>
