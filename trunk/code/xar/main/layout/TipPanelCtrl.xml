@@ -45,9 +45,9 @@
 								</obj>
 								<obj id="MainPanel.Head" class="BrowserHeadCtrl">
 									<attr>
-										<left>0</left>
-										<top>0</top>
-										<width>father.width</width>
+										<left>1</left>
+										<top>1</top>
+										<width>father.width-2</width>
 										<height>128</height>
 									</attr>		
 								</obj>

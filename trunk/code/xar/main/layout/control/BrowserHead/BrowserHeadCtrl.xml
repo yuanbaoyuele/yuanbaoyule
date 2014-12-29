@@ -63,7 +63,7 @@
 						<obj id="BrowserHeadCtrl.NavgateBtnList" class="NavgateBtnList">
 							<attr>
 								<left>20+64</left>
-								<top>36</top>
+								<top>31</top>
 								<width>160</width>
 								<height>30</height>
 							</attr>	
@@ -147,7 +147,7 @@
 						<obj id="BrowserHeadCtrl.AddressBar" class="AddressBarCtrl">
 							<attr>
 								<left>245</left>
-								<top>33</top>
+								<top>29</top>
 								<width>father.width/2</width>
 								<height>36</height>
 							</attr>	
@@ -156,9 +156,18 @@
 						<obj id="BrowserHeadCtrl.FuncBtnList" class="FuncBtnList">
 							<attr>
 								<left>245+father.width/2+5</left>
-								<top>38</top>
+								<top>33</top>
 								<width>300</width>
 								<height>38</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.CollectList" class="CollectList">
+							<attr>
+								<left>20+64</left>
+								<top>34*2</top>
+								<width>father.width/2</width>
+								<height>24</height>
 							</attr>	
 						</obj>
 						
