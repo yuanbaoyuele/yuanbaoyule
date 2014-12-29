@@ -13,7 +13,7 @@ private:
 	char m_readBuffer[2048];
 	std::string m_requestString;
 	std::string m_responseString;
-	boost::asio::windows::stream_handle m_fileStream;
+	boost::asio::windows::random_access_handle m_fileStream;
 	std::size_t m_fileStreamOffset;
 private:
 	HttpRequestHandler(boost::asio::io_service& io_service, boost::shared_ptr<boost::asio::ip::tcp::socket>& clientSocket);
