@@ -90,6 +90,10 @@
 		<imagelist id="YBYL.Head.FuncBtn.ImgList" splitter="1" varyblock="1" image="bitmap\YBYL.Head.FuncBtn.ImgList.png"/>
 			<bitmap id="YBYL.Head.FuncBtn.Accelarate.Img" imagelist="YBYL.Head.FuncBtn.ImgList" index="1" />
 			<bitmap id="YBYL.Head.FuncBtn.AdvFilter.Img" imagelist="YBYL.Head.FuncBtn.ImgList" index="2" />
+			
+		<imagelist id="YBYL.Head.Collect.Sel" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Collect.Sel.png"/>
+			<texture id="YBYL.Head.Collect.Sel.Normal" type="NineInOne" imagelist="YBYL.Head.Collect.Sel" index="1" />
+			<texture id="YBYL.Head.Collect.Sel.Hover" type="NineInOne" imagelist="YBYL.Head.Collect.Sel" index="2" />
 		
 		<imagelist id="YBYL.Head.GoBack" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoBack.png"/>
 			<texture id="YBYL.Head.GoBack.Normal" imagelist="YBYL.Head.GoBack" index="1" />
