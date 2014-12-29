@@ -3,6 +3,7 @@
 #include "detours.h"
 #include <sstream>
 #include <string>
+#include <cfloat>
 #define TSLOG
 #define YB_GROUP "YB"
 #include <tslog/tslog.h>
@@ -50,7 +51,11 @@ BOOL WINAPI YbSpeedHook::Hooked_QueryPerformanceCounter(LARGE_INTEGER *lpPerform
 	XMLib::CriticalSectionLockGuard lck(cs);
 	BOOL ret = YbSpeedHook::Real_QueryPerformanceCounter(lpPerformanceCount);
 	if(ret) {
-		llLastQueryPerformanceCounterCheatValue = static_cast<LONGLONG>(static_cast<double>(llLastQueryPerformanceCounterCheatValue) + (static_cast<double>(lpPerformanceCount->QuadPart) - static_cast<double>(llLastQueryPerformanceCounterRealValue)) * Rate);
+		double local_rate = Rate;
+		if(_isnan(local_rate)) {
+			return FALSE;
+		}
+		llLastQueryPerformanceCounterCheatValue = static_cast<LONGLONG>(static_cast<double>(llLastQueryPerformanceCounterCheatValue) + static_cast<double>(lpPerformanceCount->QuadPart - llLastQueryPerformanceCounterRealValue) * local_rate);
 		llLastQueryPerformanceCounterRealValue = lpPerformanceCount->QuadPart;
 		lpPerformanceCount->QuadPart = llLastQueryPerformanceCounterCheatValue;
 	}
