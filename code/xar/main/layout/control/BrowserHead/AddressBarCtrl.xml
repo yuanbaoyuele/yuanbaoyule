@@ -8,6 +8,7 @@
 			<GetText file="AddressBarCtrl.xml.lua" func="GetText"/>
 			<SetIcoImage file="AddressBarCtrl.xml.lua" func="SetIcoImage"/>
 			<AdjustCollectBtnStyle file="AddressBarCtrl.xml.lua" func="AdjustCollectBtnStyle"/>
+			<SetCollectBtnStyle file="AddressBarCtrl.xml.lua" func="SetCollectBtnStyle"/>
 		</method_def>		
 		
 		<objtemplate>
@@ -69,6 +70,8 @@
 									</attr>
 									<eventlist>
 										<event name="OnLButtonUp" file="AddressBarCtrl.xml.lua" func="OnLButtonUpCllct" />
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
 									</eventlist>
 								</obj>
 								
@@ -86,6 +89,7 @@
 									<eventlist>
 										<event name="OnClick" file="AddressBarCtrl.xml.lua" func="OnClickDropArrow" />
 										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
 									</eventlist>
 								</obj>
 							</children>

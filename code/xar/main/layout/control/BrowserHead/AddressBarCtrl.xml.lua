@@ -20,9 +20,9 @@ function AdjustCollectBtnStyle(self, strURL)
 	local objCollectBtn = self:GetControlObject("AddressBarCtrl.Collect")
 	local bHasCollected = CheckHasCollect(strURL)
 	if bHasCollected then
-		SetCollectBtnStyle(self, "hover")
+		self:SetCollectBtnStyle("hover")
 	else
-		SetCollectBtnStyle(self, "normal")
+		self:SetCollectBtnStyle("normal")
 	end	 
 end
 
@@ -47,6 +47,15 @@ function SetIcoImage(self, strIcoName)
 	end
 end
 
+function SetCollectBtnStyle(self, strState)
+	local objCollectBtn = self:GetControlObject("AddressBarCtrl.Collect")
+
+	if strState == "hover" then
+		objCollectBtn:SetTextureID("YBYL.AddressBar.Collect.Hover")
+	elseif strState == "normal" then
+		objCollectBtn:SetTextureID("YBYL.AddressBar.Collect.Normal")
+	end
+end
 
 function ProcessTabChange(self, objTabCtrl)
 	if tonumber(objTabCtrl) ~= nil and objTabCtrl == 0 then
@@ -87,12 +96,12 @@ function OnLButtonUpCllct(self)
 	local bHasCollected = CheckHasCollect(strURL)
 	if bHasCollected then
 		RemoveCollect(objRootCtrl, strURL)
-		UpdateCollectList()
-		SetCollectBtnStyle(objRootCtrl, "normal")
+		tFunHelper.UpdateCollectList()
+		objRootCtrl:SetCollectBtnStyle("normal")
 	else
 		AddCollect(objRootCtrl, strURL)
-		UpdateCollectList()
-		SetCollectBtnStyle(objRootCtrl, "hover")
+		tFunHelper.UpdateCollectList()
+		objRootCtrl:SetCollectBtnStyle("hover")
 	end	
 end
 
@@ -122,22 +131,12 @@ function OnUrlEditKeyDown(self, nKeyCode)
 		tFunHelper.OpenURL(strURL)
 	end
 	
-	tFunHelper.SaveUrlToHistory(strURL)
+	local bInAddressBar = true
+	tFunHelper.SaveUrlToHistory(strURL, bInAddressBar)
 end
 
 
 ----------------
-function SetCollectBtnStyle(objRootCtrl, strState)
-	local objCollectBtn = objRootCtrl:GetControlObject("AddressBarCtrl.Collect")
-
-	if strState == "hover" then
-		objCollectBtn:SetTextureID("YBYL.AddressBar.Collect.Hover")
-	elseif strState == "normal" then
-		objCollectBtn:SetTextureID("YBYL.AddressBar.Collect.Normal")
-	end
-end
-
-
 function CheckHasCollect(strInputURL)
 	if not IsRealString(strInputURL) then
 		return false
@@ -176,21 +175,6 @@ function AddCollect(objRootCtrl, strURL)
 	end
 	
 	tFunHelper.SaveUserCollectURL(strURL)
-end
-
-
-function UpdateCollectList()
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
-	if not objHeadCtrl then
-		return
-	end
-	
-	local objCollectList = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectList")
-	if not objCollectList then
-		return
-	end
-
-	objCollectList:UpdateCollectList()
 end
 
 

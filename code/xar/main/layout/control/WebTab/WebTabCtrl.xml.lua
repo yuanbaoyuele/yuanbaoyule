@@ -206,17 +206,17 @@ end
 
 
 function SaveTitleToHistory(objRootCtrl, strTitle)
-	local strURL = objRootCtrl:GetUserInputURL()
+	local strURL = objRootCtrl:GetLocalURL()
 	if string.find(strTitle, strURL) then --简单过滤
 		return
 	end
-	
+
 	local strFileKey = "tUrlHistory"
 	tFunHelper.SaveLctnNameToFile(strURL, strTitle, strFileKey)
 end
 
 function SaveIcoNameToHistory(objRootCtrl, strIcoName)
-	local strURL = objRootCtrl:GetUserInputURL()
+	local strURL = objRootCtrl:GetLocalURL()
 	
 	local strFileKey = "tUrlHistory"
 	tFunHelper.SaveIcoNameToFile(strURL, strIcoName, strFileKey)
@@ -279,6 +279,8 @@ function SetAddressBarState(objRootCtrl)
 	if IsRealString(strLocalURL) then
 		objAddressBar:SetText(strLocalURL)
 		objAddressBar:AdjustCollectBtnStyle(strLocalURL)
+		
+		tFunHelper.SaveUrlToHistory(strLocalURL)
 	end
 end
 

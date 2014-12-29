@@ -45,7 +45,11 @@ end
 
 
 function OnClickCollect(self)
-	InitMenuHelper()
+	local tUserCollect = tFunHelper.ReadConfigFromMemByKey("tUserCollect") or {}
+	if #tUserCollect < 1 then
+		return
+	end
+	
 	tFunHelper.TryDestroyOldMenu(self, "CollectMenu")
 	tFunHelper.CreateAndShowMenu(self, "CollectMenu")
 end

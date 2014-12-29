@@ -643,7 +643,8 @@ function SetHomePage(strURL)
 end
 
 
-function SaveUrlToHistory(strInputURL)
+--bInAddressBar 表示在用户地址栏中打开url
+function SaveUrlToHistory(strInputURL, bInAddressBar)
 	if not IsRealString(strInputURL) then
 		return
 	end
@@ -654,16 +655,23 @@ function SaveUrlToHistory(strInputURL)
 	local tHistInfo = {}
 	tHistInfo["strURL"] = strURL
 	tHistInfo["nVisitUTC"] = nCurrentTime
-	
+		
 	local tUrlHistory = ReadConfigFromMemByKey("tUrlHistory") or {}
 	for nIndex, tInfo in ipairs(tUrlHistory) do
 		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
 			tHistInfo["strIcoName"] = tInfo["strIcoName"]
 			tHistInfo["strLocationName"] = tInfo["strLocationName"]
+			if tInfo["bInAddressBar"] ~= nil then
+				tHistInfo["bInAddressBar"] = tInfo["bInAddressBar"]
+			end
 			
 			table.remove(tUrlHistory, nIndex)
 			break
 		end	
+	end
+	
+	if bInAddressBar then
+		tHistInfo["bInAddressBar"] = bInAddressBar
 	end
 	
 	table.insert(tUrlHistory, 1, tHistInfo)	
@@ -792,7 +800,6 @@ function RemoveUserCollectURL(strInputURL)
 end
 
 
-
 function GetIcoDir()
 	return GetProgramTempDir("webbrowser\\ico")
 end
@@ -823,6 +830,22 @@ function LimitCollectSize(tUserCollect)
 		table.remove(tUserCollect, i)
 	end	
 end
+
+
+function UpdateCollectList()
+	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objCollectList = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectList")
+	if not objCollectList then
+		return
+	end
+
+	objCollectList:UpdateCollectList()
+end
+
 
 function FormatURL(strURL)
 	if not IsRealString(strURL) then
@@ -871,6 +894,7 @@ obj.SaveIcoNameToFile = SaveIcoNameToFile
 obj.GetIcoDir = GetIcoDir
 obj.GetIcoBitmapObj = GetIcoBitmapObj
 obj.GetDefaultIcoImgID = GetDefaultIcoImgID
+obj.UpdateCollectList = UpdateCollectList
 
 obj.TryDestroyOldMenu = TryDestroyOldMenu
 obj.CreateAndShowMenu = CreateAndShowMenu
