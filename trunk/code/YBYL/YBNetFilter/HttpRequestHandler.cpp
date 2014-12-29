@@ -22,7 +22,8 @@ boost::shared_ptr<HttpRequestHandler> HttpRequestHandler::CreateHandler(boost::a
 HttpRequestHandler::HttpRequestHandler(boost::asio::io_service& io_service, boost::shared_ptr<boost::asio::ip::tcp::socket>& clientSocket) :
 	m_clientSocketPtr(clientSocket),
 	m_clientSocket(*m_clientSocketPtr),
-	m_fileStream(io_service)
+	m_fileStream(io_service),
+	m_fileStreamOffset(0)
 {
 }
 
@@ -213,7 +214,6 @@ void HttpRequestHandler::HandleReadDataFromClientSocket(const boost::system::err
 					boost::bind(&HttpRequestHandler::HandleWriteDataToClientSocket, this->shared_from_this(), _1, _2));
 			}
 			else {
-				std::string content = "hello, world!";
 				this->m_responseString = "HTTP/1.1 200 OK\r\nContent-Length: ";
 				{
 					std::string content_length_str;
@@ -223,6 +223,7 @@ void HttpRequestHandler::HandleReadDataFromClientSocket(const boost::system::err
 					this->m_responseString += content_length_str;
 				}
 				this->m_responseString += "\r\nConnection: close\r\n\r\n";
+				this->m_fileStreamOffset = 0;
 				boost::asio::async_write(this->m_clientSocket, boost::asio::buffer(this->m_responseString),
 					boost::bind(&HttpRequestHandler::HandleWriteDataToClientSocket, this->shared_from_this(), _1, _2));
 			}
@@ -235,10 +236,9 @@ void HttpRequestHandler::HandleReadDataFromClientSocket(const boost::system::err
 
 void HttpRequestHandler::HandleWriteDataToClientSocket(const boost::system::error_code& error, std::size_t bytes_transferred)
 {
-	// close
 	if(!error) {
 		if(this->m_fileStream.is_open()) {
-			this->m_fileStream.async_read_some(boost::asio::buffer(this->m_readBuffer), boost::bind(&HttpRequestHandler::HandleReadDataFromFile, this->shared_from_this(), _1, _2));
+			this->m_fileStream.async_read_some_at(this->m_fileStreamOffset, boost::asio::buffer(this->m_readBuffer), boost::bind(&HttpRequestHandler::HandleReadDataFromFile, this->shared_from_this(), _1, _2));
 		}
 	}
 }
@@ -246,6 +246,7 @@ void HttpRequestHandler::HandleWriteDataToClientSocket(const boost::system::erro
 void HttpRequestHandler::HandleReadDataFromFile(const boost::system::error_code& error, std::size_t bytes_transfferred)
 {
 	if(!error) {
+		this->m_fileStreamOffset += bytes_transfferred;
 		boost::asio::async_write(this->m_clientSocket, boost::asio::buffer(this->m_readBuffer, bytes_transfferred), boost::bind(&HttpRequestHandler::HandleWriteDataToClientSocket, this->shared_from_this(), _1, _2));
 	}
 }
