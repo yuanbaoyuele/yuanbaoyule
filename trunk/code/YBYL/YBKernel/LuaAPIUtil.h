@@ -96,6 +96,10 @@ public:
 	static int PostWndMessageByHandle(lua_State* pLuaState);
 	static int SendMessageByHwnd(lua_State* pLuaState);
 	static int IsNowFullScreen(lua_State* pLuaState);
+	
+	static int GetCursorWndHandle(lua_State* pLuaState);
+	static int GetFocusWnd(lua_State* pLuaState);
+	static int FGetKeyState(lua_State* pLuaState);
 
 	//нд╪Ч
 	static int GetMD5Value(lua_State* pLuaState);

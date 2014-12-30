@@ -2,6 +2,8 @@
 #include "RegisterLuaAPI.h"
 #include "LuaAPIUtil.h"
 #include "LuaAsynAPIUtil.h"
+#include "YBKernelHelper/LuaListenPre.h"
+#include "YBKernelHelper/LuaPrefactory.h"
 CRegisterLuaAPI::CRegisterLuaAPI()
 {
 
@@ -24,7 +26,8 @@ BOOL CRegisterLuaAPI::Init(LPCTSTR lpCmdLine, LPVOID lpHookObj)
 	LuaAPIUtil::RegisterObj(hEnv);
 	LuaAsynUtil::RegisterSelf(hEnv);
 
-
+	LuaListenPreFactory::RegisterObj(hEnv);
+	LuaListenPre::RegisterClass(hEnv);
 
 	XLLRT_ReleaseEnv(hEnv);
 	return TRUE;
