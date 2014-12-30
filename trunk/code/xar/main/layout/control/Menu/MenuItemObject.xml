@@ -140,7 +140,7 @@
 			</children>
 
 			<eventlist>
-				<event name="OnInitControl" />
+				<event name="OnInitControl" file="MenuItemObject.xml.lua" function="OnInitControl"/>
 				<event name="OnMouseMove" />
 				<event name="OnMouseLeave" />
 				<event name="OnMouseHover" />

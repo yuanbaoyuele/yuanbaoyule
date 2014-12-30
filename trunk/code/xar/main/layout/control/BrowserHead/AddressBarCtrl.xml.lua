@@ -116,8 +116,9 @@ function OnClickDropArrow(self)
 	local objRootCtrl = self:GetOwnerControl()
 	local objEditBkg = objRootCtrl:GetControlObject("AddressBarCtrl.Bkg")
 
+	local nTopSpan = 30
 	tFunHelper.TryDestroyOldMenu(objEditBkg, "UrlHistoryMenu")
-	tFunHelper.CreateAndShowMenu(objEditBkg, "UrlHistoryMenu")
+	tFunHelper.CreateAndShowMenu(objEditBkg, "UrlHistoryMenu", nTopSpan)
 end
 
 

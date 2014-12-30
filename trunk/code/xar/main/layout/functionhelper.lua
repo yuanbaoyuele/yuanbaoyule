@@ -473,7 +473,7 @@ function TryDestroyOldMenu(objMenuText, strMenuKey)
 end
 
 
-function CreateAndShowMenu(objMenuText, strMenuKey)
+function CreateAndShowMenu(objMenuText, strMenuKey, nTopSpan)
 	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
 	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
@@ -499,7 +499,7 @@ function CreateAndShowMenu(objMenuText, strMenuKey)
 
 		if uHostWnd and uObjTree then
 			--函数会阻塞
-			local bSucc = ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree)
+			local bSucc = ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree, nTopSpan)
 			
 			if bSucc and uHostWnd:GetMenuMode() == "manual" then
 				uObjTreeMgr:DestroyTree(strObjTreeName)
@@ -510,7 +510,7 @@ function CreateAndShowMenu(objMenuText, strMenuKey)
 end
 
 
-function ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree)
+function ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree, nTopSpan)
 	uHostWnd:BindUIObjectTree(uObjTree)
 					
 	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
@@ -522,10 +522,17 @@ function ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree)
 	local nMenuContainerHeight = nB - nT
 	local nMenuLeft, nMenuTop = GetScreenAbsPos(objMenuText)
 	
+	local nMenuL, nMenuT, nMenuR, nMenuB = objMenuText:GetAbsPos()
+	local nMenuHeight = nMenuB - nMenuT
+	if tonumber(nTopSpan) == nil then
+		nTopSpan = nMenuHeight
+	end
+	
+	
 	uHostWnd:SetFocus(false) --先失去焦点，否则存在菜单不会消失的bug
 	
 	--函数会阻塞
-	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight)
+	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop+nTopSpan, nMenuContainerWidth, nMenuContainerHeight)
 	return bOk
 end
 

@@ -49,7 +49,7 @@ end
 
 
 function OnClickLogo(self)
-	tFunHelper.ShowPopupWndByName("TipConfigWnd.Instance", true)
+	tFunHelper.ShowPopupWndByName("TipAboutWnd.Instance", true)
 end
 
 

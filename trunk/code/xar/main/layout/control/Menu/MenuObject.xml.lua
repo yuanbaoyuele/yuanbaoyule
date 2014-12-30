@@ -176,6 +176,7 @@ function OnInitControl(self)
 		local shading = self:GetControlObject("menu.shading")
 		shading:SetVisible( false )
 	end
+	
 	AdjustItemPos( self )
 end
 

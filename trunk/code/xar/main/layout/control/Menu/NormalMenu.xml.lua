@@ -11,8 +11,12 @@ function OnInitControl(self, objMenuContext)
 	--注意objMenuContext的id必须是context_menu
 	if objMenuContext ~= nil then
 		local bkn = self:GetControlObject("menu.bkn")
-		objMenuContext:SetObjPos("father.left", "father.top", "father.right", "father.bottom")
+		local attr = objMenuContext:GetAttribute()
+		local nRightSpan = attr.ItemRight or 0
+		
+		objMenuContext:SetObjPos("father.left", "father.top", "father.right-"..tostring(nRightSpan), "father.bottom")
 		bkn:AddChild(objMenuContext)
+		bkn:SetLimitChild(true)
 	else
 	
 		local contextid = attr.ContextID
@@ -57,38 +61,38 @@ function OnInitControl(self, objMenuContext)
 	-- end
 	
 	-- 设置菜单背景从上到下的渐变
-	if attr.SrcColorID ~= nil and attr.DestColorID ~= nil then
-		local fill = self:GetControlObject("menu.bkg.fill")
-		if fill == nil then
-			local uiFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
-			local xarManager = XLGetObject("Xunlei.UIEngine.XARManager")
-			local bkn = self:GetControlObject("menu.bkn")
-			local fill = uiFactory:CreateUIObject("menu.bkg.fill", "FillObject")
-			local grf = XLGetObject("Xunlei.XLGraphic.Factory.Object")
-			if fill ~= nil then
-				fill:SetFillType("Line")
-				fill:SetSrcPt(0,0)
-				fill:SetDestPt(0,1)
-				fill:SetAlpha( attr.FillAlpha )
-				fill:SetResProvider( xarManager )
-				fill:SetSrcColor( attr.SrcColorID )
-				fill:SetDestColor( attr.DestColorID )
-				fill:SetBlendType( "Source" )
-				bkn:AddChild( fill )
-				local left, top, right, bottom = self:GetObjPos()
-				fill:SetObjPos( "1", "1", "father.width-1", "father.height-1" )
-				fill:AttachListener( "OnAbsPosChange", true, 
-									function ( self_obj )
-										local left,top,right,bottom = self_obj:GetObjPos()
-										self_obj:SetSrcPt(0,0)
-										self_obj:SetDestPt(0, bottom-top)
-									end )
-			end
-		end
-	end
+	-- if attr.SrcColorID ~= nil and attr.DestColorID ~= nil then
+		-- local fill = self:GetControlObject("menu.bkg.fill")
+		-- if fill == nil then
+			-- local uiFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
+			-- local xarManager = XLGetObject("Xunlei.UIEngine.XARManager")
+			-- local bkn = self:GetControlObject("menu.bkn")
+			-- local fill = uiFactory:CreateUIObject("menu.bkg.fill", "FillObject")
+			-- local grf = XLGetObject("Xunlei.XLGraphic.Factory.Object")
+			-- if fill ~= nil then
+				-- fill:SetFillType("Line")
+				-- fill:SetSrcPt(0,0)
+				-- fill:SetDestPt(0,1)
+				-- fill:SetAlpha( attr.FillAlpha )
+				-- fill:SetResProvider( xarManager )
+				-- fill:SetSrcColor( attr.SrcColorID )
+				-- fill:SetDestColor( attr.DestColorID )
+				-- fill:SetBlendType( "Source" )
+				-- bkn:AddChild( fill )
+				-- local left, top, right, bottom = self:GetObjPos()
+				-- fill:SetObjPos( "1", "1", "father.width-1", "father.height-1" )
+				-- fill:AttachListener( "OnAbsPosChange", true, 
+									-- function ( self_obj )
+										-- local left,top,right,bottom = self_obj:GetObjPos()
+										-- self_obj:SetSrcPt(0,0)
+										-- self_obj:SetDestPt(0, bottom-top)
+									-- end )
+			-- end
+		-- end
+	-- end
 	
 	UpdateSize( self )
-	
+	ResetScrollBar(self)
 	attr.bHasInit = true
 	return true
 end
@@ -106,7 +110,13 @@ function UpdateSize( self )
 		local menu_bkn = self:GetControlObject("menu.bkn")
 		local menu_frame = self:GetControlObject("menu.frame")
 		
-		menu_frame:SetObjPos(0,0,self_right - self_left,bottom - top)
+		local nMenuH = bottom - top
+		local nSelfH = self_bottom - self_top
+		if nSelfH > nMenuH then
+			nSelfH = nMenuH
+		end	
+		
+		menu_frame:SetObjPos(0,0,self_right - self_left, nSelfH)
 		
 		--注 图片有阴影
 		menu_bkn:SetObjPos(0,0,"father.width","father.height+7")
@@ -562,3 +572,104 @@ function AdjustItemPos(self)
 	menu:AdjustItemPos()
 	UpdateSize( self )
 end
+
+
+--滚动条
+function ResetScrollBar(objRootCtrl)
+	if objRootCtrl == nil then
+		return false
+	end
+	local objScrollBar = objRootCtrl:GetControlObject("listbox.vscroll")
+	if objScrollBar == nil then
+		return false
+	end
+	
+	local attr = objRootCtrl:GetAttribute()
+	local nLinePerPage = attr.nLinePerPage
+	local nTotalLineCount = attr.nTotalLineCount
+	
+	local nItemHeight = GetItemHeight(objRootCtrl)
+	local nMaxHeight = nItemHeight * nTotalLineCount
+	local nPageSize = nItemHeight * nLinePerPage
+	
+	objScrollBar:SetScrollRange( 0, nMaxHeight - nPageSize, true )
+	objScrollBar:SetPageSize(nPageSize, true)	
+	objScrollBar:SetScrollPos(0, true)	
+		
+	if nLinePerPage >= nTotalLineCount then
+		objScrollBar:SetVisible(false)
+		objScrollBar:SetChildrenVisible(false)
+		return true
+	else
+		objScrollBar:SetVisible(true)
+		objScrollBar:SetChildrenVisible(true)
+		objScrollBar:Show(true)
+	end
+	
+	return true
+end
+
+
+function CLB__OnScrollBarMouseWheel(self, name, x, y, distance)
+	local objRootCtrl = self:GetOwnerControl()
+	local nScrollPos = self:GetScrollPos()
+
+	local nItemHeight = GetItemHeight(objRootCtrl)
+		
+    if distance > 0 then
+		self:SetScrollPos( nScrollPos - nItemHeight, true )
+    else		
+		self:SetScrollPos( nScrollPos + nItemHeight, true )
+    end
+
+	local nNewScrollPos = self:GetScrollPos()
+	MoveItemListPanel(objRootCtrl, nNewScrollPos)
+	return true	
+end
+
+
+function CLB__OnScrollMousePosEvent(self)
+	local objRootCtrl = self:GetOwnerControl()
+	local nScrollPos = self:GetScrollPos()
+	
+	MoveItemListPanel(objRootCtrl, nScrollPos)
+end
+
+
+function MoveItemListPanel(objRootCtrl, nScrollPos)
+	if not objRootCtrl then
+		return
+	end
+	
+	local objContainer = objRootCtrl:GetControlObject("context_menu")
+	if not objContainer then
+		return
+	end
+	
+	local nL, nT, nR, nB = objContainer:GetObjPos()
+	local nHeight = nB-nT
+	local nNewT = 0-nScrollPos
+	
+	objContainer:SetObjPos(nL, nNewT, nR, nNewT+nHeight)
+end
+
+
+function GetItemHeight(objRootCtrl)
+	local objContainer = objRootCtrl:GetControlObject("context_menu")
+	if not objContainer then
+		return 0
+	end
+	
+	local attr = objContainer:GetAttribute()
+	local objItem = attr.ItemList[1]
+	if not objItem then
+		return 0
+	end
+
+	local nL, nT, nR, nB = objItem:GetObjPos()
+	local nItemHeight = nB-nT
+	return nItemHeight
+end
+
+
+

@@ -128,7 +128,7 @@
 				<obj id="Menu.Context" class="NormalMenu">
 					<attr>
 						<left>0</left>
-						<top>29</top>
+						<top>0</top>
 						<width>210</width>
 						<height>father.height</height>
 						<ContextID>lookupmenu.context</ContextID>

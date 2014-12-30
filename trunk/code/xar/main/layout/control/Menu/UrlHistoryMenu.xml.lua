@@ -6,7 +6,7 @@ function OnInitControl(self)
 	ShowUrlHistory(self)
 end
 
---
+----
 
 function ShowUrlHistory(self)
 	local tUrlHistory = tFunHelper.ReadConfigFromMemByKey("tUrlHistory") or {}
@@ -18,27 +18,23 @@ function ShowUrlHistory(self)
 
 	local nMaxShowHistory = tUserConfig["nMaxShowHistory"] or 9
 	
-	local nCount = 1
+	local nTotalCount = 0
 	for nIndex=1, #tUrlHistory do
 		local tHistoryInfo = tUrlHistory[nIndex]
 		if type(tHistoryInfo) == "table" and tHistoryInfo["bInAddressBar"] then
 			local objMenuItem = CreateMenuItem(tHistoryInfo, nIndex)	
 			if objMenuItem then
-				objMenuContainer:AddChild(objMenuItem)
-				
-				nCount = nCount+1
-				if nCount > nMaxShowHistory then
-					break
-				end
+				objMenuContainer:AddChild(objMenuItem)				
+				nTotalCount = nTotalCount+1
 			end			
 		end	
 	end
 	
-	if nCount <= 1 then
+	if nTotalCount < 1 then
 		self:SetVisible(false)
 		self:SetChildrenVisible(false)
 	else
-		BindMenuContainer(self, objMenuContainer)
+		BindMenuContainer(self, objMenuContainer, nMaxShowHistory, nTotalCount)
 	end
 end
 
@@ -80,6 +76,7 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	return objMenuItem
 end
 
+
 function SetIcoImage(objMenuItem, tHistoryInfo)
 	local strIcoName = tHistoryInfo["strIcoName"]
 	local attr = objMenuItem:GetAttribute() 
@@ -91,8 +88,7 @@ function SetIcoImage(objMenuItem, tHistoryInfo)
 	objMenuItem:SetIconID(strDefaultImgID)
 	
 	local objBitmap = tFunHelper.GetIcoBitmapObj(strIcoName)
-	local objImage = objMenuItem:GetControlObject("icon")
-	if objBitmap and objImage then
+	if objBitmap then
 		objMenuItem:SetIconBitmap(objBitmap)
 	end
 end
@@ -104,8 +100,11 @@ function OpenURL(objMenuItem)
 end
 
 
+function BindMenuContainer(self, objMenuContainer, nMaxShowHistory, nTotalCount)
+	local attr = self:GetAttribute()
+	attr.nLinePerPage = nMaxShowHistory
+	attr.nTotalLineCount = nTotalCount
 
-function BindMenuContainer(self, objMenuContainer)
 	self:OnInitControl(objMenuContainer)
 end
 

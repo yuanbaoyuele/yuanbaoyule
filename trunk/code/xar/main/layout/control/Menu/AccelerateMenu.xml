@@ -135,7 +135,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>154</width>
-			<height>213</height>
+			<height>192</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -143,13 +143,13 @@
 				<left>0</left>
 				<top>0</top>
 				<width>154</width>
-				<height>213</height>
+				<height>192</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="AccelerateListCtrl">
 					<attr>
 						<left>0</left>
-						<top>29</top>
+						<top>0</top>
 						<width>154</width>
 						<height>father.height</height>
 					</attr>

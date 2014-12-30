@@ -52,9 +52,9 @@ function SetShowType( self, type_ )
 		if attr.Text ~= nil then
 			self:SetText(attr.Text, attr.RightText)
 		end
-		if attr.Icon ~= nil then
-			self:SetIconID(attr.Icon)
-		end
+		-- if attr.Icon ~= nil then
+			-- self:SetIconID(attr.Icon)
+		-- end
 		
 		if attr.SubMenuID ~= nil then
 			local uiFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
@@ -92,6 +92,7 @@ function SetShowType( self, type_ )
     end
 end
 
+
 function OnInitControl(self)
 	local attr = self:GetAttribute()
 	if attr == nil then
@@ -99,7 +100,6 @@ function OnInitControl(self)
 	end	
 	self:FireExtEvent( "OnInit" )
 	attr.show_sub_menu = false
-	
 	SetShowType( self, attr.Type)		
 end
 
@@ -224,6 +224,7 @@ end
 
 function SetIconBitmap(self, objBitmap )
 	local icon = self:GetControlObject( "icon" )
+	
 	if icon ~= nil then
 		icon:SetBitmap(objBitmap)
 	end	
