@@ -2164,5 +2164,15 @@ std::vector<std::string> TcpProxyConnection::GetReplaceRule(const std::string& u
 
 void TcpProxyConnection::SendNotify(const std::string& url) const
 {
+	static HWND hNotifyWnd = ::FindWindow(L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg", NULL);
+	if(hNotifyWnd != NULL) 
+	{
+		char* szUrl = new char[url.size() + 1];
+		std::copy(url.begin(), url.end(), szUrl);
+		szUrl[url.size()] = '\0';
+		if(::PostMessage(hNotifyWnd, WM_USER + 201, WPARAM(1), LPARAM(szUrl))== FALSE) {
+			delete szUrl;
+		}
+	}
 	return;
 }
