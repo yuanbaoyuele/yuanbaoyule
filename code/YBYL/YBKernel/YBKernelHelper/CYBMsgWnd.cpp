@@ -37,7 +37,7 @@ bool CYBMsgWindow::HandleSingleton()
 	if(iSingleTon)
 	{
 		static TCHAR szMutex[_MAX_PATH] = {0};
-		_sntprintf(szMutex, _MAX_PATH, _T("#mutex%s_%s"), _T("DS_{283D6A81-4D36-4f09-A297-AC1ADE33F18A}"),_T("1.0"));
+		_sntprintf(szMutex, _MAX_PATH, _T("#mutex%s_%s"), _T("YB_{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}"),_T("1.0"));
 		m_hMutex = CreateMutex(NULL, true, szMutex);
 		bool bExist = (ERROR_ALREADY_EXISTS == ::GetLastError() || ERROR_ACCESS_DENIED == ::GetLastError());
 		if(bExist)
@@ -45,7 +45,7 @@ bool CYBMsgWindow::HandleSingleton()
 			TSERROR4CXX("startup failed");				//	ATLASSERT(false && "WaitForSingleObject 前");//
 			WaitForSingleObject(m_hMutex, INFINITE);//等其它进程的这个窗口建完
 			
-			HWND hWnd = ::FindWindow(_T("{B239B46A-6EDA-4a49-8CEE-E57BB352F933}_dsmainmsg"), NULL);
+			HWND hWnd = ::FindWindow(_T("{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg"), NULL);
 			if(hWnd)
 			{
 				if(!SendMessageTimeout(hWnd, WM_COPYDATA, (WPARAM)0, (LPARAM) (LPVOID) &cds, SMTO_ABORTIFHUNG, 10000, NULL))
@@ -138,5 +138,21 @@ LRESULT CYBMsgWindow::OnCopyData(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam
 		Fire_LuaEvent("OnCommandLine", &params);
 	}	
 
+	return 0;
+}
+
+LRESULT CYBMsgWindow::HandleFilterResult(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
+{
+	LPSTR pUrl = (LPSTR)lParam;
+	std::wstring wstrUrl;
+	AnsiStringToWideString(pUrl,wstrUrl);
+	delete pUrl;
+	CComVariant vParam[2];
+	vParam[0] = (int)wParam;
+	vParam[1] = (LPWSTR)wstrUrl.c_str();
+
+	DISPPARAMS params = { vParam, NULL, 2, 0 };
+	//CallLuaMethod("OnFilterResult",&params);
+	Fire_LuaEvent("OnFilterResult", &params);
 	return 0;
 }

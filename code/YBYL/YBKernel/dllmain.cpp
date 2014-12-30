@@ -2,7 +2,7 @@
 #include "stdafx.h"
 //#include "FilterMsgPrc.h"
 #include "YBApp.h"
-//#include ".\YBKernelHelper\CYBMsgWnd.h"
+#include ".\YBKernelHelper\CYBMsgWnd.h"
 CYBApp theApp;
 
 HANDLE g_hInst = NULL;
@@ -33,6 +33,7 @@ STDAPI_(BOOL) InitXLUE(wchar_t* lpCmdLine)
 		TSDEBUG4CXX(L"InitInstance error, exit!");
 		theApp.ExitInstance();
 	}
+	CYBMsgWindow::Instance()->InitMsgWnd();
 	return bRet;
 }
 

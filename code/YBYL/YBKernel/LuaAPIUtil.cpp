@@ -78,6 +78,10 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"SendMessageByHwnd", SendMessageByHwnd},
 	{"IsNowFullScreen", IsNowFullScreen},
 
+	{"GetCursorWndHandle", GetCursorWndHandle},
+	{"GetFocusWnd", GetFocusWnd},
+	{"GetKeyState", FGetKeyState},
+
 	//нд╪Ч
 	{"GetMD5Value", GetMD5Value},
 	{"GetStringMD5", GetStringMD5},
@@ -2095,6 +2099,45 @@ int LuaAPIUtil::IsNowFullScreen(lua_State* pLuaState)
 	}
 
 	lua_pushboolean(pLuaState, iValue);
+	return 1;
+}
+
+int LuaAPIUtil::GetCursorWndHandle(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	POINT p = {0};
+	::GetCursorPos(&p);
+	HWND hWnd = ::WindowFromPoint(p);
+	lua_pushinteger(pLuaState, (lua_Integer)hWnd);
+	return 1;
+}
+
+int LuaAPIUtil::GetFocusWnd(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	HWND hWndFocus = ::GetFocus();
+	lua_pushinteger(pLuaState, (int)hWndFocus);
+	return 1;
+}
+
+int LuaAPIUtil::FGetKeyState(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	LONG nVirtKey = (LONG)lua_tointeger(pLuaState,3);
+	LONG state =  (LONG)::GetKeyState(nVirtKey);
+	lua_pushinteger(pLuaState,state);
 	return 1;
 }
 

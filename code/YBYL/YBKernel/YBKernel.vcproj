@@ -547,6 +547,34 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="YBKernelHelper"
+			>
+			<File
+				RelativePath=".\YBKernelHelper\CYBMsgWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\YBKernelHelper\CYBMsgWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\YBKernelHelper\LuaListenPre.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\YBKernelHelper\LuaListenPre.h"
+				>
+			</File>
+			<File
+				RelativePath=".\YBKernelHelper\LuaPrefactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\YBKernelHelper\LuaPrefactory.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>
