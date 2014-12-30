@@ -203,10 +203,13 @@ function RegQueryValue(sPath)
 	return ""
 end
 
-
+local bHasInitAcc = false
 function AccelerateFlash(fRate)
-	tipUtil:YbSpeedInitialize()
-	tipUtil:YbSpeedHook()
+	if not bHasInitAcc then
+		tipUtil:YbSpeedInitialize()
+		tipUtil:YbSpeedHook()
+		bHasInitAcc = true
+	end
 	tipUtil:YbSpeedChangeRate(fRate)
 end
 
