@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YBYL", "YBYL\YBYL.vcproj", "{1E7645A7-301F-4FE2-AE00-54BF4E69AC9E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YBKernel", "YBKernel\YBKernel.vcproj", "{8A404C85-CE5F-40E1-8836-0DBD80A551A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E187C1BB-7FB6-4723-83A9-C217B946B4FE} = {E187C1BB-7FB6-4723-83A9-C217B946B4FE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YBNetFilter", "YBNetFilter\YBNetFilter.vcproj", "{E187C1BB-7FB6-4723-83A9-C217B946B4FE}"
 EndProject
