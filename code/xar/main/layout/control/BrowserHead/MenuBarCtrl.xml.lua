@@ -31,16 +31,18 @@ end
 
 
 function OnClickFile(self)
+	local nTopSpan = 28
 	InitMenuHelper()
 	tFunHelper.TryDestroyOldMenu(self, "FileMenu")
-	tFunHelper.CreateAndShowMenu(self, "FileMenu")
+	tFunHelper.CreateAndShowMenu(self, "FileMenu", nTopSpan)
 end
 
 
 function OnClickLookup(self)
+	local nTopSpan = 28
 	InitMenuHelper()
 	tFunHelper.TryDestroyOldMenu(self, "LookupMenu")
-	tFunHelper.CreateAndShowMenu(self, "LookupMenu")
+	tFunHelper.CreateAndShowMenu(self, "LookupMenu", nTopSpan)
 end
 
 
@@ -50,22 +52,25 @@ function OnClickCollect(self)
 		return
 	end
 	
+	local nTopSpan = 28
 	tFunHelper.TryDestroyOldMenu(self, "CollectMenu")
-	tFunHelper.CreateAndShowMenu(self, "CollectMenu")
+	tFunHelper.CreateAndShowMenu(self, "CollectMenu", nTopSpan)
 end
 
 
 function OnClickTool(self)
+	local nTopSpan = 28
 	InitMenuHelper()
 	tFunHelper.TryDestroyOldMenu(self, "ToolMenu")
-	tFunHelper.CreateAndShowMenu(self, "ToolMenu")
+	tFunHelper.CreateAndShowMenu(self, "ToolMenu", nTopSpan)
 end
 
 
 function OnClickHelp(self)
+	local nTopSpan = 28
 	InitMenuHelper()
 	tFunHelper.TryDestroyOldMenu(self, "HelpMenu")
-	tFunHelper.CreateAndShowMenu(self, "HelpMenu")
+	tFunHelper.CreateAndShowMenu(self, "HelpMenu", nTopSpan)
 end
 
 ----

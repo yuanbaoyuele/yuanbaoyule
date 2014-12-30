@@ -13,6 +13,7 @@
 		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
 		<texture id="YBYL.Menu.Select.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
+		<texture id="YBYL.TipAbout.Bkg" image="bitmap\YBYL.TipAbout.Bkg.png" />
 		
 		<bitmap id="YBYL.Menu.Splitter.Bkg" path="bitmap\YBYL.Menu.Splitter.Bkg.png" />
 		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
@@ -142,6 +143,12 @@
 			<texture id="YBYL.MenuBar.ShowBtn.Hover"  imagelist="YBYL.MenuBar.ShowBtn" index="2" />
 			<texture id="YBYL.MenuBar.ShowBtn.Down"   imagelist="YBYL.MenuBar.ShowBtn" index="3" />
 			<texture id="YBYL.MenuBar.ShowBtn.Disable"  imagelist="YBYL.MenuBar.ShowBtn" index="4" />	
+			
+		<imagelist id="YBYL.Scroll.Bar" splitter="1" varyblock="1" image="bitmap\YBYL.Scroll.Bar.png"/>
+			<texture id="YBYL.Scroll.Bar.Normal" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="1" />
+			<texture id="YBYL.Scroll.Bar.Hover" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="2" />
+			<texture id="YBYL.Scroll.Bar.Down" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="3" />
+			<texture id="YBYL.Scroll.Bar.Disable" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="4" />	
 		
 	</resource>
 </XLUE>

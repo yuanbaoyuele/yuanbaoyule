@@ -135,7 +135,7 @@
 				<obj id="Menu.Context" class="NormalMenu">
 					<attr>
 						<left>0</left>
-						<top>32</top>
+						<top>0</top>
 						<width>244+10</width>
 						<height>father.height</height>
 						<ContextID>filemenu.context</ContextID>

@@ -16,21 +16,25 @@ function ShowUserCollect(self)
 	end
 
 	local nMaxShowCollect = tUserConfig["nMaxShowCollect"] or 9
-	if nMaxShowCollect > #tUserCollect then
-		nMaxShowCollect = #tUserCollect
-	end
-	
-	for nIndex=1, nMaxShowCollect do
+		
+	local nTotalCount = 0
+	for nIndex=1, #tUserCollect do
 		local tCollectInfo = tUserCollect[nIndex]
 		if type(tCollectInfo) == "table" then
 			local objMenuItem = CreateMenuItem(tCollectInfo, nIndex)	
 			if objMenuItem then
 				objMenuContainer:AddChild(objMenuItem)
+				nTotalCount = nTotalCount+1
 			end			
 		end	
 	end
 	
-	BindMenuContainer(self, objMenuContainer)
+	if nTotalCount < 1 then
+		self:SetVisible(false)
+		self:SetChildrenVisible(false)
+	else
+		BindMenuContainer(self, objMenuContainer, nMaxShowCollect, nTotalCount)
+	end
 end
 
 
@@ -92,10 +96,13 @@ function OpenURL(objMenuItem)
 end
 
 
-function BindMenuContainer(self, objMenuContainer)
+function BindMenuContainer(self, objMenuContainer, nMaxShowHistory, nTotalCount)
+	local attr = self:GetAttribute()
+	attr.nLinePerPage = nMaxShowHistory
+	attr.nTotalLineCount = nTotalCount
+
 	self:OnInitControl(objMenuContainer)
 end
-
 -----
 function IsRealString(str)
 	return type(str) == "string" and str~=nil

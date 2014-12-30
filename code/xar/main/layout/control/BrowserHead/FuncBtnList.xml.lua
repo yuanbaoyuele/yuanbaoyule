@@ -15,8 +15,9 @@ function OnInitAccText(self)
 end
 
 function OnClickAccelerate(self)
+	local nTopSpan = 33
 	tFunHelper.TryDestroyOldMenu(self, "AccelerateMenu")
-	tFunHelper.CreateAndShowMenu(self, "AccelerateMenu")
+	tFunHelper.CreateAndShowMenu(self, "AccelerateMenu", nTopSpan)
 end
 
 function OnClickAdvFilter(self)

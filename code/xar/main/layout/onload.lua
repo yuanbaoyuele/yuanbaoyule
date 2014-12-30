@@ -42,8 +42,8 @@ end
 
 --µ¯³ö´°¿Ú--
 local g_tPopupWndList = {
-	[1] = {"TipConfigWnd", "TipConfigTree"},
-	-- [2] = {"TipAboutWnd", "TipAboutTree"},
+	[1] = {"TipAboutWnd", "TipAboutTree"},
+	-- [2] = {"TipConfigWnd", "TipConfigTree"},
 }
 
 
