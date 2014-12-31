@@ -203,6 +203,18 @@ function RegQueryValue(sPath)
 	return ""
 end
 
+
+function RegDeleteValue(sPath)
+	if IsRealString(sPath) then
+		local sRegRoot, sRegPath = string.match(sPath, "^(.-)[\\/](.*)")
+		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
+			return tipUtil:DeleteRegValue(sRegRoot, sRegPath)
+		end
+	end
+	return false
+end
+
+
 local bHasInitAcc = false
 function AccelerateFlash(fRate)
 	if not bHasInitAcc then
@@ -987,6 +999,10 @@ obj.SetToolTipText = SetToolTipText
 obj.ShowToolTip = ShowToolTip
 obj.GetFilterState = GetFilterState
 obj.SetFilterState = SetFilterState
+
+obj.RegQueryValue = RegQueryValue
+obj.RegDeleteValue = RegDeleteValue
+
 
 
 XLSetGlobal("YBYL.FunctionHelper", obj)

@@ -132,7 +132,7 @@ end
 --µ¯³ö´°¿Ú--
 local g_tPopupWndList = {
 	[1] = {"TipAboutWnd", "TipAboutTree"},
-	[2] = {"TipIntroduceWnd", "TipIntroduceTree"},
+	-- [2] = {"TipIntroduceWnd", "TipIntroduceTree"},
 	-- [3] = {"TipConfigWnd", "TipConfigTree"},
 }
 
@@ -223,24 +223,12 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
-function TryShowIntroduceWnd()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
-	local cmdString = tipUtil:GetCommandLine()
-		
-	if string.find(cmdString, "/showintroduce") then
-		FunctionObj.ShowPopupWndByName("TipIntroduceWnd.Instance", true)
-	end
-end
-
-
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
 	if bRet and IsRealString(strURL) then
 		FunctionObj.OpenURL(strURL)
 	end
-	
-	TryShowIntroduceWnd()
 end
 
 

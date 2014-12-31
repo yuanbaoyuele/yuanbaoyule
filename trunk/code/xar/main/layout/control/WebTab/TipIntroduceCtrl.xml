@@ -1,0 +1,110 @@
+<xlue>
+	 <control class="TipIntroduceCtrl">
+        <method_def>
+        </method_def>
+		
+        <event_def>
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="root.layout" class="TextureObject">
+				<attr>
+					<left>0</left>
+					<top>0</top>
+					<width>father.width</width>
+					<height>father.height</height>
+					<texture>YBYL.IntroduceWnd.Bkg</texture>
+				</attr>				
+					<children>											
+						<obj id="TipIntroduce.Center" class="LayoutObject">
+							<attr>
+								<left>(father.width-716)/2</left>
+								<top>(father.height-467)/2</top>
+								<width>716</width>
+								<height>467</height>
+							</attr>
+							<children>
+								<obj id="TipIntroduce.Panel1" class="TextureObject">
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>father.width</width>
+										<height>father.height</height>
+										<texture>YBYL.IntroduceWnd.Panel1</texture>
+										<cursor>IDC_HAND</cursor>
+									</attr>
+									<eventlist>
+										<event name="OnLButtonUp" file="TipIntroduceCtrl.xml.lua" func="OnLButtonUpPanel1" />
+									</eventlist>
+								</obj>
+									
+								<obj id="TipIntroduce.Panel2" class="TextureObject">
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>father.width</width>
+										<height>father.height</height>
+										<texture>YBYL.IntroduceWnd.Panel2</texture>
+										<visible>false</visible>
+										<cursor>IDC_HAND</cursor>
+									</attr>
+									<eventlist>
+										<event name="OnLButtonUp" file="TipIntroduceCtrl.xml.lua" func="OnLButtonUpPanel2" />
+									</eventlist>
+								</obj>
+							
+								<obj id="TipIntroduce.CloseBtn" class="TipAddin.Button">
+									<attr>
+										<left>father.width-67</left>
+										<top>0-16</top>
+										<width>16</width>
+										<height>16</height>
+										<NormalBkgID>YBYL.IntroduceWnd.CloseBtn.Normal</NormalBkgID>
+										<DownBkgID>YBYL.IntroduceWnd.CloseBtn.Down</DownBkgID>
+										<HoverBkgID>YBYL.IntroduceWnd.CloseBtn.Hover</HoverBkgID>
+										<DisableBkgID>YBYL.IntroduceWnd.CloseBtn.Disable</DisableBkgID>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="TipIntroduceCtrl.xml.lua" func="OnClickCloseBtn" />
+									</eventlist>
+								</obj>
+							
+								<obj id="TipIntroduce.LeftBtn" class="TipAddin.Button">
+									<attr>
+										<left>0</left>
+										<top>(father.height-35)/2</top>
+										<width>20</width>
+										<height>35</height>
+										<NormalBkgID>YBYL.IntroduceWnd.LeftBtn.Normal</NormalBkgID>
+										<DownBkgID>YBYL.IntroduceWnd.LeftBtn.Hover</DownBkgID>
+										<HoverBkgID>YBYL.IntroduceWnd.LeftBtn.Hover</HoverBkgID>
+										<DisableBkgID>YBYL.IntroduceWnd.LeftBtn.Normal</DisableBkgID>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="TipIntroduceCtrl.xml.lua" func="OnClickLeftBtn" />
+									</eventlist>
+								</obj>
+							
+								<obj id="TipIntroduce.RightBtn" class="TipAddin.Button">
+									<attr>
+										<left>father.width-10</left>
+										<top>(father.height-35)/2</top>
+										<width>20</width>
+										<height>35</height>
+										<NormalBkgID>YBYL.IntroduceWnd.RightBtn.Normal</NormalBkgID>
+										<DownBkgID>YBYL.IntroduceWnd.RightBtn.Hover</DownBkgID>
+										<HoverBkgID>YBYL.IntroduceWnd.RightBtn.Hover</HoverBkgID>
+										<DisableBkgID>YBYL.IntroduceWnd.RightBtn.Normal</DisableBkgID>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="TipIntroduceCtrl.xml.lua" func="OnClickRightBtn" />
+									</eventlist>
+								</obj>
+							</children>
+						</obj> <!--end "TipIntroduce.Center"-->
+					</children>
+				</obj>				
+            </children>
+        </objtemplate>
+    </control>
+</xlue>
