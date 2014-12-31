@@ -24,7 +24,7 @@
 
 extern CYBApp theApp;
 
-//#include "YBKernelHelper\CYBMsgWnd.h"
+#include "YBKernelHelper\CYBMsgWnd.h"
 #include "base64.h"
 
 #include "YbSpeed\YbSpeedHook.h"
@@ -168,6 +168,10 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"YbSpeedHook", YbSpeedHook},
 	{"YbSpeedUnhook", YbSpeedUnhook},
 	{"YbSpeedChangeRate", YbSpeedChangeRate},
+
+	//¿ì½Ý¼üÏà¹Ø
+	{"FSetKeyboardHook", FSetKeyboardHook},
+	{"FDelKeyboardHook", FDelKeyboardHook},
 	{NULL, NULL}
 };
 
@@ -4150,4 +4154,17 @@ int LuaAPIUtil::YbSpeedChangeRate(lua_State* pLuaState)
 	double rate = luaL_checknumber(pLuaState, 2);
 	lua_pushnumber(pLuaState, YbSpeedHook::ChangeSpeedRate(rate));
 	return 1;
+}
+
+
+int LuaAPIUtil::FSetKeyboardHook(lua_State* pLuaState)
+{
+	CYBMsgWindow::Instance()->SetKeyboardHook();
+	return 0;
+}
+
+int LuaAPIUtil::FDelKeyboardHook(lua_State* pLuaState)
+{
+	CYBMsgWindow::Instance()->DelKeyboardHook();
+	return 0;
 }
