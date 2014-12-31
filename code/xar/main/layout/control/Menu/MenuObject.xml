@@ -21,6 +21,7 @@
 			<attr name="ShadowBkgHeight" type="int" desc="背景阴影高度">
 				<default>2</default>
 			</attr>
+			<attr name="MenuType" type="string" />  <!--"collect" :收藏菜单  "urlhistory": url历史-->
 		</attr_def>
 
 		<method_def>
@@ -41,6 +42,7 @@
 			<GetKeyItem file="MenuObject.xml.lua" func="GetKeyItem" />
 			<GetParentItem file="MenuObject.xml.lua" func="GetParentItem" />
 			<AdjustItemPos file="MenuObject.xml.lua" func="AdjustItemPos" />
+			<GetItemIndex file="MenuObject.xml.lua" func="GetItemIndex" />
 		</method_def>
 		
 		<event_def>

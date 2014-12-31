@@ -16,7 +16,7 @@ function ShowUrlHistory(self)
 		return false
 	end
 
-	local nMaxShowHistory = tUserConfig["nMaxShowHistory"] or 9
+	local nMaxShowHistory = 6
 	
 	local nTotalCount = 0
 	for nIndex=1, #tUrlHistory do
@@ -70,6 +70,7 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	attr.TextRightWidth = 40
 	attr.FontColorNormal = "949494"
 	attr.TextPos = 30
+	attr.DeleteImgVisible = true
 	
 	SetIcoImage(objMenuItem, tHistoryInfo)
 	objMenuItem:AttachListener("OnSelect", false, OpenURL)

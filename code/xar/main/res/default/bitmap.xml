@@ -175,6 +175,12 @@
 			<texture id="YBYL.IntroduceWnd.CloseBtn.Down" imagelist="YBYL.IntroduceWnd.CloseBtn" index="3" />
 			<texture id="YBYL.IntroduceWnd.CloseBtn.Disable" imagelist="YBYL.IntroduceWnd.CloseBtn" index="4" />	
 		
+		<imagelist id="YBYL.Menu.DeleteItem" splitter="1" varyblock="1" image="bitmap\YBYL.Menu.DeleteItem.png"/>
+			<texture id="YBYL.Menu.DeleteItem.Normal"  imagelist="YBYL.Menu.DeleteItem" index="1" />
+			<texture id="YBYL.Menu.DeleteItem.Hover"  imagelist="YBYL.Menu.DeleteItem" index="2" />
+			<texture id="YBYL.Menu.DeleteItem.Down" imagelist="YBYL.Menu.DeleteItem" index="3" />
+			<texture id="YBYL.Menu.DeleteItem.Disable" imagelist="YBYL.Menu.DeleteItem" index="3" />
+			
 	</resource>
 </XLUE>
 

@@ -1,3 +1,5 @@
+local g_nInitWidth = 0
+
 
 function IterateItems(self, func, revesel)
 	if type(func) ~= "function" then
@@ -26,7 +28,8 @@ function IterateItems(self, func, revesel)
 	end
 end
 
--- 遍历当前菜单项，得出最宽项
+--
+
 function GetMaxWidth(self)
 	local attr = self:GetAttribute()
 	local nL, nT, nR, nB = self:GetObjPos()
@@ -51,23 +54,22 @@ function AdjustItemPos( self )
 	local pos_shadowW = attr.ShadowBkgWidth
 	local pos_shadowH = attr.ShadowBkgHeight
 	
-	local max_width = GetMaxWidth( self )
+	local max_width = g_nInitWidth
 	local max_widthfix = max_width - pos_shadowW
-		
+		-- XLMessageBox(tostring(max_widthfix))
 	IterateItems(self, function(item)
-		--Set item pos when it is visible
 		if item:IsVisible() then
 			local left, top, right, bottom = item:GetObjPos()
-			item:SetObjPos( pos_x, pos_y, pos_x + max_widthfix, pos_y + bottom - top-pos_shadowH )
+			local nItemH = bottom - top
+			
+			item:SetObjPos( pos_x, pos_y, pos_x + max_widthfix, pos_y + bottom - top)
 			pos_y = pos_y + bottom - top
 		end
 	end)
 	
 	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
-	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom )
-	
-	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
-	
+	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom+pos_shadowH )
+		
 	if attr.HoverItem then
 		local itembkn = self:GetControlObject("ItemBkn")
 		local left, top, right, bottom = attr.HoverItem:GetObjPos()
@@ -135,9 +137,27 @@ function RemoveItem( self, index )
 		return
 	end
 	self:RemoveChild( attr.ItemList[index] )
-	attr.ItemList[ index ] = nil
+	table.remove(attr.ItemList, index)
+	-- attr.ItemList[ index ] = nil
 	AdjustItemPos( self )
 end
+
+
+function GetItemIndex(self, objItem)
+	if not objItem then
+		return 0
+	end
+	
+	local attr = self:GetAttribute()
+	for nIndex, objMenuItem in pairs(attr.ItemList) do
+		if objItem:GetID() == objMenuItem:GetID() then
+			return nIndex
+		end
+	end
+
+	return 0
+end
+
 
 function OnInitControl(self)
 	local attr = self:GetAttribute()
@@ -176,6 +196,9 @@ function OnInitControl(self)
 		local shading = self:GetControlObject("menu.shading")
 		shading:SetVisible( false )
 	end
+	
+	local nL, nT, nR, nB = self:GetObjPos()
+	g_nInitWidth = nR-nL
 	
 	AdjustItemPos( self )
 end
