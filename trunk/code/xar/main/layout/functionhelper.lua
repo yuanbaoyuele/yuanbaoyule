@@ -601,9 +601,9 @@ function ReadAllConfigInfo()
 		local strFileName = tConfig["strFileName"]
 		local strCfgPath = GetCfgPathWithName(strFileName)
 		local infoTable = LoadTableFromFile(strCfgPath)
+		
 		if type(infoTable) ~= "table" then
 			TipLog("[ReadAllConfigInfo] GetConfigFile failed! "..tostring(strFileName))
-			return false
 		end
 		
 		local tContent = infoTable
@@ -949,6 +949,7 @@ end
 
 function SetFilterState(bOpenFilter)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+		
 	tUserConfig["bOpenFilter"] = bOpenFilter
 	tipUtil:FYBFilter(bOpenFilter)
 	SaveConfigToFileByKey("tUserConfig")
