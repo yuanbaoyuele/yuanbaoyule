@@ -2,9 +2,13 @@ function GetSubTable()
 	local t = {
 		["strServerConfigURL"] = "", 
 		["nMaxUrlHistroy"] = 100, 
+		["bOpenFilter"] = false, 
 		["nAccelerateRate"] = 1, 
 		["nMaxUserCollect"] = 100, 
-		["strHomePage"] = "www.baidu.com", 
+		["tOpenStupURL"] = {
+			[1] = "www.hao123.com", 
+		}, 
+		["strOpenTabURL"] = "www.baidu.com", 
 	}
 	return t
 end
