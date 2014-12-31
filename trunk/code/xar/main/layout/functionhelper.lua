@@ -671,13 +671,13 @@ end
 
 function GetHomePage()
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local strHomePage = tUserConfig["strHomePage"]
+	local strHomePage = tUserConfig["strOpenTabURL"]
 	return strHomePage
 end
 
 function SetHomePage(strURL)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	tUserConfig["strHomePage"] = strURL
+	tUserConfig["strOpenTabURL"] = strURL
 	SaveConfigToFileByKey("tUserConfig")
 end
 

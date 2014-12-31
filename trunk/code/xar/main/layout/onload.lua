@@ -223,12 +223,36 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
+function TryOpenURLWhenStup()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strCmd = tipUtil:GetCommandLine()
+	
+	if string.find(strCmd, "/noopenstup") then
+		return
+	end
+	
+	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+	local tOpenStupURL = tUserConfig["tOpenStupURL"]
+	if type(tOpenStupURL) ~= "table" then
+		return
+	end
+	
+	for key, strURL in pairs(tOpenStupURL) do
+		if IsRealString(strURL) then
+			FunctionObj.OpenURL(strURL)
+		end
+	end
+end
+
+
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
 	if bRet and IsRealString(strURL) then
 		FunctionObj.OpenURL(strURL)
 	end
+	
+	TryOpenURLWhenStup()
 end
 
 
