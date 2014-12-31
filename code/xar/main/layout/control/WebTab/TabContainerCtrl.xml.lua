@@ -97,6 +97,16 @@ function OnCloseTabItem(self, strFunName, nTabID)
 	local objRootCtrl = objFather:GetOwnerControl()
 
 	CloseTabByID(objRootCtrl, nTabID)
+	
+	TerminateWhenNoTab(objRootCtrl)
+end
+
+
+function TerminateWhenNoTab(objRootCtrl)
+	local nTotalNum = GetTotalShowTabNum(objRootCtrl)
+	if nTotalNum <=0 then
+		tFunHelper.ExitProcess()
+	end	
 end
 
 
