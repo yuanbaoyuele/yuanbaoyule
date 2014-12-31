@@ -718,6 +718,7 @@ function DeleteHistory(objMenu, objMenuItem)
 	elseif strMenuType == "collect" then
 		local strURL = objMenuItem:GetExtraData()
 		tFunHelper.RemoveUserCollectURL(strURL)
+		tFunHelper.UpdateCollectList()
 	end
 end
 
