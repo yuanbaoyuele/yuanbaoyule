@@ -4,6 +4,7 @@
 			<ItemTop>5</ItemTop>
 			<ItemLeft>6</ItemLeft> 
 			<ItemRight>10</ItemRight> 
+			<MenuType>urlhistory</MenuType> 
 		</attr>
 		<children>
 			<!--动态创建-->

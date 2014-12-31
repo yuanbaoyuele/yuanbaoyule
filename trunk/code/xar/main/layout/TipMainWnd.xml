@@ -49,14 +49,10 @@
             <top>0</top>
             <width>1024</width>
             <height>768</height>
-            <cacheleft>0</cacheleft>
-            <cachetop>0</cachetop>
 
-            <center>1</center>
             <topmost>0</topmost>
             <visible>0</visible>
             <enable>1</enable>
-            <active>0</active>
             <maxbox>0</maxbox>
             <minbox>1</minbox>
             <minwidth>250</minwidth>

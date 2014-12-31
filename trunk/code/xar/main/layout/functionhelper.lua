@@ -820,22 +820,32 @@ function SaveUserCollectURL(strInputURL)
 end
 
 
-function RemoveUserCollectURL(strInputURL)
+function DeleteHistoryItem(strInputURL, strFileKey)
 	local strURL = FormatURL(strInputURL)
-	
-	local tUserCollect = ReadConfigFromMemByKey("tUserCollect")
-	if type(tUserCollect) ~= "table" then
-		tUserCollect= {}
+
+	local tFileInfo = ReadConfigFromMemByKey(strFileKey)
+	if type(tFileInfo) ~= "table" then
+		tFileInfo= {}
 		return
 	end
 
-	for nIndex, tCollectInfo in pairs(tUserCollect) do
-		if type(tCollectInfo) == "table" and tCollectInfo["strURL"] == strURL then
-			table.remove(tUserCollect, nIndex)
-			SaveConfigToFileByKey("tUserCollect")
+	for nIndex, tInfo in pairs(tFileInfo) do
+		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
+			table.remove(tFileInfo, nIndex)
+			SaveConfigToFileByKey(strFileKey)
 			break
 		end
 	end
+end
+
+
+function RemoveUserCollectURL(strInputURL)
+	DeleteHistoryItem(strInputURL, "tUserCollect")
+end
+
+
+function RemoveHistoryURL(strInputURL)
+	DeleteHistoryItem(strInputURL, "tUrlHistory")
 end
 
 
@@ -973,6 +983,7 @@ obj.ShowPopupWndByName = ShowPopupWndByName
 
 obj.SaveUserCollectURL = SaveUserCollectURL
 obj.RemoveUserCollectURL = RemoveUserCollectURL
+obj.RemoveHistoryURL = RemoveHistoryURL
 obj.SaveUrlToHistory = SaveUrlToHistory
 obj.ClearFileInfo = ClearFileInfo
 obj.SaveLctnNameToFile = SaveLctnNameToFile

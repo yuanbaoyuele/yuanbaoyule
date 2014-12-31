@@ -92,7 +92,6 @@ function OnInitControl(self, objMenuContext)
 	-- end
 	
 	UpdateSize( self )
-	ResetScrollBar(self)
 	attr.bHasInit = true
 	return true
 end
@@ -105,6 +104,14 @@ function UpdateSize( self )
 	
 	local menu = self:GetControlObject( "context_menu" )
 	if menu ~= nil then
+		local attr = self:GetAttribute()
+		local nTotalCount = menu:GetItemCount()
+		if nTotalCount <= 0 then
+			self:SetVisible(false)
+			self:SetChildrenVisible(false)
+			return
+		end
+	
 		local left, top, right, bottom = menu:GetObjPos()
 		local self_left, self_top, self_right, self_bottom = self:GetObjPos()
 		local menu_bkn = self:GetControlObject("menu.bkn")
@@ -120,6 +127,8 @@ function UpdateSize( self )
 		
 		--注 图片有阴影
 		menu_bkn:SetObjPos(0,0,"father.width","father.height+7")
+		
+		UpdateScrollBar(self, menu)
 	end
 end
 
@@ -575,6 +584,14 @@ end
 
 
 --滚动条
+function UpdateScrollBar(objRootCtrl, menu)
+	local attr = objRootCtrl:GetAttribute()
+	local nTotalCount = menu:GetItemCount()
+	attr.nTotalLineCount = nTotalCount
+		
+	ResetScrollBar(objRootCtrl)
+end
+
 function ResetScrollBar(objRootCtrl)
 	if objRootCtrl == nil then
 		return false
@@ -596,7 +613,7 @@ function ResetScrollBar(objRootCtrl)
 	objScrollBar:SetPageSize(nPageSize, true)	
 	objScrollBar:SetScrollPos(0, true)	
 		
-	if nLinePerPage >= nTotalLineCount then
+	if nLinePerPage == 0 or nLinePerPage >= nTotalLineCount then
 		objScrollBar:SetVisible(false)
 		objScrollBar:SetChildrenVisible(false)
 		return true

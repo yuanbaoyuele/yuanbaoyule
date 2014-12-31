@@ -3,7 +3,8 @@
 		<attr>
 			<ItemTop>5</ItemTop>
 			<ItemLeft>6</ItemLeft> 
-			<ItemRight>15</ItemRight> 
+			<ItemRight>10</ItemRight> 
+			<MenuType>collect</MenuType> 
 		</attr>
 		<children>
 			<!--动态创建-->

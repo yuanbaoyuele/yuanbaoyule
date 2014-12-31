@@ -101,6 +101,9 @@ function OnInitControl(self)
 	self:FireExtEvent( "OnInit" )
 	attr.show_sub_menu = false
 	SetShowType( self, attr.Type)		
+	
+	local bShow = attr.DeleteImgVisible
+	self:ShowDeleteBtn(bShow)
 end
 
 function SetFontColorNormal(self,color)
@@ -170,7 +173,7 @@ function SetText(self, text_, strRightText)
 			if IsRealString(strRightText) then
 				item:SetObjPos( ""..attr.TextPos, "0", "father.width/2-20", "father.height" )
 			else
-				item:SetObjPos( ""..attr.TextPos, "0", "father.width", "father.height" )
+				item:SetObjPos( ""..attr.TextPos, "0", "father.width-"..tostring(attr.TextRightSpan), "father.height" )
 			end	
 			
 			if attr.Font ~= nil and attr.Font ~= "" then
@@ -666,6 +669,58 @@ function GetUserData(self)
 	local attr = self:GetAttribute()
 	return attr.Data
 end
+
+
+function ShowDeleteBtn(self, bShow)
+	local objDelete = self:GetControlObject("MenuItem.Delete")
+	if objDelete then
+		objDelete:SetVisible(bShow)
+		objDelete:SetChildrenVisible(bShow)
+	end
+end
+
+
+function OnClickDelete(self)
+	local objMenuItem = self:GetOwnerControl()
+	local objMenu = objMenuItem:GetFather()
+	
+	if not objMenuItem or not objMenu then
+		return
+	end
+	
+	DeleteHistory(objMenu, objMenuItem)	
+	
+	local nIndex = objMenu:GetItemIndex(objMenuItem)
+	if nIndex == 0 then
+		return
+	end
+	
+	local objNormalMenu = objMenu:GetOwnerControl()
+	if objNormalMenu then
+		objNormalMenu:RemoveItem(nIndex)
+	end
+end
+
+
+function DeleteHistory(objMenu, objMenuItem)	
+	local attr = objMenu:GetAttribute()
+	local strMenuType = attr.MenuType
+	
+	if not IsRealString(strMenuType) then
+		return
+	end
+
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
+	if strMenuType == "urlhistory" then
+		local strURL = objMenuItem:GetText()
+		tFunHelper.RemoveHistoryURL(strURL)
+		
+	elseif strMenuType == "collect" then
+		local strURL = objMenuItem:GetExtraData()
+		tFunHelper.RemoveUserCollectURL(strURL)
+	end
+end
+
 
 
 function RouteToFather(self)

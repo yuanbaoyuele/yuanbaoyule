@@ -19,7 +19,7 @@
 			
 			<attr name="RightText" type="string" desc="该条目的右侧文本"/>
 			<attr name="ExtraData" type="string" />
-			
+						
 			<attr name="NormalArrow" type="string" desc="如果存在子菜单时的箭头图标" >
 				<!--default>bitmap.menu.arrow.normal</default-->
 			</attr>
@@ -43,6 +43,9 @@
 			
 			<attr name="TextPos" type="int" desc="文本的左边起始位置">
 				<default>13</default>
+			</attr>
+			<attr name="TextRightSpan" type="int" desc="文本的左边起始位置">
+				<default>15</default>
 			</attr>
 			
 			<attr name="RightTextPos" type="int" desc="右侧文本的右边起始位置">
@@ -77,6 +80,9 @@
 			</attr>
 			<attr name="Index" type="int" />
 			<attr name="TipsText" type="string" />
+			<attr name="DeleteImgVisible" type="bool">
+				<default>false</default>
+			</attr>
 		</attr_def>
 
 		<method_def>
@@ -113,6 +119,7 @@
 			<GetParentItem file="MenuItemObject.xml.lua" func="GetParentItem" />
 			<SetUserData file="MenuItemObject.xml.lua" func="SetUserData" />
 			<GetUserData file="MenuItemObject.xml.lua" func="GetUserData" />
+			<ShowDeleteBtn file="MenuItemObject.xml.lua" func="ShowDeleteBtn" />
 		</method_def>
 
 		<event_def>
@@ -136,7 +143,21 @@
 
 		<objtemplate>
 			<children>
-				
+				<obj id="MenuItem.Delete" class="TipAddin.Button">
+					<attr>
+						<left>father.width-16</left>
+						<top>(father.height-16)/2</top>
+						<width>16</width>
+						<height>16</height>
+						<NormalBkgID>YBYL.Menu.DeleteItem.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Menu.DeleteItem.Down</DownBkgID>
+						<HoverBkgID>YBYL.Menu.DeleteItem.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Menu.DeleteItem.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="MenuItemObject.xml.lua" func="OnClickDelete" />
+					</eventlist>
+				</obj>
 			</children>
 
 			<eventlist>
