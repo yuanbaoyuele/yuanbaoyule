@@ -15,6 +15,14 @@ struct CallbackNode
 	const void* luaFunction;
 };
 
+static std::wstring GetMsgWndClassName()
+{
+	wchar_t szClassName[MAX_PATH] = {0};
+	DWORD dwPid = ::GetCurrentProcessId();
+	swprintf(szClassName,L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_%d", dwPid);
+	return szClassName;
+}
+
 class CYBMsgWindow : public  CWindowImpl<CYBMsgWindow>
 {
 public:
@@ -35,7 +43,8 @@ public:
 
 	bool HandleSingleton();
 
-	DECLARE_WND_CLASS(L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg")
+	//DECLARE_WND_CLASS(L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg")
+	DECLARE_WND_CLASS(GetMsgWndClassName().c_str())
 	BEGIN_MSG_MAP(CYBMsgWindow)
 		MESSAGE_HANDLER(WM_COPYDATA, OnCopyData)
 		MESSAGE_HANDLER(WM_FILTERRESULT, HandleFilterResult)
@@ -59,8 +68,16 @@ private:
  
 
 private:
-
+	
 public:
 	LRESULT OnCopyData(UINT , WPARAM , LPARAM , BOOL& );
 	LRESULT HandleFilterResult(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
+
+public:
+	void SetKeyboardHook(void);
+	void DelKeyboardHook(void);
+private:
+	static LRESULT CALLBACK  KeyboardProc(int code, WPARAM wParam, LPARAM lParam);
+public:
+	HHOOK m_hKeyboardHook;
 };

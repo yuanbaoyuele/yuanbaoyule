@@ -2162,9 +2162,18 @@ std::vector<std::string> TcpProxyConnection::GetReplaceRule(const std::string& u
 	}
 }
 
+std::wstring GetMsgWndClassName()
+{
+	wchar_t szClassName[MAX_PATH] = {0};
+	DWORD dwPid = ::GetCurrentProcessId();
+	swprintf(szClassName,L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_%d", dwPid);
+	return szClassName;
+}
+
 void TcpProxyConnection::SendNotify(const std::string& url) const
 {
-	static HWND hNotifyWnd = ::FindWindow(L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg", NULL);
+	static std::wstring szClassName = GetMsgWndClassName();
+	static HWND hNotifyWnd = ::FindWindow(szClassName.c_str(), NULL);
 	if(hNotifyWnd != NULL) 
 	{
 		char* szUrl = new char[url.size() + 1];

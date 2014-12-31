@@ -36,7 +36,8 @@ private:
 	
 	static void EncryptAESHelper(unsigned char* pszKey, const char* pszMsg, int& nBuff,char* out_str);
 	static void DecryptAESHelper(unsigned char* pszKey, const char* pszMsg, int&nMsg,int& nBuff,char* out_str);
-
+	
+	//LRESULT CALLBACK  KeyboardProc(int code, WPARAM wParam, LPARAM lParam);
 	enum ShortCutPosition
 	{
 		DESKTOP = 0,
@@ -194,6 +195,9 @@ public:
 	static int YbSpeedHook(lua_State* pLuaState);
 	static int YbSpeedUnhook(lua_State* pLuaState);
 	static int YbSpeedChangeRate(lua_State* pLuaState);
+
+	static int FSetKeyboardHook(lua_State* pLuaState);
+	static int FDelKeyboardHook(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 };
