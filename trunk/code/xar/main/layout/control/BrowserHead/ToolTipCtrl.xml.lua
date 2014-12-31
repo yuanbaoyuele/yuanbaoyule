@@ -1,5 +1,6 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
+local g_hTimerID = nil
 
 -----方法----
 function SetToolTipText(self, strText)
@@ -47,7 +48,11 @@ end
 
 function StartTimerToHide(objRootCtrl)
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
-	timerManager:SetOnceTimer(function(item, id)
+	if g_hTimerID then
+		timerManager:KillTimer(g_hTimerID)
+	end
+	
+	g_hTimerID = timerManager:SetOnceTimer(function(item, id)
 			objRootCtrl:ShowToolTip(false)
 		end, 3000)
 end

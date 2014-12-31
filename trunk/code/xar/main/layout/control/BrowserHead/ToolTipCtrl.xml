@@ -19,13 +19,13 @@
 						<left>0</left>
 						<top>0</top>
 						<width>father.width</width>
-						<height>33</height>
+						<height>father.height</height>
 						<texture>YBYL.ToolTip.Bkg</texture>
 					</attr>
 					<children>
 						<obj id="ToolTipCtrl.Text" class="TextObject">
 							<attr>
-								<left>30</left>
+								<left>20</left>
 								<top>0</top>
 								<width>father.width-30</width>
 								<height>father.height</height>
@@ -38,7 +38,7 @@
 					
 						<obj id="ToolTipCtrl.CloseBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-5-9</left>
+								<left>father.width-5-10</left>
 								<top>(father.height-9)/2</top>
 								<width>9</width>
 								<height>9</height>
