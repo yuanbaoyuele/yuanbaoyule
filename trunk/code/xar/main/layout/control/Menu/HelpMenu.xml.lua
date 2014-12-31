@@ -1,8 +1,8 @@
-
+local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 
 -------事件---
 function OnSelect_About(self)
-	
+	tFunHelper.ShowPopupWndByName("TipAboutWnd.Instance", true)
 end
 
 

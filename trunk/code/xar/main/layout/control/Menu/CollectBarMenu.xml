@@ -1,0 +1,46 @@
+<xlue>
+	<!--点击收藏栏的箭头， 弹出菜单-->
+	<objtemplate id="collectbarmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> 
+			<ItemRight>15</ItemRight> 
+		</attr>
+		<children>
+			<!--动态创建-->
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="CollectBarMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>260</width>
+			<height>278</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>260</width>
+				<height>278</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>260</width>
+						<height>father.height</height>
+						<!--ContextID>collectmenu.context</ContextID-->
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+					<eventlist>
+						<event name="OnInitControl" file="CollectBarMenu.xml.lua" func="OnInitControl" />
+					</eventlist>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

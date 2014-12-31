@@ -928,6 +928,7 @@ end
 function SetFilterState(bOpenFilter)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	tUserConfig["bOpenFilter"] = bOpenFilter
+	tipUtil:FYBFilter(bOpenFilter)
 	SaveConfigToFileByKey("tUserConfig")
 end
 
@@ -942,6 +943,7 @@ obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.ExitProcess = ExitProcess
 obj.GetCommandStrValue = GetCommandStrValue
+obj.GetExePath = GetExePath
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir

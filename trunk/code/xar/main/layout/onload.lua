@@ -39,11 +39,101 @@ function ShowMainTipWnd(objMainWnd)
 end
 
 
+function InitAdvFilter()
+	SendRuleListtToFilterThread()
+	SetWebRoot()
+	InitFilterState()
+end
+
+
+function InitFilterState()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bOpenFilter = FunctionObj.GetFilterState()
+	FunctionObj.SetFilterState(bOpenFilter)
+end
+
+
+function GenDecFilePath(strEncFilePath)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strKey = "7uxSw0inyfnTawtg"
+	local strDecString = tipUtil:DecryptFileAES(strEncFilePath, strKey)
+	if type(strDecString) ~= "string" then
+		FunctionObj.TipLog("[GenDecFilePath] DecryptFileAES failed : "..tostring(strEncFilePath))
+		return ""
+	end
+	
+	local strTmpDir = tipUtil:GetSystemTempPath()
+	if not tipUtil:QueryFileExists(strTmpDir) then
+		FunctionObj.TipLog("[GenDecFilePath] GetSystemTempPath failed strTmpDir: "..tostring(strTmpDir))
+		return ""
+	end
+	
+	local strCfgName = tipUtil:GetTmpFileName() or "data.dat"
+	local strCfgPath = tipUtil:PathCombine(strTmpDir, strCfgName)
+	tipUtil:WriteStringToFile(strCfgPath, strDecString)
+	return strCfgPath
+end
+
+
+function GetVideoRulePath()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strServerVideoRulePath = FunctionObj.GetCfgPathWithName("ServerYBYLVideo.dat")
+	if IsRealString(strServerVideoRulePath) and tipUtil:QueryFileExists(strServerVideoRulePath) then
+		return strServerVideoRulePath
+	end
+
+	local strVideoRulePath = FunctionObj.GetCfgPathWithName("YBYLVideo.dat")
+	if IsRealString(strVideoRulePath) and tipUtil:QueryFileExists(strVideoRulePath) then
+		return strVideoRulePath
+	end
+	
+	return ""
+end
+
+
+
+function SendRuleListtToFilterThread()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strVideoRulePath = GetVideoRulePath()
+	if not IsRealString(strVideoRulePath) or not tipUtil:QueryFileExists(strVideoRulePath) then
+		return false
+	end
+
+	local strDecVideoRulePath = GenDecFilePath(strVideoRulePath)
+	if not IsRealString(strDecVideoRulePath) then
+		return false	
+	end
+	local bSucc = tipUtil:LoadVideoRules(strDecVideoRulePath)
+	if not bSucc then
+		FunctionObj.TipLog("[SendRuleListtToFilterThread] LoadVideoRules failed")
+		return false
+	end
+	
+	tipUtil:DeletePathFile(strDecVideoRulePath)
+	
+	return true
+end
+
+
+function SetWebRoot()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strBrowserExePath = FunctionObj.GetExePath()
+	local strWebRootDir = tipUtil:PathCombine(strBrowserExePath, "..\\..\\filterres")
+	
+	if not IsRealString(strWebRootDir) or not tipUtil:QueryFileExists(strWebRootDir) then
+		tipUtil:CreateDir(strWebRootDir)
+	end
+	
+	tipUtil:FYbSetWebRoot(strWebRootDir)
+end
+
+
 
 --µ¯³ö´°¿Ú--
 local g_tPopupWndList = {
 	[1] = {"TipAboutWnd", "TipAboutTree"},
-	-- [2] = {"TipConfigWnd", "TipConfigTree"},
+	[2] = {"TipIntroduceWnd", "TipIntroduceTree"},
+	-- [3] = {"TipConfigWnd", "TipConfigTree"},
 }
 
 
@@ -133,12 +223,24 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
+function TryShowIntroduceWnd()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+	local cmdString = tipUtil:GetCommandLine()
+		
+	if string.find(cmdString, "/showintroduce") then
+		FunctionObj.ShowPopupWndByName("TipIntroduceWnd.Instance", true)
+	end
+end
+
+
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
 	if bRet and IsRealString(strURL) then
 		FunctionObj.OpenURL(strURL)
 	end
+	
+	TryShowIntroduceWnd()
 end
 
 
@@ -165,6 +267,8 @@ function TipMain()
 	
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
 	FunctionObj.ReadAllConfigInfo()
+	
+	InitAdvFilter()
 	
 	CreateMainTipWnd()
 	CreatePopupTipWnd()
