@@ -7,7 +7,7 @@
 	
 	<hostwndtemplate id="MenuHostWnd" class="MenuHostWnd">
 		<attr> 
-			<!--mode>auto</mode-->
+			<mode>manul</mode>
 			<topmost>1</topmost>
 			<layered>1</layered>
 		</attr>
@@ -15,6 +15,8 @@
 			<event name="OnPopupMenu" />
 			<event name="OnEndMenu" />
 			<event name="OnBindObjectTree" />
+			<event name="OnShowWindow" />
+			<event name="OnFocusChange" />
 		</eventlist>
 	</hostwndtemplate>
 

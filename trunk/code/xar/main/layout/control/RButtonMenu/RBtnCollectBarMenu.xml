@@ -1,0 +1,57 @@
+<xlue>
+	<objtemplate id="rbtn.collectbarmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打开</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Open" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Delete" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>删除</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Delete" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="RBtnCollectBarMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>100</width>
+			<height>70</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>100</width>
+				<height>70</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>rbtn.collectbarmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

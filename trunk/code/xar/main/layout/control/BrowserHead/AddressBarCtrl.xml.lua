@@ -137,6 +137,13 @@ function OnUrlEditKeyDown(self, nKeyCode)
 end
 
 
+function OnUrlEditRButtonUp(self)
+	tFunHelper.TryDestroyOldMenu(self, "RBtnEditMenu")
+	tFunHelper.CreateAndShowMenu(self, "RBtnEditMenu", 0, true)
+end
+
+
+
 ----------------
 function CheckHasCollect(strInputURL)
 	if not IsRealString(strInputURL) then

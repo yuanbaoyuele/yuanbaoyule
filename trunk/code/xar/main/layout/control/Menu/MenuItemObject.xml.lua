@@ -667,6 +667,11 @@ function GetUserData(self)
 	return attr.Data
 end
 
+
+function RouteToFather(self)
+	self:RouteToFather()
+end
+
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
 end

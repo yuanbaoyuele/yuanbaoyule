@@ -107,6 +107,8 @@
 
 		<method_def>
 			<OnInitControl file="AccelerateMenu.xml.lua" function="OnInitControl"/>
+			<BindRelateObject file="AccelerateMenu.xml.lua" func="BindRelateObject" />
+			<GetRelateObject file="AccelerateMenu.xml.lua" func="GetRelateObject" />
 		</method_def>
 
 		<event_def>

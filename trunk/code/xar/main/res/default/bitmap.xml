@@ -14,6 +14,7 @@
 		<texture id="YBYL.Menu.Select.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
 		<texture id="YBYL.TipAbout.Bkg" image="bitmap\YBYL.TipAbout.Bkg.png" />
+		<texture id="YBYL.ToolTip.Bkg" type="ThreeInOneH" image="bitmap\YBYL.ToolTip.Bkg.png" />
 		
 		<bitmap id="YBYL.Menu.Splitter.Bkg" path="bitmap\YBYL.Menu.Splitter.Bkg.png" />
 		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
@@ -149,6 +150,12 @@
 			<texture id="YBYL.Scroll.Bar.Hover" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="2" />
 			<texture id="YBYL.Scroll.Bar.Down" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="3" />
 			<texture id="YBYL.Scroll.Bar.Disable" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="4" />	
+		
+		<imagelist id="YBYL.ToolTip.Close" splitter="1" varyblock="1" image="bitmap\YBYL.ToolTip.Close.png"/>
+			<texture id="YBYL.ToolTip.Close.Normal" type="ThreeInOneV" imagelist="YBYL.ToolTip.Close" index="1" />
+			<texture id="YBYL.ToolTip.Close.Hover" type="ThreeInOneV" imagelist="YBYL.ToolTip.Close" index="2" />
+			<texture id="YBYL.ToolTip.Close.Down" type="ThreeInOneV" imagelist="YBYL.ToolTip.Close" index="3" />
+			<texture id="YBYL.ToolTip.Close.Disable" type="ThreeInOneV" imagelist="YBYL.ToolTip.Close" index="4" />	
 		
 	</resource>
 </XLUE>

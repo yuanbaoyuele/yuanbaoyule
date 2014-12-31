@@ -25,6 +25,7 @@
 			<attr name="bHasInit" type="bool" ><default>false</default></attr>
 			<attr name="nLinePerPage" type="int" ><default>0</default></attr>
 			<attr name="nTotalLineCount" type="int" ><default>0</default></attr>
+			<attr name="RelateObject" />
 		</attr_def>
 		
 		<method_def>
@@ -47,6 +48,8 @@
 			<GetParentItem file="NormalMenu.xml.lua" func="GetParentItem" />
 			<AdjustItemPos file="NormalMenu.xml.lua" func="AdjustItemPos" />
 			<OnInitControl file="NormalMenu.xml.lua" func="OnInitControl" />
+			<BindRelateObject file="NormalMenu.xml.lua" func="BindRelateObject" />
+			<GetRelateObject file="NormalMenu.xml.lua" func="GetRelateObject" />
 		</method_def>
 		
 		<objtemplate>
@@ -90,6 +93,9 @@
 									</attr>
 								</obj>
 							</children>
+							<eventlist>
+								<event name="OnMouseWheel" file="NormalMenu.xml.lua" func="RouteToFather"/>
+							</eventlist>
 						</obj>
 						
 						<obj id="listbox.vscroll" class="TipAddin.ScrollBar">
@@ -113,8 +119,10 @@
 								<event name="OnMousePosEvent" file="NormalMenu.xml.lua" func="CLB__OnScrollMousePosEvent"/>
 							</eventlist>
 						</obj>	
-						
 					</children>
+					<eventlist>
+						<event name="OnMouseWheel" file="NormalMenu.xml.lua" redirect="listbox.vscroll"/>
+					</eventlist>
 				</obj>	<!--end menu.frame-->
 			</children>
 				

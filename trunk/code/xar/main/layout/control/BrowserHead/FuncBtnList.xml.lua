@@ -21,9 +21,16 @@ function OnClickAccelerate(self)
 end
 
 function OnClickAdvFilter(self)
-	
-
-
+	local bOpenFilter = tFunHelper:GetFilterState()
+	if bOpenFilter then
+		tFunHelper.SetToolTipText("视频去广告功能已关闭!")
+		tFunHelper.ShowToolTip(true)
+		tFunHelper.SetFilterState(false)
+	else
+		tFunHelper.SetToolTipText("已智能帮您去除广告!")
+		tFunHelper.ShowToolTip(true)
+		tFunHelper.SetFilterState(true)
+	end
 end
 
 

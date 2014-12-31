@@ -457,7 +457,7 @@ end
 ------------UI--
 
 ----菜单--
-function TryDestroyOldMenu(objMenuText, strMenuKey)
+function TryDestroyOldMenu(objUIElem, strMenuKey)
 	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
 	local strHostWndName = strMenuKey..".HostWnd.Instance" 
@@ -473,7 +473,9 @@ function TryDestroyOldMenu(objMenuText, strMenuKey)
 end
 
 
-function CreateAndShowMenu(objMenuText, strMenuKey, nTopSpan)
+--nTopSpan: 离弹出控件的高度差
+--bRBtnPopup：右键弹出菜单
+function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup)
 	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
 	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
@@ -499,7 +501,7 @@ function CreateAndShowMenu(objMenuText, strMenuKey, nTopSpan)
 
 		if uHostWnd and uObjTree then
 			--函数会阻塞
-			local bSucc = ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree, nTopSpan)
+			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
 			
 			if bSucc and uHostWnd:GetMenuMode() == "manual" then
 				uObjTreeMgr:DestroyTree(strObjTreeName)
@@ -510,24 +512,39 @@ function CreateAndShowMenu(objMenuText, strMenuKey, nTopSpan)
 end
 
 
-function ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree, nTopSpan)
+function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
 	uHostWnd:BindUIObjectTree(uObjTree)
 					
 	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
 	if not objMainLayout then
+		TipLog("[ShowMenuHostWnd] find Menu.MainLayout obj failed")
 	    return false
 	end	
+	
+	local objNormalMenu = uObjTree:GetUIObject("Menu.Context")
+	if not objNormalMenu then
+		TipLog("[ShowMenuHostWnd] find normalmenu obj failed")
+	    return false
+	end	
+	objNormalMenu:BindRelateObject(objUIElem)
+	
 	local nL, nT, nR, nB = objMainLayout:GetObjPos()				
 	local nMenuContainerWidth = nR - nL
 	local nMenuContainerHeight = nB - nT
-	local nMenuLeft, nMenuTop = GetScreenAbsPos(objMenuText)
 	
-	local nMenuL, nMenuT, nMenuR, nMenuB = objMenuText:GetAbsPos()
+	local nMenuLeft, nMenuTop = 0, 0
+	if bRBtnPopup then
+		nMenuLeft, nMenuTop = tipUtil:GetCursorPos() 	
+		nTopSpan = 0 
+	else
+		nMenuLeft, nMenuTop = GetScreenAbsPos(objUIElem)
+	end
+	
+	local nMenuL, nMenuT, nMenuR, nMenuB = objUIElem:GetAbsPos()
 	local nMenuHeight = nMenuB - nMenuT
 	if tonumber(nTopSpan) == nil then
 		nTopSpan = nMenuHeight
 	end
-	
 	
 	uHostWnd:SetFocus(false) --先失去焦点，否则存在菜单不会消失的bug
 	
@@ -536,13 +553,13 @@ function ShowMenuHostWnd(objMenuText, uHostWnd, uObjTree, nTopSpan)
 	return bOk
 end
 
+
 function GetScreenAbsPos(objUIElem)
 	local objTree = objUIElem:GetOwner()
 	local objHostWnd = objTree:GetBindHostWnd()
 	local nL, nT, nR, nB = objUIElem:GetAbsPos()
 	return objHostWnd:HostWndPtToScreenPt(nL, nT)
 end
-
 
 
 -----
@@ -870,6 +887,51 @@ function FormatURL(strURL)
 end
 
 
+function SetToolTipText(strText)
+	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objToolTip = objHeadCtrl:GetControlObject("BrowserHeadCtrl.ToolTipCtrl")
+	if not objToolTip then
+		return
+	end
+
+	objToolTip:SetToolTipText(strText)
+end
+
+
+function ShowToolTip(bShow)
+	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objToolTip = objHeadCtrl:GetControlObject("BrowserHeadCtrl.ToolTipCtrl")
+	if not objToolTip then
+		return
+	end
+
+	objToolTip:ShowToolTip(bShow)
+end
+
+
+function GetFilterState()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local bOpenFilter = tUserConfig["bOpenFilter"]
+
+	return bOpenFilter
+end
+
+
+function SetFilterState(bOpenFilter)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["bOpenFilter"] = bOpenFilter
+	SaveConfigToFileByKey("tUserConfig")
+end
+
+
 ------------------文件--
 local obj = {}
 obj.tipUtil = tipUtil
@@ -918,6 +980,11 @@ obj.GetCfgPathWithName = GetCfgPathWithName
 obj.ReadConfigFromMemByKey = ReadConfigFromMemByKey
 obj.SaveConfigToFileByKey = SaveConfigToFileByKey
 obj.ReadAllConfigInfo = ReadAllConfigInfo
+
+obj.SetToolTipText = SetToolTipText
+obj.ShowToolTip = ShowToolTip
+obj.GetFilterState = GetFilterState
+obj.SetFilterState = SetFilterState
 
 
 XLSetGlobal("YBYL.FunctionHelper", obj)
