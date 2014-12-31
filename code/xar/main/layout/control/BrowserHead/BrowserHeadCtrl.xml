@@ -187,6 +187,7 @@
 								<top>father.height+5</top>
 								<width>100</width>
 								<height>25</height>
+								<zorder>999999</zorder>
 							</attr>	
 						</obj>
 						

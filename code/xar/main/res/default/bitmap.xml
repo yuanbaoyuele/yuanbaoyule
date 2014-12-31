@@ -21,12 +21,12 @@
 		<texture id="YBYL.IntroduceWnd.Panel2"  image="bitmap\YBYL.IntroduceWnd.Panel2.png" />
 		
 		<imagelist id="YBYL.IntroduceWnd.LeftBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.LeftBtn.png"/>
-			<texture id="YBYL.IntroduceWnd.LeftBtn.Normal" type="NineInOne" imagelist="YBYL.IntroduceWnd.LeftBtn" index="1" />
-			<texture id="YBYL.IntroduceWnd.LeftBtn.Hover" type="NineInOne" imagelist="YBYL.IntroduceWnd.LeftBtn" index="2" />
+			<texture id="YBYL.IntroduceWnd.LeftBtn.Hover"  imagelist="YBYL.IntroduceWnd.LeftBtn" index="1" />
+			<texture id="YBYL.IntroduceWnd.LeftBtn.Normal"  imagelist="YBYL.IntroduceWnd.LeftBtn" index="2" />
 		
 		<imagelist id="YBYL.IntroduceWnd.RightBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.RightBtn.png"/>
-			<texture id="YBYL.IntroduceWnd.RightBtn.Normal" type="NineInOne" imagelist="YBYL.IntroduceWnd.RightBtn" index="1" />
-			<texture id="YBYL.IntroduceWnd.RightBtn.Hover" type="NineInOne" imagelist="YBYL.IntroduceWnd.RightBtn" index="2" />
+			<texture id="YBYL.IntroduceWnd.RightBtn.Normal"  imagelist="YBYL.IntroduceWnd.RightBtn" index="1" />
+			<texture id="YBYL.IntroduceWnd.RightBtn.Hover"  imagelist="YBYL.IntroduceWnd.RightBtn" index="2" />
 		
 		<bitmap id="YBYL.Menu.Splitter.Bkg" path="bitmap\YBYL.Menu.Splitter.Bkg.png" />
 		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
@@ -169,11 +169,11 @@
 			<texture id="YBYL.ToolTip.Close.Down" type="ThreeInOneV" imagelist="YBYL.ToolTip.Close" index="3" />
 			<texture id="YBYL.ToolTip.Close.Disable" type="ThreeInOneV" imagelist="YBYL.ToolTip.Close" index="4" />	
 		
-		<imagelist id="YBYL.IntroduceWnd.Close" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.Close.png"/>
-			<texture id="YBYL.IntroduceWnd.Close.Normal" type="ThreeInOneV" imagelist="YBYL.IntroduceWnd.Close" index="1" />
-			<texture id="YBYL.IntroduceWnd.Close.Hover" type="ThreeInOneV" imagelist="YBYL.IntroduceWnd.Close" index="2" />
-			<texture id="YBYL.IntroduceWnd.Close.Down" type="ThreeInOneV" imagelist="YBYL.IntroduceWnd.Close" index="3" />
-			<texture id="YBYL.IntroduceWnd.Close.Disable" type="ThreeInOneV" imagelist="YBYL.IntroduceWnd.Close" index="4" />	
+		<imagelist id="YBYL.IntroduceWnd.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.Close.png"/>
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Normal"  imagelist="YBYL.IntroduceWnd.CloseBtn" index="1" />
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Hover"  imagelist="YBYL.IntroduceWnd.CloseBtn" index="2" />
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Down" imagelist="YBYL.IntroduceWnd.CloseBtn" index="3" />
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Disable" imagelist="YBYL.IntroduceWnd.CloseBtn" index="4" />	
 		
 	</resource>
 </XLUE>

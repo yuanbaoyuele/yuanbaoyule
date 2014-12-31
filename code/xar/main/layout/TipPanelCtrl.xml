@@ -76,8 +76,21 @@
 												<left>0</left>
 												<top>31</top>
 												<width>father.width</width>
-												<height>father.height-32</height>
+												<height>father.height-31</height>
 											</attr>		
+											<children>
+												<obj id="TipIntroduce" class="TipIntroduceCtrl">
+													<attr>
+														<left>0</left>
+														<top>0</top>
+														<width>father.width</width>
+														<height>father.height</height>
+													</attr>		
+													<eventlist>
+														<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitTipIntroduce" />
+													</eventlist>
+												</obj>
+											</children>
 										</obj>
 									</children>
 								</obj> <!--MainPanel.Center end-->
