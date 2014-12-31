@@ -1,16 +1,34 @@
+local g_nLastItemRight = 0
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 
 -----方法----
 function UpdateCollectList(self)
 	DestroyOldList(self)
 	ShowUserCollect(self)
+	TryShowArrowBtn(self)
 end
+
+function GetHideMenuList(self)
+	local attr = self:GetAttribute()
+	if type(attr.tHideMenuList) ~= "table" then
+		attr.tHideMenuList = {}
+	end
+	return attr.tHideMenuList
+end
+
 
 -----事件----
 function OnInitControl(self)
 	ShowUserCollect(self)
+	TryShowArrowBtn(self)
 end
 
+
+function OnClickArrowBtn(self)
+	local bRButtonPopup = false
+	tFunHelper.TryDestroyOldMenu(self, "CollectBarMenu")
+	tFunHelper.CreateAndShowMenu(self, "CollectBarMenu", 10, bRButtonPopup)
+end
 
 ---collect item--
 function OnLButtonUpItem(self)
@@ -37,6 +55,13 @@ function OnMouseLeaveItem(self)
 	self:SetTextureID("")
 end
 
+function OnRButtonUpItem(self)
+	local bRButtonPopup = true
+	tFunHelper.TryDestroyOldMenu(self, "RBtnCollectBarMenu")
+	tFunHelper.CreateAndShowMenu(self, "RBtnCollectBarMenu", 0, bRButtonPopup)
+end
+
+
 ----
 
 function ShowUserCollect(objRootCtrl)
@@ -51,6 +76,9 @@ function ShowUserCollect(objRootCtrl)
 	if nMaxShowCollect > #tUserCollect then
 		nMaxShowCollect = #tUserCollect
 	end
+	
+	g_nLastItemRight = 0
+	ClearHideMenuItem(objRootCtrl)
 	
 	for nIndex=1, nMaxShowCollect do
 		local tCollectInfo = tUserCollect[nIndex]
@@ -99,6 +127,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	objLayout:AttachListener("OnLButtonDown", false, OnLButtonDownItem)
 	objLayout:AttachListener("OnMouseEnter", false, OnMouseEnterItem)
 	objLayout:AttachListener("OnMouseLeave", false, OnMouseLeaveItem)
+	objLayout:AttachListener("OnRButtonUp", false, OnRButtonUpItem)
 	
 	return objLayout
 end
@@ -113,6 +142,7 @@ function SetIcoImage(objImage, tCollectInfo)
 		objImage:SetBitmap(objBitmap)
 	end
 end
+
 
 --nIndex 从1 开始
 function SetMenuItemPos(objRootCtrl, objMenuItem, nIndex)
@@ -136,9 +166,17 @@ function SetMenuItemPos(objRootCtrl, objMenuItem, nIndex)
 	objMenuItem:SetObjPos(nL, 0, nR, "father.height")
 	
 	local nRootL, _, nRootR, _ = objRootCtrl:GetObjPos()
-	if nR > nRootR then
+	local nRootWidth = nRootR - nRootL
+	
+	
+	if nR > nRootWidth-7 then
+		if g_nLastItemRight == 0 then
+			g_nLastItemRight = nLastR
+		end
+		
 		objMenuItem:SetVisible(false)
 		objMenuItem:SetChildrenVisible(false)
+		PushHideMenuItem(objRootCtrl, objMenuItem)
 	end
 end
 
@@ -166,6 +204,42 @@ function DestroyOldList(objRootCtrl)
 	end 
 	
 	objContainer:RemoveAllChild()
+end
+
+
+function PushHideMenuItem(objRootCtrl, objMenuItem)
+	local tHideMenuList = objRootCtrl:GetHideMenuList()
+	table.insert(tHideMenuList, objMenuItem)
+end
+
+function ClearHideMenuItem(objRootCtrl)
+	local attr = objRootCtrl:GetAttribute()
+	attr.tHideMenuList = {}
+end
+
+
+function TryShowArrowBtn(objRootCtrl)
+	local tHideMenuList = objRootCtrl:GetHideMenuList()
+	local objArrowBtn = objRootCtrl:GetControlObject("CollectList.ArrowBtn")
+	
+	if not objArrowBtn then
+		return
+	end
+	
+	local nArrowL, nArrowT, nArrowR, nArrowB = objArrowBtn:GetObjPos() 
+	local nArrowW = nArrowR - nArrowL
+	local nNewLeft = g_nLastItemRight+10
+	
+	objArrowBtn:SetObjPos(nNewLeft, nArrowT, nNewLeft+nArrowW, nArrowB)
+	local l, t, r, b = objArrowBtn:GetObjPos()
+
+	if type(tHideMenuList) ~= "table" or #tHideMenuList<1 then		
+		objArrowBtn:SetVisible(false)
+		objArrowBtn:SetChildrenVisible(false)
+	else
+		objArrowBtn:SetVisible(true)
+		objArrowBtn:SetChildrenVisible(true)
+	end
 end
 
 

@@ -1,4 +1,5 @@
 <xlue>
+	<!--sample-->
 	<objtemplate id="collectlist.item" class="LayoutObject">
 		<attr>
 			<left>0</left>
@@ -49,9 +50,11 @@
 		<attr_def>
 			<attr name="RightSpan" type="int" desc="每个item之间的间隔"><default>5</default></attr>
 			<attr name="ItemWidth" type="int" ><default>100</default></attr>
+			<attr name="tHideMenuList" /> <!--没能显示出来的url-->
 		</attr_def>		
 		<method_def>
 			<UpdateCollectList file="CollectList.xml.lua" func="UpdateCollectList" />
+			<GetHideMenuList file="CollectList.xml.lua" func="GetHideMenuList" />
 		</method_def>		
 		
 		<event_def>
@@ -68,6 +71,23 @@
 						<limitchild>0</limitchild>
 					</attr>
 				</obj>
+				
+				<obj id="CollectList.ArrowBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width</left>
+						<top>(father.height-10)/2</top>
+						<width>6</width>
+						<height>10</height>
+						<NormalBkgID>YBYL.MenuBar.HideBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.MenuBar.HideBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.MenuBar.HideBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="CollectList.xml.lua" func="OnClickArrowBtn" />
+					</eventlist>
+				</obj>
+				
 			</children>
 			<eventlist>
 				<event name="OnInitControl" file="CollectList.xml.lua" func="OnInitControl" />

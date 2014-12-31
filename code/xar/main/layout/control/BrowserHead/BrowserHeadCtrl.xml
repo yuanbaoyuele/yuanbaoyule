@@ -166,7 +166,7 @@
 							<attr>
 								<left>20+64</left>
 								<top>34*2</top>
-								<width>father.width-200</width>
+								<width>father.width/2</width>
 								<height>24</height>
 							</attr>	
 						</obj>
@@ -178,6 +178,15 @@
 								<width>759</width>
 								<height>father.height</height>
 								<texture>YBYL.Head.RightBkg</texture>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.ToolTipCtrl" class="ToolTipCtrl">
+							<attr>
+								<left>father.width-100</left>
+								<top>father.height+5</top>
+								<width>100</width>
+								<height>25</height>
 							</attr>	
 						</obj>
 						

@@ -70,6 +70,8 @@
 					</attr>
 					<eventlist>
 						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickCloseCurTab" />
+						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterClose" />
+						<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
 					</eventlist>
 				</obj>
 				
@@ -86,6 +88,8 @@
 					</attr>
 					<eventlist>
 						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickFullScrn" />
+						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterFullScrn" />
+						<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
 					</eventlist>
 				</obj>
 				
@@ -102,6 +106,8 @@
 					</attr>
 					<eventlist>
 						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickRestore" />
+						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterRestore" />
+						<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
 					</eventlist>
 				</obj>
 				

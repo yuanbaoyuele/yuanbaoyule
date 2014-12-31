@@ -12,4 +12,13 @@ function OnBindObjectTree(self, menuTree)
 	context:OnInitControl()	
 end
 
+
+function OnShowWindow(self, bShow)
+
+end
+
+function OnFocusChange(self, bFocus)
+
+end
+
 ------------------

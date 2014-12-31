@@ -69,6 +69,9 @@
 							</attr>
 						</obj>
 					</children>
+					<eventlist>
+						<event name="OnMouseWheel" file="MenuObject.xml.lua" func="RouteToFather" />
+					</eventlist>
 				</obj>
 				<obj id="ItemBkn" class="TextureObject">
 					<attr>
@@ -80,6 +83,9 @@
 						<visible>false</visible>
 						<texture>YBYL.Menu.Select.Bkg</texture>
 					</attr>
+					<eventlist>
+						<event name="OnMouseWheel" file="MenuObject.xml.lua" func="RouteToFather" />
+					</eventlist>
 				</obj>
 				
 			</children>
@@ -88,6 +94,7 @@
 				<event name="OnInitControl"/>
 				<event name="OnDestroy" />
 				<event name="OnKeyDown" file="MenuObject.xml.lua" func="OnKeyDown" />
+				<event name="OnMouseWheel" file="MenuObject.xml.lua" func="RouteToFather" />
 			</eventlist>
 		</objtemplate>
 	</control>

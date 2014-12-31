@@ -52,6 +52,25 @@ function OnClickFullScrn(self)
 	tFunHelper.SetBrowserFullScrn()
 end
 
+function OnMouseEnterFullScrn(self)
+	tFunHelper.SetToolTipText("全屏")
+	tFunHelper.ShowToolTip(true)
+end
+
+function OnMouseEnterRestore(self)
+	tFunHelper.SetToolTipText("恢复")
+	tFunHelper.ShowToolTip(true)
+end
+
+function OnMouseEnterClose(self)
+	tFunHelper.SetToolTipText("关闭")
+	tFunHelper.ShowToolTip(true)
+end
+
+function HideToolTip()
+	tFunHelper.ShowToolTip(false)
+end
+
 
 function OnClickRestore(self)
 	tFunHelper.RestoreWndSize()

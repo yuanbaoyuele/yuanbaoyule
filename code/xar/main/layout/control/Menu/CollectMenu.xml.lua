@@ -69,6 +69,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	
 	SetIcoImage(objMenuItem, tCollectInfo)
 	objMenuItem:AttachListener("OnSelect", false, OpenURL)
+	objMenuItem:AttachListener("OnRButtonUp", false, OnRButtonUpMenuItem)
 	return objMenuItem
 end
 
@@ -93,6 +94,13 @@ end
 function OpenURL(objMenuItem)
 	local strURL = objMenuItem:GetExtraData()
 	tFunHelper.OpenURL(strURL)
+end
+
+
+function OnRButtonUpMenuItem(objMenuItem)
+	-- local bRButtonPopup = true
+	-- tFunHelper.TryDestroyOldMenu(objMenuItem, "RBtnCollectMenu")
+	-- tFunHelper.CreateAndShowMenu(objMenuItem, "RBtnCollectMenu", 0, bRButtonPopup)
 end
 
 

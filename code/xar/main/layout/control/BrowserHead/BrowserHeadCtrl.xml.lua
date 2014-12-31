@@ -53,11 +53,6 @@ function OnClickLogo(self)
 end
 
 
-function OnClickAccelerate(self)
-
-end
-
-
 function OnPosChange(self)
 	local objHostWnd = GetHostWndByUIElem(self)
 	if not objHostWnd then

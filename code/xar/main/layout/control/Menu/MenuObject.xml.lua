@@ -409,3 +409,13 @@ function GetParentItem(self)
 	local attr = father:GetAttribute()
 	return attr.ParentObj
 end
+
+
+function RouteToFather(self)
+	self:RouteToFather()
+end
+
+
+
+
+

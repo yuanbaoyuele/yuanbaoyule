@@ -13,8 +13,8 @@ function OnInitControl(self, objMenuContext)
 		local bkn = self:GetControlObject("menu.bkn")
 		local attr = objMenuContext:GetAttribute()
 		local nRightSpan = attr.ItemRight or 0
-		
-		objMenuContext:SetObjPos("father.left", "father.top", "father.right-"..tostring(nRightSpan), "father.bottom")
+	
+		objMenuContext:SetObjPos("father.left", "father.top", "father.right-"..tostring(nRightSpan), "father.bottom")	
 		bkn:AddChild(objMenuContext)
 		bkn:SetLimitChild(true)
 	else
@@ -670,6 +670,23 @@ function GetItemHeight(objRootCtrl)
 	local nItemHeight = nB-nT
 	return nItemHeight
 end
+
+function BindRelateObject(self, objRelate)
+	local attr = self:GetAttribute()
+	attr.RelateObject = objRelate
+end
+
+
+function GetRelateObject(self)
+	local attr = self:GetAttribute()
+	return attr.RelateObject
+end
+
+
+function RouteToFather(self)
+	self:RouteToFather()
+end
+
 
 
 

@@ -1,0 +1,103 @@
+<xlue>
+	<objtreetemplate id="TipAboutTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>292</width>
+			<height>298</height>
+		</attr>
+
+		<obj id="root.layout" class="CaptionObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>292</width>
+				<height>298</height>
+			</attr>				
+			<children>	
+				<obj id="TipAbout.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.TipAbout.Bkg</texture>
+					</attr>	
+				</obj>
+				
+				<obj id="TipAbout.CloseBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-8-26</left>
+						<top>8</top>
+						<width>26</width>
+						<height>24</height>
+						<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="TipAboutWnd.xml.lua" func="OnClickCloseBtn" />
+					</eventlist>
+				</obj>
+				
+				<obj id="TipAbout.YBYLVersion" class="TextObject">
+					<attr>
+						<left>116</left>
+						<top>169</top>
+						<width>father.width-116</width>
+						<height>10</height>
+						<valign>center</valign>
+						<halign>left</halign>
+						<font>font.yahei12</font>
+						<textcolor>DFC285</textcolor>
+						<text></text>
+					</attr>
+				</obj>
+				
+				<obj id="TipAbout.IEVersion" class="TextObject">
+					<attr>
+						<left>125</left>
+						<top>169+20</top>
+						<width>father.width-125</width>
+						<height>10</height>
+						<valign>center</valign>
+						<halign>left</halign>
+						<font>font.yahei12</font>
+						<textcolor>DFC285</textcolor>
+						<text></text>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+
+    <hostwndtemplate id="TipAboutWnd" class="FrameHostWnd">
+        <attr>
+            <layered>1</layered>
+            <left>0</left>
+            <top>0</top>
+            <width>292</width>
+            <height>298</height>
+            <cacheleft>0</cacheleft>
+            <cachetop>0</cachetop>
+
+            <topmost>0</topmost>
+            <visible>0</visible>
+            <enable>1</enable>
+            <active>0</active>
+            <maxbox>0</maxbox>
+            <minbox>1</minbox>
+            <minwidth>50</minwidth>
+            <minheight>50</minheight>
+			<sysmenu>0</sysmenu>
+			<appwindow>0</appwindow>
+            <fps>30</fps>
+			<blur>1</blur>
+        </attr>
+		 <eventlist>
+            <event name="OnCreate" file="TipAboutWnd.xml.lua" func="OnCreate"/>
+        </eventlist>
+    </hostwndtemplate>
+
+</xlue>

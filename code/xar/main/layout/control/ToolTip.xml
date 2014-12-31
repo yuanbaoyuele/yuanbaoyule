@@ -19,7 +19,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						<texture>XmpTipWnd.ToopTip.Bkg</texture>
+						<texture>YBYL.ToolTip.Bkg</texture>
 					</attr>
 					<children>
 						<obj id="ToolTipText" class="TextObject">
@@ -29,7 +29,7 @@
 								<width>father.width</width>
 								<height>father.height</height>
 								<font>font.yahei13</font>
-								<textcolor>movietime.black</textcolor>
+								<textcolor>255E18</textcolor>
 							</attr>
 						</obj>
 					</children>

@@ -38,6 +38,17 @@ function OnInitControl(self)
 end
 
 
+function BindRelateObject(self, objRelate)
+	local objNormalMenu = self:GetControlObject("MenuContext")
+	objNormalMenu:BindRelateObject(objRelate)
+end
+
+
+function GetRelateObject(self)
+	local objNormalMenu = self:GetControlObject("MenuContext")
+	return objNormalMenu:GetRelateObject(objRelate)
+end
+
 
 function OnSelect_Accelerate1(self)
 	tFunHelper.AccelerateFlash(1)
