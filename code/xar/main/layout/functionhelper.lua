@@ -80,6 +80,37 @@ function ExitProcess()
 end
 
 
+function ReportAndExit()
+	local tStatInfo = {}
+			
+	SendRunTimeReport(0, true)
+	
+	tStatInfo.strEC = "exit"	
+	tStatInfo.strEA = GetInstallSrc() or ""
+	tStatInfo.Exit = true
+			
+	TipConvStatistic(tStatInfo)
+end
+
+
+function SendRunTimeReport(nTimeSpanInSec, bExit)
+	local tStatInfo = {}
+	tStatInfo.strEC = "runtime"
+	tStatInfo.strEA = GetInstallSrc() or ""
+	
+	local nRunTime = 0
+	local nLastReportRunTmUTC = XLGetGlobal("YBYL.LastReportRunTime") 
+	if bExit and nLastReportRunTmUTC ~= 0 then
+		nRunTime = math.abs(tipUtil:GetCurrentUTCTime() - nLastReportRunTmUTC)
+	else
+		nRunTime = nTimeSpanInSec
+	end
+	tStatInfo.strEV = nRunTime
+	
+	TipConvStatistic(tStatInfo)
+end
+
+
 function IsUserFullScreen()
 	local bRet = false
 	if type(tipUtil.IsNowFullScreen) == "function" then
@@ -89,11 +120,46 @@ function IsUserFullScreen()
 end
 
 
+function CheckIsNewVersion(strNewVer, strCurVer)
+	if not IsRealString(strNewVer) or not IsRealString(strCurVer) then
+		return false
+	end
+
+	local a,b,c,d = string.match(strNewVer, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
+	local A,B,C,D = string.match(strCurVer, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
+	return a>A or (a==A and (b>B or (b==B and (c>C or (c==C and d>D)))))
+end
+
+
+function GetPeerID()
+	local strPeerID = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\PeerId")
+	if IsRealString(strPeerID) then
+		return strPeerID
+	end
+
+	local strRandPeerID = tipUtil:GetPeerId()
+	if not IsRealString(strRandPeerID) then
+		return ""
+	end
+	
+	RegSetValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\PeerId", strRandPeerID)
+	return strRandPeerID
+end
+
+--渠道
+function GetInstallSrc()
+	local strInstallSrc = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\InstallSource")
+	if not IsNilString(strInstallSrc) then
+		return tostring(strInstallSrc)
+	end
+	
+	return ""
+end
+
+
 function FailExitTipWnd(self, iExitCode)
 	local tStatInfo = {}
-		
 	tStatInfo.Exit = true
-		
 	TipConvStatistic(tStatInfo)
 end
 
@@ -101,8 +167,33 @@ end
 function TipConvStatistic(tStat)
 	local rdRandom = tipUtil:GetCurrentUTCTime()
 	local tStatInfo = tStat or {}
+	local strDefaultNil = "null"
 	
-	local strUrl = ""
+	local strCID = GetPeerID()
+	local strEC = tStatInfo.strEC 
+	local strEA = tStatInfo.strEA 
+	local strEL = tStatInfo.strEL
+	local strEV = tStatInfo.strEV
+	
+	if IsNilString(strEC) then
+		strEC = strDefaultNil
+	end
+	
+	if IsNilString(strEA) then
+		strEA = strDefaultNil
+	end
+	
+	if IsNilString(strEL) then
+		strEL = strDefaultNil
+	end
+	
+	if tonumber(strEV) == nil then
+		strEV = 1
+	end
+	
+	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-57884150-1&cid="..tostring(strCID)
+						.."&t=event&ec="..tostring(strEC).."&ea="..tostring(strEA)
+						.."&el="..tostring(strEL).."&ev="..tostring(strEV)
 	TipLog("TipConvStatistic: " .. tostring(strUrl))
 	
 	gStatCount = gStatCount + 1
@@ -165,6 +256,16 @@ function GetProgramTempDir(strSubDir)
 end
 
 
+function GetFileSaveNameFromUrl(url)
+	local _, _, strFileName = string.find(tostring(url), ".*/(.*)$")
+	local npos = string.find(strFileName, "?", 1, true)
+	if npos ~= nil then
+		strFileName = string.sub(strFileName, 1, npos-1)
+	end
+	return strFileName
+end
+
+
 function QueryAllUsersDir()	
 	local bRet = false
 	local strPublicEnv = "%PUBLIC%"
@@ -190,6 +291,17 @@ function GetYBYLVersion()
 	end
 
 	return tipUtil:GetFileVersionString(strEXEPath)
+end
+
+
+function GetMinorVer()
+	local strVersion = GetYBYLVersion()
+	if not IsRealString(strVersion) then
+		return ""
+	end
+	
+	local _, _, strMinorVer = string.find(strVersion, "%d+%.%d+%.%d+%.(%d+)")
+	return strMinorVer
 end
 
 
@@ -251,38 +363,36 @@ function SetBrowserFullScrnState(bFullScreen)
 	end
 end
 
-function SetWindowFullScrnState(bFullScreen)
-	g_bIsBrowserFullScrn = bFullScreen
-end
 
-function SetWindowFullScrn()
-	local objBrowserLayout = GetMainCtrlChildObj("MainPanel.Center")
-	if not objBrowserLayout then
-		return
-	end
-	local objRootLayout = GetMainCtrlChildObj("root.layout")
-	if not objRootLayout then
-		return
-	end
+-- function SetWindowFullScrn()
+	-- local objBrowserLayout = GetMainCtrlChildObj("MainPanel.Center")
+	-- if not objBrowserLayout then
+		-- return
+	-- end
+	-- local objRootLayout = GetMainCtrlChildObj("root.layout")
+	-- if not objRootLayout then
+		-- return
+	-- end
 	
-	local nBrowserL, nBrowserT, nBrowserR, nBrowserB = objBrowserLayout:GetAbsPos()
-	local nRootL, nRootT, nRootR, nRootB = objRootLayout:GetAbsPos()
+	-- local nBrowserL, nBrowserT, nBrowserR, nBrowserB = objBrowserLayout:GetAbsPos()
+	-- local nRootL, nRootT, nRootR, nRootB = objRootLayout:GetAbsPos()
 	
-	local nDiffW = nBrowserL + (nRootR-nBrowserR)
-	local nDiffH = nBrowserT + (nRootB-nBrowserB)
+	-- local nDiffW = nBrowserL + (nRootR-nBrowserR)
+	-- local nDiffH = nBrowserT + (nRootB-nBrowserB)
 	
-	local nWidth, nHeight = tipUtil:GetScreenSize()
-	local nNewWidth = nWidth+nDiffW
-	local nNewHeight = nHeight+nDiffH
+	-- local nWidth, nHeight = tipUtil:GetScreenSize()
+	-- local nNewWidth = nWidth+nDiffW
+	-- local nNewHeight = nHeight+nDiffH
 	
-	local objMainWnd = GetMainWndInst()
-	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainWnd:GetWindowRect()
-	RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
+	-- local objMainWnd = GetMainWndInst()
+	-- local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainWnd:GetWindowRect()
+	-- RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
 	
-	SetBrowserFullScrnState(true)
-	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
-	objMainWnd:Move(0-nBrowserL, 0-nBrowserT, nNewWidth, nNewHeight)	
-end
+	-- SetBrowserFullScrnState(true)
+	-- SetResizeEnable(false)
+	-- objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
+	-- objMainWnd:Move(0-nBrowserL, 0-nBrowserT, nNewWidth, nNewHeight)	
+-- end
 
 
 function SetBrowserFullScrn()
@@ -310,6 +420,7 @@ function SetBrowserFullScrn()
 	RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
 	
 	SetBrowserFullScrnState(true)
+	SetResizeEnable(false)
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
 	objMainWnd:Move(0-nBrowserL, 0-nBrowserT, nNewWidth, nNewHeight)	
 end
@@ -333,7 +444,7 @@ function RestoreWndSize()
 		end
 		
 		SetBrowserFullScrnState(false)
-		SetWindowFullScrnState(false)
+		SetResizeEnable(true)
 		objMainWnd:Move(nLeft, nTop, nWidth, nHeight)
 	end
 end
@@ -347,6 +458,15 @@ function RecordWndSize(nLeft, nTop, nRight, nBottom)
 	g_tWindowSize.nTop = nTop
 	g_tWindowSize.nRight = nRight
 	g_tWindowSize.nBottom = nBottom
+end
+
+
+function SetResizeEnable(bEnable)
+	local objFrame = GetMainCtrlChildObj("frame")
+	if objFrame then
+		objFrame:SetEnable(bEnable)
+		objFrame:SetChildrenEnable(bEnable)
+	end	
 end
 
 
@@ -369,13 +489,23 @@ function GetCurrentURL()
 end
 
 
-function OpenURL(strURL)
+function OpenURLInNewTab(strURL)
 	if not IsRealString(strURL) then
 		return
 	end
 	
 	local objTabContainer = GetMainCtrlChildObj("MainPanel.TabContainer")
 	objTabContainer:OpenURL(strURL, true)
+end
+
+
+function OpenURLInCurTab(strURL)
+	if not IsRealString(strURL) then
+		return
+	end
+	
+	local objTabContainer = GetMainCtrlChildObj("MainPanel.TabContainer")
+	objTabContainer:OpenURL(strURL, false)
 end
 
 
@@ -540,10 +670,17 @@ function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
 	end	
 	objNormalMenu:BindRelateObject(objUIElem)
 	
-	local nL, nT, nR, nB = objMainLayout:GetObjPos()				
+	local nL, nT, nR, nB 
+	local objMenuFrame = objNormalMenu:GetControlObject("menu.frame")
+	if objMenuFrame then
+		nL, nT, nR, nB = objMenuFrame:GetObjPos()				
+	else
+		nL, nT, nR, nB = objNormalMenu:GetObjPos()	
+	end	
+	
 	local nMenuContainerWidth = nR - nL
 	local nMenuContainerHeight = nB - nT
-	
+
 	local nMenuLeft, nMenuTop = 0, 0
 	if bRBtnPopup then
 		nMenuLeft, nMenuTop = tipUtil:GetCursorPos() 	
@@ -558,10 +695,10 @@ function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
 		nTopSpan = nMenuHeight
 	end
 	
-	uHostWnd:SetFocus(false) --先失去焦点，否则存在菜单不会消失的bug
+	local nMenuLeft, nMenuTop = AdjustScreenEdge(nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight, nTopSpan)
 	
 	--函数会阻塞
-	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop+nTopSpan, nMenuContainerWidth, nMenuContainerHeight)
+	local bOk = uHostWnd:TrackPopupMenu(objHostWnd, nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight)
 	return bOk
 end
 
@@ -571,6 +708,29 @@ function GetScreenAbsPos(objUIElem)
 	local objHostWnd = objTree:GetBindHostWnd()
 	local nL, nT, nR, nB = objUIElem:GetAbsPos()
 	return objHostWnd:HostWndPtToScreenPt(nL, nT)
+end
+
+
+function AdjustScreenEdge(nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight, nTopSpan)
+	local nScrnLeft, nScrnTop, nScrnRight, nScrnBottom = tipUtil:GetWorkArea()
+	
+	if nMenuLeft < nScrnLeft then
+		nMenuLeft = nScrnLeft
+	end
+	
+	if nMenuLeft+nMenuContainerWidth > nScrnRight then
+		nMenuLeft = nScrnRight - nMenuContainerWidth
+	end
+	
+	if nMenuTop < nScrnTop then
+		nMenuTop = nTopSpan+nScrnTop
+	elseif nMenuTop+nMenuContainerHeight+nTopSpan > nScrnBottom then
+		nMenuTop = nMenuTop - nMenuContainerHeight
+	else
+		nMenuTop = nTopSpan+nMenuTop
+	end	
+		
+	return nMenuLeft, nMenuTop
 end
 
 
@@ -669,11 +829,24 @@ function SaveAllConfig()
 end
 
 
+function GetDfltNewTabURL()
+	local strURL = "about:blank"
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local strOpenTabURL = tUserConfig["strOpenTabURL"]
+	if IsRealString(strOpenTabURL) then
+		strURL = strOpenTabURL
+	end
+	
+	return strURL
+end
+
+
 function GetHomePage()
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	local strHomePage = tUserConfig["strOpenTabURL"]
 	return strHomePage
 end
+
 
 function SetHomePage(strURL)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
@@ -956,31 +1129,219 @@ function SetFilterState(bOpenFilter)
 end
 
 
+---升级--
+local g_bIsUpdating = false
+
+function DownLoadNewVersion(tNewVersionInfo, fnCallBack)
+	local strPacketURL = tNewVersionInfo.strPacketURL
+	local strMD5 = tNewVersionInfo.strMD5
+	if not IsRealString(strPacketURL) then
+		return
+	end
+	
+	local strFileName = GetFileSaveNameFromUrl(strPacketURL)
+	if not string.find(strFileName, "%.exe$") then
+		strFileName = strFileName..".exe"
+	end
+	local strSaveDir = tipUtil:GetSystemTempPath()
+	local strSavePath = tipUtil:PathCombine(strSaveDir, strFileName)
+
+	DownLoadFileWithCheck(strPacketURL, strSavePath, strMD5
+	, function(bRet, strRealPath)
+		TipLog("[DownLoadNewVersion] strOpenLink:"..tostring(strPacketURL)
+		        .."  bRet:"..tostring(bRet).."  strRealPath:"..tostring(strRealPath))
+				
+		if 0 == bRet then
+			fnCallBack(strRealPath, tNewVersionInfo)
+			return
+		end
+		
+		if 1 == bRet then	--安装包已经存在
+			fnCallBack(strSavePath, tNewVersionInfo)
+			return
+		end
+		
+		fnCallBack(nil)
+	end)	
+end
+
+
+function CheckCommonUpdateTime(nTimeInDay)
+	return CheckUpdateTimeSpan(nTimeInDay, "nLastCommonUpdateUTC")
+end
+
+function CheckAutoUpdateTime(nTimeInDay)
+	return CheckUpdateTimeSpan(nTimeInDay, "nLastAutoUpdateUTC")
+end
+
+function CheckUpdateTimeSpan(nTimeInDay, strUpdateType)
+	if type(nTimeInDay) ~= "number" then
+		return false
+	end
+	
+	local nTimeInSec = nTimeInDay*24*3600
+	local nCurTimeUTC = tipUtil:GetCurrentUTCTime()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local nLastUpdateUTC = tUserConfig[strUpdateType] or 0
+	local nTimeSpan = math.abs(nCurTimeUTC - nLastUpdateUTC)
+	
+	if nTimeSpan > nTimeInSec then
+		return true
+	end	
+	
+	return false
+end
+
+
+function SaveCommonUpdateUTC()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["nLastCommonUpdateUTC"] = tipUtil:GetCurrentUTCTime()
+	SaveConfigToFileByKey("tUserConfig")
+end
+
+
+function SaveAutoUpdateUTC()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["nLastAutoUpdateUTC"] = tipUtil:GetCurrentUTCTime()
+	SaveConfigToFileByKey("tUserConfig")
+end
+
+
+function CheckIsUpdating()
+	return g_bIsUpdating
+end
+
+function SetIsUpdating(bIsUpdating)
+	if type(bIsUpdating) == "boolean" then
+		g_bIsUpdating = bIsUpdating
+	end
+end
+
+function CheckMD5(strFilePath, strExpectedMD5) 
+	local bPassCheck = false
+	
+	if not IsNilString(strFilePath) then
+		local strMD5 = tipUtil:GetMD5Value(strFilePath)
+		TipLog("[CheckMD5] strFilePath = " .. tostring(strFilePath) .. ", strMD5 = " .. tostring(strMD5))
+		if not IsRealString(strExpectedMD5) 
+			or (not IsNilString(strMD5) and not IsNilString(strExpectedMD5) and string.lower(strMD5) == string.lower(strExpectedMD5))
+			then
+			bPassCheck = true
+		end
+	end
+	
+	TipLog("[CheckMD5] strFilePath = " .. tostring(strFilePath) .. ", strExpectedMD5 = " .. tostring(strExpectedMD5) .. ". bPassCheck = " .. tostring(bPassCheck))
+	return bPassCheck
+end
+
+
+function DownLoadServerConfig(fnCallBack, nTimeInMs)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	
+	local strConfigURL = tUserConfig["strServerConfigURL"]
+	if not IsRealString(strConfigURL) then
+		fnCallBack(-1)
+		return
+	end
+	
+	local strSavePath = GetCfgPathWithName("ServerConfig.dat")
+	if not IsRealString(strSavePath) then
+		fnCallBack(-1)
+		return
+	end
+	
+	local nTime = tonumber(nTimeInMs) or 5*1000
+		
+	NewAsynGetHttpFile(strConfigURL, strSavePath, false
+	, function(bRet, strRealPath)
+		TipLog("[DownLoadServerConfig] bRet:"..tostring(bRet)
+				.." strRealPath:"..tostring(strRealPath))
+				
+		if 0 == bRet then
+			fnCallBack(0, strSavePath)
+		else
+			fnCallBack(bRet)
+		end		
+	end, nTime)
+end
+
+function DownLoadFileWithCheck(strURL, strSavePath, strCheckMD5, fnCallBack)
+	if type(fnCallBack) ~= "function"  then
+		return
+	end
+
+	if IsRealString(strCheckMD5) and CheckMD5(strSavePath, strCheckMD5) then
+		TipLog("[DownLoadFileWithCheck]File Already existed")
+		fnCallBack(1)
+		return
+	end
+	
+	NewAsynGetHttpFile(strURL, strSavePath, false, function(bRet, strDownLoadPath)
+		TipLog("[DownLoadFileWithCheck] NewAsynGetHttpFile:bret = " .. tostring(bRet) 
+				.. ", strURL = " .. tostring(strURL) .. ", strDownLoadPath = " .. tostring(strDownLoadPath))
+		if 0 == bRet then
+			strSavePath = strDownLoadPath
+            if CheckMD5(strSavePath, strCheckMD5) then
+				fnCallBack(bRet, strSavePath)
+			else
+				TipLog("[DownLoadFileWithCheck]Did Not Pass MD5 Check")
+				fnCallBack(-2)
+			end	
+		else
+			TipLog("[DownLoadFileWithCheck] DownLoad failed")
+			fnCallBack(-3)
+		end
+	end)
+end
+
+--
+
 ------------------文件--
+
 local obj = {}
 obj.tipUtil = tipUtil
 obj.tipAsynUtil = tipAsynUtil
 
+--通用
 obj.TipLog = TipLog
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.ExitProcess = ExitProcess
+obj.ReportAndExit = ReportAndExit
 obj.GetCommandStrValue = GetCommandStrValue
 obj.GetExePath = GetExePath
+obj.LoadTableFromFile = LoadTableFromFile
+obj.CheckIsNewVersion = CheckIsNewVersion
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir
 obj.GetYBYLVersion = GetYBYLVersion
+obj.GetInstallSrc = GetInstallSrc
+obj.GetMinorVer = GetMinorVer
 obj.AccelerateFlash = AccelerateFlash
 
-obj.OpenURL = OpenURL
+--UI
+obj.OpenURLInNewTab = OpenURLInNewTab
+obj.OpenURLInCurTab = OpenURLInCurTab
 obj.FormatURL = FormatURL
 obj.OpenURLInNewWindow = OpenURLInNewWindow
 obj.GetHomePage = GetHomePage
 obj.SetHomePage = SetHomePage
+obj.GetDfltNewTabURL = GetDfltNewTabURL
 obj.GetActiveTabCtrl = GetActiveTabCtrl
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
 obj.ShowPopupWndByName = ShowPopupWndByName
+
+obj.SetToolTipText = SetToolTipText
+obj.ShowToolTip = ShowToolTip
+obj.GetFilterState = GetFilterState
+obj.SetFilterState = SetFilterState
+
+--文件
+obj.GetCfgPathWithName = GetCfgPathWithName
+obj.ReadConfigFromMemByKey = ReadConfigFromMemByKey
+obj.SaveConfigToFileByKey = SaveConfigToFileByKey
+obj.ReadAllConfigInfo = ReadAllConfigInfo
 
 obj.SaveUserCollectURL = SaveUserCollectURL
 obj.RemoveUserCollectURL = RemoveUserCollectURL
@@ -994,30 +1355,30 @@ obj.GetIcoBitmapObj = GetIcoBitmapObj
 obj.GetDefaultIcoImgID = GetDefaultIcoImgID
 obj.UpdateCollectList = UpdateCollectList
 
+--菜单
 obj.TryDestroyOldMenu = TryDestroyOldMenu
 obj.CreateAndShowMenu = CreateAndShowMenu
 
+--全屏
 obj.SetBrowserFullScrn = SetBrowserFullScrn
 obj.RestoreWndSize = RestoreWndSize
 obj.RecordWndSize = RecordWndSize
 obj.IsBrowserFullScrn = IsBrowserFullScrn
+obj.SetResizeEnable = SetResizeEnable
 
-obj.GetCfgPathWithName = GetCfgPathWithName
-obj.ReadConfigFromMemByKey = ReadConfigFromMemByKey
-obj.SaveConfigToFileByKey = SaveConfigToFileByKey
-obj.ReadAllConfigInfo = ReadAllConfigInfo
+--升级
+obj.DownLoadServerConfig = DownLoadServerConfig
+obj.DownLoadNewVersion = DownLoadNewVersion
+obj.CheckIsUpdating = CheckIsUpdating
+obj.SetIsUpdating = SetIsUpdating
+obj.CheckCommonUpdateTime = CheckCommonUpdateTime
+obj.SaveCommonUpdateUTC = SaveCommonUpdateUTC
+obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 
-obj.SetToolTipText = SetToolTipText
-obj.ShowToolTip = ShowToolTip
-obj.GetFilterState = GetFilterState
-obj.SetFilterState = SetFilterState
-
+--注册表
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 
 
-
 XLSetGlobal("YBYL.FunctionHelper", obj)
-
-
 

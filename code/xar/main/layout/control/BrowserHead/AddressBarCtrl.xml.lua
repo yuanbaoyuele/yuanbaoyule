@@ -129,7 +129,7 @@ function OnUrlEditKeyDown(self, nKeyCode)
 
 	local strURL = self:GetText()
 	if IsRealString(strURL) then
-		tFunHelper.OpenURL(strURL)
+		tFunHelper.OpenURLInCurTab(strURL)
 	end
 	
 	local bInAddressBar = true

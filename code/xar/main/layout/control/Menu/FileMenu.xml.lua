@@ -3,8 +3,8 @@ local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 
 -------事件---
 function OnSelect_AddNewTab(self)
-	local strHomePage = tFunHelper.GetHomePage()
-	tFunHelper.OpenURL(strHomePage)
+	local strHomePage = tFunHelper.GetOpenTabURL()
+	tFunHelper.OpenURLInNewTab(strHomePage)
 end
 
 function OnSelect_AddNewWindow(self)
@@ -13,7 +13,7 @@ end
 
 function OnSelect_Open(self)
 	local strURL = tIEMenuHelper:ExecuteCMD("Open")
-	tFunHelper.OpenURL(strURL)
+	tFunHelper.OpenURLInNewTab(strURL)
 end
 
 function OnSelect_SaveAs(self)
@@ -41,7 +41,7 @@ function OnSelect_Properties(self)
 end
 
 function OnSelect_Exit(self)
-	tFunHelper.ExitProcess()
+	tFunHelper.ReportAndExit()
 end
 
 

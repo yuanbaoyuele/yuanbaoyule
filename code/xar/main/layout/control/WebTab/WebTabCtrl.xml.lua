@@ -96,7 +96,7 @@ function BindBrowserCtrl(self, objWebBrowser)
 	attr.objBrowserCtrl:AttachListener("Fire_OnNewWindow3", false, 
 		function (objBrowser, strEventName, nFlags, strUrlContext, strUrl)
 			if IsRealString(strUrl)	then
-				tFunHelper.OpenURL(strUrl)
+				tFunHelper.OpenURLInNewTab(strUrl)
 			end
 		end)		
 end

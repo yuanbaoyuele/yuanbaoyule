@@ -36,7 +36,7 @@ end
 
 function OnClickAddNewTab(self)
 	local objRootCtrl = self:GetOwnerControl()
-	local strDefURL = tFunHelper.GetHomePage()
+	local strDefURL = tFunHelper.GetDfltNewTabURL()
 	objRootCtrl:OpenURL(strDefURL, true)
 end
 
@@ -50,6 +50,9 @@ end
 
 function OnClickFullScrn(self)
 	tFunHelper.SetBrowserFullScrn()
+	
+	local objRootCtrl = self:GetOwnerControl()
+	ShowFullScreenBtn(objRootCtrl, false)
 end
 
 function OnMouseEnterFullScrn(self)
@@ -74,6 +77,9 @@ end
 
 function OnClickRestore(self)
 	tFunHelper.RestoreWndSize()
+	
+	local objRootCtrl = self:GetOwnerControl()
+	ShowFullScreenBtn(objRootCtrl, true)
 end
 
 
@@ -105,7 +111,7 @@ end
 function TerminateWhenNoTab(objRootCtrl)
 	local nTotalNum = GetTotalShowTabNum(objRootCtrl)
 	if nTotalNum <=0 then
-		tFunHelper.ExitProcess()
+		tFunHelper.ReportAndExit()
 	end	
 end
 
@@ -196,8 +202,25 @@ end
 
 
 function OpenURLInCurTab(objRootCtrl, strURL)
+	local objActiveTab = objRootCtrl:GetActiveTabCtrl()
+	if objActiveTab == nil or objActiveTab == 0 then
+		OpenURLInNewTab(objRootCtrl, strURL)
+		return
+	end
+	
+	local objBrowser = objActiveTab:GetBindBrowserCtrl()
+	if not objBrowser then
+		OpenURLInNewTab(objRootCtrl, strURL)
+		return
+	end
 
-
+	local objWebBrowCtrl = objBrowser:GetControlObject( "browser" )
+	if not objWebBrowCtrl then
+		OpenURLInNewTab(objRootCtrl, strURL)
+		return
+	end
+	
+	objWebBrowCtrl:Navigate(strURL)
 end
 
 
@@ -221,7 +244,6 @@ function CreateNewTab(objRootCtrl, nNewID)
 	
 	return objTab
 end
-
 
 
 function CreateNewBrowser(objRootCtrl, nNewID)
@@ -303,7 +325,6 @@ function SetActiveTab(objRootCtrl, nNewActiveID)
 
 	SetCurActiveTabID(objRootCtrl, nNewActiveID)
 end
-
 
 
 function ShowTabAndBrowser(objRootCtrl, nCtrlID, bShow)

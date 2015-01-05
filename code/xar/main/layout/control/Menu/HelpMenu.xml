@@ -5,6 +5,15 @@
 			<ItemLeft>6</ItemLeft> <!--阴影-->
 		</attr>
 		<children>
+			<obj id="CheckUpdate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>检测更新</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="HelpMenu.xml.lua" function="OnSelect_CheckUpdate" />
+				</eventlist>
+			</obj>
+		
 			<obj id="About" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>关于</Text>

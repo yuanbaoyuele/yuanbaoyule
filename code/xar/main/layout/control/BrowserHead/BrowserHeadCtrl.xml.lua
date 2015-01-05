@@ -11,7 +11,7 @@ end
 
 ----事件--
 function OnClickCpationClose(self)
-	tFunHelper.ExitProcess()	
+	tFunHelper.ReportAndExit()	
 end
 
 function OnClickCpationMin(self)
@@ -32,6 +32,7 @@ function OnClickCpationMax(self)
 	
 	local objRootCtrl = self:GetOwnerControl()
 	SetMaxBtnStyle(objRootCtrl, false)
+	tFunHelper.SetResizeEnable(false)
 end
 
 
@@ -45,6 +46,7 @@ function OnClickCpationRestore(self)
 	
 	local objRootCtrl = self:GetOwnerControl()
 	SetMaxBtnStyle(objRootCtrl, true)
+	tFunHelper.SetResizeEnable(true)
 end
 
 
@@ -62,8 +64,10 @@ function OnPosChange(self)
 	local strState = objHostWnd:GetWindowState()
 	if strState == "max" then
 		SetMaxBtnStyle(self, false)
+		tFunHelper.SetResizeEnable(false)
 	else
 		SetMaxBtnStyle(self, true)
+		tFunHelper.SetResizeEnable(true)
 	end
 end
 

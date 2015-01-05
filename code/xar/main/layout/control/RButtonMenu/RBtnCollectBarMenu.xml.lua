@@ -10,7 +10,7 @@ function OnSelect_Open(self)
 	
 	local strURL = objCollectURL:GetText()
 	if IsRealString(strURL) then
-		tFunHelper.OpenURL(strURL)
+		tFunHelper.OpenURLInNewTab(strURL)
 	end
 end
 
