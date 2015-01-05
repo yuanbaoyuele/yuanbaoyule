@@ -1,0 +1,40 @@
+说明： 字段值不能为空。ev字段默认值为1，其它字段默认值为"null"
+
+ec：事件类别
+ea: 事件动作
+el: 事件标签
+ev: 事件价值
+
+
+
+上报示例：
+http://www.google-analytics.com/collect?v=1&tid=UA-57884150-1&cid=FC4DD4F733789532&t=event&ec=runtime&ea=unknown&el=null&ev=19
+
+cid 为 pid
+
+1. 程序启动后立即上报
+ec = startup
+ea = 1			(版本号的最后一位)
+el = openfrom   (从本进程的命令行获取来源)
+ev = 1		   
+
+2. 主界面展示后上报
+ec = showui
+ea = 渠道ID
+el = openfrom   (从本进程的命令行获取来源)
+ev = 1			 
+				 
+3. 程序退出上报
+ec = exit
+ea = 渠道ID
+
+4.程序执行时间上报
+ec = runtime
+ea = 渠道号
+ev = 运行时长
+		
+		
+
+		
+		
+		
