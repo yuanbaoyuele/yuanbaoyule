@@ -5,6 +5,10 @@ function OnSelect_About(self)
 	tFunHelper.ShowPopupWndByName("TipAboutWnd.Instance", true)
 end
 
+function OnSelect_CheckUpdate(self)
+	
+end
+
 
 -----
 function IsRealString(str)

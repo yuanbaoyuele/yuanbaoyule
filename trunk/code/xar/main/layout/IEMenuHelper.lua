@@ -25,22 +25,28 @@ local gIEMenu={}
 
 	  
 function gIEMenu:Init(ctrlBrowser)
+	self.ctrlBrowser = ctrlBrowser
+	self.lpWeb2 = ctrlBrowser:GetRawWebBrowser() 
+	if self.lpWeb2 ~= nil then
+		return true
+	end
+	--[[
 	local hRealWnd = ctrlBrowser:GetWindow()
 	if hRealWnd ~= nil then
 		local hShellDoc = apiUtil:FindWindowEx(hRealWnd, nil, "Shell DocObject View", nil)
 		if hShellDoc ~= nil then
 			local hIEServer = apiUtil:FindWindowEx(hShellDoc, nil, "Internet Explorer_Server", nil)
 			if hIEServer ~= nil then
+				self.hShellDoc = hShellDoc
 				self.WndIEServer = hIEServer
 				self.ctrlBrowser = ctrlBrowser
-				self.Title = ctrlBrowser:GetLocationName()
-				self.URL = ctrlBrowser:GetLocationURL()
 				self.lpWeb2 = ctrlBrowser:GetRawWebBrowser() 
 				return true
 			end
 		end	
-	end	
-	return false	
+	end
+	--]]
+	return false
 end
 
 function gIEMenu:OpenFile(strKey)
@@ -67,12 +73,22 @@ local gMenuCMD = {
 			ViewSource = {0x0111, 2139+1*65536,0},
 			--Zoom = apiUtil.IEMenu_Zoom,
 			--工具
-			Options = {0x0111, 2135+1*65536,0},			
+			Options = {0x0111, 2135+1*65536,0},	
 	  }
 
 function gIEMenu:ExecuteCMD(strKey,...)
 	if type(gMenuCMD[strKey]) == "table" then
-		return apiUtil:SendMessageByHwnd(self.WndIEServer,gMenuCMD[strKey][1],gMenuCMD[strKey][2],0)
+		local hRealWnd = self.ctrlBrowser:GetWindow()
+		if hRealWnd ~= nil then
+			local hShellDoc = apiUtil:FindWindowEx(hRealWnd, nil, "Shell DocObject View", nil)
+			if hShellDoc ~= nil then
+				local hIEServer = apiUtil:FindWindowEx(hShellDoc, nil, "Internet Explorer_Server", nil)
+				if hIEServer ~= nil then
+					apiUtil:PostWndMessageByHandle(hIEServer,gMenuCMD[strKey][1],gMenuCMD[strKey][2],0)
+				end
+			end			
+		end		
+		return 
 	elseif 	strKey == "SaveAS" then
 		apiUtil:IEMenu_SaveAs(self.lpWeb2)
 	elseif 	strKey == "Zoom" then
@@ -87,5 +103,4 @@ end
 XLSetGlobal("YBYL.IEMenuHelper", gIEMenu)
 
 
-
-	  
+  

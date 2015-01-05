@@ -97,7 +97,7 @@ end
 
 function OpenURL(objMenuItem)
 	local strURL = objMenuItem:GetText()
-	tFunHelper.OpenURL(strURL)
+	tFunHelper.OpenURLInNewTab(strURL)
 end
 
 

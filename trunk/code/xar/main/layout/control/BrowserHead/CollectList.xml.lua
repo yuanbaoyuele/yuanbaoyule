@@ -40,7 +40,7 @@ function OnLButtonUpItem(self)
 	end
 	
 	local strURL = objURL:GetText()
-	tFunHelper.OpenURL(strURL)
+	tFunHelper.OpenURLInNewTab(strURL)
 end
 
 function OnLButtonDownItem(self)
