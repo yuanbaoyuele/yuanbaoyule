@@ -16,12 +16,13 @@ struct CallbackNode
 };
 
 static std::wstring GetMsgWndClassName()
-{
+{	
 	wchar_t szClassName[MAX_PATH] = {0};
 	DWORD dwPid = ::GetCurrentProcessId();
 	swprintf(szClassName,L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_%d", dwPid);
 	return szClassName;
 }
+
 
 class CYBMsgWindow : public  CWindowImpl<CYBMsgWindow>
 {
@@ -36,6 +37,7 @@ public:
 	{
 		if (m_hWnd == NULL)
 			Create(HWND_MESSAGE);
+		//TSDEBUG4CXX(L"[InitMsgWnd] " << m_hWnd);
 
 	}
 	int AttachListener(DWORD userData1,DWORD userData2,funResultCallBack pfn, const void* pfun);
@@ -44,7 +46,16 @@ public:
 	bool HandleSingleton();
 
 	//DECLARE_WND_CLASS(L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg")
-	DECLARE_WND_CLASS(GetMsgWndClassName().c_str())
+	//DECLARE_WND_CLASS(GetMsgWndClassName().c_str())+
+	static ATL::CWndClassInfo& GetWndClassInfo()
+	{ 
+		static std::wstring strClassName = GetMsgWndClassName();
+		static ATL::CWndClassInfo wc = 
+		{ 
+			{ sizeof(WNDCLASSEX), CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS, StartWindowProc, 0, 0, NULL, NULL, NULL, (HBRUSH)(COLOR_WINDOW + 1), NULL, strClassName.c_str(), NULL }, NULL, NULL, IDC_ARROW, TRUE, 0, _T("") 
+		}; 
+		return wc; 
+	}
 	BEGIN_MSG_MAP(CYBMsgWindow)
 		MESSAGE_HANDLER(WM_COPYDATA, OnCopyData)
 		MESSAGE_HANDLER(WM_FILTERRESULT, HandleFilterResult)
