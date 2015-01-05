@@ -176,6 +176,26 @@ void CYBMsgWindow::DelKeyboardHook()
 	return ;
 }
 
+
+BOOL CheckIsIEShortKey(LONG lctrl, LONG lshift, LONG lalt, LONG wParam)
+{
+	if ((1 == lctrl) && (0 == lshift) && (0 == lalt))
+	{
+		switch(wParam)  //ctrl+ n/p
+		{
+			case 78: case 80:
+				return TRUE;
+		}
+
+		return FALSE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+
 LRESULT CALLBACK CYBMsgWindow::KeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 {
 	if(HC_NOREMOVE == code)
@@ -221,5 +241,13 @@ LRESULT CALLBACK CYBMsgWindow::KeyboardProc(int code, WPARAM wParam, LPARAM lPar
 		 CYBMsgWindow::Instance()->Fire_LuaEvent("OnKeyDown", &params);
 	}
 
-	return CallNextHookEx (CYBMsgWindow::Instance()->m_hKeyboardHook, code, wParam, lParam);
+	BOOL bIsIEShortKey = CheckIsIEShortKey(lctrl, lshift, lalt, wParam);
+	if(bIsIEShortKey)
+	{
+		return 1;
+	}
+	else
+	{
+		return CallNextHookEx (CYBMsgWindow::Instance()->m_hKeyboardHook, code, wParam, lParam);
+	}
 }
