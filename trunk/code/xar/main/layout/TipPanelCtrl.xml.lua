@@ -62,8 +62,7 @@ function CreateFilterListener(objRootCtrl)
 
 			tFunHelper.TipLog("[CreateFilterListener] key: " .. tostring(key))
 			
-			local tParam = {...}
-			
+			local tParam = {...}	
 			if tostring(key) == "OnFilterResult" then
 				OnFilterResult(tParam)
 			elseif tostring(key) == "OnKeyDown" then
@@ -83,7 +82,7 @@ function OnFilterResult(tParam)
 		return
 	end
 	
-	-- tFunHelper.PopupToolTipOneDay()
+	tFunHelper.PopupToolTipOneDay()
 end
 
 

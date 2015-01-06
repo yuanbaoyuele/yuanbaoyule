@@ -69,6 +69,8 @@ function OnPosChange(self)
 		SetMaxBtnStyle(self, true)
 		tFunHelper.SetResizeEnable(true)
 	end
+	
+	SetToolTipPos(self)
 end
 
 --------
@@ -105,6 +107,16 @@ function SetMaxBtnStyle(objRootCtrl, bShowMax)
 	objMax:SetChildrenVisible(bShowMax)
 	objRestore:SetVisible(bShowRestore)
 	objRestore:SetChildrenVisible(bShowRestore)
+end
+
+
+function SetToolTipPos(objRootCtrl)
+	local objToolTip = objRootCtrl:GetControlObject("BrowserHeadCtrl.ToolTipCtrl")
+	local nTipL, nTipT, nTipR, nTipB = objToolTip:GetObjPos()
+	local nRootL, nRootT, nRootR, nRootB = objRootCtrl:GetObjPos()
+
+	local nTooltipW = nTipR-nTipL
+	objToolTip:SetObjPos(nRootR-nTooltipW, nTipT, nRootR, nTipB)
 end
 
 

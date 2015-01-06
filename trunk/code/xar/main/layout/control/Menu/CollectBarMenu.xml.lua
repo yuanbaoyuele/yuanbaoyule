@@ -66,6 +66,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	attr.ExtraData = tCollectInfo["strURL"]
 	attr.FontColorNormal = "404040"
 	attr.TextPos = 27
+	attr.DeleteImgVisible = true
 	
 	SetIcoImage(objMenuItem, tCollectInfo)
 	objMenuItem:AttachListener("OnSelect", false, OpenURL)

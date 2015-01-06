@@ -279,7 +279,7 @@ function SetAddressBarState(objRootCtrl)
 	if IsRealString(strLocalURL) then
 		objAddressBar:SetText(strLocalURL)
 		objAddressBar:AdjustCollectBtnStyle(strLocalURL)
-		
+
 		tFunHelper.SaveUrlToHistory(strLocalURL)
 	end
 end

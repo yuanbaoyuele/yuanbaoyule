@@ -86,6 +86,39 @@ function SendStartupReport(bShowWnd)
 end
 
 
+-- function InitAdvFilter()
+	-- EncryptLazyFile("VideoRule_out.mingwen") 
+
+	-- SendRuleListtToFilterThread()
+	-- SetWebRoot()
+	-- InitFilterState()
+-- end
+
+
+-- function EncryptLazyFile(strFileName) 
+		-- local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	-- local strLazyListPath = FunctionObj.GetCfgPathWithName(strFileName)
+	-- if not IsRealString(strLazyListPath) or not tipUtil:QueryFileExists(strLazyListPath) then
+		-- XLMessageBox("file not exists:"..tostring(strFileName))
+		-- return false
+	-- end
+
+	-- local strAESString = tipUtil:ReadFileToString(strLazyListPath)
+	-- if not strAESString then
+		-- TipLog("[SendLazyListToFilterThread] ReadFileToString failed : "..tostring(strLazyListPath))
+		-- return false
+	-- end
+	
+	-- local strEncName = strFileName..".enc"
+	-- local strEncFilePath = FunctionObj.GetCfgPathWithName(strEncName)
+	-- local strKey = "7uxSw0inyfnTawtg"
+	-- tipUtil:EncryptAESToFile(strEncFilePath, strAESString, strKey)
+	
+	-- return
+-- end
+
+
+
 function GenDecFilePath(strEncFilePath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local strKey = "7uxSw0inyfnTawtg"
