@@ -79,10 +79,16 @@ function ExitProcess()
 	tipUtil:Exit("Exit")
 end
 
+function HideMainWindow()
+	local objMainWnd = GetMainWndInst()
+	if objMainWnd then
+		objMainWnd:Show(0)
+	end
+end
 
 function ReportAndExit()
 	local tStatInfo = {}
-			
+	HideMainWindow()		
 	SendRunTimeReport(0, true)
 	
 	tStatInfo.strEC = "exit"	
@@ -161,6 +167,18 @@ function FailExitTipWnd(self, iExitCode)
 	local tStatInfo = {}
 	tStatInfo.Exit = true
 	TipConvStatistic(tStatInfo)
+end
+
+
+function CheckTimeIsAnotherDay(LastTime)
+	local bRet = false
+	local LYear, LMonth, LDay, LHour, LMinute, LSecond = tipUtil:FormatCrtTime(LastTime)
+	local curTime = tipUtil:GetCurrentUTCTime()
+	local CYear, CMonth, CDay, CHour, CMinute, CSecond = tipUtil:FormatCrtTime(curTime)
+	if LYear ~= CYear or LMonth ~= CMonth or LDay ~= CDay then
+		bRet = true
+	end
+	return bRet
 end
 
 
@@ -595,7 +613,6 @@ function GetDefaultIcoImgID()
 	return strDefaultImgID
 end
 
-
 ------------UI--
 
 ----菜单--
@@ -760,10 +777,10 @@ function ReadAllConfigInfo()
 	for strKey, tConfig in pairs(g_tConfigFileStruct) do
 		local strFileName = tConfig["strFileName"]
 		local strCfgPath = GetCfgPathWithName(strFileName)
-		local infoTable = LoadTableFromFile(strCfgPath)
+		local infoTable = LoadTableFromFile(strCfgPath) or {}
 		
 		if type(infoTable) ~= "table" then
-			TipLog("[ReadAllConfigInfo] GetConfigFile failed! "..tostring(strFileName))
+			TipLog("[ReadAllConfigInfo] no content in file: "..tostring(strFileName))
 		end
 		
 		local tContent = infoTable
@@ -812,9 +829,9 @@ function SaveConfigToFileByKey(strKey)
 	end
 
 	local strFileName = g_tConfigFileStruct[strKey]["strFileName"]
-	local tContent = g_tConfigFileStruct[strKey]["tContent"]
+	local tContent = g_tConfigFileStruct[strKey]["tContent"] or {}
 	local strConfigPath = GetCfgPathWithName(strFileName)
-	if IsRealString(strConfigPath) and type(tContent) == "table" then
+	if IsRealString(strConfigPath) then
 		tipUtil:SaveLuaTableToLuaFile(tContent, strConfigPath)
 	end
 end
@@ -905,10 +922,10 @@ function SaveLctnNameToFile(strInputURL, strLctnName, strFileKey)
 	for nIndex, tInfo in ipairs(tFileInfo) do
 		if type(tInfo) == "table" and tInfo["strURL"] == strURL then
 		
-			if not IsRealString(tInfo["strLocationName"]) then
+			-- if not IsRealString(tInfo["strLocationName"]) then
 				tFileInfo[nIndex]["strLocationName"] = strLctnName
 				SaveConfigToFileByKey(tFileInfo)
-			end
+			-- end
 			return
 		end	
 	end
@@ -1109,6 +1126,27 @@ function ShowToolTip(bShow)
 	end
 
 	objToolTip:ShowToolTip(bShow)
+end
+
+
+function PopupToolTipOneDay()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local nLastBubbleUTC = tonumber(tUserConfig["nLastToolTipUTC"]) 
+	
+	if not IsNilString(nLastBubbleUTC) and not CheckTimeIsAnotherDay(nLastBubbleUTC) then
+		return
+	end
+	
+	local nNoShowFilterBubble = tonumber(tUserConfig["nNoShowFilterBubble"]) 
+	if not IsNilString(nNoShowFilterBubble) then
+		return
+	end
+
+	SetToolTipText("已智能帮您去除广告")
+	ShowToolTip(true)
+	
+	tUserConfig["nLastToolTipUTC"] = tipUtil:GetCurrentUTCTime()
+	SaveConfigToFileByKey("tUserConfig")
 end
 
 
@@ -1334,6 +1372,7 @@ obj.ShowPopupWndByName = ShowPopupWndByName
 
 obj.SetToolTipText = SetToolTipText
 obj.ShowToolTip = ShowToolTip
+obj.PopupToolTipOneDay = PopupToolTipOneDay
 obj.GetFilterState = GetFilterState
 obj.SetFilterState = SetFilterState
 

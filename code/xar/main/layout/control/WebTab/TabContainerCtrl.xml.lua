@@ -17,6 +17,7 @@ function OpenURL(self, strURL, bInNewTab)
 	PushShowTab(self, nNewTabID)
 	SetActiveTab(self, nNewTabID)
 	AdjustTabSize(self)
+	tFunHelper.SaveUrlToHistory(strURL)
 end
 
 
