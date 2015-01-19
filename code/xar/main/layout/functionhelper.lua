@@ -345,6 +345,17 @@ function RegDeleteValue(sPath)
 end
 
 
+function RegSetValue(sPath, value)
+	if IsRealString(sPath) then
+		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
+		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
+			return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
+		end
+	end
+	return false
+end
+
+
 local bHasInitAcc = false
 function AccelerateFlash(fRate)
 	if not bHasInitAcc then
@@ -354,7 +365,6 @@ function AccelerateFlash(fRate)
 	end
 	tipUtil:YbSpeedChangeRate(fRate)
 end
-
 
 
 ----UI相关---
@@ -1350,6 +1360,7 @@ obj.GetCommandStrValue = GetCommandStrValue
 obj.GetExePath = GetExePath
 obj.LoadTableFromFile = LoadTableFromFile
 obj.CheckIsNewVersion = CheckIsNewVersion
+obj.SendRunTimeReport = SendRunTimeReport
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir

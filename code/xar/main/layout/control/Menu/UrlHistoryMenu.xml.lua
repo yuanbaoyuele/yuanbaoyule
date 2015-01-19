@@ -3,10 +3,30 @@ local tipUtil = tFunHelper.tipUtil
 
 -------事件---
 function OnInitControl(self)
+	AdjustSelfPos(self)
 	ShowUrlHistory(self)
 end
 
 ----
+function AdjustSelfPos(self)
+	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objAddressBar = objHeadCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")
+	if not objAddressBar then
+		return
+	end
+	
+	local nAddBarL, nAddBarT, nAddBarR, nAddBarB = objAddressBar:GetObjPos()
+	local nAddBarW = nAddBarR - nAddBarL
+		
+	local nSelfL, nSelfT, nSelfR, nSelfB = self:GetObjPos()
+	self:SetObjPos(nSelfL, nSelfT, nSelfL+nAddBarW, nSelfB )
+end
+
+
 
 function ShowUrlHistory(self)
 	local tUrlHistory = tFunHelper.ReadConfigFromMemByKey("tUrlHistory") or {}

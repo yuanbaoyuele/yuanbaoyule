@@ -73,7 +73,25 @@ function OnClickHelp(self)
 	tFunHelper.CreateAndShowMenu(self, "HelpMenu", nTopSpan)
 end
 
+
+function OnMouseEnterMenuItem(self)
+	ShowMenuItemBkg(self, true, "YBYL.Head.Collect.Sel.Normal")
+end
+
+
+function OnLButtonDownMenuItem(self)
+	-- self:SetCaptureMouse(true)
+	ShowMenuItemBkg(self, true, "YBYL.Head.Collect.Sel.Hover")
+end
+
+
+function OnMouseLeaveMenuItem(self)
+	ShowMenuItemBkg(self, false, "")
+end
+
+
 ----
+
 
 function InitMenuHelper()
 	local objActiveTab = tFunHelper.GetActiveTabCtrl()
@@ -99,6 +117,23 @@ function SetHideBtnStyle(objRootCtrl, bHideBtnVsbl)
 	objShowBtn:SetVisible(bShowBtnVsbl)
 	objShowBtn:SetChildrenVisible(bShowBtnVsbl)
 end
+
+
+function ShowMenuItemBkg(objMenuItem, bShow, strTextureID)
+	local objRootCtrl = objMenuItem:GetOwnerControl()
+	local objBkg = objRootCtrl:GetControlObject("MenuBarCtrl.MenuItem.Bkg")
+	if not objBkg then
+		return
+	end
+	
+	local l, t, r, b = objMenuItem:GetObjPos()
+	objBkg:SetObjPos(l, t, r, b)
+	objBkg:SetVisible(bShow)
+	if IsRealString(strTextureID) then
+		objBkg:SetTextureID(strTextureID)
+	end
+end
+
 
 
 ------辅助函数---
