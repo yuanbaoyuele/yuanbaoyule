@@ -48,6 +48,7 @@ end
 
 function ShowMainTipWnd(objMainWnd)
 	objMainWnd:Show(5)
+	objMainWnd:SetTitle("å…ƒå®å¨±ä¹æµè§ˆå™¨")
 	SendStartupReport(true)
 end
 
@@ -74,10 +75,10 @@ function SendStartupReport(bShowWnd)
 	tStatInfo.strEL = strSource or ""
 	
 	if not bShowWnd then
-		tStatInfo.strEC = "startup"  --½øÈëÉÏ±¨
+		tStatInfo.strEC = "startup"  --è¿›å…¥ä¸ŠæŠ¥
 		tStatInfo.strEA = FunctionObj.GetMinorVer() or ""
 	else
-		tStatInfo.strEC = "showui" 	 --Õ¹Ê¾ÉÏ±¨
+		tStatInfo.strEC = "showui" 	 --å±•ç¤ºä¸ŠæŠ¥
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
 	end
 	
@@ -358,18 +359,19 @@ end
 
 
 function StartRunCountTimer()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local nTimeSpanInSec = 10 * 60 
 	local nTimeSpanInMs = nTimeSpanInSec * 1000
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	timerManager:SetTimer(function(item, id)
 		gnLastReportRunTmUTC = tipUtil:GetCurrentUTCTime()
-		SendRunTimeReport(nTimeSpanInSec, false)
+		FunctionObj.SendRunTimeReport(nTimeSpanInSec, false)
 		XLSetGlobal("YBYL.LastReportRunTime", gnLastReportRunTmUTC) 
 	end, nTimeSpanInMs)
 end
 
 
---µ¯³ö´°¿Ú--
+--å¼¹å‡ºçª—å£--
 local g_tPopupWndList = {
 	[1] = {"TipAboutWnd", "TipAboutTree"},
 	-- [2] = {"TipIntroduceWnd", "TipIntroduceTree"},

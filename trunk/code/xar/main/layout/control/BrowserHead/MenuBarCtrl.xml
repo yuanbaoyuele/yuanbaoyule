@@ -1,4 +1,23 @@
 <xlue>
+	<objtemplate class="TextObject" id="menu.item">
+		<attr>
+			<top>7</top>
+			<width>45</width>
+			<height>father.height-14</height>
+			<valign>center</valign>
+			<halign>center</halign>
+			<font>font.menubar.text</font>
+			<textcolor>color.menubar.text</textcolor>
+			<cursor>IDC_HAND</cursor>
+		</attr>
+		<eventlist>
+			<event name="OnMouseEnter" file="MenuBarCtrl.xml.lua" func="OnMouseEnterMenuItem" />
+			<event name="OnLButtonDown" file="MenuBarCtrl.xml.lua" func="OnLButtonDownMenuItem" />
+			<event name="OnMouseLeave" file="MenuBarCtrl.xml.lua" func="OnMouseLeaveMenuItem" />
+		</eventlist>
+	</objtemplate>
+
+
 	<control class="MenuBarCtrl">
 		<attr_def>
 		</attr_def>		
@@ -51,18 +70,22 @@
 								<event name="OnClick" file="MenuBarCtrl.xml.lua" func="OnClickShowBtn" />
 							</eventlist>
 						</obj>
-						
-								
-						<obj id="MenuBarCtrl.HideBtn.File" class="TextObject">
+							
+						<obj id="MenuBarCtrl.MenuItem.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>26</width>
+								<height>23</height>
+								<texture>YBYL.Head.Collect.Sel.Normal</texture>
+								<visible>false</visible>
+							</attr>
+						</obj>	
+							
+							
+						<obj id="MenuBarCtrl.HideBtn.File" class="TextObject" templateid="menu.item">
 							<attr>
 								<left>15</left>
-								<top>0</top>
-								<width>30</width>
-								<height>father.height</height>
-								<valign>center</valign>
-								<halign>center</halign>
-								<font>font.menubar.text</font>
-								<textcolor>color.menubar.text</textcolor>
 								<text>文件</text>
 							</attr>
 							<eventlist>
@@ -70,16 +93,9 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Lookup" class="TextObject">
+						<obj id="MenuBarCtrl.HideBtn.Lookup" class="TextObject" templateid="menu.item">
 							<attr>
 								<left>15+40</left>
-								<top>0</top>
-								<width>30</width>
-								<height>father.height</height>
-								<valign>center</valign>
-								<halign>center</halign>
-								<font>font.menubar.text</font>
-								<textcolor>color.menubar.text</textcolor>
 								<text>查看</text>
 							</attr>
 							<eventlist>
@@ -87,16 +103,9 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Collect" class="TextObject">
+						<obj id="MenuBarCtrl.HideBtn.Collect" class="TextObject" templateid="menu.item">
 							<attr>
 								<left>15+40*2</left>
-								<top>0</top>
-								<width>30</width>
-								<height>father.height</height>
-								<valign>center</valign>
-								<halign>center</halign>
-								<font>font.menubar.text</font>
-								<textcolor>color.menubar.text</textcolor>
 								<text>收藏</text>
 							</attr>
 							<eventlist>
@@ -104,16 +113,9 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Tool" class="TextObject">
+						<obj id="MenuBarCtrl.HideBtn.Tool" class="TextObject" templateid="menu.item">
 							<attr>
 								<left>15+40*3</left>
-								<top>0</top>
-								<width>30</width>
-								<height>father.height</height>
-								<valign>center</valign>
-								<halign>center</halign>
-								<font>font.menubar.text</font>
-								<textcolor>color.menubar.text</textcolor>
 								<text>工具</text>
 							</attr>
 							<eventlist>
@@ -121,16 +123,9 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Help" class="TextObject">
+						<obj id="MenuBarCtrl.HideBtn.Help" class="TextObject" templateid="menu.item">
 							<attr>
 								<left>15+40*4</left>
-								<top>0</top>
-								<width>30</width>
-								<height>father.height</height>
-								<valign>center</valign>
-								<halign>center</halign>
-								<font>font.menubar.text</font>
-								<textcolor>color.menubar.text</textcolor>
 								<text>帮助</text>
 							</attr>
 							<eventlist>

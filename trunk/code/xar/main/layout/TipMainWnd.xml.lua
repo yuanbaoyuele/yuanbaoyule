@@ -4,8 +4,8 @@ local gRootCtrl = nil
 
 
 function OnClose( self )
-	self:Show(0)
-	return 0, true
+	-- self:Show(0)
+	return false, false
 end
 
 
@@ -50,7 +50,6 @@ function PopupInDeskCenter(self)
 end
 
 
-
 function OnCreate( self )
 	 PopupInDeskCenter(self)
 end
@@ -68,7 +67,7 @@ function OnDestroy( self )
 		local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
 		local tempWnd = hostwndManager:GetHostWnd(wndId)
 		if tempWnd then
-			hostwndManager:RemoveHostWnd(wndId)
+			-- hostwndManager:RemoveHostWnd(wndId)
 		end
 	end
 end

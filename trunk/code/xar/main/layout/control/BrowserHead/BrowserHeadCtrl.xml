@@ -148,14 +148,14 @@
 							<attr>
 								<left>245</left>
 								<top>29</top>
-								<width>father.width/2</width>
+								<width>father.width-500</width>
 								<height>36</height>
 							</attr>	
 						</obj>
 						
 						<obj id="BrowserHeadCtrl.FuncBtnList" class="FuncBtnList">
 							<attr>
-								<left>245+father.width/2+5</left>
+								<left>father.width-250</left>
 								<top>33</top>
 								<width>300</width>
 								<height>38</height>
