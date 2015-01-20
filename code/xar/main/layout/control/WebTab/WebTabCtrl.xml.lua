@@ -82,21 +82,22 @@ function BindBrowserCtrl(self, objWebBrowser)
 	local attr = self:GetAttribute()
 	attr.objBrowserCtrl = objWebBrowser
 	
-	attr.objBrowserCtrl:AttachListener("Fire_OnNavigateComplete2", false, 
+	attr.objBrowserCtrl:AttachListener("OnNavigateComplete2", false, 
 		function (objBrowser, strEventName, strURL)
 			SetAddressBarState(self)
 			DownloadTabIco(self, strURL)
 		end)
 	
-	attr.objBrowserCtrl:AttachListener("Fire_OnTitleChange", false, 
+	attr.objBrowserCtrl:AttachListener("OnTitleChange", false, 
 		function (objBrowser, strEventName, strTitle)
 			SetTabTitle(self, strTitle)
 		end)
 		
-	attr.objBrowserCtrl:AttachListener("Fire_OnNewWindow3", false, 
+	attr.objBrowserCtrl:AttachListener("OnNewWindow3", false, 
 		function (objBrowser, strEventName, nFlags, strUrlContext, strUrl)
 			if IsRealString(strUrl)	then
 				tFunHelper.OpenURLInNewTab(strUrl)
+				return true
 			end
 		end)		
 end

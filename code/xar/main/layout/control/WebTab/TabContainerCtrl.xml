@@ -60,7 +60,7 @@
 				<obj id="TabContainerCtrl.CloseBtn" class="TipAddin.Button">
 					<attr>
 						<left>father.width-21-15</left>
-						<top>0</top>
+						<top>3</top>
 						<width>21</width>
 						<height>21</height>
 						<NormalBkgID>YBYL.TabContainer.CloseBtn.Normal</NormalBkgID>
@@ -77,7 +77,7 @@
 				<obj id="TabContainerCtrl.FullScrn" class="TipAddin.Button">
 					<attr>
 						<left>father.width-21*2-22</left>
-						<top>0</top>
+						<top>3</top>
 						<width>21</width>
 						<height>21</height>
 						<NormalBkgID>YBYL.TabContainer.FullScrn.Normal</NormalBkgID>
@@ -94,7 +94,7 @@
 				<obj id="TabContainerCtrl.RestoreBtn" class="TipAddin.Button">
 					<attr>
 						<left>father.width-21*2-22</left>
-						<top>0</top>
+						<top>3</top>
 						<width>21</width>
 						<height>21</height>
 						<NormalBkgID>YBYL.TabContainer.RestoreBtn.Normal</NormalBkgID>

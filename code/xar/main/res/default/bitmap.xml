@@ -32,6 +32,11 @@
 		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
 		<bitmap id="YBYL.UrlIco.Default" path="bitmap\YBYL.Head.Logo.Default.png" />
 		<bitmap id="YBYL.DropMenu.Check" path="bitmap\YBYL.DropMenu.Check.png" />
+	
+		<!-- BufferView -->
+		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
+		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	
+		<bitmap id="bitmap.ball.loading" path="bitmap\bitmap.loading.png" />
 		
 		<imagelist id="YBYL.Caption.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.CloseBtn.png" />
 			<texture id="YBYL.Caption.CloseBtn.Normal" imagelist="YBYL.Caption.CloseBtn" index="1" />

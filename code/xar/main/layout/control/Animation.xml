@@ -1,0 +1,264 @@
+<xlue>
+	<animationtemplate id="ball.animation" class="SeqFrameAnimation">
+		<attr>
+		   <loop>true</loop>
+		   <resid>ball.loading</resid>
+		   <type>equalframe</type>
+		   <frametime>90</frametime>
+		</attr>
+	</animationtemplate>
+	<animationtemplate id="turn.deasil.animation" class="AngleChangeAnimation">
+		<attr>
+			<totaltime>1000</totaltime>
+			<loop>true</loop>
+			<perspective>1000</perspective>
+			<zoffset>0</zoffset>
+			<srcanglex>0</srcanglex>
+			<srcangley>0</srcangley>
+			<srcanglez>0</srcanglez>
+			<destanglex>0</destanglex>
+			<destangley>0</destangley>
+			<destanglez>360</destanglez>
+			<centerpointmode>true</centerpointmode>
+			<blendmode>AntiAlias</blendmode>
+		</attr>
+	</animationtemplate>
+
+	
+	<animation_def class="Thunder.Animation.HideDialog">
+		<attr_def>
+			<attr name="ChangeX" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="ChangeY" type="int" >
+				<default>15</default>
+			</attr>
+			<!-- true false -->
+			<attr name="ZoomOut" type="bool">
+				<default>true</default>
+			</attr>
+		</attr_def>
+		<method_def>
+			<Action file="Animation.xml.lua" func="HideDialog_Action"/>
+			<BindObj file="Animation.xml.lua" func="HideDialog_BindObj"/>
+			<GetBindObj file="Animation.xml.lua" func="HideDialog_GetBindObj" />
+		</method_def>
+	</animation_def>
+
+	<animation_def class="Thunder.Animation.PopDialog">
+		<attr_def>
+			<attr name="ChangeX" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="ChangeY" type="int" >
+				<default>15</default>
+			</attr>
+			<!--true ,false -->
+			<attr name="ZoomOut" type="bool">
+				<default>true</default>
+			</attr>
+		</attr_def>
+		<method_def>
+			<Action file="Animation.xml.lua" func="PopDialog_Action"/>
+			<BindObj file="Animation.xml.lua" func="PopDialog_BindObj"/>
+			<GetBindObj file="Animation.xml.lua" func="PopDialog_GetBindObj" />
+		</method_def>
+	</animation_def>
+
+	<animationtemplate id="hidedlg.animation" class="Thunder.Animation.HideDialog">
+		<attr>
+			<curve>dlg.hidden.curve</curve>
+			<totaltime>300</totaltime>
+			<ZoomOut>true</ZoomOut>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+
+	<animationtemplate id="popdlg.animation" class="Thunder.Animation.PopDialog">
+		<attr>
+			<curve>dlg.pop.curve</curve>
+			<totaltime>300</totaltime>
+			<ZoomOut>true</ZoomOut>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+
+	<animationtemplate id="pos.animation" class="PosChangeAnimation">
+		<attr>
+			<totaltime>5000</totaltime>
+			<srcleft>10</srcleft>
+			<srctop>10</srctop>
+			<srcright>100</srcright>
+			<srcbottom>100</srcbottom>
+			<destleft>10</destleft>
+			<desttop>10</desttop>
+			<destright>590</destright>
+			<destbottom>590</destbottom>
+		</attr>
+	</animationtemplate>
+
+	<animationtemplate id="alpha.animation" class="AlphaChangeAnimation">
+		<attr>
+			<totaltime>5000</totaltime>
+			<srcalpha>255</srcalpha>
+			<destalpha>0</destalpha>
+		</attr>
+	</animationtemplate>
+
+	<animationtemplate id="angle.animation" class="AngleChangeAnimation">
+		<attr>
+			<totaltime>20000</totaltime>
+			<curve></curve>
+			<loop>false</loop>
+			<srcanglex>0</srcanglex>
+			<srcangley>0</srcangley>
+			<srcanglez>0</srcanglez>
+			<destanglex>360</destanglex>
+			<destangley>0</destangley>
+			<destanglez>0</destanglez>
+			<perspective>10000</perspective>
+			<zoffset>0</zoffset>
+			<centerpointmode></centerpointmode>
+			<positionmode></positionmode>
+			<limitmode></limitmode>
+		</attr>
+	</animationtemplate>
+	
+	<animationtemplate id="turn.animation" class="TurnObjectAnimation">
+		<attr>
+			<curve>dlg.turn.curve</curve>
+			<totaltime>1500</totaltime>
+			<perspective>1000</perspective>
+			<turntype>roundy</turntype>
+			<zoffset>0</zoffset>
+		</attr>
+	</animationtemplate>
+	
+	<animationtemplate id="checkbox.showani" class="PosChangeAnimation">
+		<attr>
+			<curve>checkbox.show</curve>
+			<totaltime>300</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+	
+	<animationtemplate id="menu.showani" class="PosChangeAnimation">
+		<attr>
+			<curve>menu.show</curve>
+			<totaltime>200</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+	
+	<animationtemplate id="menu.hideani" class="PosChangeAnimation">
+		<attr>
+			<curve>menu.hide</curve>
+			<totaltime>200</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+	<animationtemplate id="kkv.tips.horizontalani" class="PosChangeAnimation">
+		<attr>
+			<curve>kkv.tips.h</curve>
+			<totaltime>300</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+		<animationtemplate id="kkv.tips.verticalani" class="PosChangeAnimation">
+		<attr>
+			<curve>kkv.tips.h</curve>
+			<totaltime>500</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+	
+	
+	<animation_def class="kkv.Animation.tipsWnd">
+		<attr_def>
+			<attr name="ChangeX" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="ChangeY" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="srcleft" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="srctop" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="srcright" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="srcbottom" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="destleft" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="desttop" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="destright" type="int" >
+				<default>15</default>
+			</attr>
+			<attr name="destbottom" type="int" >
+				<default>15</default>
+			</attr>
+		</attr_def>
+		<method_def>
+			<SetKeyFrameRect file="Animation.xml.lua" func="tipsWnd_SetKeyFrameRect"/>
+			<Action file="Animation.xml.lua" func="tipsWnd_Action"/>
+			<BindObj file="Animation.xml.lua" func="tipsWnd_BindObj"/>
+			<GetBindObj file="Animation.xml.lua" func="tipsWnd_GetBindObj" />
+		</method_def>
+	</animation_def>		
+	<animationtemplate id="kkv.tips.wndAni.H" class="kkv.Animation.tipsWnd">
+		<attr>
+			<!--curve>kkv.tips.v</curve-->
+			<totaltime>100</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+	<animationtemplate id="kkv.tips.wndAni.V" class="kkv.Animation.tipsWnd">
+		<attr>
+			<!--curve>kkv.tips.v</curve-->
+			<totaltime>500</totaltime>
+			<loop>false</loop>
+		</attr>
+		<templateeventlist>
+			<event name="OnPostCreateInstance">
+            </event>
+		</templateeventlist>
+	</animationtemplate>
+</xlue>

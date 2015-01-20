@@ -26,7 +26,6 @@ function OnSize(self, _type, width, height)
 	local objTree = self:GetBindUIObjectTree()
 	local objRootCtrl = objTree:GetUIObject("root.layout:root.ctrl")
 	objRootCtrl:SetObjPos(0, 0, width, height)
-	local objBkg = objRootCtrl:GetControlObject("bkg")
 end
 
 

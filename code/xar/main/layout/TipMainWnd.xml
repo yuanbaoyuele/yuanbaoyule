@@ -44,7 +44,7 @@
 
     <hostwndtemplate id="TipMainWnd" class="FrameHostWnd">
         <attr>
-            <layered>0</layered>
+            <layered>1</layered>
             <left>0</left>
             <top>0</top>
             <width>1024</width>

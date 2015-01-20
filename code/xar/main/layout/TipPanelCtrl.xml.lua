@@ -10,7 +10,14 @@ end
 
 
 ---事件--
+--caption控件
 function OnLButtonDbClick(self)
+	
+	
+end
+
+function OnDrag(self)
+	
 	
 end
 
