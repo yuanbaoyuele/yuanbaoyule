@@ -23,13 +23,7 @@ end
 
 
 function OnClickCpationMax(self)
-	local objHostWnd = GetHostWndByUIElem(self)
-	if not objHostWnd then
-		return
-	end
-
-	objHostWnd:Max()
-	
+	tFunHelper.SetWindowMax()
 	local objRootCtrl = self:GetOwnerControl()
 	SetMaxBtnStyle(objRootCtrl, false)
 	tFunHelper.SetResizeEnable(false)
@@ -37,13 +31,7 @@ end
 
 
 function OnClickCpationRestore(self)
-	local objHostWnd = GetHostWndByUIElem(self)
-	if not objHostWnd then
-		return
-	end
-
-	objHostWnd:Restore()
-	
+	tFunHelper.RestoreWndSize()
 	local objRootCtrl = self:GetOwnerControl()
 	SetMaxBtnStyle(objRootCtrl, true)
 	tFunHelper.SetResizeEnable(true)

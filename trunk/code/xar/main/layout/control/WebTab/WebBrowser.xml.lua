@@ -1,31 +1,153 @@
-local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+function GetWeb(self)
+	local browser = self:GetControlObject("browser")	
+	return browser
+end
+function SetErrorUrl( self, url )
+	local attr = self:GetAttribute()
+	attr.ErrorUrl = url
+end
 
 function SetExternal( self, webevent )
 	local attr = self:GetAttribute()
 	attr.External = webevent
+	local browser = self:GetControlObject("browser")
+	if browser then
+		browser:SetExternal( attr.External )
+	end
 end
 
-local gCurRetryTimes = 0	--��ǰ�����Դ���
-local gTotalRetryTimes = 1 --�����ʧ�ܣ�����һ��
-function Navigate( self, url )
+function GetBusy( self )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		return browser:GetBusy()
+	end
+	return false
+end
+function Stop( self )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		browser:Stop()
+	end
+end
+
+function Refresh( self  )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		browser:Refresh()
+	end
+end
+
+function Home( self )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		browser:Refresh()
+	end
+end
+
+function GoBack( self )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		browser:GoBack()
+	end
+end
+
+function GoForward( self )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		browser:GoForward()
+	end
+end
+
+function EnableContextMenu( self, bEnable )
+	local browser = self:GetControlObject( "browser" )
 	local attr = self:GetAttribute()
-	attr.ErrorUrls = {}
-	attr.CompleteUrls = {}
-    local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
+	attr.ContextMenu = bEnable
+	if browser ~= nil then
+		browser:EnableContextMenu(bEnable)
+	end
+end
+
+function RegisterAsDropTarget( self, bEnable )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		browser:RegisterAsDropTarget(bEnable)
+	end
+end
+
+function GetLocationURL(self)
+	local browser = self:GetControlObject("browser")
+	if browser ~= nil then
+		return browser:GetLocationURL()
+	end
+	return nil
+end
+
+function GetRawWebBrowser(self)
+	local browser = self:GetControlObject("browser")
+	if browser ~= nil then
+		return browser:GetRawWebBrowser()
+	end
+	return nil
+end
+
+function EnableScriptError(self, enable)
+	local browser = self:GetControlObject("browser")
+	if browser ~= nil then
+		enable = enable or false
+		return browser:EnableScriptError(enable)
+	end
+	return nil
+end
+
+function OnInitControl(self)
+	local errorbkg = self:GetControlObject("error.bkg")
+	local loadingimg = self:GetControlObject("loading.img")
+	
+	errorbkg:SetVisible(false)
+	errorbkg:SetChildrenVisible(false)
+	loadingimg:SetVisible(true)
+	loadingimg:SetChildrenVisible(true)
+	
+	local attr = self:GetAttribute()
+	local pagename = "SmallErrorPage"
+	local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
+	local page = objFactory:CreateUIObject("error.page", pagename)
+	page:SetObjPos("0", "0", "father.width", "father.height")
+	errorbkg:AddChild(page)
+	
+	self:SetVisible(attr.Visible)
+	self:SetChildrenVisible(attr.Visible)
+	
+	if attr.ErrorBkgColorResID then
+		errorbkg:SetSrcColor(attr.ErrorBkgColorResID)
+		errorbkg:SetDestColor(attr.ErrorBkgColorResID)
+	end
+	if attr.BkgColorResID then
+		local webbkg = self:GetControlObject("web.bkg")
+		webbkg:SetSrcColor(attr.BkgColorResID)
+		webbkg:SetDestColor(attr.BkgColorResID)
+	end
+	-- 直接显示loading
+	attr.firstNavigate = true
+	ShowLoadingPage(self)
+end
+
+function InitWebBrowserObj(self)
+	local attr = self:GetAttribute()
 	
 	local browser = self:GetControlObject( "browser" )
-	if browser == nil then
-		browser = objFactory:CreateUIObject( "browser", "WebBrowseObject" )
-		self:AddChild( browser )
-	end
-	browser:EnableContextMenu(true)
-	browser:SetVisible( true )
-	browser:SetChildrenVisible( true )
+	browser:SetVisible( false )
+	browser:SetChildrenVisible( false )
+	
+	browser:EnableScriptError(attr.ScriptError)
+	--默认不支持右键菜单和拖拽对象
+	browser:EnableContextMenu(attr.ContextMenu)
+	browser:RegisterAsDropTarget(true)
 	if attr.External ~= nil then
 		browser:SetExternal( attr.External )
 	end
 	browser:SetObjPos( "0", "0", "father.width", "father.height" )
-	local cookie, ret = browser:AttachListener("OnNavigateError", false, function( self, URL )
+	local cookie, ret = browser:AttachListener( "OnNavigateError", false, function( self, URL )
 												table.insert( attr.ErrorUrls, URL )
 												for i = 1, #attr.CompleteUrls do
 													if attr.CompleteUrls[ i ] == URL then
@@ -34,10 +156,9 @@ function Navigate( self, url )
 													end
 												end
 												return true
-											 end)
-	browser:AttachListener( "OnNavigateComplete2", false, function( obj, URL )
-													FunctionObj.TipLog("WebBrowserctrl: OnNavigateComplete2 " .. URL)
-													self:FireExtEvent( "Fire_OnNavigateComplete2", URL)
+											 end )
+	browser:AttachListener( "OnNavigateComplete2", false, function( obj, URL)
+													self:FireExtEvent( "OnNavigateComplete2", URL)
 													local error_ = false
 													for i = 1, #attr.ErrorUrls do
 														if attr.ErrorUrls[ i ] == URL then
@@ -51,81 +172,89 @@ function Navigate( self, url )
 													return true
 												 end )
 	browser:AttachListener( "OnCommandStateChange", false, function( obj, command, enable )
-																self:FireExtEvent( "Fire_OnCommandStateChange", command, enable )
+																attr[command .. "state" ] = enable 
+																self:FireExtEvent( "OnCommandStateChange", command, enable )
 																return true
 														   end )
+	browser:AttachListener("OnTitleChange", false, function(obj, title)
+		attr.Title = title 
+		self:FireExtEvent("OnTitleChange", title)
+		return true
+	end)
+	browser:AttachListener("OnNewWindow3", false, function(obj, flags, url_context, url)
+		local bCancel = self:FireExtEvent("OnNewWindow3", flags, url_context, url)
+		if bCancel == nil then bCancel = false end
+		return 0, 0, bCancel, true
+	end)	
+	browser:AttachListener("OnDocumentComplete", false, function(obj, URL)
+		self:FireExtEvent("OnDocumentComplete", URL)
+	end)
+	browser:AttachListener("OnBeforeNavigate2", false, function(obj, URL)		
+		self:FireExtEvent("OnBeforeNavigate2", URL)
+	end)	
+end
 
+function Navigate( self, url )
+	local attr = self:GetAttribute()
+	attr.ErrorUrls = {}
+	attr.CompleteUrls = {}
+	-- 第一次Navigate 不做动画，因为在OnInitControl 的时候已经做了
+	if attr.firstNavigate then 
+		attr.firstNavigate = false
+	else
+		ShowLoadingPage(self)	
+	end
+	--在初始化URL时，自动为这个URL加上 #gettime()
+	--url = url .. "#" .. tostring(os.time())
+	attr.url = url
+    local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
 	
-	browser:AttachListener( "OnTitleChange", false, 
-		function(obj, title)
-			FunctionObj.TipLog("WebBrowserctrl: OnTitleChange " .. title)
-			attr.Title = title 
-			self:FireExtEvent("Fire_OnTitleChange", title)
-			return true
-		end)	
-
-	browser:AttachListener( "OnNewWindow3", false, 
-		function(obj, flags, urlContext, url)
-			self:FireExtEvent("Fire_OnNewWindow3", flags, urlContext, url)
-			return 0, nil, true, true
-		end)
-		
+	local browser = self:GetControlObject( "browser" )
+	if browser == nil then
+		browser = objFactory:CreateUIObject( "browser", "WebBrowseObject" )
+		self:AddChild( browser )
+		if browser then
+			InitWebBrowserObj(self)
+		end
+	end
+	
 	browser:Navigate( url )
-end
-
-
-function GetLocationURL(self)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		return browser:GetLocationURL()
+	self:FireExtEvent("OnNavigate", url)
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	if attr.timer then
+		timerManager:KillTimer( attr.timer )
+		attr.timer = nil
 	end
-	
-	return ""
+	attr.timer = timerManager:SetTimer( function ( item, id )
+								local killTimer = false
+								for i = 1, #attr.ErrorUrls do
+									for j = 1, #attr.CompleteUrls do
+										if attr.ErrorUrls[ i ] == attr.CompleteUrls[ j ] then
+											table.remove( attr.CompleteUrls, j )
+											break
+										end
+									end
+								end
+								if #attr.CompleteUrls > 0 or not attr.CustomErrorPage then
+									browser:SetVisible( true )
+									browser:SetChildrenVisible( true )
+									HideBkgPage(self)
+									killTimer = true
+								elseif not browser:GetBusy() then
+									self:FireExtEvent( "OnNavigateError", url )
+									browser:SetVisible( false )
+									browser:SetChildrenVisible( false )
+									self:RemoveChild( browser )
+									ShowErrorPage(self)
+									attr.errorurl = url
+									killTimer = true
+								end
+								if killTimer then
+									timerManager:KillTimer( id )
+									attr.timer = nil
+								end
+						   end, 500)
 end
-
-function GoBack(self)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		return browser:GoBack()
-	end
-end
-
-function GoForward(self)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		return browser:GoForward()
-	end
-end
-
-function Refresh(self)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		return browser:Refresh()
-	end
-end
-
-function Stop(self)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		return browser:Stop()
-	end
-end
-
-function GetBusy(self)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		return browser:GetBusy()
-	end
-end
-
-
-function SetRealFocus(self, bFocus)
-	local browser = self:GetControlObject( "browser" )
-	if browser then
-		browser:SetRealFocus(bFocus)
-	end
-end
-
 
 function OnDestroy( self )
 	local attr = self:GetAttribute()
@@ -136,8 +265,103 @@ function OnDestroy( self )
 	return true
 end
 
-function ReloadPage(self)
-	local attr = self:GetAttribute()
-	self:Navigate(attr.errorurl)
+function OnBtnRefresh(self)
+	local page = self:GetOwnerControl()
+	local web = page:GetOwnerControl()
+	local attr = web:GetAttribute()
+	web:Navigate(attr.errorurl)
 	return true
+end
+function OnBtnClose(self)
+	local web = self:GetOwnerControl()
+	web:FireExtEvent("OnErrorClose")
+end
+function OnBtnMin(self)
+	local web = self:GetOwnerControl()	
+	web:FireExtEvent("OnErrorMin")
+end
+function ShowErrorPage(self)
+	local bkg = self:GetControlObject("web.bkg")
+	local errorbkg = self:GetControlObject("error.bkg")
+	local loadingimg = self:GetControlObject("loading.img")
+	
+	bkg:SetVisible(true)
+	bkg:SetChildrenVisible(true)
+	errorbkg:SetVisible(true)
+	errorbkg:SetChildrenVisible(true)
+	loadingimg:SetVisible(false)
+	loadingimg:SetChildrenVisible(false)
+	
+	StopAni(self)
+end
+
+function ShowLoadingPage(self)
+	StartAni(self)
+	local bkg = self:GetControlObject("web.bkg")
+	local errorbkg = self:GetControlObject("error.bkg")
+	local loadingimg = self:GetControlObject("loading.img")
+	
+	bkg:SetVisible(true)
+	bkg:SetChildrenVisible(true)
+	errorbkg:SetVisible(false)
+	errorbkg:SetChildrenVisible(false)
+	loadingimg:SetVisible(true)
+	loadingimg:SetChildrenVisible(true)
+end
+
+function HideBkgPage(self)
+	local bkg = self:GetControlObject("web.bkg")
+	bkg:SetVisible(false)
+	bkg:SetChildrenVisible(false)
+	
+	StopAni(self)
+end
+
+function StartAni(self)
+	StopAni(self)
+	local loadingimg = self:GetControlObject("loading")
+	local objectTree = self:GetOwner()
+	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")		
+	local popAniT = templateMananger:GetTemplate("ball.animation","AnimationTemplate")
+	if popAniT and objectTree then
+		local popAni = popAniT:CreateInstance()
+		popAni:BindImageObj(loadingimg)
+		objectTree:AddAnimation(popAni)
+		popAni:Resume()
+		local attr = self:GetAttribute()
+		attr.loadingani = popAni
+	end
+end
+
+function StopAni(self)
+	local attr = self:GetAttribute()
+	if attr then
+		if attr.loadingani then
+			attr.loadingani:Stop()
+		end
+		attr.loadingani = nil
+	end
+end
+
+function Show(self, visible)
+	local attr = self:GetAttribute()
+	if attr.Visible == visible then
+		return
+	end
+	attr.Visible = visible
+	self:SetVisible(visible)
+	self:SetChildrenVisible(visible)
+end
+function AddSearchAssistant(self , relayer)
+	local attr = self:GetAttribute()
+	local browser = self:GetControlObject("browser")
+	local rawWebBrowser = browser:GetRawWebBrowser()	
+	local sniffer = relayer:AddSearchAssistant(rawWebBrowser)
+	return sniffer
+end
+function SetRealFocus(self,focus)
+	local browser = self:GetControlObject("browser")
+	if browser then
+		browser:SetRealFocus(focus)
+	end
 end

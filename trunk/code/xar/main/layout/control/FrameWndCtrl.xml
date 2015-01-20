@@ -14,7 +14,7 @@
 				<obj id="mainwnd.resize.right" class="ResizeObject" templateid = "caption.failhittest">
 					<attr>
 						<left>father.width-3</left>
-						<width>6</width>
+						<width>20</width>
 						<height>father.height</height>
 						<type>right</type>
 						<zorder>100000000</zorder>
@@ -24,16 +24,16 @@
 					<attr>
 						<top>father.height-3</top>
 						<width>father.width</width>
-						<height>6</height>
+						<height>15</height>
 						<type>bottom</type>
 						<zorder>100000000</zorder>
 					</attr>
 				</obj>
 				<obj id="mainwnd.resize.top" class="ResizeObject" templateid = "caption.failhittest">
 					<attr>
-						<top>-3</top>
+						<top>-7</top>
 						<width>father.width</width>
-						<height>6</height>
+						<height>15</height>
 						<type>top</type>
 						<zorder>100000000</zorder>
 					</attr>
@@ -41,7 +41,7 @@
 				<obj id="mainwnd.resize.left" class="ResizeObject" templateid = "caption.failhittest">
 					<attr>
 						<left>-3</left>
-						<width>6</width>
+						<width>15</width>
 						<height>father.height</height>
 						<type>left</type>
 						<zorder>100000000</zorder>
@@ -51,8 +51,8 @@
 					<attr>
 						<left>-3</left>
 						<top>-3</top>
-						<width>8</width>
-						<height>8</height>
+						<width>15</width>
+						<height>15</height>
 						<type>topleft</type>
 						<zorder>100000001</zorder>
 					</attr>
@@ -61,8 +61,8 @@
 					<attr>
 						<left>-3</left>
 						<top>father.height-5</top>
-						<width>8</width>
-						<height>8</height>
+						<width>15</width>
+						<height>15</height>
 						<type>bottomleft</type>
 						<zorder>100000001</zorder>
 					</attr>
@@ -71,8 +71,8 @@
 					<attr>
 						<left>father.width-5</left>
 						<top>-3</top>
-						<width>8</width>
-						<height>8</height>
+						<width>15</width>
+						<height>15</height>
 						<type>topright</type>
 						<zorder>100000001</zorder>
 					</attr>

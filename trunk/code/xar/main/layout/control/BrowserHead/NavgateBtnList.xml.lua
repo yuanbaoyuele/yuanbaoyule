@@ -61,7 +61,7 @@ function UnBindLastBrowser(objRootCtrl)
 	end
 
 	local attr = objRootCtrl:GetAttribute()
-	objCurrentBrowser:RemoveListener("Fire_OnCommandStateChange", attr.hEvntListener)
+	objCurrentBrowser:RemoveListener("OnCommandStateChange", attr.hEvntListener)
 end
 
 
@@ -98,7 +98,7 @@ function SetBtnListStyle(objRootCtrl, objWebTabCtrl)
 	
 	local attr = objRootCtrl:GetAttribute()
 	--后退与前进
-	attr.hEvntListener = objCurrentBrowser:AttachListener("Fire_OnCommandStateChange", false, 
+	attr.hEvntListener = objCurrentBrowser:AttachListener("OnCommandStateChange", false, 
 		function (objBrowser, strEventName, strCommand, bEnable)
 			if strCommand == "navigateback" then
 				objGoBack:Enable(bEnable)
@@ -110,7 +110,12 @@ function SetBtnListStyle(objRootCtrl, objWebTabCtrl)
 		end)	
 		
 	--停止
-	objStop:Enable(true)
+	if objCurrentBrowser:GetBusy() then
+		objStop:Enable(true)
+	else
+		objStop:Enable(false)
+	end
+	
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	timerManager:SetTimer(function(item, id)
 			if objCurrentBrowser:GetBusy() then
