@@ -152,7 +152,7 @@
 		</templateeventlist>
 	</animationtemplate>
 	
-	<animationtemplate id="menu.showani" class="PosChangeAnimation">
+	<animationtemplate id="menu.showanimation" class="PosChangeAnimation">
 		<attr>
 			<curve>menu.show</curve>
 			<totaltime>200</totaltime>

@@ -49,11 +49,11 @@
             <top>0</top>
             <width>1024</width>
             <height>768</height>
-
+           
             <topmost>0</topmost>
             <visible>0</visible>
             <enable>1</enable>
-            <maxbox>0</maxbox>
+            <maxbox>1</maxbox>
             <minbox>1</minbox>
             <minwidth>250</minwidth>
             <minheight>50</minheight>
