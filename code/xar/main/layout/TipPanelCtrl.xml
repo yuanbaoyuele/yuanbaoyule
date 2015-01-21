@@ -15,7 +15,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-					</attr>				
+					</attr>	
 					<children>	
 						<obj id="shadow" class="TextureObject">
 							<attr>
@@ -41,11 +41,7 @@
 										<top>0</top>
 										<width>father.width</width>
 										<height>father.height</height>
-									</attr>	
-									<eventlist>
-										<!--event name="OnDrag" file="TipPanelCtrl.xml.lua" func="OnDrag" /-->
-										<event name="OnLButtonDbClick" file="TipPanelCtrl.xml.lua" func="OnLButtonDbClick" />
-									</eventlist>									
+									</attr>									
 								</obj>
 							
 								<obj id="frame" class="FrameWndCtrl">

@@ -397,7 +397,7 @@ function SetBrowserFullScrnState(bFullScreen)
 end
 
 
-function SetWindowMax()
+function GetWindowBorder()
 	local objMainBkg = GetMainCtrlChildObj("bkg")
 	if not objMainBkg then
 		return
@@ -410,25 +410,14 @@ function SetWindowMax()
 	local nBrowserL, nBrowserT, nBrowserR, nBrowserB = objMainBkg:GetAbsPos()
 	local nRootL, nRootT, nRootR, nRootB = objRootLayout:GetAbsPos()
 	
-	local nDiffW = nBrowserL + (nRootR-nBrowserR)
-	local nDiffH = nBrowserT + (nRootB-nBrowserB)
-	
-	local nScreenL, nScreenT, nScreenR, nScreenB = tipUtil:GetWorkArea()	
-	local nWidth = nScreenR-nScreenL
-	local nHeight = nScreenB-nScreenT
-	
-	local nNewWidth = nWidth+nDiffW
-	local nNewHeight = nHeight+nDiffH
-	
-	local objMainWnd = GetMainWndInst()
-	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainWnd:GetWindowRect()
-	RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
-	
-	SetResizeEnable(false)
-	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
-	objMainWnd:Move(nScreenL-nBrowserL, nScreenT-nBrowserT, nNewWidth, nNewHeight)	
-end
+	local nLDiff = nBrowserL - nRootL
+	local nTDiff = nBrowserT - nRootT
+	local nRDiff = nRootR - nBrowserR
+	local nBDiff = nRootB - nBrowserB
 
+	return nLDiff, nTDiff, nRDiff, nBDiff
+end
+	
 
 function SetBrowserFullScrn()
 	local objBrowserLayout = GetMainCtrlChildObj("MainPanel.Center")
@@ -443,8 +432,8 @@ function SetBrowserFullScrn()
 	local nBrowserL, nBrowserT, nBrowserR, nBrowserB = objBrowserLayout:GetAbsPos()
 	local nRootL, nRootT, nRootR, nRootB = objRootLayout:GetAbsPos()
 	
-	local nDiffW = nBrowserL + (nRootR-nBrowserR)
-	local nDiffH = nBrowserT + (nRootB-nBrowserB)
+	local nDiffW = (nBrowserL-nRootL) + (nRootR-nBrowserR)
+	local nDiffH = (nBrowserT-nRootT) + (nRootB-nBrowserB)
 	
 	local nWidth, nHeight = tipUtil:GetScreenSize()
 	local nNewWidth = nWidth+nDiffW
@@ -457,6 +446,7 @@ function SetBrowserFullScrn()
 	SetBrowserFullScrnState(true)
 	SetResizeEnable(false)
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
+	
 	objMainWnd:Move(0-nBrowserL, 0-nBrowserT, nNewWidth, nNewHeight)	
 end
 
@@ -480,6 +470,7 @@ function RestoreWndSize()
 		
 		SetBrowserFullScrnState(false)
 		SetResizeEnable(true)
+		
 		ResetTrackSize(objMainWnd)
 		objMainWnd:Move(nLeft, nTop, nWidth, nHeight)
 	end
@@ -487,7 +478,13 @@ end
 
 
 function ResetTrackSize(objMainWnd)
-	objMainWnd:SetMaxTrackSize(-1, -1)
+	if type(g_tWindowSize) ~= "table" then
+		return
+	end
+	
+	local nTrackWidth = g_tWindowSize.nMaxTrackWidth
+	local nTrackHeight = g_tWindowSize.nMaxTrackHeight
+	objMainWnd:SetMaxTrackSize(nTrackWidth, nTrackHeight)
 end
 
 
@@ -499,6 +496,15 @@ function RecordWndSize(nLeft, nTop, nRight, nBottom)
 	g_tWindowSize.nTop = nTop
 	g_tWindowSize.nRight = nRight
 	g_tWindowSize.nBottom = nBottom
+end
+
+
+function RecordTrackSize(nTrackWidth, nTrackHeight)
+	if type(g_tWindowSize) ~= "table" then
+		g_tWindowSize={}
+	end
+	g_tWindowSize.nMaxTrackWidth = nTrackWidth
+	g_tWindowSize.nMaxTrackHeight = nTrackHeight
 end
 
 
@@ -1423,9 +1429,10 @@ obj.TryDestroyOldMenu = TryDestroyOldMenu
 obj.CreateAndShowMenu = CreateAndShowMenu
 
 --全屏\最大化
-obj.SetWindowMax = SetWindowMax    
+obj.GetWindowBorder = GetWindowBorder    
 obj.SetBrowserFullScrn = SetBrowserFullScrn
 obj.RestoreWndSize = RestoreWndSize
+obj.RecordTrackSize = RecordTrackSize
 obj.RecordWndSize = RecordWndSize
 obj.IsBrowserFullScrn = IsBrowserFullScrn
 obj.SetResizeEnable = SetResizeEnable

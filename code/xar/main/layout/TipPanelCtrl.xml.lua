@@ -10,17 +10,6 @@ end
 
 
 ---事件--
---caption控件
-function OnLButtonDbClick(self)
-	
-	
-end
-
-function OnDrag(self)
-	
-	
-end
-
 --tabcontainer事件
 function OnActiveTabChange(self, strEvntName,objActiveTab)
 	if not objActiveTab then

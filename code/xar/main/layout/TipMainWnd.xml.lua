@@ -18,6 +18,7 @@ XLSetGlobal("YBYL.GetTipStartTime", GetTipStartTime)
 function OnShowWindow(self, bShow)
 	if bShow then
 		gTipStartTime = tipUtil:GetCurrentUTCTime()
+		SetWindowSizeProfile(self)
 	end
 end
 
@@ -66,9 +67,29 @@ function OnDestroy( self )
 		local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
 		local tempWnd = hostwndManager:GetHostWnd(wndId)
 		if tempWnd then
-			-- hostwndManager:RemoveHostWnd(wndId)
+			hostwndManager:RemoveHostWnd(wndId)
 		end
 	end
 end
+
+
+function SetWindowSizeProfile(objHostWnd)
+	local nLDiff, nTDiff, nRDiff, nBDiff = tFunHelper.GetWindowBorder()
+	objHostWnd:SetBorder(nLDiff/2, nTDiff/2, 0, 0)
+	
+	local nScreenL, nScreenT, nScreenR, nScreenB = tipUtil:GetWorkArea()	
+	local nWidth = nScreenR-nScreenL
+	local nHeight = nScreenB-nScreenT
+	local nDiffW = nLDiff+nRDiff+1
+	local nDiffH = nTDiff+nBDiff
+	local nNewWidth = nWidth+nDiffW
+	local nNewHeight = nHeight+nDiffH
+	
+	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objHostWnd:GetWindowRect()
+	tFunHelper.RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
+	tFunHelper.RecordTrackSize(nNewWidth, nNewHeight)
+	objHostWnd:SetMaxTrackSize(nNewWidth, nNewHeight)	
+end
+
 
 
