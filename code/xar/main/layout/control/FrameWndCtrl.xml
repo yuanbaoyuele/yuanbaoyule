@@ -31,9 +31,9 @@
 				</obj>
 				<obj id="mainwnd.resize.top" class="ResizeObject" templateid = "caption.failhittest">
 					<attr>
-						<top>-7</top>
+						<top>-3</top>
 						<width>father.width</width>
-						<height>20</height>
+						<height>10</height>
 						<type>top</type>
 						<zorder>100000000</zorder>
 					</attr>

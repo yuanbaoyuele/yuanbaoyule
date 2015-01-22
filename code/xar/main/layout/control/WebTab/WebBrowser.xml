@@ -80,8 +80,8 @@
 			<attr name="BigErrorPage" type="bool" >	<default>true</default>	</attr>
 			<attr name="Visible" type="bool" > <default>true</default> </attr>
             <attr name="ErrorUrl" type="string" />
-			<attr name="ScriptError" type="bool"><default>true</default></attr>
-			<attr name="ContextMenu" type="bool"><default>false</default></attr>
+			<attr name="ScriptError" type="bool"><default>false</default></attr>
+			<attr name="ContextMenu" type="bool"><default>true</default></attr>
 			<attr name="BkgColorResID" type="string" />
 			<attr name="ErrorBkgColorResID" type="string" />
         </attr_def>

@@ -2,6 +2,7 @@
     <control class="BrowserHeadCtrl">
         <method_def>
 			<ProcessTabChange file="BrowserHeadCtrl.xml.lua" func="ProcessTabChange"/>
+			<SetMaxBtnStyle file="BrowserHeadCtrl.xml.lua" func="SetMaxBtnStyle"/>
         </method_def>
 		
         <event_def>

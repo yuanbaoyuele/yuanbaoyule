@@ -24,10 +24,10 @@
 								<top>0</top>
 								<width>father.width</width>
 								<height>father.height</height>
-								<NormalBkgID>YBYL.Head.FuncBtn.Bkg.Normal</NormalBkgID>
-								<DownBkgID>YBYL.Head.FuncBtn.Bkg.Down</DownBkgID>
-								<HoverBkgID>YBYL.Head.FuncBtn.Bkg.Hover</HoverBkgID>
-								<DisableBkgID>YBYL.Head.FuncBtn.Bkg.Disable</DisableBkgID>
+								<NormalBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Disable</DisableBkgID>
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="FuncBtnList.xml.lua" func="OnClickAccelerate" />
@@ -80,21 +80,39 @@
 						<height>father.height</height>
 					</attr>
 					<children>
-						<obj id="FuncBtnList.AdvFilter" class="TipAddin.Button">
+						<obj id="FuncBtnList.AdvFilter.Close" class="TipAddin.Button">
 							<attr>
 								<left>0</left>
 								<top>0</top>
 								<width>father.width</width>
 								<height>father.height</height>
-								<NormalBkgID>YBYL.Head.FuncBtn.Bkg.Normal</NormalBkgID>
-								<DownBkgID>YBYL.Head.FuncBtn.Bkg.Down</DownBkgID>
-								<HoverBkgID>YBYL.Head.FuncBtn.Bkg.Hover</HoverBkgID>
-								<DisableBkgID>YBYL.Head.FuncBtn.Bkg.Disable</DisableBkgID>
+								<NormalBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.FuncBtn.FiltOpen.Bkg.Disable</DisableBkgID>
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="FuncBtnList.xml.lua" func="OnClickAdvFilter" />
 							</eventlist>
 						</obj>
+						
+						<obj id="FuncBtnList.AdvFilter.Open" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<NormalBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Down</NormalBkgID>
+								<DownBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Normal</DownBkgID>
+								<HoverBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Disable</DisableBkgID>
+								<Visible>false</Visible>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="FuncBtnList.xml.lua" func="OnClickAdvFilter" />
+							</eventlist>
+						</obj>
+						
 						
 						<obj id="FuncBtnList.AdvFilter.Img" class="ImageObject">
 							<attr>
@@ -122,6 +140,7 @@
 				</obj>
 			</children>
 			<eventlist>
+				<event name="OnInitControl" file="FuncBtnList.xml.lua" func="OnInitRootCtrl" />
 			</eventlist>
 		</objtemplate>
 	</control>

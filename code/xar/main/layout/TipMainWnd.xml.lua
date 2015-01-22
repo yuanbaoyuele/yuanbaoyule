@@ -75,7 +75,7 @@ end
 
 function SetWindowSizeProfile(objHostWnd)
 	local nLDiff, nTDiff, nRDiff, nBDiff = tFunHelper.GetWindowBorder()
-	objHostWnd:SetBorder(nLDiff/2, nTDiff/2, 0, 0)
+	objHostWnd:SetBorder(nLDiff/2, 0, 0, 0)
 	
 	local nScreenL, nScreenT, nScreenR, nScreenB = tipUtil:GetWorkArea()	
 	local nWidth = nScreenR-nScreenL
