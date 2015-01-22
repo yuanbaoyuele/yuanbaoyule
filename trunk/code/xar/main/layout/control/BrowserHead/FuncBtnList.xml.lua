@@ -4,6 +4,11 @@ local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 
 
 -----事件----
+function OnInitRootCtrl(self)
+	SetAdvFilterStyle(self)
+end
+
+
 function OnInitAccText(self)
 	local tUserConfig = tFunHelper.ReadConfigFromMemByKey("tUserConfig") or {}
 	local nAccelerateRate = tonumber(tUserConfig["nAccelerateRate"]) or 1
@@ -31,10 +36,25 @@ function OnClickAdvFilter(self)
 		tFunHelper.ShowToolTip(true)
 		tFunHelper.SetFilterState(true)
 	end
+	
+	local objRootCtrl = self:GetOwnerControl()
+	SetAdvFilterStyle(objRootCtrl)
 end
 
 
 ----
+function SetAdvFilterStyle(objRootCtrl)
+	local bOpenFilter = tFunHelper:GetFilterState()
+	local objAdvOpen = objRootCtrl:GetControlObject("FuncBtnList.AdvFilter.Open")
+	local objAdvClose = objRootCtrl:GetControlObject("FuncBtnList.AdvFilter.Close")
+	local bShowOpenObj = not bOpenFilter
+	local bShowCloseObj = bOpenFilter
+	
+	objAdvOpen:SetVisible(bShowOpenObj)
+	objAdvOpen:SetChildrenVisible(bShowOpenObj)
+	objAdvClose:SetVisible(bShowCloseObj)
+	objAdvClose:SetChildrenVisible(bShowCloseObj)
+end
 
 
 ------辅助函数---

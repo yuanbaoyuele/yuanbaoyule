@@ -419,6 +419,19 @@ function GetWindowBorder()
 end
 	
 
+function SetWindowMax()
+	local objHostWnd = GetMainWndInst()
+	if objHostWnd then
+		objHostWnd:Max()
+	end
+
+	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	objHeadCtrl:SetMaxBtnStyle(false)
+	SetResizeEnable(false)
+end	
+	
+	
+
 function SetBrowserFullScrn()
 	local objBrowserLayout = GetMainCtrlChildObj("MainPanel.Center")
 	if not objBrowserLayout then
@@ -510,9 +523,14 @@ end
 
 function SetResizeEnable(bEnable)
 	local objFrame = GetMainCtrlChildObj("frame")
-	if objFrame then
-		objFrame:SetEnable(bEnable)
-		objFrame:SetChildrenEnable(bEnable)
+	if not objFrame then
+		return
+	end
+	
+	if bEnable then
+		objFrame:SetObjPos(0, 0, "father.width", "father.height")
+	else
+		objFrame:SetObjPos(0, 0, 0, 0)
 	end	
 end
 
@@ -1430,6 +1448,7 @@ obj.CreateAndShowMenu = CreateAndShowMenu
 
 --全屏\最大化
 obj.GetWindowBorder = GetWindowBorder    
+obj.SetWindowMax = SetWindowMax    
 obj.SetBrowserFullScrn = SetBrowserFullScrn
 obj.RestoreWndSize = RestoreWndSize
 obj.RecordTrackSize = RecordTrackSize

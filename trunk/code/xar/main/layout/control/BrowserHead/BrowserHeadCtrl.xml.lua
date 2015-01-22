@@ -9,6 +9,17 @@ function ProcessTabChange(self, objTabCtrl)
 end
 
 
+function SetMaxBtnStyle(objRootCtrl, bShowMax)	
+	local objMax = objRootCtrl:GetControlObject("BrowserHeadCtrl.Caption.MaxBtn")
+	local objRestore = objRootCtrl:GetControlObject("BrowserHeadCtrl.Caption.Restore")
+	local bShowRestore = not bShowMax
+	
+	objMax:SetVisible(bShowMax)
+	objMax:SetChildrenVisible(bShowMax)
+	objRestore:SetVisible(bShowRestore)
+	objRestore:SetChildrenVisible(bShowRestore)
+end
+
 ----事件--
 function OnClickCpationClose(self)
 	tFunHelper.ReportAndExit()	
@@ -23,15 +34,7 @@ end
 
 
 function OnClickCpationMax(self)
-	local objHostWnd = GetHostWndByUIElem(self)
-	if objHostWnd then
-		objHostWnd:Max()
-	end
-
-	-- tFunHelper.SetWindowMax()
-	local objRootCtrl = self:GetOwnerControl()
-	SetMaxBtnStyle(objRootCtrl, false)
-	tFunHelper.SetResizeEnable(false)
+	tFunHelper.SetWindowMax()
 end
 
 
@@ -40,8 +43,7 @@ function OnClickCpationRestore(self)
 	if objHostWnd then
 		objHostWnd:Restore()
 	end
-
-	-- tFunHelper.RestoreWndSize()
+	
 	local objRootCtrl = self:GetOwnerControl()
 	SetMaxBtnStyle(objRootCtrl, true)
 	tFunHelper.SetResizeEnable(true)
@@ -93,18 +95,6 @@ function GetHostWndByUIElem(objUIElem)
 	if objTree then
 		return objTree:GetBindHostWnd()
 	end
-end
-
-
-function SetMaxBtnStyle(objRootCtrl, bShowMax)	
-	local objMax = objRootCtrl:GetControlObject("BrowserHeadCtrl.Caption.MaxBtn")
-	local objRestore = objRootCtrl:GetControlObject("BrowserHeadCtrl.Caption.Restore")
-	local bShowRestore = not bShowMax
-	
-	objMax:SetVisible(bShowMax)
-	objMax:SetChildrenVisible(bShowMax)
-	objRestore:SetVisible(bShowRestore)
-	objRestore:SetChildrenVisible(bShowRestore)
 end
 
 

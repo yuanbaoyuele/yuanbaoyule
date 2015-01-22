@@ -37,7 +37,6 @@ function SetIcoImage(self, strIcoName)
 		return
 	end
 	
-	
 	local objBitmap = tFunHelper.GetIcoBitmapObj(strIcoName)
 	if objBitmap then
 		objImage:SetBitmap(objBitmap)
@@ -141,8 +140,6 @@ function OnUrlEditRButtonUp(self)
 	tFunHelper.TryDestroyOldMenu(self, "RBtnEditMenu")
 	tFunHelper.CreateAndShowMenu(self, "RBtnEditMenu", 0, true)
 end
-
-
 
 ----------------
 function CheckHasCollect(strInputURL)

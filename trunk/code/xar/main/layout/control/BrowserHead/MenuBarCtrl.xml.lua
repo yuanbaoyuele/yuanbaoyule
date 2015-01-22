@@ -30,47 +30,38 @@ function OnClickShowBtn(self)
 end
 
 
+local g_tShowFileMenu = {bShow=false}
 function OnClickFile(self)
-	local nTopSpan = 28
-	InitMenuHelper()
-	tFunHelper.TryDestroyOldMenu(self, "FileMenu")
-	tFunHelper.CreateAndShowMenu(self, "FileMenu", nTopSpan)
+	PopupMenu(self, 28, "FileMenu", g_tShowFileMenu)
 end
 
 
+local g_tShowLookupMenu = {bShow=false}
 function OnClickLookup(self)
-	local nTopSpan = 28
-	InitMenuHelper()
-	tFunHelper.TryDestroyOldMenu(self, "LookupMenu")
-	tFunHelper.CreateAndShowMenu(self, "LookupMenu", nTopSpan)
+	PopupMenu(self, 28, "LookupMenu", g_tShowLookupMenu)
 end
 
 
+local g_tShowCollectMenu = {bShow=false}
 function OnClickCollect(self)
 	local tUserCollect = tFunHelper.ReadConfigFromMemByKey("tUserCollect") or {}
 	if #tUserCollect < 1 then
 		return
 	end
 	
-	local nTopSpan = 28
-	tFunHelper.TryDestroyOldMenu(self, "CollectMenu")
-	tFunHelper.CreateAndShowMenu(self, "CollectMenu", nTopSpan)
+	PopupMenu(self, 28, "CollectMenu", g_tShowCollectMenu)
 end
 
 
+local g_tShowToolMenu = {bShow=false}
 function OnClickTool(self)
-	local nTopSpan = 28
-	InitMenuHelper()
-	tFunHelper.TryDestroyOldMenu(self, "ToolMenu")
-	tFunHelper.CreateAndShowMenu(self, "ToolMenu", nTopSpan)
+	PopupMenu(self, 28, "ToolMenu", g_tShowToolMenu)
 end
 
 
+local g_tShowHelpMenu = {bShow=false}
 function OnClickHelp(self)
-	local nTopSpan = 28
-	InitMenuHelper()
-	tFunHelper.TryDestroyOldMenu(self, "HelpMenu")
-	tFunHelper.CreateAndShowMenu(self, "HelpMenu", nTopSpan)
+	PopupMenu(self, 28, "HelpMenu", g_tShowHelpMenu)
 end
 
 
@@ -90,7 +81,33 @@ function OnMouseLeaveMenuItem(self)
 end
 
 
-----
+------
+--对同一个菜单按钮连续点击时，点击次数为偶数则不显示菜单
+function PopupMenu(objMenuBtn, nTopSpan, strMenuName, tMenuOpenFlag)
+	ShowMenuItemBkg(objMenuBtn, true, "YBYL.Head.Collect.Sel.Normal")
+	
+	if type(tMenuOpenFlag) ~= "table" then
+		tMenuOpenFlag = {}
+	end
+	if tMenuOpenFlag.bShow then
+		return
+	end
+	tMenuOpenFlag.bShow = true
+	
+	InitMenuHelper()
+	tFunHelper.TryDestroyOldMenu(objMenuBtn, strMenuName)
+	tFunHelper.CreateAndShowMenu(objMenuBtn, strMenuName, nTopSpan)
+	
+	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
+	if tMenuOpenFlag.hTimer then
+		timeMgr:KillTimer(tMenuOpenFlag.hTimer)
+	end
+	
+	tMenuOpenFlag.hTimer = timeMgr:SetTimer(function(Itm, id)
+		tMenuOpenFlag.bShow = false
+		Itm:KillTimer(id)
+	end, 300)	
+end
 
 
 function InitMenuHelper()

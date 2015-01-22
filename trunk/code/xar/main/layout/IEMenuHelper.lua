@@ -79,16 +79,27 @@ local gMenuCMD = {
 function gIEMenu:ExecuteCMD(strKey,...)
 	if type(gMenuCMD[strKey]) == "table" then
 		local hRealWnd = self.ctrlBrowser:GetWindow()
-		if hRealWnd ~= nil then
-			local hShellDoc = apiUtil:FindWindowEx(hRealWnd, nil, "Shell DocObject View", nil)
-			if hShellDoc ~= nil then
-				local hIEServer = apiUtil:FindWindowEx(hShellDoc, nil, "Internet Explorer_Server", nil)
-				if hIEServer ~= nil then
-					apiUtil:PostWndMessageByHandle(hIEServer,gMenuCMD[strKey][1],gMenuCMD[strKey][2],0)
-				end
-			end			
-		end		
-		return 
+		
+		if hRealWnd == nil then
+			return
+		end
+		
+		local hShellEmb = apiUtil:FindWindowEx(hRealWnd, nil, "Shell Embedding", nil)
+		if hShellEmb == nil then
+			hShellEmb = hRealWnd  --兼容xlue的版本
+		end
+		
+		local hShellDoc = apiUtil:FindWindowEx(hShellEmb, nil, "Shell DocObject View", nil)
+		if hShellDoc == nil then
+			return
+		end	
+		
+		local hIEServer = apiUtil:FindWindowEx(hShellDoc, nil, "Internet Explorer_Server", nil)
+		if hIEServer ~= nil then
+			apiUtil:PostWndMessageByHandle(hIEServer,gMenuCMD[strKey][1],gMenuCMD[strKey][2],0)
+		end
+		return
+		
 	elseif 	strKey == "SaveAS" then
 		apiUtil:IEMenu_SaveAs(self.lpWeb2)
 	elseif 	strKey == "Zoom" then

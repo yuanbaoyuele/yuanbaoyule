@@ -47,9 +47,11 @@ function FetchValueByPath(obj, path)
 end
 
 function ShowMainTipWnd(objMainWnd)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	objMainWnd:Show(5)
 	objMainWnd:SetTitle("元宝娱乐浏览器")
 	SendStartupReport(true)
+	FunctionObj.SetWindowMax()
 end
 
 
@@ -302,7 +304,6 @@ function CheckServerRuleFile(tServerConfig)
 			TipMain()
 			
 		end, 5*1000)
-	
 end
 
 
