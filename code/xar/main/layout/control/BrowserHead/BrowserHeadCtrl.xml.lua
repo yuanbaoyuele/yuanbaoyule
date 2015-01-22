@@ -65,9 +65,14 @@ function OnPosChange(self)
 	if strState == "max" then
 		SetMaxBtnStyle(self, false)
 		tFunHelper.SetResizeEnable(false)
+		
+		if not tFunHelper.IsUACOS() then
+			tFunHelper.EnableCaptionDrag(false)
+		end		
 	else
 		SetMaxBtnStyle(self, true)
 		tFunHelper.SetResizeEnable(true)
+		tFunHelper.EnableCaptionDrag(true)
 	end
 	
 	SetToolTipPos(self)

@@ -47,10 +47,10 @@
 						<obj id="FuncBtnList.Accelerate.Text" class="TextObject">
 							<attr>
 								<left>30</left>
-								<top>5</top>
+								<top>-5</top>
 								<width>100</width>
 								<height>father.height</height>
-								<valign>top</valign>
+								<valign>center</valign>
 								<font>font.funcbtn.text</font>
 								<textcolor>system.white</textcolor>
 								<text>游戏加速 1x</text>
@@ -127,10 +127,10 @@
 						<obj id="FuncBtnList.AdvFilter.Text" class="TextObject">
 							<attr>
 								<left>28</left>
-								<top>5</top>
+								<top>-5</top>
 								<width>100</width>
 								<height>father.height</height>
-								<valign>top</valign>
+								<valign>center</valign>
 								<font>font.funcbtn.text</font>
 								<textcolor>system.white</textcolor>
 								<text>视频去广告</text>
