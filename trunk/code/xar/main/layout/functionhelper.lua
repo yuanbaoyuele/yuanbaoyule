@@ -23,6 +23,16 @@ function TipLog(strLog)
 end
 
 
+function IsUACOS()
+	local bRet = true
+	local iMax, iMin = tipUtil:GetOSVersion()
+	if type(iMax) == "number" and iMax <= 5 then
+		bRet = false
+	end
+	return bRet
+end
+
+
 function LoadTableFromFile(strDatFilePath)
 	local tResult = nil
 
@@ -429,8 +439,7 @@ function SetWindowMax()
 	objHeadCtrl:SetMaxBtnStyle(false)
 	SetResizeEnable(false)
 end	
-	
-	
+		
 
 function SetBrowserFullScrn()
 	local objBrowserLayout = GetMainCtrlChildObj("MainPanel.Center")
@@ -526,6 +535,9 @@ function SetResizeEnable(bEnable)
 	if not objFrame then
 		return
 	end
+	
+	objFrame:SetEnable(bEnable)
+	objFrame:SetChildrenEnable(bEnable)
 	
 	if bEnable then
 		objFrame:SetObjPos(0, 0, "father.width", "father.height")
@@ -1389,6 +1401,7 @@ obj.tipAsynUtil = tipAsynUtil
 
 --通用
 obj.TipLog = TipLog
+obj.IsUACOS = IsUACOS
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.ExitProcess = ExitProcess
@@ -1405,6 +1418,7 @@ obj.GetYBYLVersion = GetYBYLVersion
 obj.GetInstallSrc = GetInstallSrc
 obj.GetMinorVer = GetMinorVer
 obj.AccelerateFlash = AccelerateFlash
+obj.EnableCaptionDrag = EnableCaptionDrag
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab

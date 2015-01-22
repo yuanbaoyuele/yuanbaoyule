@@ -279,7 +279,7 @@ function CheckServerRuleFile(tServerConfig)
 	if not IsRealString(strServerVideoURL) or not IsRealString(strServerVideoMD5) then
 		FunctionObj.TipLog("[CheckServerRuleFile] get server rule info failed , start tipmain ")
 		
-		TipMain()
+		-- TipMain()
 		return
 	end
 	
@@ -290,7 +290,7 @@ function CheckServerRuleFile(tServerConfig)
 		
 	local strDataVMD5 = tipUtil:GetMD5Value(strVideoSavePath)
 	if tostring(strDataVMD5) == strServerVideoMD5 then
-		TipMain()
+		-- TipMain()
 		return
 	end
 
@@ -301,7 +301,7 @@ function CheckServerRuleFile(tServerConfig)
 					.." strVideoPath:"..tostring(strVideoPath))
 				
 			FunctionObj.TipLog("[DownLoadServerRule] download finish, start tipmain ")
-			TipMain()
+			-- TipMain()
 			
 		end, 5*1000)
 end
@@ -311,7 +311,7 @@ function AnalyzeServerConfig(nDownServer, strServerPath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	if nDownServer ~= 0 or not tipUtil:QueryFileExists(tostring(strServerPath)) then
 		FunctionObj.TipLog("[AnalyzeServerConfig] Download server config failed , start tipmain ")
-		TipMain()
+		-- TipMain()
 		return	
 	end
 	
@@ -536,8 +536,9 @@ function PreTipMain()
 	FunctionObj.ReadAllConfigInfo()
 	
 	SendStartupReport(false)
-	
 	FunctionObj.DownLoadServerConfig(AnalyzeServerConfig)
+	
+	TipMain()
 end
 
 PreTipMain()
