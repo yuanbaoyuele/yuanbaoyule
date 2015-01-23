@@ -3,6 +3,7 @@
 		<attr>
 			<ItemTop>5</ItemTop>
 			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
 		</attr>
 		<children>
 			<obj id="CheckUpdate" class="MenuItemObject" templateid="menu.context.item">

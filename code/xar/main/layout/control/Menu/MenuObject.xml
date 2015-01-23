@@ -89,7 +89,6 @@
 						<event name="OnMouseWheel" file="MenuObject.xml.lua" func="RouteToFather" />
 					</eventlist>
 				</obj>
-				
 			</children>
 			
 			<eventlist>

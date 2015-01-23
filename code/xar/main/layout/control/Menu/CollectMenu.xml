@@ -4,6 +4,7 @@
 			<ItemTop>5</ItemTop>
 			<ItemLeft>6</ItemLeft> 
 			<ItemRight>10</ItemRight> 
+			<ItemBottom>-5</ItemBottom> 
 			<MenuType>collect</MenuType> 
 		</attr>
 		<children>
@@ -16,7 +17,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>260</width>
-			<height>278</height>
+			<height>290</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -24,7 +25,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>260</width>
-				<height>278</height>
+				<height>290</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">
