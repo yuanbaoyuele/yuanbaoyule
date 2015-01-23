@@ -35,7 +35,6 @@ function OnInitTipIntroduce(self)
 		self:SetObjPos(0, 0, "father.width", "father.height")
 		self:SetVisible(true)
 		self:SetChildrenVisible(true)
-		tFunHelper.RegDeleteValue(strRegPath)
 	else
 		self:SetVisible(false)
 		self:SetChildrenVisible(false)
