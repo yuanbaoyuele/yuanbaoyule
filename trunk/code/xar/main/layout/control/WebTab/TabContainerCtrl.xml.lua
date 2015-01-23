@@ -205,19 +205,19 @@ end
 function OpenURLInCurTab(objRootCtrl, strURL)
 	local objActiveTab = objRootCtrl:GetActiveTabCtrl()
 	if objActiveTab == nil or objActiveTab == 0 then
-		OpenURLInNewTab(objRootCtrl, strURL)
+		objRootCtrl:OpenURL(strURL,true)
 		return
 	end
 	
 	local objBrowser = objActiveTab:GetBindBrowserCtrl()
 	if not objBrowser then
-		OpenURLInNewTab(objRootCtrl, strURL)
+		objRootCtrl:OpenURL(strURL,true)
 		return
 	end
 
 	local objWebBrowCtrl = objBrowser:GetControlObject( "browser" )
 	if not objWebBrowCtrl then
-		OpenURLInNewTab(objRootCtrl, strURL)
+		objRootCtrl:OpenURL(strURL,true)
 		return
 	end
 	
