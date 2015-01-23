@@ -21,14 +21,13 @@ function OnInitControl(self)
 		strMenuItemID = "Accelerate0_"..tostring(nAccelerateRate*10)  --减速
 	end
 	
+	SetMenuItemIco(objMenuContainer)
+	
 	local objMenuItem = objMenuContainer:GetObject(strMenuItemID)
 	if not objMenuItem then
 		return
 	end
 	
-	-- local strText = objMenuItem:GetText()
-	-- strText = strText .. " （默认）"
-	-- objMenuItem:SetText(strText)
 	objMenuItem:SetIconVisible(true)
 	
 	local attr = self:GetAttribute()
@@ -130,6 +129,17 @@ function UpdateAccBtnText(self)
 end
 
 
+function SetMenuItemIco(objMenuContainer)
+	local nMenuItemCount = objMenuContainer:GetItemCount()
+	
+	for i=1, nMenuItemCount do
+		local objMenuItem = objMenuContainer:GetItem(i)
+		if objMenuItem then
+			local strIcoResID = objMenuItem:GetIconID() or ""
+			objMenuItem:SetIconID(strIcoResID)
+		end	
+	end
+end
 
 -----
 function IsRealString(str)

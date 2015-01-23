@@ -136,7 +136,7 @@
 	
 	<objtemplate class="MenuItemObject" id="menu.context.item">
 		<attr>
-			<height>30</height>
+			<height>32</height>
 			<width>father.width</width>
 			<TextPos>25</TextPos>
 			<Font>font.yahei12</Font>

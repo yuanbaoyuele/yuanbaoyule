@@ -1,9 +1,10 @@
 <xlue>
 	<objtemplate id="urlhistorymenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
+			<ItemTop>6</ItemTop>
 			<ItemLeft>6</ItemLeft> 
 			<ItemRight>10</ItemRight> 
+			<ItemBottom>-5</ItemBottom> 
 			<MenuType>urlhistory</MenuType> 
 		</attr>
 		<children>
@@ -16,7 +17,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>552</width>
-			<height>190</height>
+			<height>195</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -24,7 +25,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>552</width>
-				<height>190</height>
+				<height>195</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

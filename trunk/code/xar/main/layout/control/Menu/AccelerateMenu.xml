@@ -3,25 +3,26 @@
 		<attr>
 			<height>25</height>
 			<width>father.width</width>
-			<TextPos>25</TextPos>
+			<TextPos>20</TextPos>
 			<Font>font.yahei12</Font>
 			<Icon>YBYL.DropMenu.Check</Icon>
-			<IconPos>8</IconPos>
+			<IconPos>5</IconPos>
 			<IconVisible>false</IconVisible>
 			<FontColorNormal>ADACAA</FontColorNormal>
+			<TextRightSpan>0</TextRightSpan>
 		</attr>
 	</objtemplate>
 
 	<objtemplate id="acceleratemenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>10</ItemTop>
+			<ItemTop>12</ItemTop>
 			<ItemBottom>20</ItemBottom>
 			<ItemLeft>6</ItemLeft>
 		</attr>
 		<children>
 			<obj id="Accelerate1" class="MenuItemObject" templateid="droplist.context.item">
 				<attr>
-					<Text>游戏加速1x （默认）</Text>
+					<Text>游戏加速1x（默认）</Text>
 					<ExtraData>1</ExtraData>
 				</attr>
 				<eventlist>
@@ -136,7 +137,7 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>154</width>
+			<width>145</width>
 			<height>192</height>
 		</attr>
 		
@@ -144,7 +145,7 @@
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>154</width>
+				<width>145</width>
 				<height>192</height>
 			</attr>
 			<children>
@@ -152,7 +153,7 @@
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>154</width>
+						<width>father.width</width>
 						<height>father.height</height>
 					</attr>
 				</obj>

@@ -82,8 +82,8 @@ function SetShowType( self, type_ )
 			if separator ~= nil then
 				separator:SetResProvider(xarManager)
 				separator:SetDrawMode(1)
-				self:AddChild( separator )
-				separator:SetObjPos( "2", "(father.height - "..attr.SeparatorHeight..")/2", "father.width-1", "(father.height + "..attr.SeparatorHeight..")/2" )
+				self:AddChild( separator )			
+				separator:SetObjPos( "2", "(father.height - "..attr.SeparatorHeight..")/2", "father.width-1", "(father.height + "..attr.SeparatorHeight..")/2+1" )
 			end
 		end
 		if attr.Icon ~= nil then
