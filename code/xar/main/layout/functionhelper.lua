@@ -605,6 +605,27 @@ function GetCurrentURL()
 end
 
 
+function OpenURLWhenStup()
+	local strCmd = tipUtil:GetCommandLine()
+	
+	if string.find(strCmd, "/noopenstup") then
+		return
+	end
+	
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local tOpenStupURL = tUserConfig["tOpenStupURL"]
+	if type(tOpenStupURL) ~= "table" then
+		return
+	end
+	
+	for key, strURL in pairs(tOpenStupURL) do
+		if IsRealString(strURL) then
+			OpenURLInNewTab(strURL)
+		end
+	end
+end
+
+
 function OpenURLInNewTab(strURL)
 	if not IsRealString(strURL) then
 		return
@@ -1465,6 +1486,7 @@ obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
 obj.OpenURLInCurTab = OpenURLInCurTab
+obj.OpenURLWhenStup = OpenURLWhenStup
 obj.FormatURL = FormatURL
 obj.OpenURLInNewWindow = OpenURLInNewWindow
 obj.GetHomePage = GetHomePage

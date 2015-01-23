@@ -4,6 +4,11 @@ local g_nCurrentPage = 1
 
 function OnClickCloseBtn(self)
 	HideCtrl(self)
+	tFunHelper.OpenURLWhenStup()
+	
+	local strRegPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\ShowIntroduce"
+	local strValue = tFunHelper.RegQueryValue(strRegPath)
+	tFunHelper.RegDeleteValue(strRegPath)
 end
 
 
