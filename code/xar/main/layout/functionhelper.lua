@@ -96,16 +96,55 @@ function HideMainWindow()
 	end
 end
 
+
+local g_bHasExit = false
 function ReportAndExit()
 	local tStatInfo = {}
 	HideMainWindow()		
 	SendRunTimeReport(0, true)
 	
-	tStatInfo.strEC = "exit"	
-	tStatInfo.strEA = GetInstallSrc() or ""
-	tStatInfo.Exit = true
-			
-	TipConvStatistic(tStatInfo)
+	function FinalExit()
+		tStatInfo.strEC = "exit"	
+		tStatInfo.strEA = GetInstallSrc() or ""
+		tStatInfo.Exit = true
+		TipConvStatistic(tStatInfo)
+	end
+	
+	StartExitTimer(FinalExit)
+	
+	TryBeforeExit( function (bRet)
+		if g_bHasExit then
+			return
+		end
+		g_bHasExit = true
+		FinalExit()
+	end)
+end
+
+
+function StartExitTimer(fnFinalExit)
+	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
+	timeMgr:SetTimer(function(Itm, id)
+			Itm:KillTimer(id)
+
+			if g_bHasExit then
+				return
+			end
+			g_bHasExit = true
+			fnFinalExit()
+		end, 10 * 1000)
+end
+
+
+function TryBeforeExit(fnCallBack)
+	local tExtraHelper = XLGetGlobal("YBYL.ExtraHelper")
+	if type(tExtraHelper) == "table" 
+		and type(tExtraHelper.BeforeExit) == "function" then
+		tExtraHelper.BeforeExit(fnCallBack)
+		return
+	end
+	
+	fnCallBack(true)
 end
 
 
@@ -1245,7 +1284,7 @@ function DownLoadNewVersion(tNewVersionInfo, fnCallBack)
 
 	DownLoadFileWithCheck(strPacketURL, strSavePath, strMD5
 	, function(bRet, strRealPath)
-		TipLog("[DownLoadNewVersion] strOpenLink:"..tostring(strPacketURL)
+		TipLog("[DownLoadNewVersion] strPacketURL:"..tostring(strPacketURL)
 		        .."  bRet:"..tostring(bRet).."  strRealPath:"..tostring(strRealPath))
 				
 		if 0 == bRet then
@@ -1341,7 +1380,8 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 		return
 	end
 	
-	local strSavePath = GetCfgPathWithName("ServerConfig.dat")
+	local strFileName = GetFileSaveNameFromUrl(strConfigURL)
+	local strSavePath = GetCfgPathWithName(strFileName)
 	if not IsRealString(strSavePath) then
 		fnCallBack(-1)
 		return
@@ -1419,6 +1459,8 @@ obj.GetInstallSrc = GetInstallSrc
 obj.GetMinorVer = GetMinorVer
 obj.AccelerateFlash = AccelerateFlash
 obj.EnableCaptionDrag = EnableCaptionDrag
+obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
+obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
