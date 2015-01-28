@@ -1,14 +1,14 @@
 function GetSubTable()
 	local t = {
-		["strServerConfigURL"] = "", 
+		["strServerConfigURL"] = "http://www.91yuanbao.com/cm/YBYLServerConfig.dat", 
 		["nMaxUrlHistroy"] = 100, 
 		["bOpenFilter"] = false, 
 		["nAccelerateRate"] = 1, 
 		["nMaxUserCollect"] = 100, 
 		["tOpenStupURL"] = {
-			[1] = "www.hao123.com", 
+			[1] = "www.hao123.com/?tn=98632214_hao_pg", 
 		}, 
-		["strOpenTabURL"] = "www.baidu.com", 
+		["strOpenTabURL"] = "www.hao123.com/?tn=98632214_hao_pg", 
 	}
 	return t
 end
