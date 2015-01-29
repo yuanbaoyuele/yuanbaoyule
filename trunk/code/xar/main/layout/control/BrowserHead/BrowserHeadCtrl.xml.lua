@@ -72,7 +72,10 @@ function OnPosChange(self)
 	else
 		SetMaxBtnStyle(self, true)
 		tFunHelper.SetResizeEnable(true)
-		tFunHelper.EnableCaptionDrag(true)
+		
+		if not tFunHelper.IsBrowserFullScrn() then
+			tFunHelper.EnableCaptionDrag(true)
+		end
 	end
 	
 	SetToolTipPos(self)
