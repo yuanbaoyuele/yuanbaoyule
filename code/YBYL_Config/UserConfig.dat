@@ -1,6 +1,6 @@
 function GetSubTable()
 	local t = {
-		["strServerConfigURL"] = "http://www.91yuanbao.com/cm/YBYLServerConfig.dat", 
+		["strServerConfigURL"] = "http://www.91yuanbao.com/cmi/YBYLServerConfig.dat", 
 		["nMaxUrlHistroy"] = 100, 
 		["bOpenFilter"] = false, 
 		["nAccelerateRate"] = 1, 
