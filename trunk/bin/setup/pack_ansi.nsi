@@ -16,6 +16,8 @@ Var Txt_Browser
 Var Btn_Browser
 Var Edit_BrowserBg
 
+Var PB_ProgressBar
+
 Var ck_DeskTopLink
 Var Bool_DeskTopLink
 
@@ -48,8 +50,8 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "YBYL"
 !define SHORTCUT_NAME "元宝娱乐浏览器"
-!define PRODUCT_VERSION "1.0.0.1"
-!define VERSION_LASTNUMBER 1
+!define PRODUCT_VERSION "1.0.0.3"
+!define VERSION_LASTNUMBER 3
 !define NeedSpace 10240
 !define EM_OUTFILE_NAME "YBSetup_${INSTALL_CHANNELID}.exe"
 
@@ -87,14 +89,14 @@ SetDatablockOptimize on
 !insertmacro MUI_LANGUAGE "SimpChinese"
 SetFont 宋体 9
 !define TEXTCOLOR "4D4D4D"
-RequestExecutionLevel highest
+RequestExecutionLevel admin
 
 VIProductVersion ${PRODUCT_VERSION}
 VIAddVersionKey /LANG=2052 "ProductName" "${SHORTCUT_NAME}"
 VIAddVersionKey /LANG=2052 "Comments" ""
-VIAddVersionKey /LANG=2052 "CompanyName" "元宝娱乐科技有限公司"
+VIAddVersionKey /LANG=2052 "CompanyName" "深圳市新创基缘科技有限公司"
 ;VIAddVersionKey /LANG=2052 "LegalTrademarks" "YBYL"
-VIAddVersionKey /LANG=2052 "LegalCopyright" "Copyright (c) 2014-2016 元宝娱乐科技有限公司"
+VIAddVersionKey /LANG=2052 "LegalCopyright" "Copyright (c) 2014-2016 深圳市新创基缘科技有限公司"
 VIAddVersionKey /LANG=2052 "FileDescription" "${SHORTCUT_NAME}安装程序"
 VIAddVersionKey /LANG=2052 "FileVersion" ${PRODUCT_VERSION}
 VIAddVersionKey /LANG=2052 "ProductVersion" ${PRODUCT_VERSION}
@@ -155,16 +157,14 @@ Function Random
 FunctionEnd
 
 Function CloseExe
-	FindWindow $R0 "{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg"
-	${If} $R0 != 0
-		SendMessage $R0 1324 0 0
-	${EndIf}
+	StartKillProcess:
 	${For} $R3 0 3
 		FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
 		${If} $R3 == 3
 		${AndIf} $R0 != 0
-			KillProcDLL::KillProc "${PRODUCT_NAME}.exe"
+			Goto StartKillProcess
 		${ElseIf} $R0 != 0
+			KillProcDLL::KillProc "${PRODUCT_NAME}.exe"
 			Sleep 250
 		${Else}
 			${Break}
@@ -175,7 +175,7 @@ FunctionEnd
 Var Bool_IsUpdate
 Function DoInstall
   ;释放配置到public目录
-  /*SetOutPath "$TEMP\${PRODUCT_NAME}"
+  SetOutPath "$TEMP\${PRODUCT_NAME}"
   StrCpy $1 ${NSIS_MAX_STRLEN}
   StrCpy $0 ""
   System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetProfileFolder(t) i(.r0).r2' 
@@ -189,12 +189,15 @@ Function DoInstall
   MessageBox MB_ICONINFORMATION|MB_OK "很抱歉，发生了意料之外的错误,请尝试重新安装，如果还不行请到官方网站寻求帮助"
   Call OnClickQuitOK
  
+  IfFileExists "$0\YBYL\UserConfig.dat" 0 +3
+  IfFileExists "$0\YBYL\UserConfig.dat.bak" +2 0
+  Rename "$0\YBYL\UserConfig.dat" "$0\YBYL\UserConfig.dat.bak"
   SetOutPath "$0\YBYL"
-  File "input_config\YBYL\DataV.dat"
-  File "input_config\YBYL\DataW.dat"
+  SetOverwrite off
+  File "input_config\YBYL\*.dat"
   
   ;重命名
-  IfFileExists "$0\YBYL\VideoList.dat" 0 +3
+/*  IfFileExists "$0\YBYL\VideoList.dat" 0 +3
   IfFileExists "$0\YBYL\VideoList.dat.bak" +2 0
   Rename "$0\YBYL\VideoList.dat" "$0\YBYL\VideoList.dat.bak"
   IfFileExists "$0\YBYL\UserConfig.dat" 0 +3
@@ -211,6 +214,7 @@ Function DoInstall
   RMDir /r "$INSTDIR\program"
   RMDir /r "$INSTDIR\xar"
   RMDir /r "$INSTDIR\res"
+  RMDir /r "$INSTDIR\filterres"
   
   ;释放主程序文件到安装目录
   SetOutPath "$INSTDIR"
@@ -227,13 +231,15 @@ Function DoInstall
   
   ;上报统计
   SetOutPath "$TEMP\${PRODUCT_NAME}"
-  ${GetParameters} $R1
-  ${GetOptions} $R1 "/source"  $R0
+  System::Call "kernel32::GetCommandLineA() t.R1"
+  System::Call "kernel32::GetModuleFileName(i 0, t R2R2, i 256)"
+  ${WordReplace} $R1 $R2 "" +1 $R3
+  ${StrFilter} "$R3" "-" "" "" $R4
+  ${GetOptions} $R4 "/source"  $R0
   IfErrors 0 +2
   StrCpy $R0 $str_ChannelID
   ;是否静默安装
-  ${GetParameters} $R1
-  ${GetOptions} $R1 "/s"  $R2
+  ${GetOptions} $R4 "/s"  $R2
   StrCpy $R3 "0"
   IfErrors 0 +2
   StrCpy $R3 "1"
@@ -248,6 +254,7 @@ Function DoInstall
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstallSource" $str_ChannelID
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstDir" "$INSTDIR"
   System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetTime(*l) i(.r0).r1'
+  WriteRegStr "HKEY_CURRENT_USER" "Software\${PRODUCT_NAME}" "ShowIntroduce" "$0"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstallTimes" "$0"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "Path" "$INSTDIR\program\${PRODUCT_NAME}.exe"
   
@@ -271,8 +278,12 @@ Function DoInstall
 FunctionEnd
 
 Function CmdSilentInstall
-	${GetParameters} $R1
-	${GetOptions} $R1 "/s"  $R0
+	System::Call "kernel32::GetCommandLineA() t.R1"
+	System::Call "kernel32::GetModuleFileName(i 0, t R2R2, i 256)"
+	${WordReplace} $R1 $R2 "" +1 $R3
+	${StrFilter} "$R3" "-" "" "" $R4
+	${GetOptions} $R4 "/s"  $R0
+	
 	IfErrors FunctionReturn 0
 	SetSilent silent
 	ReadRegStr $0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstDir"
@@ -286,8 +297,11 @@ Function CmdSilentInstall
 		${If} $2 == "2" ;已安装的版本低于该版本
 			Goto StartInstall
 		${Else}
-			${GetParameters} $R1
-			${GetOptions} $R1 "/write"  $R0
+			System::Call "kernel32::GetCommandLineA() t.R1"
+			System::Call "kernel32::GetModuleFileName(i 0, t R2R2, i 256)"
+			${WordReplace} $R1 $R2 "" +1 $R3
+			${StrFilter} "$R3" "-" "" "" $R4
+			${GetOptions} $R4 "/write"  $R0
 			IfErrors 0 +2
 			Abort
 			Goto StartInstall
@@ -340,14 +354,14 @@ Function CmdSilentInstall
 	StrCpy $R0 "$DESKTOP\${SHORTCUT_NAME}.lnk"
 	Call RefreshIcon
 	;静默安装根据命令行开机启动
-	${GetParameters} $R1
-	${GetOptions} $R1 "/setboot"  $R0
+	System::Call "kernel32::GetCommandLineA() t.R1"
+	System::Call "kernel32::GetModuleFileName(i 0, t R2R2, i 256)"
+	${WordReplace} $R1 $R2 "" +1 $R3
+	${StrFilter} "$R3" "-" "" "" $R4
+	${GetOptions} $R4 "/setboot"  $R0
 	IfErrors +2 0
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "SOFTWARE\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" '"$INSTDIR\program\${PRODUCT_NAME}.exe" /embedding /ssartfrom sysboot'
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetTime(*l) i(.r0).r1'
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "ShowIntroduce" "$0"
-	${GetParameters} $R1
-	${GetOptions} $R1 "/run"  $R0
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "SOFTWARE\Microsoft\Windows\CurrentVersion\Run" "${PRODUCT_NAME}" '"$INSTDIR\program\${PRODUCT_NAME}.exe" /embedding /sstartfrom sysboot'
+	${GetOptions} $R4 "/run"  $R0
 	IfErrors +7 0
 	${If} $R0 == ""
 	${OrIf} $R0 == 0
@@ -460,17 +474,16 @@ Function UpdateChanel
 		Push "\"
 		Call GetLastPart
 		Pop $R1
-		${WordReplace} "$R1" "GsSetup_" "" "+" $R3
-		${WordReplace} "$R3" ".exe" "" "+" $R4
-		;MessageBox MB_ICONINFORMATION|MB_OK $R4
-		${If} $R4 == 0
-		${OrIf} $R4 == ""
+		;${WordReplace} "$R1" "GsSetup_" "" "+" $R3
+		${WordFind2X} "$R1" "_" "." -1 $R3
+		;MessageBox MB_ICONINFORMATION|MB_OK $R3
+		${If} $R3 == 0
+		${OrIf} $R3 == ""
 			StrCpy $str_ChannelID ${INSTALL_CHANNELID}
 		${ElseIf} $R1 == $R3
-		${OrIf} $R3 == $R4
 			StrCpy $str_ChannelID "unknown"
 		${Else}
-			StrCpy $str_ChannelID $R4
+			StrCpy $str_ChannelID $R3
 		${EndIf}
 	${EndIf}
 FunctionEnd
@@ -502,7 +515,7 @@ Function .onInit
 	File "input_main\program\ATL90.dll"
 	File "license\license.txt"
 	Call CmdSilentInstall
-	Call CmdUnstall
+	;Call CmdUnstall
 	
 	ReadRegStr $0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstDir"
 	${If} $0 != ""
@@ -527,10 +540,9 @@ Function .onInit
 	File "/oname=$PLUGINSDIR\img_installpos.bmp" "images\img_installpos.bmp"
 	
 	File "/oname=$PLUGINSDIR\bg2.bmp" "images\bg2.bmp"
-	File "/ONAME=$PLUGINSDIR\loading.gif" "images\loading.gif"
+	File "/ONAME=$PLUGINSDIR\loading2.bmp" "images\loading2.bmp"
 	File "/ONAME=$PLUGINSDIR\loadingbg.bmp" "images\loadingbg.bmp"
 	File "/ONAME=$PLUGINSDIR\img_installing.bmp" "images\img_installing.bmp"
-	File "/ONAME=$PLUGINSDIR\loading.htm" "images\loading.htm"
 	
 	File "/oname=$PLUGINSDIR\btn_return.bmp" "images\btn_return.bmp"
 	File "/oname=$PLUGINSDIR\quit.bmp" "images\quit.bmp"
@@ -653,14 +665,15 @@ FunctionEnd
 Function ClickSure2
 	ShowWindow $Hwnd_MsgBox ${SW_HIDE}
 	ShowWindow $HWNDPARENT ${SW_HIDE}
-	${If} $9 != 0
-		SendMessage $9 1324 0 0
+	${If} $R0 != 0
+		StartKillProcess:
 		${For} $R3 0 3
 			FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
 			${If} $R3 == 3
 			${AndIf} $R0 != 0
-				KillProcDLL::KillProc "${PRODUCT_NAME}.exe"
+				Goto StartKillProcess
 			${ElseIf} $R0 != 0
+				KillProcDLL::KillProc "${PRODUCT_NAME}.exe"
 				Sleep 250
 			${Else}
 				${Break}
@@ -676,8 +689,8 @@ Function ClickSure1
 	ShowWindow $HWNDPARENT ${SW_HIDE}
 	Sleep 100
 	;发退出消息
-	FindWindow $9 "{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg"
-	${If} $9 != 0
+	FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
+	${If} $R0 != 0
 		StrCpy $R6 "检测${PRODUCT_NAME}.exe正在运行，"
 		StrCpy $R8 "是否强制结束？"
 		GetFunctionAddress $R7 ClickSure2
@@ -692,8 +705,11 @@ Function CheckMessageBox
 	IfFileExists $0 0 StartInstall
 	${GetFileVersion} $0 $1
 	${VersionCompare} $1 ${PRODUCT_VERSION} $2
-	${GetParameters} $R1
-	${GetOptions} $R1 "/write"  $R0
+	System::Call "kernel32::GetCommandLineA() t.R1"
+	System::Call "kernel32::GetModuleFileName(i 0, t R2R2, i 256)"
+	${WordReplace} $R1 $R2 "" +1 $R3
+	${StrFilter} "$R3" "-" "" "" $R4
+	${GetOptions} $R4 "/write"  $R0
 	IfErrors 0 +3
 	push "false"
 	pop $R0
@@ -1226,9 +1242,7 @@ Function WelcomePage
 FunctionEnd
 
 Var Handle_Loading
-Var WebImg
 Var img_installing
-Var loadingbgWnd
 Function NSD_TimerFun
 	GetFunctionAddress $0 NSD_TimerFun
     nsDialogs::KillTimer $0
@@ -1293,9 +1307,8 @@ Function NSD_TimerFun
 	;最后才显示安装完成界面
 	HideWindow
 	ShowWindow $Handle_Loading ${SW_HIDE}
-	ShowWindow $WebImg ${SW_HIDE}
 	ShowWindow $img_installing ${SW_HIDE}
-	ShowWindow $loadingbgWnd ${SW_HIDE}
+	ShowWindow $PB_ProgressBar ${SW_HIDE}
 
 	ShowWindow $Btn_Guanbi ${SW_SHOW}
 	
@@ -1308,29 +1321,25 @@ FunctionEnd
 
 
 Function InstallationMainFun
+	SendMessage $PB_ProgressBar ${PBM_SETRANGE32} 0 100  ;总步长为顶部定义值
 	Sleep 100
 	Call CloseExe
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 28 315 488 13 0x40
+	SendMessage $PB_ProgressBar ${PBM_SETPOS} 2 0
 	Sleep 100
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 38 315 478 13 0x40
+    SendMessage $PB_ProgressBar ${PBM_SETPOS} 4 0
 	Sleep 100
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 48 315 468 13 0x40
+	SendMessage $PB_ProgressBar ${PBM_SETPOS} 7 0
     Sleep 100
-    ${NSW_SetWindowPosEx} $loadingbgWnd 0 68 315 448 13 0x40
+    SendMessage $PB_ProgressBar ${PBM_SETPOS} 14 0
     Sleep 100
-    ${NSW_SetWindowPosEx} $loadingbgWnd 0 88 315 428 13 0x40
+    SendMessage $PB_ProgressBar ${PBM_SETPOS} 27 0
     Call DoInstall
-    ${NSW_SetWindowPosEx} $loadingbgWnd 0 128 315 388 13 0x40
+    SendMessage $PB_ProgressBar ${PBM_SETPOS} 50 0
     Sleep 100
-    ${NSW_SetWindowPosEx} $loadingbgWnd 0 208 315 308 13 0x40
+    SendMessage $PB_ProgressBar ${PBM_SETPOS} 73 0
     Sleep 100
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 288 315 228 13 0x40
-    Sleep 100
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 368 315 148 13 0x40
-    Sleep 100
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 448 315 68 13 0x40
-    Sleep 100
-    ${NSW_SetWindowPosEx} $loadingbgWnd 0 488 315 0 13 0x40
+    SendMessage $PB_ProgressBar ${PBM_SETPOS} 100 0
+	Sleep 1000
 FunctionEnd
 
 Function OnClick_FreeUse
@@ -1366,19 +1375,10 @@ Function LoadingPage
     Pop $img_installing
     ${NSD_SetImage} $img_installing $PLUGINSDIR\img_installing.bmp $ImageHandle
     
-	${NSD_CreateBitmap} 18 315 498 13 ""
-    Pop $loadingbgWnd
-    ${NSD_SetImage} $loadingbgWnd $PLUGINSDIR\loadingbg.bmp $ImageHandle
-	${NSW_SetWindowPosEx} $loadingbgWnd 0 18 315 498 13 0x40
 	
-	System::Call "*(i,i,i,i)i(18,313,498,22).R0"
-    System::Call "user32::MapDialogRect(i$HWNDPARENT,iR0)"
-    System::Call "*$R0(i.s,i.s,i.s,i.s)"
-    System::Free $R0
-    FindWindow $R0 "#32770" "" $HWNDPARENT
-    System::Call "user32::CreateWindowEx(i,t'STATIC',in,i${DEFAULT_STYLES}|${SS_BLACKRECT},i18,i313,i498,i22,iR0,i1100,in,in)i.R0"
-    StrCpy $WebImg $R0
-    WebCtrl::ShowWebInCtrl $WebImg "$PLUGINSDIR/loading.htm"
+	${NSD_CreateProgressBar} 18 315 498 13 ""
+    Pop $PB_ProgressBar
+    SkinProgress::Set $PB_ProgressBar "$PLUGINSDIR\loading2.bmp" "$PLUGINSDIR\loadingbg.bmp"
 	
 	GetFunctionAddress $0 NSD_TimerFun
     nsDialogs::CreateTimer $0 1
@@ -1555,46 +1555,14 @@ Function un.Random
 	Exch $0
 FunctionEnd
 
-
-Function un.DeleteConfigFile
-	StrCpy $1 ${NSIS_MAX_STRLEN}
-	StrCpy $0 ""
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetProfileFolder(t) i(.r0).r2' 
-	${If} $0 == ""
-		Goto EndFun
-	${EndIf}
-
-	IfFileExists "$0\YBYL\UserConfig.dat" 0 +2
-	Delete "$0\YBYL\UserConfig.dat"
-	
-	IfFileExists "$0\YBYL\UserConfig.dat.bak" 0 +2
-	Delete "$0\YBYL\UserConfig.dat.bak"
-
-	EndFun:	
-FunctionEnd
-
-
 Function un.DoUninstall
 	;删除
 	RMDir /r "$INSTDIR\xar"
 	Delete "$INSTDIR\uninst.exe"
 	RMDir /r "$INSTDIR\program"
 	RMDir /r "$INSTDIR\res"
-
-	;删除配置文件
-	Call un.DeleteConfigFile
+	RMDir /r "$INSTDIR\filterres"
 	
-	 ;文件被占用则改一下名字
-	StrCpy $R4 "$INSTDIR\program\GsNet32.dll"
-	IfFileExists $R4 0 RenameOK
-	BeginRename:
-	Push "1000" 
-	Call un.Random
-	Pop $0
-	IfFileExists "$R4.$0" BeginRename
-	Rename $R4 "$R4.$0"
-	Delete /REBOOTOK "$R4.$0"
-	RenameOK:
 	
 	StrCpy "$R0" "$INSTDIR"
 	System::Call 'Shlwapi::PathIsDirectoryEmpty(t R0)i.s'
@@ -1649,10 +1617,6 @@ Function un.OnClick_CruelRefused
 	File "bin\YBSetUpHelper.dll"
 	IfFileExists "$TEMP\${PRODUCT_NAME}\YBSetUpHelper.dll" 0 +3
 	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "uninstall", t "${VERSION_LASTNUMBER}", t "$str_ChannelID", i 1) '
-	FindWindow $R0 "{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg"
-	${If} $R0 != 0
-		SendMessage $R0 1324 0 0
-	${EndIf}
 	${For} $R3 0 3
 		FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
 		${If} $R3 == 3
@@ -1759,7 +1723,7 @@ Function un.GsMessageBox
 	SkinBtn::Set /IMGID=$PLUGINSDIR\btn_quitsure.bmp $1
 	SkinBtn::onClick $1 $R7
 
-	${NSD_CreateButton} 250 140 80 ''
+	${NSD_CreateButton} 250 140 80 26 ''
 	Pop $btn_MsgBoxCancel
 	StrCpy $1 $btn_MsgBoxCancel
 	SkinBtn::Set /IMGID=$PLUGINSDIR\btn_quitreturn.bmp $1
@@ -1808,15 +1772,14 @@ Function un.GsMessageBox
 FunctionEnd
 
 Function un.ClickSure
-	${If} $R0 != 0
-		SendMessage $R0 1324 0 0
-	${EndIf}
+	StartKillProcess:
 	${For} $R3 0 3
 		FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
 		${If} $R3 == 3
 		${AndIf} $R0 != 0
-			KillProcDLL::KillProc "${PRODUCT_NAME}.exe"
+			Goto StartKillProcess
 		${ElseIf} $R0 != 0
+			KillProcDLL::KillProc "${PRODUCT_NAME}.exe"
 			Sleep 250
 		${Else}
 			${Break}
@@ -1830,7 +1793,7 @@ Function un.MyUnstallMsgBox
 	push $0
 	call un.myGUIInit
 	;发退出消息
-	FindWindow $R0 "{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg"
+	FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
 	${If} $R0 != 0
 		StrCpy $R6 "检测${PRODUCT_NAME}.exe正在运行，"
 		StrCpy $R8 "是否强制结束？"
