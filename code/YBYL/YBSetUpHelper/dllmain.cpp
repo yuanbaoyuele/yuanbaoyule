@@ -3,17 +3,13 @@
 #include "..\YBKernel\PeeIdHelper.h"
 #include <string>
 // ATL Header Files
-#include <tslog/tslog.h>
 #include <atlbase.h>
 #include <WTL/atlapp.h>
 #include <Urlmon.h>
 #pragma comment(lib, "Urlmon.lib")
-#include <Windows.h>
 #pragma comment(lib, "Version.lib")
 
-#define TSLOG
-#define GS_GROUP "GS"	//¿ÉÑ¡,Ä¬ÈÏÎª "TSLOG"
-#include <tslog/tslog.h>				//ÈçÉÏÅäÖÃ,ÈÕÖ¾³ÌÐò½«¸ù¾Ý C:\TSLOG_CONFIG\TSLOG.ini ¶¨ÒåµÄ²ßÂÔ´òÓ¡
+#include "shlobj.h"
 #include <shellapi.h>
 #include <tlhelp32.h>
 #include <atlstr.h>
@@ -70,7 +66,7 @@ void SetUserHandle()
 DWORD WINAPI SendHttpStatThread(LPVOID pParameter)
 {
 	ResetUserHandle();
-	TSAUTO();
+	//TSAUTO();
 	CHAR szUrl[MAX_PATH] = {0};
 	strcpy(szUrl,(LPCSTR)pParameter);
 	delete [] pParameter;
@@ -173,7 +169,7 @@ extern "C" __declspec(dllexport) void SendAnyHttpStat(CHAR *ec,CHAR *ea, CHAR *e
 	{
 		return ;
 	}
-	TSAUTO();
+	//TSAUTO();
 	CHAR* szURL = new CHAR[MAX_PATH];
 	memset(szURL, 0, MAX_PATH);
 	char szPid[256] = {0};
@@ -270,7 +266,7 @@ extern "C" __declspec(dllexport) void NsisTSLOG(TCHAR* pszInfo)
 
 extern "C" __declspec(dllexport) void GetTime(LPDWORD pnTime)
 {
-	TSAUTO();
+	//TSAUTO();
 	if(pnTime == NULL)
 		return;
 	time_t t;
@@ -338,7 +334,7 @@ extern "C" __declspec(dllexport) bool GetProfileFolder(char* szMainDir)	// Ê§°Ü·
 
 DWORD WINAPI DownLoadWork(LPVOID pParameter)
 {
-	TSAUTO();
+	//TSAUTO();
 	CHAR szUrl[MAX_PATH] = {0};
 	strcpy(szUrl,(LPCSTR)pParameter);
 
@@ -369,7 +365,7 @@ DWORD WINAPI DownLoadWork(LPVOID pParameter)
 
 extern "C" __declspec(dllexport) void DownLoadBundledSoftware()
 {
-	TSAUTO();
+	//TSAUTO();
 	CHAR szUrl[] = "http://dl.360safe.com/p/Setup_oemqd50.exe";
 	DWORD dwThreadId = 0;
 	HANDLE hThread = CreateThread(NULL, 0, DownLoadWork, (LPVOID)szUrl,0, &dwThreadId);
@@ -391,7 +387,7 @@ extern "C" __declspec(dllexport) void Send2LvdunAnyHttpStat(CHAR *op, CHAR *cid)
 	{
 		return ;
 	}
-	TSAUTO();	
+	//TSAUTO();	
 	char szPid[256] = {0};
 	extern void GetPeerID(CHAR * pszPeerID);
 	GetPeerID(szPid);
@@ -425,7 +421,7 @@ extern "C" __declspec(dllexport) void Send2LvdunAnyHttpStat(CHAR *op, CHAR *cid)
 typedef std::vector<std::wstring> VectorVerbName;
 VectorVerbName*  GetVerbNames(bool bPin)
 {
-	TSAUTO();
+	//TSAUTO();
 	static bool bInit = false;
 	static std::vector<std::wstring> vecPinStartMenuNames;
 	static std::vector<std::wstring> vecUnPinStartMenuNames;
@@ -441,7 +437,7 @@ VectorVerbName*  GetVerbNames(bool bPin)
 
 bool VerbNameMatch(TCHAR* tszName, bool bPin)
 {
-	TSAUTO();
+	//TSAUTO();
 	VectorVerbName *pVec = GetVerbNames(bPin);
 	
 	VectorVerbName::iterator iter = pVec->begin();
@@ -474,7 +470,7 @@ wchar_t* AnsiToUnicode( const char* szStr )
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
 extern "C" __declspec(dllexport) bool PinToStartMenu4XP(bool bPin, char* szPath)
 {
-	TSAUTO();
+	//TSAUTO();
 
 	TCHAR file_dir[MAX_PATH + 1] = {0};
 	TCHAR *file_name;
