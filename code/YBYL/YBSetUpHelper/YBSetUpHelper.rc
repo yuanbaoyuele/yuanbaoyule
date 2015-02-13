@@ -72,6 +72,7 @@ BEGIN
             VALUE "FileDescription", "YBSetUpHelper Module"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "YBSetUpHelper"
+            VALUE "LegalCopyright", "Copyright (C) 2014"
             VALUE "OriginalFilename", "YBSetUpHelper.dll"
             VALUE "ProductName", "‘™±¶”È¿÷‰Ø¿¿∆˜"
             VALUE "ProductVersion", "1, 0, 0, 1"
