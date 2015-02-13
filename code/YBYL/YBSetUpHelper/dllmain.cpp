@@ -226,7 +226,7 @@ extern "C" __declspec(dllexport) void GetFileVersionString(CHAR* pszFileName, CH
 extern "C" __declspec(dllexport) void GetPeerID(CHAR * pszPeerID)
 {
 	HKEY hKEY;
-	LPCSTR data_Set= "Software\\GreenShield";
+	LPCSTR data_Set= "Software\\YBYL";
 	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_LOCAL_MACHINE,data_Set,0,KEY_READ,&hKEY))
 	{
 		char szValue[256] = {0};
@@ -248,7 +248,7 @@ extern "C" __declspec(dllexport) void GetPeerID(CHAR * pszPeerID)
 	HKEY hKey, hTempKey;
 	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software",0,KEY_SET_VALUE, &hKey))
 	{
-		if (ERROR_SUCCESS == ::RegCreateKeyA(hKey, "GreenShield", &hTempKey))
+		if (ERROR_SUCCESS == ::RegCreateKeyA(hKey, "YBYL", &hTempKey))
 		{
 			::RegSetValueExA(hTempKey, "PeerId", 0, REG_SZ, (LPBYTE)pszPeerID, strlen(pszPeerID)+1);
 		}
