@@ -64,6 +64,11 @@ BOOL YbSetHook()
 	return TRUE;
 }
 
+VOID GsEnableRedirect(BOOL bEnable)
+{
+	HttpRequestFilter::GetInstance().EnableRedirect(bEnable == FALSE ? false : true);
+}
+
 BOOL YbSetWebRoot(const wchar_t* root_path)
 {
 	HttpRequestHandler::SetWebRoot(root_path);
@@ -117,4 +122,13 @@ bool YbGetUsersRules(const std::wstring& filename)
 	}
 	//return m->getUsersRules(filename);
 	return false;
+}
+
+bool GsGetRedirectRules(const std::wstring& filename)
+{
+	FilterManager* m = FilterManager::getManager();
+	if(m == NULL) {
+		return false;
+	}
+	return m->getRedirectRules(filename);
 }
