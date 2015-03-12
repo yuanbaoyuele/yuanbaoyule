@@ -1,9 +1,8 @@
 <xlue>
 	<objtemplate id="editmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<obj id="Cut" class="MenuItemObject" templateid="menu.context.item">

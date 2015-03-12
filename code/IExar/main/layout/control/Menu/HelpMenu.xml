@@ -1,9 +1,8 @@
 <xlue>
 	<objtemplate id="helpmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> <!--阴影-->
 		</attr>
 		<children>
 			<obj id="Help" class="MenuItemObject" templateid="menu.context.item">
@@ -74,7 +73,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>250</width>
-			<height>120</height>
+			<height>130</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -82,7 +81,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>250</width>
-				<height>120</height>
+				<height>130</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

@@ -80,11 +80,11 @@ end
 -----事件----
 --背景框
 function OnMouseEnterBkg(self)
-	self:SetTextureID("YBYL.AddressBar.UrlSearch.Bkg.Hover")
+	
 end
 
 function OnMouseLeaveBkg(self)
-	self:SetTextureID("YBYL.AddressBar.UrlSearch.Bkg.Normal")
+	
 end
 
 

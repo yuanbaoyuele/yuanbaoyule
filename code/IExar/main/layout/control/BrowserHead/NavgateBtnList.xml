@@ -14,40 +14,51 @@
 		
 		<objtemplate>
 			<children>
-				<obj id="NavgateBtnList.GobackBtn" class="TipAddin.Button">
+				
+				<obj id="NavgateBtnList.Bkg" class="ImageObject">
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>30</width>
-						<height>30</height>
-						<NormalBkgID>YBYL.Head.GoBack.Normal</NormalBkgID>
-						<DownBkgID>YBYL.Head.GoBack.Down</DownBkgID>
-						<HoverBkgID>YBYL.Head.GoBack.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.Head.GoBack.Disable</DisableBkgID>
-						<Enable>false</Enable>
+						<width>57</width>
+						<height>29</height>
+						<image>NavBtn.Bkg.png</image>
 					</attr>
-					<eventlist>
-						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGobackBtn" />
-					</eventlist>
+					<children>
+						<obj id="NavgateBtnList.GobackBtn" class="TipAddin.Button">
+							<attr>
+								<left>2</left>
+								<top>2</top>
+								<width>25</width>
+								<height>25</height>
+								<NormalBkgID>YBYL.Head.GoBack.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.GoBack.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.GoBack.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.GoBack.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGobackBtn" />
+							</eventlist>
+						</obj>
+						
+						<obj id="NavgateBtnList.GoForwardBtn" class="TipAddin.Button">
+							<attr>
+								<left>5+25</left>
+								<top>1</top>
+								<width>25</width>
+								<height>26</height>
+								<NormalBkgID>YBYL.Head.GoForward.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.GoForward.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.GoForward.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.GoForward.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGoForwardBtn" />
+							</eventlist>
+						</obj>
+					</children>
 				</obj>
-				
-				<obj id="NavgateBtnList.GoForwardBtn" class="TipAddin.Button">
-					<attr>
-						<left>7+30</left>
-						<top>0</top>
-						<width>30</width>
-						<height>30</height>
-						<NormalBkgID>YBYL.Head.GoForward.Normal</NormalBkgID>
-						<DownBkgID>YBYL.Head.GoForward.Down</DownBkgID>
-						<HoverBkgID>YBYL.Head.GoForward.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.Head.GoForward.Disable</DisableBkgID>
-						<Enable>false</Enable>
-					</attr>
-					<eventlist>
-						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGoForwardBtn" />
-					</eventlist>
-				</obj>
-				
 			</children>
 			<eventlist>
 			</eventlist>

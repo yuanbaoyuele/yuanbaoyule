@@ -49,8 +49,8 @@ end
 -- 遍历当前菜单项，从上到下设置每项菜单项的位置
 function AdjustItemPos( self )
 	local attr = self:GetAttribute()
-	local pos_x = attr.ItemLeft
-	local pos_y = attr.ItemTop
+	local pos_x = attr.ItemLeft or 0
+	local pos_y = attr.ItemTop or 0
 	local pos_shadowW = attr.ShadowBkgWidth
 	local pos_shadowH = attr.ShadowBkgHeight
 	
@@ -69,7 +69,7 @@ function AdjustItemPos( self )
 	
 	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
 	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom+pos_shadowH )
-		
+
 	if attr.HoverItem then
 		local itembkn = self:GetControlObject("ItemBkn")
 		local left, top, right, bottom = attr.HoverItem:GetObjPos()

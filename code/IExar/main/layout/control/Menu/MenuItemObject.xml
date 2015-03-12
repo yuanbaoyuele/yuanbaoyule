@@ -26,10 +26,10 @@
 			<attr name="ExtraData" type="string" />
 						
 			<attr name="NormalArrow" type="string" desc="如果存在子菜单时的箭头图标" >
-				<default>YBYL.SubMenu.Arrow</default>
+				<default>SubMenu.Arrow.Normal</default>
 			</attr>
 			<attr name="HoverArrow" type="string" >
-				<!--default>bitmap.menu.arrow.hover</default-->
+				<default>SubMenu.Arrow.Hover</default>
 			</attr>
 			<attr name="Font" type="string">
 			</attr>

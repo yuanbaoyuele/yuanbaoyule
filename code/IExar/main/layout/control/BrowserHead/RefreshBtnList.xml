@@ -18,8 +18,8 @@
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>30</width>
-						<height>30</height>
+						<width>22</width>
+						<height>22</height>
 						<NormalBkgID>YBYL.Head.Refresh.Normal</NormalBkgID>
 						<DownBkgID>YBYL.Head.Refresh.Down</DownBkgID>
 						<HoverBkgID>YBYL.Head.Refresh.Hover</HoverBkgID>
@@ -33,10 +33,10 @@
 			
 				<obj id="RefreshBtnList.StopBtn" class="TipAddin.Button">
 					<attr>
-						<left>37</left>
+						<left>27</left>
 						<top>0</top>
-						<width>30</width>
-						<height>30</height>
+						<width>22</width>
+						<height>22</height>
 						<NormalBkgID>YBYL.Head.Stop.Normal</NormalBkgID>
 						<DownBkgID>YBYL.Head.Stop.Down</DownBkgID>
 						<HoverBkgID>YBYL.Head.Stop.Hover</HoverBkgID>

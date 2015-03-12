@@ -4,10 +4,10 @@
 			<attr name="BknID" type="string" />
 			<attr name="ShadingID" type="string" />
 			<attr name="ItemLeft" type="int" desc="菜单条左边空白">
-				<default>0</default>
+				<default>3</default>
 			</attr>
 			<attr name="ItemTop" type="int" desc="菜单条顶层空白">
-				<default>0</default>
+				<default>3</default>
 			</attr>
 			<attr name="ItemRight" type="int" desc="菜单条右边空白">
 				<default>0</default>
@@ -16,10 +16,10 @@
 				<default>0</default>
 			</attr>
 			<attr name="ShadowBkgWidth" type="int" desc="背景阴影宽度">
-				<default>13</default>
+				<default>6</default>
 			</attr>
 			<attr name="ShadowBkgHeight" type="int" desc="背景阴影高度">
-				<default>2</default>
+				<default>3</default>
 			</attr>
 			<attr name="MenuType" type="string" />  <!--"collect" :收藏菜单  "urlhistory": url历史-->
 		</attr_def>

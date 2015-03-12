@@ -11,14 +11,14 @@
 		<texture id="YBYL.DropMenu.ItemBkg.Normal" type="NineInOne" image="bitmap\YBYL.DropMenu.ItemBkg.Normal.png" />
 		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
-		<!--texture id="YBYL.Menu.Select2.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" /-->
 		<texture id="YBYL.Menu.Select.Bkg"  image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
 		<texture id="YBYL.TipAbout.Bkg" image="bitmap\YBYL.TipAbout.Bkg.png" />
 		<texture id="YBYL.ToolTip.Bkg" type="ThreeInOneH" image="bitmap\YBYL.ToolTip.Bkg.png" />
 		<texture id="YBYL.Menu.Splitter" image="bitmap\YBYL.Menu.Splitter.Bkg.png" />
 		<texture id="YBYL.TitleBar.Bkg" image="bitmap\YBYL.TitleBar.Bkg.png" />
-	
+		<texture id="YBYL.AddressBar.UrlSearch.Bkg" type="ThreeInOneH" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png" />
+		
 		<texture id="YBYL.IntroduceWnd.Bkg" type="NineInOne" image="bitmap\YBYL.IntroduceWnd.Bkg.png" />
 		<texture id="YBYL.IntroduceWnd.Panel1"  image="bitmap\YBYL.IntroduceWnd.Panel1.png" />
 		<texture id="YBYL.IntroduceWnd.Panel2"  image="bitmap\YBYL.IntroduceWnd.Panel2.png" />
@@ -35,13 +35,24 @@
 		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
 		<bitmap id="YBYL.UrlIco.Default" path="bitmap\YBYL.Head.Logo.Default.png" />
 		<bitmap id="YBYL.DropMenu.Check" path="bitmap\YBYL.DropMenu.Check.png" />
+		<bitmap id="Title.Logo" path="bitmap\Title.Logo.png" />
+		<bitmap id="NavBtn.Bkg.png" path="bitmap\NavBtn.Bkg.png" />
+		<bitmap id="SubMenu.Arrow.Normal" path="bitmap\SubMenu.Arrow.Normal.png"/>
+		<bitmap id="SubMenu.Arrow.Hover" path="bitmap\SubMenu.Arrow.Hover.png"/>
+		
 <bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 <bitmap id="collect.file.defaluticon" path="bitmap\collect.file.defaluticon.png" />
-<imagelist id="bitmap.search.imagelist" vertical="0" splitter="1" varyblock="0" blocksize="16" image="bitmap\Search_button.png"/>
-<texture id="bitmap.search.normal" imagelist="bitmap.search.imagelist" index="1"/>
-<texture id="bitmap.search.hover" imagelist="bitmap.search.imagelist" index="2"/>
-<texture id="bitmap.search.down" imagelist="bitmap.search.imagelist" index="3"/>
 
+		<imagelist id="bitmap.search.imagelist" splitter="1" varyblock="1" image="bitmap\Search_button.png"/>
+			<texture id="bitmap.search.normal" imagelist="bitmap.search.imagelist" index="1"/>
+			<texture id="bitmap.search.hover" imagelist="bitmap.search.imagelist" index="2"/>
+			<texture id="bitmap.search.down" imagelist="bitmap.search.imagelist" index="3"/>
+
+		<imagelist id="SearchBox.DropArrow.imagelist" splitter="1" varyblock="1" image="bitmap\SearchBox.DropArrow.png"/>
+			<texture id="SearchBox.DropArrow.Normal" imagelist="SearchBox.DropArrow.imagelist" index="1"/>
+			<texture id="SearchBox.DropArrow.Hover" imagelist="SearchBox.DropArrow.imagelist" index="2"/>
+			<texture id="SearchBox.DropArrow.Down" imagelist="SearchBox.DropArrow.imagelist" index="3"/>
+			
 <imagelist id="imagelist.search.edit.imagelist" vertical="0" splitter="1" varyblock="1" image="bitmap\imagelist.edit.png"/>
 <texture id="texture.edit.bkg.disable" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="10"/>
 <texture id="texture.edit.bkg.normal" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="11"/>
@@ -104,10 +115,8 @@
 			<texture id="YBYL.AddressBarCtrl.DropArrow.Normal" imagelist="YBYL.AddressBarCtrl.DropArrow" index="1" />
 			<texture id="YBYL.AddressBarCtrl.DropArrow.Hover"  imagelist="YBYL.AddressBarCtrl.DropArrow" index="2" />
 			<texture id="YBYL.AddressBarCtrl.DropArrow.Down"   imagelist="YBYL.AddressBarCtrl.DropArrow" index="3" />
-			<texture id="YBYL.AddressBarCtrl.DropArrow.Disable"   imagelist="YBYL.AddressBarCtrl.DropArrow" index="4" />
+			<texture id="YBYL.AddressBarCtrl.DropArrow.Disable"   imagelist="YBYL.AddressBarCtrl.DropArrow" index="1" />
 		
-			<bitmap id="YBYL.SubMenu.Arrow"   imagelist="YBYL.AddressBarCtrl.DropArrow" index="1" />
-			
 		<imagelist id="YBYL.Tab.AddNew" splitter="1" varyblock="1" image="bitmap\YBYL.Tab.AddNew.png"/>
 			<texture id="YBYL.Tab.AddNew.Normal" imagelist="YBYL.Tab.AddNew" index="1" />
 			<texture id="YBYL.Tab.AddNew.Hover"  imagelist="YBYL.Tab.AddNew" index="2" />
@@ -131,10 +140,6 @@
 			<texture id="YBYL.TabContainer.FullScrn.Hover"  imagelist="YBYL.TabContainer.FullScrn" index="2" />
 			<texture id="YBYL.TabContainer.FullScrn.Down"   imagelist="YBYL.TabContainer.FullScrn" index="3" />
 			<texture id="YBYL.TabContainer.FullScrn.Disable"   imagelist="YBYL.TabContainer.FullScrn" index="4" />
-	
-		<imagelist id="YBYL.AddressBar.UrlSearch.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png"/>
-			<texture id="YBYL.AddressBar.UrlSearch.Bkg.Normal" type="ThreeInOneH"  imagelist="YBYL.AddressBar.UrlSearch.Bkg" index="1" />
-			<texture id="YBYL.AddressBar.UrlSearch.Bkg.Hover" type="ThreeInOneH" imagelist="YBYL.AddressBar.UrlSearch.Bkg" index="2" />
 		
 		<imagelist id="YBYL.AddressBar.Collect" splitter="1" varyblock="1" image="bitmap\YBYL.AddressBar.Collect.png"/>
 			<texture id="YBYL.AddressBar.Collect.Normal" imagelist="YBYL.AddressBar.Collect" index="1" />
@@ -164,13 +169,13 @@
 			<texture id="YBYL.Head.Refresh.Normal" imagelist="YBYL.Head.Refresh" index="1" />
 			<texture id="YBYL.Head.Refresh.Hover"  imagelist="YBYL.Head.Refresh" index="2" />
 			<texture id="YBYL.Head.Refresh.Down"   imagelist="YBYL.Head.Refresh" index="3" />
-			<texture id="YBYL.Head.Refresh.Disable"   imagelist="YBYL.Head.Refresh" index="4" />			
+			<texture id="YBYL.Head.Refresh.Disable"   imagelist="YBYL.Head.Refresh" index="1" />			
 	
 		<imagelist id="YBYL.Head.Stop" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Stop.png"/>
 			<texture id="YBYL.Head.Stop.Normal" imagelist="YBYL.Head.Stop" index="1" />
 			<texture id="YBYL.Head.Stop.Hover"  imagelist="YBYL.Head.Stop" index="2" />
 			<texture id="YBYL.Head.Stop.Down"   imagelist="YBYL.Head.Stop" index="3" />
-			<texture id="YBYL.Head.Stop.Disable"   imagelist="YBYL.Head.Stop" index="4" />	
+			<texture id="YBYL.Head.Stop.Disable"   imagelist="YBYL.Head.Stop" index="1" />	
 			
 		<imagelist id="YBYL.Head.Logo.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Logo.Bkg.png"/>
 			<texture id="YBYL.Head.Logo.Bkg.Normal" imagelist="YBYL.Head.Logo.Bkg" index="1" />

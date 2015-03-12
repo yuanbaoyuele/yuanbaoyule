@@ -71,25 +71,29 @@ end
 
 
 function OnMouseEnterMenuItem(self)
-	ShowMenuItemBkg(self, true, "YBYL.Head.Collect.Sel.Normal")
+	FocusOnItem(self, true)
 end
 
 
 function OnLButtonDownMenuItem(self)
 	-- self:SetCaptureMouse(true)
-	ShowMenuItemBkg(self, true, "YBYL.Head.Collect.Sel.Hover")
+	FocusOnItem(self, true)
 end
 
 
 function OnMouseLeaveMenuItem(self)
-	ShowMenuItemBkg(self, false, "")
+	FocusOnItem(self, false)
 end
 
+
+function OnFocusMenuItem(self, bFocus)
+	FocusOnItem(self, bFocus)
+end
 
 ------
 --对同一个菜单按钮连续点击时，点击次数为偶数则不显示菜单
 function PopupMenu(objMenuBtn, nTopSpan, strMenuName, tMenuOpenFlag)
-	ShowMenuItemBkg(objMenuBtn, true, "YBYL.Head.Collect.Sel.Normal")
+	FocusOnItem(objMenuBtn, true)
 	
 	if type(tMenuOpenFlag) ~= "table" then
 		tMenuOpenFlag = {}
@@ -103,6 +107,7 @@ function PopupMenu(objMenuBtn, nTopSpan, strMenuName, tMenuOpenFlag)
 	tFunHelper.TryDestroyOldMenu(objMenuBtn, strMenuName)
 	tFunHelper.CreateAndShowMenu(objMenuBtn, strMenuName, nTopSpan)
 	
+	FocusOnItem(objMenuBtn, false)
 	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
 	if tMenuOpenFlag.hTimer then
 		timeMgr:KillTimer(tMenuOpenFlag.hTimer)
@@ -153,6 +158,17 @@ function ShowMenuItemBkg(objMenuItem, bShow, strTextureID)
 	objBkg:SetVisible(bShow)
 	if IsRealString(strTextureID) then
 		objBkg:SetTextureID(strTextureID)
+	end
+end
+
+
+function FocusOnItem(objItem, bOnFocus)
+	if bOnFocus then
+		ShowMenuItemBkg(objItem, true, "YBYL.Menu.Select.Bkg")
+		objItem:SetTextColorResID("system.white")
+	else
+		ShowMenuItemBkg(objItem, false, "")
+		objItem:SetTextColorResID("color.menubar.text")
 	end
 end
 

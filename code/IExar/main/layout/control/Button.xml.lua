@@ -60,7 +60,7 @@ function Enable(self, enable)
 		attr.CaptrueMouse = false
 		text:SetTextColorResID(attr.DisableTextColor)
 	else
-		self:SetCursorID("IDC_HAND")
+		-- self:SetCursorID("IDC_HAND")
 		self:SetState(0, false, true)
 		text:SetTextColorResID(attr.TextColor)
 	end

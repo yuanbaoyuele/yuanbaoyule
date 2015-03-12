@@ -65,7 +65,7 @@ function SetShowType( self, type_ )
 				arrow:SetResProvider(xarManager)
 				arrow:SetResID( attr.NormalArrow )
 				self:AddChild( arrow )
-				arrow:SetObjPos( "father.width - 23", "(father.height-8)/2+1", "father.width - 9", "(father.height-8)/2 + 1 + 8" )
+				arrow:SetObjPos( "father.width -4-5", "(father.height-7)/2-2", "father.width - 5", "(father.height+7)/2" )
 			end
 		end
 		
