@@ -114,7 +114,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	objText:SetObjPos(3+21, 0, "father.width", "father.height")
 	objURL:SetObjPos(0, 0, 0, 0)
 	
-	objLayout:SetCursorID("IDC_HAND")
+	-- objLayout:SetCursorID("IDC_HAND")
 	
 	objText:SetTextColorResID("color.menubar.text")
 	objText:SetTextFontResID("font.menubar.text")

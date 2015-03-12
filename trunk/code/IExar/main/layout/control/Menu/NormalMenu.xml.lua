@@ -124,9 +124,7 @@ function UpdateSize( self )
 		end	
 		
 		menu_frame:SetObjPos(0,0,self_right - self_left, nSelfH)
-		
-		--注 图片有阴影
-		menu_bkn:SetObjPos(0,0-5,"father.width","father.height+7")
+		menu_bkn:SetObjPos(0,0,"father.width","father.height")
 		
 		UpdateScrollBar(self, menu)
 	end

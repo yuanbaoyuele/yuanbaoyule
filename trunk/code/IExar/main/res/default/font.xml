@@ -19,5 +19,6 @@
 		<font id="font.head.caption" height="12" facename="微软雅黑" /> 
 		<font id="font.funcbtn.text" height="12" facename="微软雅黑" /> 
 		<font id="font.menubar.text" height="12" facename="宋体" /> 
+		<font id="font.text12.bold" height="12" facename="宋体" weight="bold"/> 
 	</resource>
 </XLUE>

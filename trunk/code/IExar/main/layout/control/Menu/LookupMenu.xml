@@ -5,7 +5,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>150+10</width>
-			<height>112</height>
+			<height>115</height>
 			<ContextID>submenu.toolbar.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -16,9 +16,8 @@
 
 	<objtemplate id="submenu.toolbar.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>6</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<obj id="MenuBar" class="MenuItemObject" templateid="menu.context.item">
@@ -93,9 +92,8 @@
 
 	<objtemplate id="submenu.browserbar.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>6</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<obj id="CollectBox" class="MenuItemObject" templateid="menu.context.item">
@@ -140,7 +138,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>188+10</width>
-			<height>72</height>
+			<height>75</height>
 			<ContextID>submenu.goto.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -148,9 +146,8 @@
 
 	<objtemplate id="submenu.goto.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>6</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<obj id="Back" class="MenuItemObject" templateid="menu.context.item">
@@ -202,7 +199,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>188+10</width>
-			<height>220</height>
+			<height>222</height>
 			<ContextID>submenu.zoom.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -210,9 +207,8 @@
 
 	<objtemplate id="submenu.zoom.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>6</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<obj id="Enlage" class="MenuItemObject" templateid="menu.context.item">
@@ -324,9 +320,8 @@
 	<!--主菜单-->
 	<objtemplate id="lookupmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft>
 		</attr>
 		<children>
 			<obj id="ToolBar" class="MenuItemObject" templateid="menu.context.item">

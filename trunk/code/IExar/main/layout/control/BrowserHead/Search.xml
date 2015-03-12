@@ -20,16 +20,16 @@
 				<obj id="border" class="TextureObject">
 					<attr>
 						<width>father.width</width>
-						<height>26</height>
-						<texture>texture.edit.bkg.normal</texture>
+						<height>22</height>
+						<texture>YBYL.AddressBar.UrlSearch.Bkg</texture>
 					</attr>
 					<children>
 						<obj id="image.ctrl" class="TipAddin.Button">
 							<attr>
-								<left>father.width+9</left>
-								<top>5</top>
-								<width>16</width>
-								<height>16</height>
+								<left>father.width+3</left>
+								<top>0</top>
+								<width>22</width>
+								<height>22</height>
 								<NormalBkgID>bitmap.search.normal</NormalBkgID>
 								<HoverBkgID>bitmap.search.hover</HoverBkgID>
 								<DownBkgID>bitmap.search.down</DownBkgID>
@@ -40,13 +40,13 @@
 						</obj>
 						<obj id="image.ctrl2" class="TipAddin.Button">
 							<attr>
-								<left>father.width+9+16</left>
-								<top>5</top>
-								<width>16</width>
-								<height>16</height>
-								<NormalBkgID>YBYL.AddressBarCtrl.DropArrow.Normal</NormalBkgID>
-								<HoverBkgID>YBYL.AddressBarCtrl.DropArrow.Hover</HoverBkgID>
-								<DownBkgID>YBYL.AddressBarCtrl.DropArrow.Down</DownBkgID>
+								<left>father.width+3+22</left>
+								<top>0</top>
+								<width>13</width>
+								<height>22</height>
+								<NormalBkgID>SearchBox.DropArrow.Normal</NormalBkgID>
+								<HoverBkgID>SearchBox.DropArrow.Hover</HoverBkgID>
+								<DownBkgID>SearchBox.DropArrow.Down</DownBkgID>
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="Search.xml.lua" func="OnClick2" />
@@ -54,7 +54,7 @@
 						</obj>
 						<obj id="icon" class="ImageObject">
 							<attr>
-								<left>5</left>
+								<left>3</left>
 								<width>16</width>
 								<height>father.height</height>
 								<valign>center</valign>
@@ -66,11 +66,12 @@
 						</obj>
 						<obj id="edit" class="EditObject">
 							<attr>
-								<left>5+16</left>
-								<top>5</top>
-								<width>father.width-5-16-5</width>
-								<height>16</height>
-								<!--valign>center</valign-->
+								<left>16</left>
+								<top>2</top>
+								<width>father.width-19</width>
+								<height>father.height-4</height>
+								<transparent>1</transparent>
+								<textcolor></textcolor>
 							</attr>
 							<eventlist>
 								<event name="OnLButtonDbClick" file="Search.xml.lua" func="OnLButtonDbClick" />

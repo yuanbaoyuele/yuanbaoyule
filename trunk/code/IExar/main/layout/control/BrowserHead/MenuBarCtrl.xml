@@ -1,9 +1,9 @@
 <xlue>
 	<objtemplate class="ShortCutText" id="menu.item">
 		<attr>
-			<top>7</top>
-			<width>55</width>
-			<height>father.height-14</height>
+			<top>0</top>
+			<width>58</width>
+			<height>17</height>
 			<Font>font.menubar.text</Font>
 			<KeyFont>font.menuitemkey</KeyFont>
 			<Textcolor>color.menubar.text</Textcolor>
@@ -13,6 +13,7 @@
 			<event name="OnMouseEnter" file="MenuBarCtrl.xml.lua" func="OnMouseEnterMenuItem" />
 			<event name="OnLButtonDown" file="MenuBarCtrl.xml.lua" func="OnLButtonDownMenuItem" />
 			<event name="OnMouseLeave" file="MenuBarCtrl.xml.lua" func="OnMouseLeaveMenuItem" />
+			<event name="OnFocusChange" file="MenuBarCtrl.xml.lua" func="OnFocusMenuItem" />
 		</eventlist>
 	</objtemplate>
 
@@ -43,7 +44,7 @@
 								<left>0</left>
 								<top>0</top>
 								<width>26</width>
-								<height>23</height>
+								<height>15</height>
 								<texture>YBYL.Head.Collect.Sel.Normal</texture>
 								<visible>false</visible>
 							</attr>
@@ -62,7 +63,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.Edit" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>55</left>
+								<left>58</left>
 								<Text>编辑</Text>
 								<Key>E</Key>
 							</attr>
@@ -73,7 +74,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.Lookup" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>55*2</left>
+								<left>58*2</left>
 								<Text>查看</Text>
 								<Key>V</Key>
 							</attr>
@@ -84,8 +85,8 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.Collect" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>55*3</left>
-								<width>65</width>
+								<left>58*3</left>
+								<width>69</width>
 								<Text>收藏夹</Text>
 								<Key>A</Key>
 							</attr>
@@ -96,7 +97,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.Tool" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>55*4+10</left>
+								<left>58*4+11</left>
 								<Text>工具</Text>
 								<Key>T</Key>
 							</attr>
@@ -107,7 +108,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.Help" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>55*5+10</left>
+								<left>58*5+11</left>
 								<Text>帮助</Text>
 								<Key>H</Key>
 							</attr>

@@ -182,7 +182,7 @@ function CB__OnInitControl(self)
     edit:SetReadOnly(not attr.EnableEdit)
     edit:SetNoCaret(not attr.EnableEdit)
 	if not attr.EnableEdit then
-		edit:SetCursorID("IDC_HAND")
+		-- edit:SetCursorID("IDC_HAND")
 	end
     edit:SetMultiline(attr.Multiline)
     local nowLeft = attr.LeftMargin

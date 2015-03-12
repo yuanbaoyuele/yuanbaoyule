@@ -1,10 +1,12 @@
 <xlue>
 	<objtemplate id="toolmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
-			<ItemRight>60</ItemRight> 
-			<ItemBottom>-5</ItemBottom> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
 		</attr>
 		<children>
 			<obj id="ClearHistory" class="MenuItemObject" templateid="menu.context.item">

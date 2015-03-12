@@ -68,7 +68,7 @@ function SetActiveStyle(self, bActive)
 		self:SetCursorID("IDC_ARROW")
 	else
 		objActvieBkg:SetTextureID("")
-		self:SetCursorID("IDC_HAND")
+		-- self:SetCursorID("IDC_HAND")
 	end
 		
 	ShowMouseEnterBkg(self, false)

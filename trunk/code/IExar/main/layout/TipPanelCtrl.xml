@@ -17,34 +17,33 @@
 						<height>father.height</height>
 					</attr>	
 					<children>	
-						<obj id="shadow" class="TextureObject">
+						<obj id="bkg" class="TextureObject">
 							<attr>
 								<left>0</left>
 								<top>0</top>
 								<width>father.width</width>
 								<height>father.height</height>
-								<texture>YBYL.MainWnd.Bkg.Shadow</texture>
+								<texture>YBYL.MainWnd.Bkg</texture>
 							</attr>		
+						</obj>
+						
+						<obj id="frame" class="FrameWndCtrl">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
 						</obj>
 						
 						<obj id="MainPanel.Title" class="BrowserTitleCtrl">
 							<attr>
-								<left>15</left>
+								<left>0</left>
 								<top>0</top>
-								<width>father.width-15*2</width>
-								<height>25</height>
+								<width>father.width</width>
+								<height>30</height>
 							</attr>		
-						</obj>
-						
-						<obj id="bkg" class="TextureObject">
-							<attr>
-								<left>15</left>
-								<top>25</top>
-								<width>father.width-15*2</width> 
-								<height>father.height-15*2-11</height>
-								<texture>YBYL.MainWnd.Bkg</texture>
-							</attr>		
-							<children>	
+							<children>
 								<obj id="caption.drag" class="CaptionObject">
 									<attr>
 										<left>0</left>
@@ -53,21 +52,23 @@
 										<height>father.height</height>
 									</attr>									
 								</obj>
-							
-								<obj id="frame" class="FrameWndCtrl">
+							</children>
+						</obj>
+						
+						<obj id="MainLayout" class="TextureObject">
+							<attr>
+								<left>4</left>
+								<top>29</top>
+								<width>father.width-4*2</width> 
+								<height>father.height-30-4</height>
+								<texture></texture>
+							</attr>		
+							<children>									
+								<obj id="MainPanel.Head" class="BrowserHeadCtrl">
 									<attr>
 										<left>0</left>
 										<top>0</top>
 										<width>father.width</width>
-										<height>father.height</height>
-									</attr>
-								</obj>
-								
-								<obj id="MainPanel.Head" class="BrowserHeadCtrl">
-									<attr>
-										<left>1</left>
-										<top>1</top>
-										<width>father.width-2</width>
 										<height>130</height>
 									</attr>		
 								</obj>

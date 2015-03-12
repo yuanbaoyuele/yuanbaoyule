@@ -15,6 +15,7 @@
 		<color id="ADACAA" value="#ADACAA" />
 		<color id="DFC285" value="#DFC285" />
 		<color id="255E18" value="#255E18" />
+		<color id="999999" value="#999999" />
 		
 		<color id="color.tab.normal" red="204" green="211" blue="214" alpha="255" />
 		<color id="color.tab.hover" red="255" green="255" blue="255" alpha="255" />
