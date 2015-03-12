@@ -49,6 +49,24 @@ function LoadTableFromFile(strDatFilePath)
 	return tResult
 end
 
+function SaveTableToFile(tDat, strDatFilePath)
+	local bSuc = false
+	if type(tDat) == "table" and IsRealString(strDatFilePath) then
+		local strDir = string.match(strDatFilePath, "^(.*)[\\/][^\\/]*$")
+		if IsRealString(strDir) then
+			if not tipUtil:QueryFileExists(strDir) then
+				tipUtil:CreateDir(strDir)
+			end
+			if tipUtil:QueryFileExists(strDir) then
+				tipUtil:SaveLuaTableToLuaFile(tDat, strDatFilePath)
+				bSuc = true
+			end
+		end
+	end
+	
+	return bSuc
+end
+
 function FetchValueByPath(obj, path)
 	local cursor = obj
 	for i = 1, #path do
@@ -802,7 +820,6 @@ function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup)
 		if uObjTreeTemplt then
 			uObjTree = uObjTreeTemplt:CreateInstance(strObjTreeName)
 		end
-
 		if uHostWnd and uObjTree then
 			--函数会阻塞
 			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
@@ -1669,6 +1686,7 @@ obj.ReportAndExit = ReportAndExit
 obj.GetCommandStrValue = GetCommandStrValue
 obj.GetExePath = GetExePath
 obj.LoadTableFromFile = LoadTableFromFile
+obj.SaveTableToFile = SaveTableToFile
 obj.CheckIsNewVersion = CheckIsNewVersion
 obj.SendRunTimeReport = SendRunTimeReport
 

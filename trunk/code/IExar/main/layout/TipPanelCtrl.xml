@@ -104,8 +104,9 @@
 							</children>
 						</obj><!--bkg end-->
 						
-						<!--用于加载XGP, 不用显示-->
-						<obj id="LoadXGP" class="SeqImageObject">
+						
+						<!--加载XGP使用不显示-->
+						<!--obj id="LoadXGP" class="SeqImageObject">
 							<attr>
 								<left>0</left>  
 								<top>0</top>
@@ -113,7 +114,21 @@
 								<height>0</height>
 								<gif></gif>
 							</attr>
-						</obj>	
+						</obj-->	
+						
+						<!--debug!!-->
+						<!--obj id="TestImage" class="ImageObject">
+							<attr>
+								<left>20</left>  
+								<top>20</top>
+								<width>200</width>
+								<height>120</height>
+								<zorder>9999999</zorder>
+								<antialias>2</antialias>
+							</attr>
+						</obj-->
+						
+						
 						
 					</children>
 					<eventlist>
