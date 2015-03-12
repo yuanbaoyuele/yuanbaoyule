@@ -1,0 +1,241 @@
+<xlue>
+	<objtemplate id="toolmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemRight>60</ItemRight> 
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="ClearHistory" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>删除浏览的历史记录</Text>
+					<AccKey>D</AccKey>
+					<RightText>Ctrl+Shift+Del</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearHistory" />
+				</eventlist>
+			</obj>
+			
+			<obj id="InPrivate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>InPrivate 浏览</Text>
+					<AccKey>I</AccKey>
+					<RightText>Ctrl+Shift+P</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InPrivate" />
+				</eventlist>
+			</obj>
+			
+			<obj id="OpenLast" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>重新打开上次浏览会话</Text>
+					<AccKey>S</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_OpenLast" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="PrivateFilter" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>InPrivate 筛选</Text>
+					<RightText>Ctrl+Shift+F</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_PrivateFilter" />
+				</eventlist>
+			</obj>
+			
+			<obj id="PrivateProfile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>InPrivate 筛选设置</Text>
+					<AccKey>S</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_PrivateProfile" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="ForbidPopup" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>弹出窗口阻止程序</Text>
+					<AccKey>P</AccKey>
+					<!--SubMenuID>lookupmenu.submenu.zoom</SubMenuID-->
+				</attr>
+			</obj>
+			
+			<obj id="SmartScreen" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>SmartScreen 筛选器</Text>
+					<AccKey>T</AccKey>
+					<!--SubMenuID>lookupmenu.submenu.zoom</SubMenuID-->
+				</attr>
+			</obj>
+			
+			<obj id="ManagePlugin" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>管理加载项</Text>
+					<AccKey>A</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ManagePlugin" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="CompatibleView" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>兼容性视图</Text>
+					<AccKey>V</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_CompatibleView" />
+				</eventlist>
+			</obj>
+			
+			
+			<obj id="CompatibleSet" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>兼容性视图设置</Text>
+					<AccKey>B</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_CompatibleSet" />
+				</eventlist>
+			</obj>
+		
+			<obj id="spilt4" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="Subscribe" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>订阅该源</Text>
+					<AccKey>F</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_Subscribe" />
+				</eventlist>
+			</obj>
+			
+			<obj id="FindSource" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>源发现</Text>
+					<AccKey>E</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_FindSource" />
+				</eventlist>
+			</obj>
+			
+			<obj id="WindowsUpdate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>Windows Update</Text>
+					<AccKey>U</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_WindowsUpdate" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt5" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="DevelopTool" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>开发人员工具</Text>
+					<AccKey>L</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_DevelopTool" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt6" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="Diagnose" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>诊断连接问题</Text>
+					<AccKey>L</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_Diagnose" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt7" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="InternetProfile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>Internet选项</Text>
+					<AccKey>O</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InternetPro" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="ToolMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>270+10</width>
+			<height>425</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>270+10</width>
+				<height>425</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>toolmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+	
+</xlue>

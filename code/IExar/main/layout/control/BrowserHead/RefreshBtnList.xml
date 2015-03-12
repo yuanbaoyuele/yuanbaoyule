@@ -1,0 +1,55 @@
+<xlue>
+	<control class="RefreshBtnList">
+		<attr_def>
+			<attr name="objCurrentWebTab" type="userdata" />
+			<attr name="hEvntListener" type="userdata" />
+		</attr_def>		
+		<method_def>
+			<SetCurrentWebTab file="RefreshBtnList.xml.lua" func="SetCurrentWebTab"/>
+		</method_def>		
+		
+		<event_def>
+		
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="RefreshBtnList.RefreshBtn" class="TipAddin.Button">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>30</width>
+						<height>30</height>
+						<NormalBkgID>YBYL.Head.Refresh.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.Refresh.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.Refresh.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.Refresh.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" />
+					</eventlist>
+				</obj>
+			
+				<obj id="RefreshBtnList.StopBtn" class="TipAddin.Button">
+					<attr>
+						<left>37</left>
+						<top>0</top>
+						<width>30</width>
+						<height>30</height>
+						<NormalBkgID>YBYL.Head.Stop.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.Stop.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.Stop.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.Stop.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickStopBtn" />
+					</eventlist>
+				</obj>
+			</children>
+			<eventlist>
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

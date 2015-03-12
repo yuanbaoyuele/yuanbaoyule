@@ -1,0 +1,101 @@
+<xlue>
+	<control class="ShortCutText">
+		<attr_def>
+			<attr name="Text" type="string"></attr>
+			<attr name="Key" type="string" ></attr>
+			<attr name="KeyFont" type="string" ></attr>
+			<attr name="Font" type="string"/>
+			<attr name="Endellipsis" type="int"/>
+			<attr name="Textcolor" type="string"/>
+			<attr name="Halign" type="string"/>
+		</attr_def>		
+		
+		<method_def>
+			<SetShortCutKey file="ShortCutText.xml.lua" func="SetShortCutKey"/>
+			<SetHAlign file="ShortCutText.xml.lua" func="SetHAlign"/>
+			<SetKeyFont file="ShortCutText.xml.lua" func="SetKeyFont"/>
+			<SetTextFontResID file="ShortCutText.xml.lua" func="SetTextFontResID"/>
+			<SetTextColorResID file="ShortCutText.xml.lua" func="SetTextColorResID"/>
+			<SetText file="ShortCutText.xml.lua" func="SetText"/>
+			<GetText file="ShortCutText.xml.lua" func="GetText"/>
+		</method_def>		
+		
+		<event_def>
+		
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="ShortCutText.Layout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+					<children>
+						<obj id="ShortCutText.Text" class="TextObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width-30</width>
+								<height>father.height</height>
+								<font>font.yahei13</font>
+								<valign>center</valign>
+								<halign>left</halign>
+							</attr>
+						</obj>
+							
+						<obj id="ShortCutText.Key" class="LayoutObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>17</width>
+								<height>father.height</height>
+							</attr>
+							<children>
+								<obj id="lefttext" class="TextObject">
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>6</width>
+										<height>father.height</height>
+										<text>(</text>
+										<valign>center</valign>
+										<halign>center</halign>
+									</attr>
+								</obj>
+								
+								<obj id="keytext" class="TextObject">
+									<attr>
+										<left>5</left>
+										<top>0</top>
+										<width>9</width>
+										<height>father.height</height>
+										<valign>center</valign>
+										<halign>center</halign>
+									</attr>
+								</obj>
+								
+								<obj id="righttext" class="TextObject">
+									<attr>
+										<left>12</left>
+										<top>0</top>
+										<width>4</width>
+										<height>father.height</height>
+										<text>)</text>
+										<valign>center</valign>
+										<halign>center</halign>
+									</attr>
+								</obj>
+							</children>
+						</obj>
+					</children>
+				</obj>
+			</children>
+			<eventlist>
+				<event name="OnInitControl" file="ShortCutText.xml.lua" func="OnInitControl" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

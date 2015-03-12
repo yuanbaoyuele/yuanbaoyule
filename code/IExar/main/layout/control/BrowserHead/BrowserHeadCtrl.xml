@@ -1,0 +1,110 @@
+<xlue>
+    <control class="BrowserHeadCtrl">
+        <method_def>
+			<ProcessTabChange file="BrowserHeadCtrl.xml.lua" func="ProcessTabChange"/>
+			<!--SetMaxBtnStyle file="BrowserHeadCtrl.xml.lua" func="SetMaxBtnStyle"/-->
+        </method_def>
+		
+        <event_def>
+		
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="root.layout" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.MainWnd.Head.Bkg</texture>
+					</attr>		
+					<children>															
+						<obj id="BrowserHeadCtrl.NavgateBtnList" class="NavgateBtnList">
+							<attr>
+								<left>20</left>
+								<top>0</top>
+								<width>160</width>
+								<height>30</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.AddressBar" class="AddressBarCtrl">
+							<attr>
+								<left>20+100</left>
+								<top>0</top>
+								<width>father.width-500</width>
+								<height>36</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.RefreshBtnList" class="RefreshBtnList">
+							<attr>
+								<left>father.width-500+140</left>
+								<top>0</top>
+								<width>160</width>
+								<height>30</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Splitter1" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>37</top>
+								<width>father.width</width>
+								<height>1</height>
+								<texture>YBYL.Menu.Splitter</texture>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.MenuBarCtrl" class="MenuBarCtrl">
+							<attr>
+								<left>5</left>
+								<top>30</top>
+								<width>350</width>
+								<height>35</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Splitter2" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>60</top>
+								<width>father.width</width>
+								<height>1</height>
+								<texture>YBYL.Menu.Splitter</texture>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.CollectBtn" class="TipAddin.Button">
+							<attr>
+								<left>2</left>
+								<top>62</top>
+								<width>60</width>
+								<height>18</height>
+								<Text>收藏夹</Text>
+								<NormalBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCollect" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.CollectList" class="CollectList">
+							<attr>
+								<left>10+62</left>
+								<top>62</top>
+								<width>father.width-300</width>
+								<height>18</height>
+							</attr>	
+						</obj>
+					</children>
+				</obj> <!--end root.layout-->
+            </children>
+			<eventlist>
+			</eventlist>
+        </objtemplate>
+    </control>
+</xlue>
