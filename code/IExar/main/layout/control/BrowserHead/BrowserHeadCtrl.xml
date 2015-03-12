@@ -100,6 +100,33 @@
 								<height>18</height>
 							</attr>	
 						</obj>
+						<obj id="BrowserHeadCtrl.SearchCtrl" class="BoltFox.Search.Ctrl">
+							<attr>
+								<left>father.width-200-8-50</left>
+								<top>35</top>
+								<width>200-21</width>
+								<height>26</height>
+							</attr>
+							<eventlist>
+								<event name="OnSearch" file="BrowserHeadCtrl.xml.lua" func="OnSearch" />
+							</eventlist>
+						</obj>
+						<obj id="BrowserHeadCtrl.TabThunmb" class="TipAddin.Button">
+							<attr>
+								<left>father.width-200-8-50</left>
+								<top>70</top>
+								<width>60</width>
+								<height>18</height>
+								<Text>缩略图</Text>
+								<NormalBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickTabThunmb" />
+							</eventlist>
+						</obj>
 					</children>
 				</obj> <!--end root.layout-->
             </children>

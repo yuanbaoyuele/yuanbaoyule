@@ -1,0 +1,28 @@
+<xlue>
+	 <control class="ie.collect">
+        <attr_def>
+            <attr name="Index" type="int" >
+              <default>1</default>
+            </attr>
+        </attr_def>
+        <method_def>
+            <Show file="collect.xml.lua" func="Show" />
+        </method_def>
+        <objtemplate>
+            <children>
+                <obj id="Layout.main" class="FillObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+						<srccolor>255,255,255,255</srccolor>
+						<destcolor>255,255,255,255</destcolor>
+						<srcpt>0,0</srcpt>
+						<destpt>father.width, father.height</destpt>
+                    </attr>
+				</obj>
+			 </children>
+		</objtemplate>
+	</control>
+</xlue>

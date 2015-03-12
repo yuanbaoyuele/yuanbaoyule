@@ -22,6 +22,8 @@ function OnSelect_ManageCollect(self)
 	
 end
 
+function OnNewDir(self)
+end
 
 -----
 function IsRealString(str)
