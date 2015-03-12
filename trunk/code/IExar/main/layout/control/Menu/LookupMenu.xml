@@ -1,0 +1,536 @@
+<xlue>
+	<!--工具栏子菜单-->
+	<objtemplate id="lookupmenu.submenu.toolbar" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>150+10</width>
+			<height>112</height>
+			<ContextID>submenu.toolbar.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+		<eventlist>
+			<event name="OnInitControl" file="ToolBarMenu.xml.lua" function="OnInitControl" />
+		</eventlist>
+	</objtemplate>
+
+	<objtemplate id="submenu.toolbar.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>6</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="MenuBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>菜单栏</Text>
+					<AccKey>M</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolBarMenu.xml.lua" function="OnSelect_MenuBar" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CollectBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>收藏夹栏</Text>
+					<AccKey>F</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolBarMenu.xml.lua" function="OnSelect_CollectBar" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CommandBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>命令栏</Text>
+					<AccKey>C</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolBarMenu.xml.lua" function="OnSelect_CommandBar" />
+				</eventlist>
+			</obj>
+			
+			<obj id="StateBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>状态栏</Text>
+					<AccKey>S</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolBarMenu.xml.lua" function="OnSelect_StateBar" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="LockBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>锁定工具栏</Text>
+					<AccKey>L</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolBarMenu.xml.lua" function="OnSelect_LockBar" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	
+	<!--浏览器栏子菜单-->
+	<objtemplate id="lookupmenu.submenu.browserbar" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>188+10</width>
+			<height>65</height>
+			<ContextID>submenu.browserbar.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="submenu.browserbar.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>6</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="CollectBox" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>收藏夹</Text>
+					<AccKey>F</AccKey>
+					<RightText>Ctrl+Shift+I</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_CollectBox" />
+				</eventlist>
+			</obj>
+			
+			<obj id="History" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>历史记录</Text>
+					<AccKey>H</AccKey>
+					<RightText>Ctrl+Shift+H</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_History" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Source" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>源</Text>
+					<AccKey>D</AccKey>
+					<RightText>Ctrl+Shift+J</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Source" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	
+	<!--转到子菜单-->
+	<objtemplate id="lookupmenu.submenu.goto" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>188+10</width>
+			<height>72</height>
+			<ContextID>submenu.goto.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="submenu.goto.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>6</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="Back" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>后退</Text>
+					<AccKey>B</AccKey>
+					<RightText>Ctrl+Shift+I</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Back" />
+					<event name="OnInit" file="LookupMenu.xml.lua" function="OnInit_Back" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Forward" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>前进</Text>
+					<AccKey>F</AccKey>
+					<RightText>Ctrl+Shift+H</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Forward" />
+					<event name="OnInit" file="LookupMenu.xml.lua" function="OnInit_Forward" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="HomePage" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>主页</Text>
+					<AccKey>H</AccKey>
+					<RightText>Ctrl+Shift+J</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_HomePage" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	
+	<!--缩放子菜单-->
+	<objtemplate id="lookupmenu.submenu.zoom" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>188+10</width>
+			<height>220</height>
+			<ContextID>submenu.zoom.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="submenu.zoom.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>6</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="Enlage" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>放大</Text>
+					<RightText>Ctrl +</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Enlage" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Narrow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>缩小</Text>
+					<RightText>Ctrl -</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Narrow" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+		
+			<obj id="Zoom400" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>400%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom400" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Zoom200" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>200%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom200" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom150" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>150%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom125" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom125" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>125%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom125" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Zoom100" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>100%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom100" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom75" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>75%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom75" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Zoom50" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>50%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Zoom50" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Custom" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>自定义...</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Custom" />
+				</eventlist>
+			</obj>
+			
+		</children>
+	</objtemplate>
+	
+		
+	<!--主菜单-->
+	<objtemplate id="lookupmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="ToolBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>工具栏</Text>
+					<AccKey>T</AccKey>
+					<SubMenuID>lookupmenu.submenu.toolbar</SubMenuID>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_ToolBar" />
+				</eventlist>
+			</obj>
+			
+			<obj id="FastNavigate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>快速导航选项卡</Text>
+					<AccKey>Q</AccKey>
+					<RightText>Ctrl+Q</RightText>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_FastNavigate" />
+				</eventlist>
+			</obj>
+			
+			<obj id="BrowserBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>浏览器栏</Text>
+					<AccKey>E</AccKey>
+					<SubMenuID>lookupmenu.submenu.browserbar</SubMenuID>
+				</attr>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="GoTo" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>转到</Text>
+					<AccKey>G</AccKey>
+					<SubMenuID>lookupmenu.submenu.goto</SubMenuID>
+				</attr>
+			</obj>
+			
+			<obj id="Stop" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>停止</Text>
+					<AccKey>P</AccKey>
+					<RightText>Esc</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Stop" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Refresh" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>刷新</Text>
+					<AccKey>R</AccKey>
+					<RightText>F5</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Refresh" />
+				</eventlist>
+			</obj>
+					
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Zoom" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>缩放</Text>
+					<AccKey>Z</AccKey>
+					<SubMenuID>lookupmenu.submenu.zoom</SubMenuID>
+				</attr>
+			</obj>
+			
+			<obj id="FontSize" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>文字大小</Text>
+					<AccKey>X</AccKey>
+					<!--SubMenuID></SubMenuID-->
+				</attr>
+			</obj>
+			
+			<obj id="Decode" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>编码</Text>
+					<AccKey>D</AccKey>
+					<!--SubMenuID></SubMenuID-->
+				</attr>
+			</obj>
+			
+			<obj id="Style" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>样式</Text>
+					<AccKey>Y</AccKey>
+					<!--SubMenuID></SubMenuID-->
+				</attr>
+			</obj>
+			
+			<obj id="InsertCursor" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>插入光标浏览</Text>
+					<AccKey>B</AccKey>
+					<RightText>F7</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_InsertCursor" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="SourceCode" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>源文件</Text>
+					<AccKey>C</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_SourceCode" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Report" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>安全报告</Text>
+					<AccKey>S</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Report" />
+				</eventlist>
+			</obj>
+			
+			<obj id="UniversalSite" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>国际网站地址</Text>
+					<AccKey>I</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_UniversalSite" />
+				</eventlist>
+			</obj>
+			
+			<obj id="PrivacyPolicy" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>网页隐私策略</Text>
+					<AccKey>V</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_PrivacyPolicy" />
+				</eventlist>
+			</obj>
+			
+			<obj id="FullScreen" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>全屏</Text>
+					<AccKey>F</AccKey>
+					<RightText>F11</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_FullScreen" />
+				</eventlist>
+			</obj>
+			
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="LookupMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>350</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>210</width>
+				<height>350</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>210</width>
+						<height>father.height</height>
+						<ContextID>lookupmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

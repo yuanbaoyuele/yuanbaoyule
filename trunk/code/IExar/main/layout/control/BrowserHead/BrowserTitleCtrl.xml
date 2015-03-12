@@ -1,0 +1,110 @@
+<xlue>
+    <control class="BrowserTitleCtrl">
+        <method_def>
+			<ProcessTabChange file="BrowserTitleCtrl.xml.lua" func="ProcessTabChange"/>
+			<SetMaxBtnStyle file="BrowserTitleCtrl.xml.lua" func="SetMaxBtnStyle"/>
+			<SetTitleText file="BrowserTitleCtrl.xml.lua" func="SetTitleText"/>
+        </method_def>
+		
+        <event_def>
+		
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="root.layout" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.TitleBar.Bkg</texture>
+					</attr>		
+					<children>		
+						<obj id="BrowserTitleCtrl.Title" class="TextObject" >
+							<attr>
+								<left>20</left>
+								<top>0</top>
+								<width>father.width-100</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<halign>left</halign>
+								<font>default.font</font>
+								<textcolor>system.white</textcolor>
+							</attr>
+						</obj>
+						
+						<obj id="BrowserTitleCtrl.Caption.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-10-26</left>
+								<top>0</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserTitleCtrl.xml.lua" func="OnClickCpationClose" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserTitleCtrl.Caption.MaxBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-15-26*2</left>
+								<top>0</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.MaxBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.MaxBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.MaxBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.MaxBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserTitleCtrl.xml.lua" func="OnClickCpationMax" />
+							</eventlist>
+						</obj>
+						
+						
+						<obj id="BrowserTitleCtrl.Caption.Restore" class="TipAddin.Button">
+							<attr>
+								<left>father.width-15-26*2</left>
+								<top>0</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.RestoreBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.RestoreBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.RestoreBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.RestoreBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserTitleCtrl.xml.lua" func="OnClickCpationRestore" />
+							</eventlist>
+						</obj>
+						
+						
+						<obj id="BrowserTitleCtrl.Caption.MinBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-20-26*3</left>
+								<top>0</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.MinBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.MinBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.MinBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.MinBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserTitleCtrl.xml.lua" func="OnClickCpationMin" />
+							</eventlist>
+						</obj>
+						
+					</children>
+				</obj> <!--end root.layout-->
+            </children>
+			<eventlist>
+				<event name="OnPosChange" file="BrowserTitleCtrl.xml.lua" func="OnPosChange" />
+			</eventlist>
+        </objtemplate>
+    </control>
+</xlue>
