@@ -51,75 +51,76 @@
 		
 		<objtemplate>
 			<children>
-				<obj id="WebTabCtrl.Active.Bkg" class="TextureObject">
+				<obj id="WebTabCtrl.Layout" class="LayoutObject">
 					<attr>
 						<left>0</left>
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
 					</attr>
-				</obj>  
-				
-				<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
-					<attr>
-						<left>0</left>
-						<top>0</top>
-						<width>father.width</width>
-						<height>father.height</height>
-					</attr>
-				</obj>  
-				
-				<obj id="WebTabCtrl.HeadImg" class="ImageObject">
-					<attr>
-						<left>15</left>
-						<top>(father.height-16)/2</top>
-						<width>16</width>
-						<height>16</height>
-						<drawmode>1</drawmode>
-						<antialias>2</antialias>
-					</attr>
-				</obj>   	
+					<children>
+						<obj id="WebTabCtrl.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
+						</obj>  
+						
+						<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<texture>YBYL.Tab.MouseEnter</texture>
+							</attr>
+						</obj>  
+						
+						<obj id="WebTabCtrl.HeadImg" class="ImageObject">
+							<attr>
+								<left>8</left>
+								<top>(father.height-16)/2</top>
+								<width>16</width>
+								<height>16</height>
+								<drawmode>1</drawmode>
+								<antialias>2</antialias>
+								<zorder>999999</zorder>
+							</attr>
+						</obj>   	
 
-				<obj id="WebTabCtrl.Text" class="TextObject">
-					<attr>
-						<left>40</left>
-						<top>0</top>
-						<width>father.width-40-35</width>
-						<height>father.height</height>
-						<valign>center</valign>
-						<font>font.tab.normal</font>
-						<textcolor>color.tab.normal</textcolor>
-						<endellipsis>1</endellipsis>
-					</attr>
-				</obj>   	
+						<obj id="WebTabCtrl.Text" class="TextObject">
+							<attr>
+								<left>30</left>
+								<top>0</top>
+								<width>father.width-30-35</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<font>font.tab.normal</font>
+								<textcolor>color.tab.normal</textcolor>
+								<endellipsis>1</endellipsis>
+								<zorder>999999</zorder>
+							</attr>
+						</obj>   	
 
-				<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
-					<attr>
-						<left>father.width-19</left>
-						<top>(father.height-9)/2</top>
-						<width>9</width>
-						<height>9</height>
-						<NormalBkgID>YBYL.Tab.CloseBtn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.Tab.CloseBtn.Down</DownBkgID>
-						<HoverBkgID>YBYL.Tab.CloseBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.Tab.CloseBtn.Disable</DisableBkgID>
-					</attr>
-					<eventlist>
-						<event name="OnClick" file="WebTabCtrl.xml.lua" func="OnClickCloseTab" />
-					</eventlist>
+						<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-19</left>
+								<top>(father.height-9)/2</top>
+								<width>9</width>
+								<height>9</height>
+								<NormalBkgID>YBYL.Tab.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Tab.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.CloseBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="WebTabCtrl.xml.lua" func="OnClickCloseTab" />
+							</eventlist>
+						</obj>
+					</children>
 				</obj>
-				
-				<!--分割线-->
-				<obj id="WebTabCtrl.Split" class="TextureObject">
-					<attr>
-						<left>father.width-1</left>
-						<top>father.height-25</top>
-						<width>1</width>
-						<height>25</height>
-						<texture>YBYL.Tab.Split</texture>
-					</attr>
-				</obj>   
-				
 			</children>
 			<eventlist>
 				<event name="OnLButtonUp" file="WebTabCtrl.xml.lua" func="OnClickTab" />

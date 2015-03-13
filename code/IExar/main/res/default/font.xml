@@ -15,10 +15,11 @@
 		<font id="font.yahei13.underline" height="13" facename="微软雅黑" underline="1"/> 
 		<font id="font.yahei11.underline" height="11" facename="微软雅黑" underline="1"/> 
 		
-		<font id="font.tab.normal" height="12" facename="微软雅黑" /> 
+		<font id="font.tab.normal" height="12" facename="宋体" /> 
 		<font id="font.head.caption" height="12" facename="微软雅黑" /> 
 		<font id="font.funcbtn.text" height="12" facename="微软雅黑" /> 
 		<font id="font.menubar.text" height="12" facename="宋体" /> 
+		<font id="font.collectbar.text" height="12" facename="宋体" /> 
 		<font id="font.text12.bold" height="12" facename="宋体" weight="bold"/> 
 	</resource>
 </XLUE>

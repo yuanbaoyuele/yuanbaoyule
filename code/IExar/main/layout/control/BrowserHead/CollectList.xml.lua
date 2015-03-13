@@ -42,7 +42,7 @@ end
 
 ---collect item--
 function OnLButtonUpItem(self)
-	self:SetTextureID("YBYL.Head.Collect.Sel.Normal")
+	self:SetTextureID("")
 	
 	local objURL = self:GetChildByIndex(2)
 	if not objURL then
@@ -54,11 +54,11 @@ function OnLButtonUpItem(self)
 end
 
 function OnLButtonDownItem(self)
-	self:SetTextureID("YBYL.Head.Collect.Sel.Hover")
+	self:SetTextureID("Collect.Button.Bkg.Down")
 end
 
 function OnMouseEnterItem(self)
-	self:SetTextureID("YBYL.Head.Collect.Sel.Normal")
+	self:SetTextureID("Collect.Button.Bkg.Hover")
 end
 
 function OnMouseLeaveItem(self)
@@ -162,7 +162,7 @@ function SetMenuItemPos(objRootCtrl, objMenuItem, nIndex)
 	local nSpan = attr.RightSpan
 	local nWidth = GetSuitWidth(objMenuItem, nMaxWidth)
 	
-	local nLastR = GetAddBtnWidth(objRootCtrl)   ---最左侧是添加按钮
+	local nLastR = GetAddBtnWidth(objRootCtrl) - nSpan  ---最左侧是添加按钮
 	local nLastObjIndex = nIndex-2
 	if nLastObjIndex >= 0 then   --取上一个控件的right
 		local objContainer = objRootCtrl:GetControlObject("CollectList.Container") 
@@ -243,12 +243,11 @@ function TryShowArrowBtn(objRootCtrl)
 		return
 	end
 	
-	local nArrowL, nArrowT, nArrowR, nArrowB = objArrowBtn:GetObjPos() 
-	local nArrowW = nArrowR - nArrowL
-	local nNewLeft = g_nLastItemRight+10
+	-- local nArrowL, nArrowT, nArrowR, nArrowB = objArrowBtn:GetObjPos() 
+	-- local nArrowW = nArrowR - nArrowL
+	-- local nNewLeft = g_nLastItemRight+10
 	
-	objArrowBtn:SetObjPos(nNewLeft, nArrowT, nNewLeft+nArrowW, nArrowB)
-	local l, t, r, b = objArrowBtn:GetObjPos()
+	-- objArrowBtn:SetObjPos(nNewLeft, nArrowT, nNewLeft+nArrowW, nArrowB)
 
 	if type(tHideMenuList) ~= "table" or #tHideMenuList<1 then		
 		objArrowBtn:SetVisible(false)

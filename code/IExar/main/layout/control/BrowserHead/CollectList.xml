@@ -61,23 +61,35 @@
 		</event_def>
 		
 		<objtemplate>
-			<children>
+			<children>		
 				<obj id="CollectList.AddBtn" class="TipAddin.Button">
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>19</width>
-						<height>19</height>
-						<NormalBkgID>YBYL.AddressBar.Collect.Hover</NormalBkgID>
-						<DownBkgID>YBYL.AddressBar.Collect.Normal</DownBkgID>
-						<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.MenuBar.HideBtn.Normal</DisableBkgID>
-						<zorder>9999988</zorder>
+						<width>25</width>
+						<height>father.height</height>
+						<NormalBkgID></NormalBkgID>
+						<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+						<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+						<DisableBkgID></DisableBkgID>
 					</attr>
+					<children>
+						<obj id="CollectBtn.LeftIco" class="ImageObject">
+							<attr>
+								<left>5</left>
+								<top>5</top>
+								<width>16</width>
+								<height>16</height>
+								<image>YBYL.AddressBar.Collect</image>
+								<zorder>999999</zorder>
+							</attr>	
+						</obj>
+					</children>
 					<eventlist>
-						<event name="OnClick" file="CollectList.xml.lua" func="OnClickAddBtn" />
+							<event name="OnClick" file="CollectList.xml.lua" func="OnClickAddBtn" />
 					</eventlist>
 				</obj>
+			
 			
 				<obj id="CollectList.Container" class="LayoutObject">
 					<attr>
@@ -89,22 +101,35 @@
 					</attr>
 				</obj>
 				
+				
 				<obj id="CollectList.ArrowBtn" class="TipAddin.Button">
 					<attr>
-						<left>father.width</left>
-						<top>(father.height-10)/2</top>
-						<width>6</width>
-						<height>10</height>
-						<NormalBkgID>YBYL.MenuBar.HideBtn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.MenuBar.HideBtn.Down</DownBkgID>
-						<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.MenuBar.HideBtn.Disable</DisableBkgID>
+						<left>father.width-15</left>
+						<top>0</top>
+						<width>15</width>
+						<height>father.height</height>
+						<NormalBkgID></NormalBkgID>
+						<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+						<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+						<DisableBkgID></DisableBkgID>
 					</attr>
+					<children>
+						<obj id="CollectBtn.ShowHide" class="TextureObject">
+							<attr>
+								<left>4</left>
+								<top>5</top>
+								<width>8</width>
+								<height>5</height>
+								<texture>YBYL.CollectList.ShowHide.Normal</texture>
+								<zorder>999999</zorder>
+							</attr>	
+						</obj>
+					</children>
 					<eventlist>
 						<event name="OnClick" file="CollectList.xml.lua" func="OnClickArrowBtn" />
 					</eventlist>
 				</obj>
-				
+								
 			</children>
 			<eventlist>
 				<event name="OnPosChange" file="CollectList.xml.lua" func="OnPosChange" />
