@@ -146,7 +146,7 @@ function CreateNode(v, icon, left, isdir)
 		self:RouteToFather()
 	end)
 	
-	local objparent = uiOwner:GetControlObject("Layout.main")
+	local objparent = uiOwner:GetControlObject("Layout.Container")
 	objparent:AddChild(nodebkg)
 	treeNodeAttr[v] = treeNodeAttr[v] or {}
 	if isdir then
@@ -334,18 +334,41 @@ function AdjustBkgPos()
 	local objlast = uiOwner:GetControlObject("bkg_treenode"..(treeNodeIndex-1))
 	if objlast then
 		local _, _, _, b = objlast:GetObjPos()
-		local objparent = uiOwner:GetControlObject("Layout.main")
+		local objparent = uiOwner:GetControlObject("Layout.Container")
 		local l, t, r, b2 = objparent:GetObjPos()
 		objparent:SetObjPos(l, t, r, b+10)
 	end
 end
 
 function RemoveAll()
-	local objparent = uiOwner:GetControlObject("Layout.main")
+	local objparent = uiOwner:GetControlObject("Layout.Container")
 	local ret = objparent:RemoveAllChild()
 	treeNodeIndex = 0
 end
 
+
+-----------事件
+function OnClickAddToBar(self)
+
+end
+
+
+function OnClickAddArrow(self)
+
+end
+
+function OnDownFixBtn(self)
+
+end
+
+function OnUpFixBtn(self)
+
+end
+
+-----------
+function RouteToFather(self)
+	self:RouteToFather()
+end
 
 
 

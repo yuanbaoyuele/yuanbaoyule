@@ -81,7 +81,7 @@
 						<obj id="WebTabCtrl.HeadImg" class="ImageObject">
 							<attr>
 								<left>8</left>
-								<top>(father.height-16)/2</top>
+								<top>(father.height-16)/2+1</top>
 								<width>16</width>
 								<height>16</height>
 								<drawmode>1</drawmode>
@@ -93,7 +93,7 @@
 						<obj id="WebTabCtrl.Text" class="TextObject">
 							<attr>
 								<left>30</left>
-								<top>0</top>
+								<top>2</top>
 								<width>father.width-30-35</width>
 								<height>father.height</height>
 								<valign>center</valign>

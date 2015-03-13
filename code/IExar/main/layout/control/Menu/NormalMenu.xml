@@ -142,7 +142,7 @@
 			<Font>font.menuitem</Font>
 			<FontColorNormal>system.black</FontColorNormal>
 			<FontColorHover>system.white</FontColorHover>
-			<FontColorDisable>system.gray</FontColorDisable>
+			<FontColorDisable>ADA999</FontColorDisable>
 			<RightTextColor>system.black</RightTextColor>
 			<RightTextFont>font.menuitem</RightTextFont>
 			<RightTextHAligh>right</RightTextHAligh>

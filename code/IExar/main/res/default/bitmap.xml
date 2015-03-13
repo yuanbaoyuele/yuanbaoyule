@@ -19,12 +19,16 @@
 		<texture id="YBYL.Menu.Splitter" image="bitmap\YBYL.Menu.Splitter.Bkg.png" />
 		<texture id="YBYL.TitleBar.Bkg" image="bitmap\YBYL.TitleBar.Bkg.png" />
 		<texture id="YBYL.AddressBar.UrlSearch.Bkg" type="ThreeInOneH" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png" />
+		<texture id="WebTab.BottomBkg.Line" type="ThreeInOneH" image="bitmap\WebTab.BottomBkg.Line.png" />
 		
 		<texture id="YBYL.IntroduceWnd.Bkg" type="NineInOne" image="bitmap\YBYL.IntroduceWnd.Bkg.png" />
 		<texture id="YBYL.IntroduceWnd.Panel1"  image="bitmap\YBYL.IntroduceWnd.Panel1.png" />
 		<texture id="YBYL.IntroduceWnd.Panel2"  image="bitmap\YBYL.IntroduceWnd.Panel2.png" />
 		<texture id="YBYL.Menu.Splitter.Vertical"  image="bitmap\YBYL.Menu.Splitter.Vertical.png" />
 		<texture id="YBYL.CollectList.ShowHide.Normal"  image="bitmap\YBYL.CollectList.ShowHide.Normal.png" />
+		<texture id="CollectPanel.FixBtn"  image="bitmap\CollectPanel.FixBtn.png" />
+		
+		<texture id="Collect.Panel.Bkg" type="NineInOne" image="bitmap\Collect.Panel.Bkg.png" />
 				
 		<imagelist id="YBYL.IntroduceWnd.LeftBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.LeftBtn.png"/>
 			<texture id="YBYL.IntroduceWnd.LeftBtn.Hover"  imagelist="YBYL.IntroduceWnd.LeftBtn" index="1" />
@@ -43,7 +47,11 @@
 		<bitmap id="SubMenu.Arrow.Normal" path="bitmap\SubMenu.Arrow.Normal.png"/>
 		<bitmap id="SubMenu.Arrow.Hover" path="bitmap\SubMenu.Arrow.Hover.png"/>
 		<bitmap id="Star.Logo" path="bitmap\Star.png"/>
+		<bitmap id="Star.Add.Logo" path="bitmap\Star.Add.png"/>
 		<bitmap id="YBYL.AddressBar.Collect" path="bitmap\YBYL.AddressBar.Collect.png" />
+		<bitmap id="WebTab.ThumbBtn" path="bitmap\WebTab.ThumbBtn.png" />
+		<bitmap id="Arrow.Down" path="bitmap\Arrow.Down.png" />
+		<bitmap id="WebTab.AddTab.Image" path="bitmap\WebTab.AddTab.Image.png" />
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.file.defaluticon" path="bitmap\collect.file.defaluticon.png" />
@@ -51,7 +59,6 @@
 	<texture id="Collect.Button.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Hover.png" />
 	<texture id="Collect.Button.Bkg.Down" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Down.png" />
 		
-
 		<imagelist id="bitmap.search.imagelist" splitter="1" varyblock="1" image="bitmap\Search_button.png"/>
 			<texture id="bitmap.search.normal" imagelist="bitmap.search.imagelist" index="1"/>
 			<texture id="bitmap.search.hover" imagelist="bitmap.search.imagelist" index="2"/>
