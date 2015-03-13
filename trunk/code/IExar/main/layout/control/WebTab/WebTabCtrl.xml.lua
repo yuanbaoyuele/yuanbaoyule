@@ -357,7 +357,7 @@ function ShowActiveBkg(objRootCtrl, bActive)
 		objLayout:SetObjPos(0, 0, "father.width", "father.height")
 	else
 		objActvieBkg:SetTextureID("YBYL.Tab.Normal")
-		objLayout:SetObjPos(0, 3, "father.width", "father.height")
+		objLayout:SetObjPos(0, 2, "father.width", "father.height-2")
 	end
 end
 

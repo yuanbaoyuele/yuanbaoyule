@@ -48,6 +48,45 @@ function OnClickAddNewTab(self)
 	objRootCtrl:OpenURL(strDefURL, true)
 end
 
+function OnClickThumbBtn(self)
+	local owner = self:GetOwner():GetUIObject("root.layout:root.ctrl")
+	if not owner then return end
+	local ret =	tFunHelper.GetCurBrowserBitmap()
+	if not ret then return end
+	local webbrowser = owner:GetControlObject("MainPanel.WebContainer")
+	local thunmblayout = owner:GetControlObject("MainPanel.thunmblayout")
+	if thunmblayout then
+		owner:RemoveChild(thunmblayout)
+		webbrowser:SetVisible(true)
+		webbrowser:SetChildrenVisible(true)
+		return
+	end
+	local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
+	thunmblayout = objFactory:CreateUIObject("MainPanel.thunmblayout", "LayoutObject")
+	local parent = webbrowser:GetParent()
+	parent:AddChild(thunmblayout)
+	local l, t, r, b = webbrowser:GetObjPos()
+	webbrowser:SetVisible(false)
+	webbrowser:SetChildrenVisible(false)
+	thunmblayout:SetObjPos(l, t, r, b)
+	
+	local thunmbobj = owner:GetControlObject("tabthunmbobj")
+	if thunmbobj then
+		owner:RemoveChild(thunmbobj)
+	end
+	thunmbobj = objFactory:CreateUIObject("tabthunmbobj", "ie.tabthunmb")
+	local attr = thunmbobj:GetAttribute()
+	attr.BitmapHandle = ret
+	thunmblayout:AddChild(thunmbobj)
+	thunmbobj:SetObjPos2(58, 46, 226, 175)
+	thunmbobj:Show()
+end
+
+
+function OnClickThumbArrow(self)
+
+end
+
 
 function OnClickCloseCurTab(self)
 	local objRootCtrl = self:GetOwnerControl()
@@ -55,38 +94,8 @@ function OnClickCloseCurTab(self)
 end
 
 
-function OnClickFullScrn(self)
-	tFunHelper.SetBrowserFullScrn()
-	
-	local objRootCtrl = self:GetOwnerControl()
-	ShowFullScreenBtn(objRootCtrl, false)
-end
-
-function OnMouseEnterFullScrn(self)
-	tFunHelper.SetToolTipText("全屏")
-	tFunHelper.ShowToolTip(true)
-end
-
-function OnMouseEnterRestore(self)
-	tFunHelper.SetToolTipText("恢复")
-	tFunHelper.ShowToolTip(true)
-end
-
-function OnMouseEnterClose(self)
-	tFunHelper.SetToolTipText("关闭")
-	tFunHelper.ShowToolTip(true)
-end
-
 function HideToolTip()
 	tFunHelper.ShowToolTip(false)
-end
-
-
-function OnClickRestore(self)
-	tFunHelper.RestoreWndSize()
-	
-	local objRootCtrl = self:GetOwnerControl()
-	ShowFullScreenBtn(objRootCtrl, true)
 end
 
 
@@ -273,6 +282,7 @@ function CreateNewBrowser(objRootCtrl, nNewID)
 	
 	objFather:AddChild(objWeb)
 	objWeb:SetObjPos(0, 0, "father.width", "father.height")
+	objWeb:SetZorder(-1)
 	
 	return objWeb
 end
@@ -283,6 +293,8 @@ function AdjustTabSize(objRootCtrl)
 	local tTabShowList = GetTabShowList(objRootCtrl)
 	
 	local nTotalNum = #tTabShowList
+	TryShowThumbBtn(objRootCtrl, nTotalNum)
+	
 	local objContLayout = objRootCtrl:GetControlObject("TabContainerCtrl.Container.Layout") 
 	local nFatherL, nFatherT, nFatherR, nFatherB = objContLayout:GetObjPos()
 	local nFatherW = nFatherR - nFatherL
@@ -303,6 +315,7 @@ function AdjustTabSize(objRootCtrl)
 	local nActiveTabID = GetActiveTabID(objRootCtrl)
 	local nActiveShowIndex = GetTabShowIndexByID(objRootCtrl, nActiveTabID)
 	local nActiveSpan = 3
+	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan - nActiveSpan*2 - nTotalNum
 	
 	for nIndex, objTabCtrl in ipairs(tTabShowList) do
 		objTabCtrl:SetZorder(10)	
@@ -322,11 +335,33 @@ function AdjustTabSize(objRootCtrl)
 		end 
 		
 		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
+		if nTotalNum == 1 then
+			objTabCtrl:SetObjPos(nLeft, 0, nLeft+300, "father.height")
+			nFinalRight = nLeft+300-4
+		end		
 	end
 	
-	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan - nActiveSpan*2 - nTotalNum
 	objAddBtn:SetObjPos(nFinalRight, nAddBtnT, nFinalRight+nAddBtnW, nAddBtnB)
 end
+
+
+function TryShowThumbBtn(objRootCtrl, nTabNumber)
+	local objThumbLayout = objRootCtrl:GetControlObject("TabContainerCtrl.ThumbLayout") 
+	local objContLayout = objRootCtrl:GetControlObject("TabContainerCtrl.Container.Layout") 
+	local l, t, r, b = objRootCtrl:GetObjPos()
+	
+	if nTabNumber > 1 then
+		objThumbLayout:SetVisible(true)
+		objThumbLayout:SetChildrenVisible(true)
+		
+		objContLayout:SetObjPos(35,0,"father.width-35","father.height")
+	else
+		objThumbLayout:SetVisible(false)
+		objThumbLayout:SetChildrenVisible(false)
+		objContLayout:SetObjPos(0,0,"father.width","father.height")
+	end
+end
+
 
 
 function SetActiveTab(objRootCtrl, nNewActiveID)

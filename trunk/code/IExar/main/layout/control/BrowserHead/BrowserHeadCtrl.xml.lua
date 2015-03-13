@@ -44,14 +44,15 @@ end
 function OnClickCollect(self)
 	local owner = self:GetOwner():GetUIObject("root.layout:root.ctrl")
 	if not owner then return end
-	local webbrowser = owner:GetControlObject("MainPanel.Center")
+	
+	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.Center")
 	local l, t, r, b = webbrowser:GetObjPos()
-	local collectpanel = owner:GetControlObject("MainPanel.collectpanel")
+	local collectpanel = tFunHelper.GetMainCtrlChildObj("MainPanel.collectpanel")
 	if not collectpanel then
 		local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
 		collectpanel = objFactory:CreateUIObject("MainPanel.collectpanel", "ie.collect")
 		owner:AddChild(collectpanel)
-		collectpanel:SetObjPos(0+16, t+60, 265+16, b+25)
+		collectpanel:SetObjPos(4, 115, 215+16, b+25)
 		collectpanel:SetVisible(false)
 		collectpanel:SetZorder(9999999)
 	end
@@ -65,40 +66,6 @@ function OnClickCollect(self)
 	end
 end
 
-
-function OnClickTabThunmb(self)
-	local owner = self:GetOwner():GetUIObject("root.layout:root.ctrl")
-	if not owner then return end
-	local ret =	tFunHelper.GetCurBrowserBitmap()
-	if not ret then return end
-	local webbrowser = owner:GetControlObject("MainPanel.WebContainer")
-	local thunmblayout = owner:GetControlObject("MainPanel.thunmblayout")
-	if thunmblayout then
-		owner:RemoveChild(thunmblayout)
-		webbrowser:SetVisible(true)
-		webbrowser:SetChildrenVisible(true)
-		return
-	end
-	local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
-	thunmblayout = objFactory:CreateUIObject("MainPanel.thunmblayout", "LayoutObject")
-	local parent = webbrowser:GetParent()
-	parent:AddChild(thunmblayout)
-	local l, t, r, b = webbrowser:GetObjPos()
-	webbrowser:SetVisible(false)
-	webbrowser:SetChildrenVisible(false)
-	thunmblayout:SetObjPos(l, t, r, b)
-	
-	local thunmbobj = owner:GetControlObject("tabthunmbobj")
-	if thunmbobj then
-		owner:RemoveChild(thunmbobj)
-	end
-	thunmbobj = objFactory:CreateUIObject("tabthunmbobj", "ie.tabthunmb")
-	local attr = thunmbobj:GetAttribute()
-	attr.BitmapHandle = ret
-	thunmblayout:AddChild(thunmbobj)
-	thunmbobj:SetObjPos2(58, 46, 226, 175)
-	thunmbobj:Show()
-end
 
 ------辅助函数---
 function GetHostWndByUIElem(objUIElem)

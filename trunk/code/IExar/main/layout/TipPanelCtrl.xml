@@ -76,16 +76,16 @@
 								<obj id="MainPanel.Center" class="LayoutObject">
 									<attr>
 										<left>1</left>
-										<top>120-32</top>
+										<top>120-33</top>
 										<width>father.width-2</width>
-										<height>father.height-(120-32)</height>
+										<height>father.height-(120-33)</height>
 									</attr>
 									<children>	
 										<obj id="MainPanel.TabContainer" class="TabContainerCtrl">
 											<attr>
-												<left>45</left>
-												<top>0</top>
-												<width>father.width-45</width>
+												<left>5</left>
+												<top>1</top>
+												<width>father.width</width>
 												<height>27</height>
 											</attr>		
 											<eventlist>
@@ -95,9 +95,10 @@
 										<obj id="MainPanel.WebContainer" class="LayoutObject">
 											<attr>
 												<left>0</left>
-												<top>32</top>
+												<top>33</top>
 												<width>father.width</width>
-												<height>father.height-32</height>
+												<height>father.height-33</height>
+												<zorder>-1</zorder>
 											</attr>		
 										</obj>
 									</children>
@@ -106,12 +107,11 @@
 								<obj id="MainPanel.Bottom" class="TextureObject">
 									<attr>
 										<left>0</left>
-										<top>118</top>
+										<top>114</top>
 										<width>father.width</width>
-										<height>2</height>
-										<!--texture>WebTab.BottomBkg.Line</texture-->
-										<texture>BrowserHead.Splitter</texture>
-										<zorder>999999</zorder>
+										<height>6</height>
+										<texture>WebTab.BottomBkg.Line</texture>
+										<zorder>100</zorder>
 									</attr>		
 								</obj>
 							</children>
