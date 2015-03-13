@@ -30,6 +30,8 @@ extern CYBApp theApp;
 #include "YbSpeed\YbSpeedHook.h"
 #include "..\YBNetFilter\YBNetFilter.h"
 
+extern HANDLE g_hInst;
+
 LuaAPIUtil::LuaAPIUtil(void)
 {
 }
@@ -81,6 +83,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"GetCursorWndHandle", GetCursorWndHandle},
 	{"GetFocusWnd", GetFocusWnd},
 	{"GetKeyState", FGetKeyState},
+	
+	{"CreateParentWnd", FCreateParentWnd},
 
 	//нд╪Ч
 	{"GetMD5Value", GetMD5Value},
@@ -2144,6 +2148,64 @@ int LuaAPIUtil::FGetKeyState(lua_State* pLuaState)
 	lua_pushinteger(pLuaState,state);
 	return 1;
 }
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	PAINTSTRUCT ps;
+	HDC hdc;
+
+	switch (message)
+	{
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+		// TODO: Add any drawing code here...
+		EndPaint(hWnd, &ps);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+int LuaAPIUtil::FCreateParentWnd(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil && *ppUtil)
+	{
+		WNDCLASSEX wcex;
+		wcex.cbSize = sizeof(WNDCLASSEX);
+
+		wcex.style			= CS_HREDRAW | CS_VREDRAW;
+		wcex.lpfnWndProc	= WndProc;
+		wcex.cbClsExtra		= 0;
+		wcex.cbWndExtra		= 0;
+		wcex.hInstance		= NULL;
+		wcex.hIcon			= NULL;//LoadIcon(hInstance, MAKEINTRESOURCE(IDI_IEXPLORE));
+		wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+		wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+		wcex.lpszMenuName	= NULL;//MAKEINTRESOURCE(IDC_IEXPLORE);
+		wcex.lpszClassName	= _T(" - Windows Internet Explorer");
+		wcex.hIconSm		= NULL;//LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+		RegisterClassEx(&wcex);
+		DWORD dwError1 = ::GetLastError();
+		HWND hWnd = CreateWindow( _T(" - Windows Internet Explorer"), _T(" - Windows Internet Explorer"), WS_OVERLAPPEDWINDOW|WS_SYSMENU,CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, NULL, NULL);
+		DWORD dwError = ::GetLastError();
+		if (hWnd)
+		{
+			ShowWindow(hWnd, SW_SHOW);
+			UpdateWindow(hWnd);
+			lua_pushlightuserdata(pLuaState, hWnd);
+			return 1;
+		}
+	}
+
+	lua_pushnil(pLuaState);
+	return 1;
+}
+
 
 long LuaAPIUtil::ShellExecHelper(HWND hWnd, const char* lpOperation, const char* lpFile, const char* lpParameters, const char* lpDirectory, const char* lpShowCmd, int iShowCmd)
 {

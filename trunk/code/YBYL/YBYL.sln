@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YBNetFilter", "YBNetFilter\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YBSetUpHelper", "YBSetUpHelper\YBSetUpHelper.vcproj", "{065B86A4-3F01-4C50-BAB6-4A1D8ECA325E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iexplore", "iexplore\iexplore.vcproj", "{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -34,6 +36,10 @@ Global
 		{065B86A4-3F01-4C50-BAB6-4A1D8ECA325E}.Debug|Win32.Build.0 = Debug|Win32
 		{065B86A4-3F01-4C50-BAB6-4A1D8ECA325E}.Release|Win32.ActiveCfg = Release|Win32
 		{065B86A4-3F01-4C50-BAB6-4A1D8ECA325E}.Release|Win32.Build.0 = Release|Win32
+		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Debug|Win32.Build.0 = Debug|Win32
+		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Release|Win32.ActiveCfg = Release|Win32
+		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
