@@ -22,7 +22,7 @@ typedef boost::unordered_map<std::string /*host*/, int /*state*/ > ConfigRuleMap
 class FilterRule {
 public:
 	FilterRule(const std::string & rule);
-    bool shouldFilter(const Url & mainURL,const Url & url, FilterType t);
+    int shouldFilter(const Url & mainURL,const Url & url, FilterType t);
     bool isWhiteFilter() { return m_isException;}
     bool isNeedMimeType() { return m_type!=0;}
     void getDomains(StringVector & domains);
@@ -32,6 +32,7 @@ public:
 	void print();
 
 private:
+	int m_iresponse;
 	bool m_isMatchProtocol;
     bool m_isException;
 	std::string m_reFilter;
@@ -41,12 +42,25 @@ private:
     bool m_matchFirstParty;
 	std::vector<std::string> m_domains;
 	std::vector<std::string> m_inverseDomains;
-	std::vector<std::string> m_stateDomains;
 private:
     bool isMatchType(const Url & url,FilterType t);
     bool isMatchThirdParty(const Url & host,const Url & other);
     bool isMatchDomains( const Url & url);
     void processDomains(std::string & ds);
+};
+
+class HideRule {
+public:
+
+	HideRule(const std::string & r);
+	const StringVector & domains() { return m_domains;}
+	//example.com,~foo.example.com##*.sponsor
+	//*.sponsor就是selector
+	const std::string & selector() { return m_sel;}
+	void print();
+private:
+	std::string m_sel;
+	std::vector<std::string> m_domains;
 };
 
 class ReplaceRule {
@@ -66,8 +80,30 @@ private:
 	std::string m_rule;
 	bool m_isMatchProtocol;
 
-	std::vector<std::string> m_stateDomains;
+	//std::vector<std::string> m_stateDomains;
 	
+};
+
+class RedirectRule {
+public:
+
+	RedirectRule(const std::string & r);
+
+	bool shouldRedirect(const Url & u);
+	const std::string & getRedirect(){ return m_reParse;};
+
+	void getDomains(std::string & domain);
+	const std::string & getRegularFilter(){ return m_reRedirect;}
+private:
+	std::string m_reParse;
+	std::string m_reRedirect;
+	std::vector<std::string> m_domains;
+	std::string m_rule;
+	bool m_isMatchProtocol;
+
+	std::vector<std::string> m_vwhiteContent;
+	std::vector<std::string> m_vblackContent;
+
 };
 
 #endif // FILTER_H

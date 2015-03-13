@@ -6,6 +6,8 @@
 #include <string.h>
 #include <iostream>
 
+extern ConfigRuleMap map_VideoState;
+extern rwmutex rw_cfgmutex;
 static std::string parseDomain(std::string host)
 {
 	int spos=0;
@@ -54,30 +56,57 @@ static std::string parseDomain(std::string host)
 	return host;
 }
 
+//ä¸å¼¹è¿‡æ»¤æ¡†ï¼Œåªæœ‰åœ¨VideoStateé‡Œå­˜åœ¨ä¸”ç­‰äº2çš„æ‰ä¸å¼¹
+static bool isMatchState(std::vector<std::string> & v_domain)
+{
+	readLock rdLock(rw_cfgmutex);
+	for (std::vector<std::string>::const_iterator c_iter = v_domain.begin();c_iter!= v_domain.end();c_iter++)
+	{
+		ConfigRuleMap::iterator map_iter =map_VideoState.find(*c_iter);
+		if (map_iter != map_VideoState.end() && map_iter->second == 2)
+		{
+			return false;
+		}
+		
+	}
+	return true; 
+}
 /*
-  Ê×ÏÈmanagerÒÑ¾­ÅĞ¶Ï¹ıÊÇ¹ıÂË¶ø²»ÊÇÒş²Ø¹æÔòÁË
-  ÒÔ@@¿ªÊ¼£¬ÔòÊÇ°×Ãûµ¥£¬manager»áÓÅÏÈ¿¼ÂÇ
-  ÒÔ||¿ªÊ¼ÔòÊÇ²»Æ¥ÅäĞ­ÒéÃûµÄ¹ıÂË£¬²¢È¥µô||
-  ÒÔ|¿ªÊ¼£¬ÔòÈ¥µô|£¬·ñÔòÔÚ¿ªÊ¼´¦Ìí¼Ó*
-  º¬ÓĞ$ÀàĞÍÖ¸¶¨¹æÔò£¬È¥µôÕâĞ©×Ö·û´®£¬²¢´¦ÀíÀàĞÍ
-  ÒÔ|½áÎ²£¬È¥µô|£¬·ñÔòÔÚ½áÎ²´¦Ìí¼Ó*
+  é¦–å…ˆmanagerå·²ç»åˆ¤æ–­è¿‡æ˜¯è¿‡æ»¤è€Œä¸æ˜¯éšè—è§„åˆ™äº†
+  ä»¥@@å¼€å§‹ï¼Œåˆ™æ˜¯ç™½åå•ï¼Œmanagerä¼šä¼˜å…ˆè€ƒè™‘
+  ä»¥||å¼€å§‹åˆ™æ˜¯ä¸åŒ¹é…åè®®åçš„è¿‡æ»¤ï¼Œå¹¶å»æ‰||
+  ä»¥|å¼€å§‹ï¼Œåˆ™å»æ‰|ï¼Œå¦åˆ™åœ¨å¼€å§‹å¤„æ·»åŠ *
+  å«æœ‰$ç±»å‹æŒ‡å®šè§„åˆ™ï¼Œå»æ‰è¿™äº›å­—ç¬¦ä¸²ï¼Œå¹¶å¤„ç†ç±»å‹
+  ä»¥|ç»“å°¾ï¼Œå»æ‰|ï¼Œå¦åˆ™åœ¨ç»“å°¾å¤„æ·»åŠ *
   */
 
 FilterRule::FilterRule( const std::string & r)
 {
 	std::string rule=boost::trim_copy(r);
-    //m_rule=rule;
     this->m_isException=false;
     this->m_isMatchProtocol=true;
     m_filterThirdParty=false;
     m_type=0;
-	
+	m_iresponse = -1;
+	boost::iterator_range<string::iterator> ran = boost::ifind_last(rule,"|#|");
+	if (ran.begin() != rule.end())
+	{
+		std::string::size_type pos = ran.begin()-rule.begin();
+		std::string striresponse = rule.substr(pos+3);
+		if (!striresponse.empty())
+		{
+			m_iresponse = atol(striresponse.c_str());
+		}
+		
+		rule = rule.substr(0,pos);
+	}
+
 	boost::iterator_range<string::iterator> range = boost::ifind_last(rule,"$$$");
 	if (range.begin() != rule.end())
 	{
 		std::string::size_type pos = range.begin()-rule.begin();
 		std::string strState = rule.substr(pos+3);
-		boost::split(m_stateDomains,strState,boost::is_any_of("|"));
+		//boost::split(m_stateDomains,strState,boost::is_any_of("|"));
 		rule = rule.substr(0,pos);
 	}
 
@@ -163,7 +192,7 @@ void FilterRule::print()
 }
 
 /*
- * »ñÈ¡¸Ã¹æÔòÆÚÍû¹ıÂËµÄÓòÃû
+ * è·å–è¯¥è§„åˆ™æœŸæœ›è¿‡æ»¤çš„åŸŸå
  */
 void FilterRule::getDomains(StringVector & domains)
 {
@@ -268,7 +297,7 @@ bool FilterRule::isMatchType(const Url &u, FilterType t)
 static bool adbMatch(const char * s,  const char *  p,bool caseSensitivie=false);
 
 
-bool FilterRule::shouldFilter(const Url & mainURL,const Url & u,FilterType t)
+int FilterRule::shouldFilter(const Url & mainURL,const Url & u,FilterType t)
 {
 	std::string url=u.GetString();
 	bool ret;
@@ -280,16 +309,24 @@ bool FilterRule::shouldFilter(const Url & mainURL,const Url & u,FilterType t)
 		}
 	}
     if(!this->isMatchThirdParty(mainURL,u)) {
-        return false;
+        return 0;
     }
     if(!this->isMatchDomains(u) || !this->isMatchDomains(mainURL)) {
-        return false;
+        return 0;
     }
     if(!isMatchType(u,t)) {
-        return false;
+        return 0;
     }
     ret=adbMatch(url.c_str(),m_reFilter.c_str());
-	return ret;
+	if (ret)
+	{
+		if (m_iresponse > 0 && m_iresponse<1000)
+		{
+			return m_iresponse;  
+		}
+		return 1;
+	}
+	return 0;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -309,7 +346,7 @@ inline char getCaseChar( char c,bool caseSensitive)
 }
 /*
   Separator character is anything but a letter,
-a digit, or one of the following: ¨C . %.
+a digit, or one of the following: â€“ . %.
   */
 static int  isSeperator( char ch)
 {
@@ -375,10 +412,10 @@ static inline int  patternStep( const char * s, const  char * p)
     strncpy_s(temp,p,abpmin(sizeof(temp)-1,step));
     //printf("temp=%s,step=%d\n",temp,step);
     const char * res=strfind(s,temp);
-    if(!res) //Ã»ÓĞÕÒµ½
-        return strlen(s); //ÒÆ¶¯Õû¸ö×Ö·û´®
+    if(!res) //æ²¡æœ‰æ‰¾åˆ°
+        return strlen(s); //ç§»åŠ¨æ•´ä¸ªå­—ç¬¦ä¸²
     else
-        return abpmax(1,res-s); //ÕÒµ½µÚÒ»¸öÆ¥ÅäµÄ×Ö·û´®µÄÎ»ÖÃ
+        return abpmax(1,res-s); //æ‰¾åˆ°ç¬¬ä¸€ä¸ªåŒ¹é…çš„å­—ç¬¦ä¸²çš„ä½ç½®
 }
 /*
    test if a given string  and a pattern  matches use adblock plus rule
@@ -421,6 +458,31 @@ static bool adbMatch(const char *  s,  const char *  p,bool caseSensitivie) {
     }
 }
 
+HideRule::HideRule(const std::string & r)
+{
+	std::string rule=boost::trim_copy(r);
+	int pos=rule.find("##",0);
+	std::string temp;
+	for(int i=0;i<pos;i++) {
+		if(rule[i]==',') {
+			if(!temp.empty()) {
+				m_domains.push_back(temp);
+				temp="";
+			}
+			continue;
+		}
+		temp += rule[i];
+		if(i==pos-1)
+			m_domains.push_back(temp);
+	}
+	m_sel=rule.substr(pos+2);
+}
+
+void HideRule::print()
+{
+
+}
+
 ReplaceRule::ReplaceRule(const std::string & r)
 {
 
@@ -432,7 +494,7 @@ ReplaceRule::ReplaceRule(const std::string & r)
 	{
 		std::string::size_type pos = range.begin()-rule.begin();
 		std::string strState = rule.substr(pos+3);
-		boost::split(m_stateDomains,strState,boost::is_any_of("|"));
+		//boost::split(m_stateDomains,strState,boost::is_any_of("|"));
 		rule = rule.substr(0,pos);
 	}
 	m_rule=rule;
@@ -478,6 +540,118 @@ bool ReplaceRule::shouldReplace(const Url & u)
 void ReplaceRule::getDomains(std::string &domain)
 {
 	std::string s=parseDomain(m_reReplace);
+	if(!s.empty())
+		domain = s;
+}
+
+RedirectRule::RedirectRule(const std::string & r)
+{
+	std::string rule=boost::trim_copy(r);
+	if(boost::istarts_with(rule,"@#@")) {
+		boost::erase_first(rule,"@#@");
+	}
+
+	boost::iterator_range<string::iterator> range = boost::ifind_last(rule,"$$$");
+	if (range.begin() != rule.end())
+	{
+		std::string::size_type pos = range.begin()-rule.begin();
+		rule = rule.substr(0,pos);
+	}
+	m_rule=rule;
+	this->m_isMatchProtocol=true;
+	if(boost::istarts_with(rule,"||")) {
+		this->m_isMatchProtocol=false;
+		boost::erase_first(rule,"||");
+	}
+	if(boost::istarts_with(rule,"|"))
+		boost::erase_first(rule,"|");
+	else
+		rule.insert(0,"*");
+	int dollarPos=rule.find_last_of('$');
+	if(dollarPos!= std::string::npos) {
+		std::string token;
+		rule=rule.substr(0,dollarPos);
+		this->m_reParse=m_rule.substr(dollarPos+2);
+	}
+	range = boost::ifind_first(rule,"$content=");
+	if(range.begin() != rule.end()) {
+		std::string::size_type contentPos = range.begin()-rule.begin();
+		std::string token=rule.substr(contentPos+9);
+		rule=rule.substr(0,contentPos);
+		if (!token.empty())
+		{
+			if (token[0] == '~')
+			{
+				token = token.substr(1);
+				boost::split(m_vwhiteContent,token,boost::is_any_of("|"));
+			}
+			else
+			{
+				boost::split(m_vblackContent,token,boost::is_any_of("|"));
+			}
+			
+		}
+		
+	}
+
+	if (rule[rule.length() - 1] == '|')
+		rule = rule.substr(0,rule.length() - 1);
+	else
+		rule.append("*");
+	this->m_reRedirect=rule;
+}
+
+static bool isMatchContent(std::vector<std::string> & v_content,std::string url)
+{
+	for (std::vector<std::string>::const_iterator c_iter = v_content.begin();c_iter!= v_content.end();c_iter++)
+	{
+		if (url.find((*c_iter).c_str()) != std::string::npos)
+		{
+			return true;
+		}
+		
+	}
+	return false; 
+}
+
+bool RedirectRule::shouldRedirect(const Url & u)
+{
+	std::string url=u.GetString();
+	if (m_reParse.empty() || url.find(m_reParse.c_str()) != std::string::npos)
+	{
+		return false;
+	}
+
+	if(!this->m_isMatchProtocol) 
+	{
+		//url=url.substr(url.length()-u.GetScheme().length());
+		if (!u.GetScheme().empty())
+		{
+			url=url.substr(u.GetScheme().length()+3);
+		}
+	}
+	if (!m_vwhiteContent.empty() && isMatchContent(m_vwhiteContent,url))
+	{
+		return false;
+	}
+	
+	if (!m_vblackContent.empty() && !isMatchContent(m_vblackContent,url))
+	{
+		return false;
+	}
+	
+	bool ret = adbMatch(url.c_str(),m_reRedirect.c_str());
+	if (ret)
+	{
+		m_rule;
+	}
+	
+	return ret;
+}
+
+void RedirectRule::getDomains(std::string &domain)
+{
+	std::string s=parseDomain(m_reRedirect);
 	if(!s.empty())
 		domain = s;
 }
