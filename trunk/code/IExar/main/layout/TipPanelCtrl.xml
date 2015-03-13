@@ -69,24 +69,24 @@
 										<left>0</left>
 										<top>0</top>
 										<width>father.width</width>
-										<height>130</height>
+										<height>120</height>
 									</attr>		
 								</obj>
 								
 								<obj id="MainPanel.Center" class="LayoutObject">
 									<attr>
 										<left>1</left>
-										<top>130-31</top>
+										<top>120-32</top>
 										<width>father.width-2</width>
-										<height>father.height-(130-30)</height>
+										<height>father.height-(120-32)</height>
 									</attr>
 									<children>	
 										<obj id="MainPanel.TabContainer" class="TabContainerCtrl">
 											<attr>
-												<left>10</left>
+												<left>45</left>
 												<top>0</top>
-												<width>father.width-10</width>
-												<height>31</height>
+												<width>father.width-45</width>
+												<height>27</height>
 											</attr>		
 											<eventlist>
 												<event name="OnActiveTabChange" file="TipPanelCtrl.xml.lua" func="OnActiveTabChange" />
@@ -95,42 +95,28 @@
 										<obj id="MainPanel.WebContainer" class="LayoutObject">
 											<attr>
 												<left>0</left>
-												<top>31</top>
+												<top>32</top>
 												<width>father.width</width>
-												<height>father.height-31</height>
+												<height>father.height-32</height>
 											</attr>		
 										</obj>
 									</children>
 								</obj> <!--MainPanel.Center end-->
+								
+								<obj id="MainPanel.Bottom" class="TextureObject">
+									<attr>
+										<left>0</left>
+										<top>118</top>
+										<width>father.width</width>
+										<height>2</height>
+										<!--texture>WebTab.BottomBkg.Line</texture-->
+										<texture>BrowserHead.Splitter</texture>
+										<zorder>999999</zorder>
+									</attr>		
+								</obj>
 							</children>
 						</obj><!--bkg end-->
-						
-						
-						<!--加载XGP使用不显示-->
-						<!--obj id="LoadXGP" class="SeqImageObject">
-							<attr>
-								<left>0</left>  
-								<top>0</top>
-								<width>0</width>
-								<height>0</height>
-								<gif></gif>
-							</attr>
-						</obj-->	
-						
-						<!--debug!!-->
-						<!--obj id="TestImage" class="ImageObject">
-							<attr>
-								<left>20</left>  
-								<top>20</top>
-								<width>200</width>
-								<height>120</height>
-								<zorder>9999999</zorder>
-								<antialias>2</antialias>
-							</attr>
-						</obj-->
-						
-						
-						
+										
 					</children>
 					<eventlist>
 					</eventlist>

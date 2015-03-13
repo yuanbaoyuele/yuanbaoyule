@@ -16,7 +16,7 @@ function OpenURL(self, strURL, bInNewTab)
 
 	PushShowTab(self, nNewTabID)
 	SetActiveTab(self, nNewTabID)
-	AdjustTabSize(self)
+	-- AdjustTabSize(self)
 	tFunHelper.SaveUrlToHistory(strURL)
 end
 
@@ -290,7 +290,7 @@ function AdjustTabSize(objRootCtrl)
 	local objAddBtn = objRootCtrl:GetControlObject("TabContainerCtrl.AddNewTab")
 	local nAddBtnL, nAddBtnT, nAddBtnR, nAddBtnB = objAddBtn:GetObjPos()
 	local nAddBtnW = nAddBtnR - nAddBtnL
-	local nBtnSpan = 10
+	local nBtnSpan = 0
 	
 	local nMaxTabWidth = attr.nMaxTabWidth
 	local nTabWidth = nMaxTabWidth
@@ -299,13 +299,32 @@ function AdjustTabSize(objRootCtrl)
 		nTabWidth = nFatherW/nTotalNum
 	end
 	
+	--处理激活态的tab
+	local nActiveTabID = GetActiveTabID(objRootCtrl)
+	local nActiveShowIndex = GetTabShowIndexByID(objRootCtrl, nActiveTabID)
+	local nActiveSpan = 3
+	
 	for nIndex, objTabCtrl in ipairs(tTabShowList) do
+		objTabCtrl:SetZorder(10)	
 		local nLeft = (nIndex-1)*nTabWidth
+		
+		if nIndex > 1 then
+			nLeft = nLeft - nIndex + 1
+		end
+		
+		if nIndex == nActiveShowIndex then
+			nLeft = nLeft - nActiveSpan
+			objTabCtrl:SetZorder(100)
+		end
+		
+		if nIndex > nActiveShowIndex then
+			nLeft = nLeft - nActiveSpan*2
+		end 
+		
 		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
-		objTabCtrl:SetZorder(10)
 	end
 	
-	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan
+	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan - nActiveSpan*2 - nTotalNum
 	objAddBtn:SetObjPos(nFinalRight, nAddBtnT, nFinalRight+nAddBtnW, nAddBtnB)
 end
 
@@ -331,6 +350,7 @@ function SetActiveTab(objRootCtrl, nNewActiveID)
 	ShowTabAndBrowser(objRootCtrl, nNewActiveID, true)
 
 	SetCurActiveTabID(objRootCtrl, nNewActiveID)
+	AdjustTabSize(objRootCtrl)
 end
 
 

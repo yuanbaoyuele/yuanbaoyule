@@ -80,8 +80,8 @@
 								<left>0</left>
 								<top>32</top>
 								<width>father.width</width>
-								<height>1</height>
-								<texture>YBYL.Menu.Splitter</texture>
+								<height>2</height>
+								<texture>BrowserHead.Splitter</texture>
 							</attr>	
 						</obj>
 						
@@ -99,34 +99,58 @@
 								<left>0</left>
 								<top>55</top>
 								<width>father.width</width>
-								<height>1</height>
-								<texture>YBYL.Menu.Splitter</texture>
+								<height>2</height>
+								<texture>BrowserHead.Splitter</texture>
 							</attr>	
 						</obj>
 						
 						<obj id="BrowserHeadCtrl.CollectBtn" class="TipAddin.Button">
 							<attr>
 								<left>2</left>
-								<top>62</top>
-								<width>60</width>
-								<height>18</height>
+								<top>59</top>
+								<width>70</width>
+								<height>26</height>
+								<LeftTextPos>25</LeftTextPos>
+								<TextFont>font.collectbar.text</TextFont>
 								<Text>收藏夹</Text>
-								<NormalBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Normal</NormalBkgID>
-								<DownBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Down</DownBkgID>
-								<HoverBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Hover</HoverBkgID>
-								<DisableBkgID>YBYL.Head.FuncBtn.FiltClose.Bkg.Disable</DisableBkgID>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<DisableBkgID></DisableBkgID>
 							</attr>
+							<children>
+								<obj id="CollectBtn.LeftIco" class="ImageObject">
+									<attr>
+										<left>5</left>
+										<top>6</top>
+										<width>16</width>
+										<height>16</height>
+										<image>Star.Logo</image>
+										<zorder>999999</zorder>
+									</attr>	
+								</obj>
+							</children>
 							<eventlist>
 								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCollect" />
 							</eventlist>
 						</obj>
 						
+						<obj id="BrowserHeadCtrl.Splitter3" class="TextureObject">
+							<attr>
+								<left>75</left>
+								<top>62</top>
+								<width>1</width>
+								<height>20</height>
+								<texture>YBYL.Menu.Splitter.Vertical</texture>
+							</attr>	
+						</obj>
+						
 						<obj id="BrowserHeadCtrl.CollectList" class="CollectList">
 							<attr>
-								<left>10+62</left>
-								<top>62</top>
-								<width>father.width-300</width>
-								<height>18</height>
+								<left>80</left>
+								<top>59</top>
+								<width>father.width-80</width>
+								<height>26</height>
 							</attr>	
 						</obj>
 					</children>

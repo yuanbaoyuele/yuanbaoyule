@@ -32,18 +32,18 @@ end
 
 local g_tShowFileMenu = {bShow=false}
 function OnClickFile(self)
-	PopupMenu(self, 28, "FileMenu", g_tShowFileMenu)
+	PopupMenu(self, 18, "FileMenu", g_tShowFileMenu)
 end
 
 local g_tShowEditMenu = {bShow=false}
 function OnClickEdit(self)
-	PopupMenu(self, 28, "EditMenu", g_tShowEditMenu)
+	PopupMenu(self, 18, "EditMenu", g_tShowEditMenu)
 end
 
 
 local g_tShowLookupMenu = {bShow=false}
 function OnClickLookup(self)
-	PopupMenu(self, 28, "LookupMenu", g_tShowLookupMenu)
+	PopupMenu(self, 18, "LookupMenu", g_tShowLookupMenu)
 end
 
 
@@ -54,19 +54,19 @@ function OnClickCollect(self)
 		return
 	end
 	
-	PopupMenu(self, 28, "CollectMenu", g_tShowCollectMenu)
+	PopupMenu(self, 18, "CollectMenu", g_tShowCollectMenu)
 end
 
 
 local g_tShowToolMenu = {bShow=false}
 function OnClickTool(self)
-	PopupMenu(self, 28, "ToolMenu", g_tShowToolMenu)
+	PopupMenu(self, 18, "ToolMenu", g_tShowToolMenu)
 end
 
 
 local g_tShowHelpMenu = {bShow=false}
 function OnClickHelp(self)
-	PopupMenu(self, 28, "HelpMenu", g_tShowHelpMenu)
+	PopupMenu(self, 18, "HelpMenu", g_tShowHelpMenu)
 end
 
 

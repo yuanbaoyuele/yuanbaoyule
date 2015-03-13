@@ -42,13 +42,13 @@
 						<obj id="TabContainerCtrl.AddNewTab" class="TipAddin.Button">
 							<attr>
 								<left>0</left>
-								<top>father.height-20</top>
-								<width>12</width>
-								<height>12</height>
-								<NormalBkgID>YBYL.Tab.AddNew.Normal</NormalBkgID>
-								<DownBkgID>YBYL.Tab.AddNew.Down</DownBkgID>
-								<HoverBkgID>YBYL.Tab.AddNew.Hover</HoverBkgID>
-								<DisableBkgID>YBYL.Tab.AddNew.Disable</DisableBkgID>
+								<top>3</top>
+								<width>30</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Tab.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.MouseEnter</DownBkgID>
+								<HoverBkgID>YBYL.Tab.MouseEnter</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.Normal</DisableBkgID>
 							</attr>
 							<eventlist>
 								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickAddNewTab" />
@@ -56,58 +56,6 @@
 						</obj>
 					</children>
 				</obj> 
-				
-				<!--obj id="TabContainerCtrl.CloseBtn" class="TipAddin.Button">
-					<attr>
-						<left>father.width-21-15</left>
-						<top>3</top>
-						<width>21</width>
-						<height>21</height>
-						<NormalBkgID>YBYL.TabContainer.CloseBtn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.TabContainer.CloseBtn.Down</DownBkgID>
-						<HoverBkgID>YBYL.TabContainer.CloseBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.TabContainer.CloseBtn.Disable</DisableBkgID>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickCloseCurTab" />
-						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterClose" />
-					</eventlist>
-				</obj>
-				
-				<obj id="TabContainerCtrl.FullScrn" class="TipAddin.Button">
-					<attr>
-						<left>father.width-21*2-22</left>
-						<top>3</top>
-						<width>21</width>
-						<height>21</height>
-						<NormalBkgID>YBYL.TabContainer.FullScrn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.TabContainer.FullScrn.Down</DownBkgID>
-						<HoverBkgID>YBYL.TabContainer.FullScrn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.TabContainer.FullScrn.Disable</DisableBkgID>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickFullScrn" />
-						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterFullScrn" />
-					</eventlist>
-				</obj>
-				
-				<obj id="TabContainerCtrl.RestoreBtn" class="TipAddin.Button">
-					<attr>
-						<left>father.width-21*2-22</left>
-						<top>3</top>
-						<width>21</width>
-						<height>21</height>
-						<NormalBkgID>YBYL.TabContainer.RestoreBtn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.TabContainer.RestoreBtn.Down</DownBkgID>
-						<HoverBkgID>YBYL.TabContainer.RestoreBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.TabContainer.RestoreBtn.Disable</DisableBkgID>
-					</attr>
-					<eventlist>
-						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickRestore" />
-						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterRestore" />
-						<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
-					</eventlist>
-				</obj-->
 				
 			</children>
 			<eventlist>

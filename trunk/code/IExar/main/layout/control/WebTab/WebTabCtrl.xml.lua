@@ -59,16 +59,12 @@ function GetSelfID(self)
 end
 
 
-function SetActiveStyle(self, bActive)
-	local objActvieBkg = self:GetControlObject("WebTabCtrl.Active.Bkg")
-	
+function SetActiveStyle(self, bActive)	
 	if bActive then
 		FocusOnBrowser(self)
-		objActvieBkg:SetTextureID("YBYL.Tab.Active")
-		self:SetCursorID("IDC_ARROW")
+		ShowActiveBkg(self, true)
 	else
-		objActvieBkg:SetTextureID("")
-		-- self:SetCursorID("IDC_HAND")
+		ShowActiveBkg(self, false)
 	end
 		
 	ShowMouseEnterBkg(self, false)
@@ -337,11 +333,7 @@ function ShowMouseEnterBkg(objRootCtrl, bShow)
 		return
 	end
 	
-	if bShow then
-		objMsEnterBkg:SetTextureID("YBYL.Tab.MouseEnter")
-	else
-		objMsEnterBkg:SetTextureID("")
-	end
+	objMsEnterBkg:SetVisible(bShow)
 end
 
 
@@ -352,6 +344,21 @@ function SetBrowserTitle(strTitle)
 	end
 
 	objTitleCtrl:SetTitleText(strTitle)
+end
+
+
+function ShowActiveBkg(objRootCtrl, bActive)
+	local objActvieBkg = objRootCtrl:GetControlObject("WebTabCtrl.Bkg")
+	local objLayout = objRootCtrl:GetControlObject("WebTabCtrl.Layout")
+	local l, t, r, b = objLayout:GetObjPos()
+	
+	if bActive then
+		objActvieBkg:SetTextureID("YBYL.Tab.Active")
+		objLayout:SetObjPos(0, 0, "father.width", "father.height")
+	else
+		objActvieBkg:SetTextureID("YBYL.Tab.Normal")
+		objLayout:SetObjPos(0, 3, "father.width", "father.height")
+	end
 end
 
 
