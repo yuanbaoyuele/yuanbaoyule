@@ -53,7 +53,7 @@ function OnClick2(self)
 		
 	local data = { 
 		textArray = SearchEngineDisplay, 
-		edit = control:GetControlObject("edit"), 
+		edit = self, 
 		iconArray = SearchEngineIcon
 	}
 
@@ -95,9 +95,8 @@ function ShowPopupWnd(control, left, top, width, bottom, data)
 								if data.isSetSearchEngine then
 									SetSearchEngine(control, data.text)
 								else
-									--local edit = control:GetControlObject("edit")
-									--edit:SetText(data.text)
-									SetSearchEngine(control, data.text)
+									local edit = control:GetControlObject("edit")
+									edit:SetText(data.text)
 								end
 							end
 						end
@@ -152,9 +151,8 @@ function OnControlFocusChange(self, focus)
 						btn = objFactory:CreateUIObject("minibtn"..i, "TipAddin.Button")
 						editextctrl:AddChild(btn)
 						btn:SetObjPos(6+(i-1)*24, 2, 20+(i-1)*24, 16)
-						btn:AttachListener("OnClick", false, function(_self)
-							--XLMessageBox(SearchEngineMap[i]["displayName"])
-							SetSearchEngine(self, SearchEngineMap[i]["displayName"])
+						btn:AttachListener("OnClick", false, function(self)
+							XLMessageBox(SearchEngineMap[i]["displayName"])
 						end)
 					end
 					local attr = btn:GetAttribute()

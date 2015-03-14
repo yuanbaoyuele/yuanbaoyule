@@ -66,7 +66,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	attr.ExtraData = tCollectInfo["strURL"]
 	attr.FontColorNormal = "404040"
 	attr.TextPos = 27
-	attr.DeleteImgVisible = true
+	attr.DeleteImgVisible = false
 	
 	SetIcoImage(objMenuItem, tCollectInfo)
 	objMenuItem:AttachListener("OnSelect", false, OpenURL)
@@ -84,7 +84,7 @@ function SetIcoImage(objMenuItem, tCollectInfo)
 	local objBitmap = tCollectInfo["objBitmap"]
 	local strDefaultImgID = tFunHelper.GetDefaultIcoImgID()
 	objMenuItem:SetIconID(strDefaultImgID)
-	
+		
 	local objImage = objMenuItem:GetControlObject("icon")
 	if objBitmap and objImage then
 		objMenuItem:SetIconBitmap(objBitmap)
