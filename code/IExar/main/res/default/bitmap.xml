@@ -101,6 +101,8 @@
 <texture id="texture.search.google" path="bitmap\google.png"/>
 <texture id="texture.search.soso" path="bitmap\soso.png"/>
 <texture id="texture.search.bing" path="bitmap\bing.png"/>
+<bitmap id="img.week" path="bitmap\week.png"/>
+<bitmap id="img.weekday" path="bitmap\weekday.png"/>
 		<!-- BufferView -->
 		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
 		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	
