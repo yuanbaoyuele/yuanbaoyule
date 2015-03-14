@@ -188,7 +188,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 		if not _select then
 			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
 			objparent:AddChild(_select)
-			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+			_select:SetTextureID("YBYL.Menu.Select.Bkg")
 			_select:SetZorder(101)
 		end
 		local l, t, r, b = objparent:GetObjPos()
@@ -205,7 +205,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 		if not _select then
 			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
 			objparent:AddChild(_select)
-			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+			_select:SetTextureID("YBYL.Menu.Select.Bkg")
 		end
 		_select:SetZorder(101)
 		local l, t, r, b = objparent:GetObjPos()
@@ -354,7 +354,7 @@ function CreateNode(v, icon, left, isdir)
 		if not _select then
 			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
 			objparent:AddChild(_select)
-			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+			_select:SetTextureID("YBYL.Menu.Select.Bkg")
 			_select:SetZorder(101)
 		end
 		local l, t, r, b = objparent:GetObjPos()
@@ -376,7 +376,7 @@ function CreateNode(v, icon, left, isdir)
 		if not _select then
 			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
 			objparent:AddChild(_select)
-			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+			_select:SetTextureID("YBYL.Menu.Select.Bkg")
 		end
 		_select:SetZorder(101)
 		local l, t, r, b = objparent:GetObjPos()
