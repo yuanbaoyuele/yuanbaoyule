@@ -5,7 +5,7 @@ end
 
 function OnMouseEnter(self)
 	local bkg = self:GetControlObject("bkg")
-	bkg:SetTextureID("YBYL.Menu.Select.Bkg")
+	bkg:SetTextureID("pluginitem.all.hover")
 end
 
 function OnMouseLeave(self)

@@ -9,6 +9,19 @@
 			<zorder>999999</zorder>
 		</attr>
 	</objtemplate>
+	<objtemplate class="TextObject" id="text.template">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>father.width</width>
+			<height>father.height</height>
+			<font>font.text12</font>
+			<textcolor>system.black</textcolor>
+			<valign>center</valign>
+			<halign>center</halign>
+		</attr>
+	</objtemplate>
+	
 
 
 	<control class="StateBar">
@@ -25,7 +38,7 @@
 		
 		<objtemplate>
 			<children>
-				<obj id="ToolTipCtrl.Bkg" class="TextureObject">
+				<obj id="StateBar.Bkg" class="TextureObject">
 					<attr>
 						<left>0</left>
 						<top>0</top>
@@ -34,7 +47,7 @@
 						<texture>StateBar.Bkg</texture>
 					</attr>
 					<children>
-						<obj id="ToolTipCtrl.Text" class="TextObject">
+						<obj id="StateBar.Text" class="TextObject">
 							<attr>
 								<left>0</left>
 								<top>0</top>
@@ -48,23 +61,103 @@
 							</attr>
 						</obj>
 					
-						<obj id="BrowserHeadCtrl.Splitter1" class="TextureObject" templateid="splitter.template">
+						<obj id="StateBar.Splitter1" class="TextureObject" templateid="splitter.template">
 							<attr>
 								<left>father.width-445</left>
 							</attr>	
 						</obj>
-						<obj id="BrowserHeadCtrl.Splitter2" class="TextureObject" templateid="splitter.template">>
+						<obj id="StateBar.Splitter2" class="TextureObject" templateid="splitter.template">
 							<attr>
 								<left>father.width-445+25</left>
 							</attr>	
 						</obj>
-						<obj id="BrowserHeadCtrl.Splitter3" class="TextureObject" templateid="splitter.template">>
+						<obj id="StateBar.Splitter3" class="TextureObject" templateid="splitter.template">
 							<attr>
 								<left>father.width-445+25*2</left>
 							</attr>	
 						</obj>
+						<obj id="StateBar.Splitter4" class="TextureObject" templateid="splitter.template">
+							<attr>
+								<left>father.width-445+25*3</left>
+							</attr>	
+						</obj>
+						<obj id="StateBar.Splitter5" class="TextureObject" templateid="splitter.template">
+							<attr>
+								<left>father.width-445+25*4</left>
+							</attr>	
+						</obj>
+						<obj id="StateBar.Splitter6" class="TextureObject" templateid="splitter.template">
+							<attr>
+								<left>father.width-445+25*5</left>
+							</attr>	
+						</obj>
+						<obj id="StateBar.Splitter7" class="TextureObject" templateid="splitter.template">
+							<attr>
+								<left>father.width-445+25*6</left>
+							</attr>	
+						</obj>
 					
+						<obj id="Earth.Image" class="ImageObject">
+							<attr>
+								<left>father.width-275-14</left>
+								<top>(father.height-16)/2+3</top>
+								<width>16</width>
+								<height>16</height>
+								<image>Earth.Image</image>
+							</attr>
+						</obj>
 					
+						<obj id="StateBar.TextInternet" class="TextObject" templateid="text.template">
+							<attr>
+								<left>father.width-275</left>
+								<top>2</top>
+								<width>60</width>
+								<height>father.height</height>
+								<text>Internet</text>
+							</attr>
+						</obj>
+						
+						<obj id="StateBar.Splitter8" class="TextureObject" templateid="splitter.template">
+							<attr>
+								<left>father.width-140</left>
+							</attr>	
+						</obj>
+						
+						<obj id="StateBar.Splitter9" class="TextureObject" templateid="splitter.template">
+							<attr>
+								<left>father.width-95</left>
+							</attr>	
+						</obj>
+												
+						<obj id="Magnifier.Image" class="ImageObject">
+							<attr>
+								<left>father.width-85</left>
+								<top>(father.height-13)/2+1</top>
+								<width>13</width>
+								<height>13</height>
+								<image>Magnifier</image>
+							</attr>
+						</obj>
+						
+						<obj id="StateBar.Zoom.Text" class="TextObject" templateid="text.template">
+							<attr>
+								<left>father.width-87</left>
+								<top>2</top>
+								<width>60</width>
+								<height>father.height</height>
+								<text>100%</text>
+							</attr>
+						</obj>
+						
+						<obj id="StateBar.RightCorner" class="ImageObject">
+							<attr>
+								<left>father.width-11</left>
+								<top>father.height-11</top>
+								<width>11</width>
+								<height>11</height>
+								<image>StateBar.RightCorner</image>
+							</attr>
+						</obj>
 						
 					</children>
 				</obj>
