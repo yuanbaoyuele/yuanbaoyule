@@ -193,6 +193,7 @@ public:
 	//IE菜单
 	static int IEMenu_SaveAs(lua_State* pLuaState);
 	static int IEMenu_Zoom(lua_State* pLuaState);
+	static int IEFavorite_Organize(lua_State* pLuaState);
 
 	// 变速相关
 	static int YbSpeedInitialize(lua_State* pLuaState);
