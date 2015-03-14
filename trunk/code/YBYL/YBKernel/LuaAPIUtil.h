@@ -149,7 +149,9 @@ public:
 	static int GetCurrentUTCTime(lua_State* pLuaState);
 	static int DateTime2Seconds(lua_State* pLuaState);
 	static int Seconds2DateTime(lua_State* pLuaState);
-
+	static int FileTime2LocalTime(lua_State* pLuaState);
+	static int InternetTimeToUTCTime(lua_State* pLuaState);
+	
 	//互斥量函数
 	static int CreateNamedMutex(lua_State* pLuaState);
 	static int CloseNamedMutex(lua_State* pLuaState);
@@ -173,6 +175,7 @@ public:
 	static int EncryptAESToFile(lua_State* pLuaState);
 	static int DecryptFileAES(lua_State* pLuaState);
 	
+	static int GetIEHistoryInfo(lua_State* pLuaState);
 
 	//INI配置文件操作
 	static int ReadINI(lua_State* pLuaState);

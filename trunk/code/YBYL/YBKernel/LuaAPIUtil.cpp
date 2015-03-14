@@ -130,6 +130,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"GetCurrentUTCTime", GetCurrentUTCTime},
 	{"DateTime2Seconds", DateTime2Seconds},
 	{"Seconds2DateTime", Seconds2DateTime},
+	{"FileTime2LocalTime", FileTime2LocalTime},
+	{"InternetTimeToUTCTime", InternetTimeToUTCTime},
 
 	//互斥量函数
 	{"CreateMutex", CreateNamedMutex},
@@ -153,6 +155,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"EncryptAESToFile", EncryptAESToFile},
 	{"DecryptFileAES", DecryptFileAES},
 
+
+	{"GetIEHistoryInfo", GetIEHistoryInfo},
 	//INI配置文件操作
 	{"ReadINI", ReadINI},
 	{"WriteINI", WriteINI},
@@ -2706,6 +2710,77 @@ int LuaAPIUtil::Seconds2DateTime(lua_State* pLuaState)
 	return 0;
 }
 
+int LuaAPIUtil::FileTime2LocalTime(lua_State *pLuaState)
+{
+	TSTRACEAUTO();
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		DWORD dwLowTime = (DWORD)lua_tonumber(pLuaState, 2);
+		DWORD dwHighTime = (DWORD)lua_tonumber(pLuaState, 3);
+		FILETIME ft;
+		ft.dwLowDateTime = dwLowTime;
+		ft.dwHighDateTime = dwHighTime;
+		SYSTEMTIME stUTC, stLocal;
+		FileTimeToSystemTime(&ft, &stUTC);
+		SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+
+		lua_pushnumber(pLuaState, stLocal.wYear);
+		lua_pushnumber(pLuaState, stLocal.wMonth);
+		lua_pushnumber(pLuaState, stLocal.wDay);
+		lua_pushnumber(pLuaState, stLocal.wHour);
+		lua_pushnumber(pLuaState, stLocal.wMinute);
+		lua_pushnumber(pLuaState, stLocal.wSecond);
+		lua_pushnumber(pLuaState, stLocal.wDayOfWeek);
+		return 7;
+	}
+	return 0;
+}
+
+#include <WinInet.h>
+#pragma comment(lib, "WinInet.lib")
+int LuaAPIUtil::InternetTimeToUTCTime(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		if (lua_isstring(pLuaState, 2))
+		{
+			const char *szInetTime = luaL_checkstring(pLuaState, 2);
+			if (szInetTime)
+			{
+				CComBSTR bstrInetTimeW;
+				LuaStringToCComBSTR(szInetTime,bstrInetTimeW);
+
+
+				::SYSTEMTIME stSince1601;
+				ULONGLONG ftSince1601 = 0;
+
+				::SYSTEMTIME st1970 = {0};
+				st1970.wYear = 1970;
+				st1970.wMonth = 1;
+				st1970.wDay = 1;
+				st1970.wHour = 0;
+				st1970.wMinute = 0;
+				st1970.wSecond = 0;
+				st1970.wMilliseconds = 0;
+				ULONGLONG ft1970 = 0;
+
+				if (   ::InternetTimeToSystemTimeW(bstrInetTimeW.m_str, &stSince1601, 0)
+					&& ::SystemTimeToFileTime(&stSince1601, (FILETIME *)&ftSince1601)
+					&& ::SystemTimeToFileTime(&st1970, (FILETIME *)&ft1970))
+				{
+					LONGLONG ftSince1970 = ftSince1601 - ft1970;
+					lua_pushnumber(pLuaState, (lua_Number)(ftSince1970 / 10000000));
+					return 1;
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+
 
 //互斥量函数
 int LuaAPIUtil::CreateNamedMutex(lua_State* pLuaState)
@@ -4228,5 +4303,115 @@ int LuaAPIUtil::FSetKeyboardHook(lua_State* pLuaState)
 int LuaAPIUtil::FDelKeyboardHook(lua_State* pLuaState)
 {
 	CYBMsgWindow::Instance()->DelKeyboardHook();
+	return 0;
+}
+
+#include <UrlHist.h>
+int LuaAPIUtil::GetIEHistoryInfo(lua_State *pLuaState)
+{
+	TSTRACEAUTO();
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		::CoInitialize(NULL);
+
+		IUrlHistoryStg* puhs = NULL;
+		HRESULT hr = CoCreateInstance(CLSID_CUrlHistory, NULL, CLSCTX_INPROC_SERVER, IID_IUrlHistoryStg, (LPVOID *)&puhs);
+		if (SUCCEEDED(hr))
+		{
+			IEnumSTATURL* pEnumURL;
+			hr = puhs->EnumUrls(&pEnumURL);
+			if (SUCCEEDED(hr))
+			{
+				STATURL suURL;
+				ULONG pceltFetched;
+				suURL.cbSize = sizeof(suURL);
+				hr = pEnumURL->Reset();
+				pEnumURL->SetFilter(L"http", 0);
+
+				lua_newtable(pLuaState);
+				int i = 1;
+				while (SUCCEEDED(pEnumURL->Next(1, &suURL, &pceltFetched)) && (pceltFetched > 0))
+				{
+					TSDEBUG4CXX(suURL.pwcsUrl << L"   " << suURL.pwcsTitle);
+					std::wstring strUrl = suURL.pwcsUrl;
+
+					lua_newtable(pLuaState);
+					lua_pushstring(pLuaState, "pwcsUrl");
+					if (suURL.pwcsUrl != NULL)
+					{
+						std::string strUrl;
+						BSTRToLuaString(suURL.pwcsUrl,strUrl);
+						lua_pushstring(pLuaState, strUrl.c_str());
+					}
+					else
+					{
+						lua_pushnil(pLuaState);
+					}
+					lua_settable(pLuaState, -3);
+
+					lua_pushstring(pLuaState, "pwcsTitle");
+					if (suURL.pwcsTitle != NULL)
+					{
+						std::string strTitle;
+						BSTRToLuaString(suURL.pwcsTitle,strTitle);
+						lua_pushstring(pLuaState, strTitle.c_str());
+					}
+					else
+					{
+						lua_pushnil(pLuaState);
+					}
+					lua_settable(pLuaState, -3);
+
+					TSDEBUG4CXX(L"ftLastVisited.dwLowDateTime = " << suURL.ftLastVisited.dwLowDateTime << L"  ftLastVisited.dwHighDateTime = " << suURL.ftLastVisited.dwHighDateTime);
+					lua_pushstring(pLuaState, "ftLastVisited");
+					lua_newtable(pLuaState);
+					lua_pushstring(pLuaState, "dwLowDateTime");
+					lua_pushnumber(pLuaState, suURL.ftLastVisited.dwLowDateTime);
+					lua_settable(pLuaState, -3);
+					lua_pushstring(pLuaState, "dwHighDateTime");
+					lua_pushnumber(pLuaState, suURL.ftLastVisited.dwHighDateTime);
+					lua_settable(pLuaState, -3);
+					lua_settable(pLuaState, -3);
+
+					TSDEBUG4CXX(L"ftLastUpdated.dwLowDateTime = " << suURL.ftLastUpdated.dwLowDateTime << L"  ftLastUpdated.dwHighDateTime = " << suURL.ftLastUpdated.dwHighDateTime);
+					lua_pushstring(pLuaState, "ftLastUpdated");
+					lua_newtable(pLuaState);
+					lua_pushstring(pLuaState, "dwLowDateTime");
+					lua_pushnumber(pLuaState, suURL.ftLastUpdated.dwLowDateTime);
+					lua_settable(pLuaState, -3);
+					lua_pushstring(pLuaState, "dwHighDateTime");
+					lua_pushnumber(pLuaState, suURL.ftLastUpdated.dwHighDateTime);
+					lua_settable(pLuaState, -3);
+					lua_settable(pLuaState, -3);
+
+					TSDEBUG4CXX(L"ftExpires.dwLowDateTime = " << suURL.ftExpires.dwLowDateTime << L"  ftExpires.dwHighDateTime = " << suURL.ftExpires.dwHighDateTime);
+					lua_pushstring(pLuaState, "ftExpires");
+					lua_newtable(pLuaState);
+					lua_pushstring(pLuaState, "dwLowDateTime");
+					lua_pushnumber(pLuaState, suURL.ftExpires.dwLowDateTime);
+					lua_settable(pLuaState, -3);
+					lua_pushstring(pLuaState, "dwHighDateTime");
+					lua_pushnumber(pLuaState, suURL.ftExpires.dwHighDateTime);
+					lua_settable(pLuaState, -3);
+					lua_settable(pLuaState, -3);
+
+					::CoTaskMemFree(suURL.pwcsTitle);
+					::CoTaskMemFree(suURL.pwcsUrl);
+
+					lua_rawseti(pLuaState, -2, i);
+					i++;
+				}
+
+				pEnumURL->Release();
+				puhs->Release();
+				::CoUninitialize();
+
+				return 1;
+			}
+			puhs->Release();
+		}
+		::CoUninitialize();
+	}
 	return 0;
 }
