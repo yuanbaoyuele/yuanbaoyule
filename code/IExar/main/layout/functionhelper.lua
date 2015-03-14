@@ -1746,6 +1746,7 @@ obj.GetExePath = GetExePath
 obj.LoadTableFromFile = LoadTableFromFile
 obj.SaveTableToFile = SaveTableToFile
 obj.CheckIsNewVersion = CheckIsNewVersion
+obj.FileTime2LocalTime = FileTime2LocalTime
 obj.SendRunTimeReport = SendRunTimeReport
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
