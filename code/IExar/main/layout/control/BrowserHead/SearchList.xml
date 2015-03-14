@@ -66,6 +66,7 @@
 						<obj id="text" class="TextObject">
 							<attr>
 								<left>7+16+3</left>
+								<top>2</top>
 								<width>father.width-14</width>
 								<height>father.height</height>
 							</attr>
