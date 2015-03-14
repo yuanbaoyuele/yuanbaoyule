@@ -170,6 +170,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"BrowserForFile", BrowserForFile},
 	{"IEMenu_SaveAs", IEMenu_SaveAs},
 	{"IEMenu_Zoom", IEMenu_Zoom},
+	{"IEFavorite_Organize", IEFavorite_Organize},
 
 	// 变速相关
 	{"YbSpeedInitialize", YbSpeedInitialize},
@@ -4263,6 +4264,49 @@ int LuaAPIUtil::IEMenu_Zoom(lua_State *pLuaState)
 			
 			(*lpWeb2)->ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DODEFAULT, &varZoom, NULL);
 		}
+	}
+	return 0;
+}
+
+int LuaAPIUtil::IEFavorite_Organize(lua_State *pLuaState)
+{
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil)
+	{	
+		HWND hWnd = (HWND)lua_touserdata(pLuaState, 2);
+
+		typedef UINT (CALLBACK* LPFNORGFAV)(HWND, LPTSTR);
+		bool bFree = false;
+		HMODULE hMod = ::GetModuleHandle( _T("shdocvw.dll") );
+		if (hMod == NULL)//如果"shdocvw.dll"尚未载入则载入之
+		{
+			hMod = ::LoadLibrary( _T("shdocvw.dll") );
+			bFree = true;
+		}
+		if (hMod == NULL)
+		{
+			return 0;
+		}
+		LPFNORGFAV lpfnDoOrganizeFavDlg = (LPFNORGFAV)::GetProcAddress( hMod, "DoOrganizeFavDlg" );
+		if (lpfnDoOrganizeFavDlg == NULL)
+		{
+			
+			return 0;
+		}
+		TCHAR szPath [ MAX_PATH ];
+		HRESULT hr;
+		hr = ::SHGetSpecialFolderPath( hWnd, szPath, CSIDL_FAVORITES, TRUE );
+		if (FAILED(hr))
+		{
+			return 0;
+		}
+		BOOL bResult = (*lpfnDoOrganizeFavDlg) (hWnd, szPath) ? TRUE : FALSE;
+		if (bFree)
+		{
+			::FreeLibrary( hMod );
+		}
+		lua_pushboolean(pLuaState, bResult);
+		return 1;
 	}
 	return 0;
 }
