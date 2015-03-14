@@ -207,6 +207,24 @@ function IsUserFullScreen()
 	return bRet
 end
 
+function FileTime2LocalTime(tFileTime)
+	local nUTCInSec, strWeekDay = 0, ""
+	if type(tFileTime) == "table" and type(tFileTime.dwLowDateTime) == "number" and type(tFileTime.dwHighDateTime) == "number" then
+		local nYear, nMonth, nDay, nHour, nMin, nSec, nDayOfWeek = tipUtil:FileTime2LocalTime(tFileTime.dwLowDateTime, tFileTime.dwHighDateTime)
+		local tDayWeekMap = {[1]="星期一", [2]="星期二", [3]="星期三", [4]="星期四", [5]="星期五", [6]="星期六", [7]="星期日"}
+		strWeekDay = tDayWeekMap[nDayOfWeek]
+		if type(nYear) == "number" and type(nMonth) == "number" and type(nDay) == "number" 
+			and type(nHour) == "number" and type(nMin) == "number" and type(nSec) == "number" 
+			then
+			local nResult = tipUtil:DateTime2Seconds(nYear, nMonth, nDay, nHour, nMin, nSec)
+			if type(nResult) == "number" then
+				nUTCInSec = nResult
+			end
+		end
+	end
+	
+	return nUTCInSec, strWeekDay
+end
 
 function CheckIsNewVersion(strNewVer, strCurVer)
 	if not IsRealString(strNewVer) or not IsRealString(strCurVer) then
@@ -1728,6 +1746,7 @@ obj.GetExePath = GetExePath
 obj.LoadTableFromFile = LoadTableFromFile
 obj.SaveTableToFile = SaveTableToFile
 obj.CheckIsNewVersion = CheckIsNewVersion
+obj.FileTime2LocalTime = FileTime2LocalTime
 obj.SendRunTimeReport = SendRunTimeReport
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
