@@ -95,8 +95,9 @@ function ShowPopupWnd(control, left, top, width, bottom, data)
 								if data.isSetSearchEngine then
 									SetSearchEngine(control, data.text)
 								else
-									local edit = control:GetControlObject("edit")
-									edit:SetText(data.text)
+									--local edit = control:GetControlObject("edit")
+									--edit:SetText(data.text)
+									SetSearchEngine(control, data.text)
 								end
 							end
 						end
