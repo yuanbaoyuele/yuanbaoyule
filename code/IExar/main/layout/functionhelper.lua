@@ -1243,7 +1243,7 @@ end
 
 function GetUserCollectList()
 	local strFavoriteDir = GetUserCollectDir()
-	local strCollectDir = tipUtil:PathCombine(strFavoriteDir,"Links")
+	local strCollectDir = tipUtil:PathCombine(strFavoriteDir,"链接")
 	
 	if not IsRealString(strCollectDir) or not tipUtil:QueryFileExists(strCollectDir) then
 		return nil
