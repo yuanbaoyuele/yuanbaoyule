@@ -233,7 +233,10 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 				RemoveAll()
 				CreateHistoryListUI()
 			else
-				XLMessageBox(v[3]["pwcsTitle"] or v[3]["pwcsUrl"])
+				local strUrl = v[3]["pwcsUrl"]
+				if IsRealString(strUrl) then
+					tFunHelper.OpenURLInNewTab(strUrl)
+				end
 			end
 		end
 		self:RouteToFather()
@@ -469,7 +472,10 @@ function CreateNode(v, icon, left, isdir)
 				treeNodeAttr[v].ext = not treeNodeAttr[v].ext 
 				ReBuild()
 			else
-				XLMessageBox(name)
+				local strUrl = tipUtil:ReadINI(v, "InternetShortcut", "URL")
+				if IsRealString(strUrl) then
+					tFunHelper.OpenURLInNewTab(strUrl)
+				end
 			end
 		end
 		self:RouteToFather()
