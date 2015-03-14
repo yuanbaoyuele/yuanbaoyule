@@ -74,6 +74,9 @@ local gMenuCMD = {
 			--Zoom = apiUtil.IEMenu_Zoom,
 			--工具
 			Options = {0x0111, 2135+1*65536,0},	
+			
+			--添加到收藏夹
+			AddFav = {0x0111, 2261+1*65536,0},
 	  }
 
 function gIEMenu:ExecuteCMD(strKey,...)
