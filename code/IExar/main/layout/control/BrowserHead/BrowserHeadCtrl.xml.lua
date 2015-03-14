@@ -78,15 +78,16 @@ function OnClickCollect(self)
 	end
 	
 	local objWnd = tFunHelper.GetWndInstByName("TipCollectWnd.Instance")
+	local objtree = objWnd:GetBindUIObjectTree()
+	local objRootLayout = objtree:GetUIObject("root.layout")
+	local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
 	if objWnd:GetVisible() then
-		local objtree = objWnd:GetBindUIObjectTree()
-		local objRootLayout = objtree:GetUIObject("root.layout")
-		local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
 		objRootCtrl:CloseCollectWnd()
 		return
 	end	
 	
 	tFunHelper.ShowPopupWndByName("TipCollectWnd.Instance", false)
+	objRootCtrl:ShowTab(1)
 end
 
 
