@@ -22,7 +22,7 @@
 						<obj id="Layout.Container" class="TextureObject">
 							<attr>
 								<left>5</left>
-								<top>1</top>
+								<top>2</top>
 								<width>father.width-5</width>
 								<height>father.height</height>
 								<texture></texture>
