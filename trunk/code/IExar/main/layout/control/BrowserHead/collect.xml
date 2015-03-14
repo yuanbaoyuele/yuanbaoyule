@@ -16,110 +16,16 @@
                         <top>0</top>
                         <width>father.width</width>
                         <height>father.height</height>
-						<texture>Collect.Panel.Bkg</texture>
+						<texture></texture>
                     </attr>
 					<children>
-						<obj id="Collect.HeadBtn" class="TipAddin.Button">
-							<attr>
-								<left>5</left>
-								<top>5</top>
-								<width>132</width>
-								<height>26</height>
-								<LeftTextPos>25</LeftTextPos>
-								<TextFont>font.collectbar.text</TextFont>
-								<Text>添加到收藏夹...</Text>
-								<NormalBkgID></NormalBkgID>
-								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
-								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
-								<DisableBkgID></DisableBkgID>
-							</attr>
-							<children>
-								<obj id="CollectBtn.LeftIco" class="ImageObject">
-									<attr>
-										<left>5</left>
-										<top>6</top>
-										<width>16</width>
-										<height>16</height>
-										<image>Star.Add.Logo</image>
-										<zorder>999999</zorder>
-									</attr>	
-								</obj>
-								
-								<obj id="TabContainerCtrl.ThumbArrow" class="TipAddin.Button">
-									<attr>
-										<left>father.width-15</left>
-										<top>0</top>
-										<width>15</width>
-										<height>father.height</height>
-										<NormalBkgID></NormalBkgID>
-										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
-										<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
-										<DisableBkgID></DisableBkgID>
-										<zorder>999900</zorder>
-									</attr>
-									<children>
-										<obj id="TabContainerCtrl.ThumbArrow.Image" class="ImageObject">
-											<attr>
-												<left>5</left>
-												<top>10</top>
-												<width>5</width>
-												<height>3</height>
-												<image>Arrow.Down</image>
-												<zorder>999999</zorder>
-											</attr>
-										</obj>  
-									</children>
-									<eventlist>
-										<event name="OnLButtonUp" file="collect.xml.lua" func="OnClickAddArrow" />
-										<event name="OnMouseEnter" file="collect.xml.lua" func="RouteToFather" />
-										<event name="OnMouseLeave" file="collect.xml.lua" func="RouteToFather" />
-									</eventlist>
-								</obj>
-							</children>
-							<eventlist>
-								<event name="OnClick" file="collect.xml.lua" func="OnClickAddToBar" />
-							</eventlist>
-						</obj>
-						
-						<obj id="TabContainerCtrl.FixBtn" class="TextureObject">
-							<attr>
-								<left>father.width-5-17</left>
-								<top>10</top>
-								<width>17</width>
-								<height>17</height>
-								<texture>CollectPanel.FixBtn</texture>
-							</attr>
-							<eventlist>
-								<event name="OnLButtonDown" file="collect.xml.lua" func="OnDownFixBtn" />
-								<event name="OnLButtonUp" file="collect.xml.lua" func="OnUpFixBtn" />
-							</eventlist>
-						</obj>
-						
-						
-						<!--obj id=".FixBtn" class="TextureObject">
-							<attr>
-								<left>father.width-5-17</left>
-								<top>10</top>
-								<width>17</width>
-								<height>17</height>
-								<texture>CollectPanel.FixBtn</texture>
-							</attr>
-							<eventlist>
-								<event name="OnLButtonDown" file="collect.xml.lua" func="OnDownFixBtn" />
-								<event name="OnLButtonUp" file="collect.xml.lua" func="OnUpFixBtn" />
-							</eventlist>
-						</obj-->
-						
-						
-						
-						
 						<obj id="Layout.Container" class="TextureObject">
 							<attr>
 								<left>5</left>
 								<top>55</top>
 								<width>father.width-15</width>
 								<height>father.height-55-15</height>
-								<texture>YBYL.Menu.Bkg</texture>
+								<texture></texture>
 							</attr>
 							<children>
 					

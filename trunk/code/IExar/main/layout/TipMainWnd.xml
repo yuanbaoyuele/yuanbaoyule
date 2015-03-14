@@ -60,7 +60,7 @@
 			<sysmenu>1</sysmenu>
 			<appwindow>1</appwindow>
             <fps>30</fps>
-			<blur>1</blur>
+			<blur>1</blur>		
         </attr>
 		 <eventlist>
             <event name="OnCreate" file="TipMainWnd.xml.lua" func="OnCreate"/>

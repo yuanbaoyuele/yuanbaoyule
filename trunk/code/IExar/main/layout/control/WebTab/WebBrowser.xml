@@ -106,6 +106,7 @@
 			<SetRealFocus  file="WebBrowser.xml.lua" function="SetRealFocus"/>
 			<GetRawWebBrowser file="WebBrowser.xml.lua" function="GetRawWebBrowser" />
 			<GetWindowBitmap file="WebBrowser.xml.lua" function="GetWindowBitmap" />
+			<GetWindow file="WebBrowser.xml.lua" function="GetWindow" />
         </method_def>
 		
         <event_def>	

@@ -243,7 +243,8 @@ end
 --弹出窗口--
 local g_tPopupWndList = {
 	[1] = {"TipAboutWnd", "TipAboutTree"},
-	-- [2] = {"TipConfigWnd", "TipConfigTree"},
+	-- [2] = {"TipCollectWnd", "TipCollectTree"},
+	-- [3] = {"TipConfigWnd", "TipConfigTree"},
 }
 
 

@@ -41,30 +41,54 @@ function ProecssNavgateBtnList(objRootCtrl, objTabCtrl)
 	end
 end
 
-function OnClickCollect(self)
-	local owner = self:GetOwner():GetUIObject("root.layout:root.ctrl")
-	if not owner then return end
+-- function OnClickCollect(self)
+	-- local owner = self:GetOwner():GetUIObject("root.layout:root.ctrl")
+	-- if not owner then return end
 	
-	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.Center")
-	local l, t, r, b = webbrowser:GetObjPos()
-	local collectpanel = tFunHelper.GetMainCtrlChildObj("MainPanel.collectpanel")
-	if not collectpanel then
-		local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
-		collectpanel = objFactory:CreateUIObject("MainPanel.collectpanel", "ie.collect")
-		owner:AddChild(collectpanel)
-		collectpanel:SetObjPos(4, 115, 215+16, b+25)
-		collectpanel:SetVisible(false)
-		collectpanel:SetZorder(9999999)
+	-- local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.Center")
+	-- local l, t, r, b = webbrowser:GetObjPos()
+	-- local collectpanel = tFunHelper.GetMainCtrlChildObj("MainPanel.collectpanel")
+	-- if not collectpanel then
+		-- local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
+		-- collectpanel = objFactory:CreateUIObject("MainPanel.collectpanel", "ie.collect")
+		-- owner:AddChild(collectpanel)
+		-- collectpanel:SetObjPos(4, 115, 215+16, b+25)
+		-- collectpanel:SetVisible(false)
+		-- collectpanel:SetZorder(9999999)
+	-- end
+	-- if collectpanel:GetVisible() then
+		-- collectpanel:SetVisible(false)
+		-- webbrowser:SetObjPos(l-265, t, r, b)
+	-- else
+		-- collectpanel:Show(1)
+		-- webbrowser:SetObjPos(l+265, t, r, b)
+		-- collectpanel:SetVisible(true)
+	-- end
+-- end
+
+local g_HasCreate = false
+function OnClickCollect(self)
+	if not g_HasCreate then
+		local bSuccess = tFunHelper.CreateSubWndByName("TipCollectWnd", "TipCollectTree", ".Instance")
+		if bSuccess then
+			 g_HasCreate = true
+		else
+			return
+		end
 	end
-	if collectpanel:GetVisible() then
-		collectpanel:SetVisible(false)
-		webbrowser:SetObjPos(l-265, t, r, b)
-	else
-		collectpanel:Show(1)
-		webbrowser:SetObjPos(l+265, t, r, b)
-		collectpanel:SetVisible(true)
-	end
+	
+	local objWnd = tFunHelper.GetWndInstByName("TipCollectWnd.Instance")
+	if objWnd:GetVisible() then
+		local objtree = objWnd:GetBindUIObjectTree()
+		local objRootLayout = objtree:GetUIObject("root.layout")
+		local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
+		objRootCtrl:CloseCollectWnd()
+		return
+	end	
+	
+	tFunHelper.ShowPopupWndByName("TipCollectWnd.Instance", false)
 end
+
 
 
 ------辅助函数---

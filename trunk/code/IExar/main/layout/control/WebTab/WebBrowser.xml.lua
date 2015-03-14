@@ -53,6 +53,13 @@ function GoBack( self )
 	end
 end
 
+function GetWindow( self )
+	local browser = self:GetControlObject( "browser" )
+	if browser ~= nil then
+		return browser:GetWindow()
+	end
+end
+
 function GoForward( self )
 	local browser = self:GetControlObject( "browser" )
 	if browser ~= nil then
