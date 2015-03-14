@@ -10,6 +10,7 @@ local tFilePathMap = nil
 local strFavoritesPath = tFunHelper.GetUserCollectDir()
 local strSysTemp = tipUtil:GetSystemTempPath()
 local strPathCachePath = tipUtil:PathCombine(strSysTemp, "iefilepathmap.dat")
+local tUrlHistory = nil
 function Show(self, index)
 	uiOwner = self
 	if index == 1 then --收藏夹
@@ -32,18 +33,212 @@ end
 
 function IsRealString(str) return type(str) == "string" and str ~= "" end
 
+function GetHostName(URL) --获取域名
+	if string.find(URL, "://") then
+		URL = string.match(URL, "^.*://(.*)$" ) or ""
+	end
+	URL = string.match(URL, "^([^/]*).*$" )  or ""
+	if string.find(URL, "@") then
+		URL = string.match(URL, "^[^@]*@(.*)$" )  or ""
+	end
+	URL = string.match(URL, "^([^:]*).*$" )  or ""
+	local captures = {}
+	for w in string.gmatch(URL, "[^%.]+") do
+		table.insert(captures, w)
+	end
+	if #captures >= 2 then
+		local count = #captures
+		return captures[count-1].."."..captures[count]
+	end
+	return "about:blank"
+end
+
+local nIEListIndex = 0
+local lastselectlistname = ""
+local tListAttr = {}
 function CreateHistoryListUI()
-	--local tUrlHistory = tipUtil:GetIEHistoryInfo()
-	--local nMaxCount = (#tUrlHistory > 20 and 20 or #tUrlHistory)
-	local strHistoryPath = "C:\\Users\\wangwei\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files"
-	local tUrlHistory = tipUtil:FindFileList(strHistoryPath, "*")
+	tUrlHistory = tUrlHistory or tipUtil:GetIEHistoryInfo()
+	local nCurYear, nCurMon, nCurDay = tipUtil:FormatCrtTime(tipUtil:GetCurrentUTCTime())
+	local nTodayFirstUTC = tipUtil:DateTime2Seconds(nCurYear, nCurMon, nCurDay, 0, 0, 0)
+	local tDefineRecent = tDefineRecent or {}
+	for i = 1, 7 do
+		tDefineRecent[i] = tDefineRecent[i] or {}
+		tDefineRecent[i]["minutc"] = nTodayFirstUTC-(i-1)*86400
+		tDefineRecent[i]["maxutc"] = nTodayFirstUTC-(i-1)*86400+86400
+	end
+	local function Add2Recent(nVistUtc, strWeek, tUrl)
+		for i, v in ipairs(tDefineRecent) do
+			if nVistUtc >= v["minutc"] and nVistUtc < v["maxutc"] then
+				v["info"] = v["info"] or {}
+				v["weekday"] = strWeek
+				if i == 1 then
+					v["weekday"] = "今天"
+				end
+				--按域名分类
+				local strHost = GetHostName(tUrl["pwcsUrl"])
+				local t = v["info"][strHost] or {}
+				t[#t+1] = tUrl
+				v["info"][strHost] = t
+			end
+		end
+	end
 	for i, v in ipairs(tUrlHistory) do
-		XLMessageBox(tostring(v))
+		local nVistUtc, strWeek = tFunHelper.FileTime2LocalTime(v["ftLastVisited"])
+		Add2Recent(nVistUtc, strWeek, v)
+	end
+	nIEListIndex = 0
+	for i, v in ipairs(tDefineRecent) do
+		if type(v["info"]) == "table" then
+			CreateIEHistoryNode(v, 10, 1)--第一级
+			tListAttr[v["weekday"]] = tListAttr[v["weekday"]] or  {}
+			if tListAttr[v["weekday"]]["ext"] then
+				for hostname, vv in pairs(v["info"]) do--第二级
+					CreateIEHistoryNode({v, hostname, vv}, 30, 2)
+					tListAttr[v["weekday"]..hostname] = tListAttr[v["weekday"]..hostname] or {}
+					if tListAttr[v["weekday"]..hostname]["ext"] and type(vv) == "table" then
+						for _, vvv in ipairs(vv) do
+							CreateIEHistoryNode({v, hostname, vvv}, 50, 3)
+						end
+					end
+				end
+			end
+		end
 	end
 end
 
-function CreateIEHistoryNode(i, v)--创建ie历史节点
+
+function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
+	local key = nil
+	if listrank == 1 then
+		key = v["weekday"]
+	elseif listrank == 2 then
+		key = v[1]["weekday"]..v[2]
+	else
+		key = v[1]["weekday"]..tostring(v[2])..tostring(v[3]["pwcsUrl"])
+	end
+	--背景layout
+	local nodebkg = objFactory:CreateUIObject("bkg_listnode"..nIEListIndex, "LayoutObject")
+	--图标
+	local imgobj = objFactory:CreateUIObject("img_listnode"..nIEListIndex, "ImageObject")
+	if listrank == 1 then
+		imgobj:SetResID("img.week")
+	elseif listrank == 2 then
+		imgobj:SetResID("img.weekday")
+	else
+		imgobj:SetResID("collect.file.defaluticon")
+	end
 	
+	local objpre = uiOwner:GetControlObject("bkg_listnode"..(nIEListIndex-1))
+	local top = 0
+	if objpre then
+		local _, _, _, b = objpre:GetObjPos()
+		top = b+2
+	end
+	nodebkg:SetObjPos2(left, top, 140, 16)
+	nodebkg:AddChild(imgobj)
+	if listrank == 1 then
+		imgobj:SetObjPos2(0, 0, 15, 14)
+	elseif listrank == 2 then
+		imgobj:SetObjPos2(0, 0, 13, 19)
+	else
+		imgobj:SetObjPos2(0, 0, 16, 16)
+	end
+	
+	--文本
+	local txtobj = objFactory:CreateUIObject("txt_listnode"..nIEListIndex, "TextObject")
+	txtobj:SetTextFontResID("font.menuitem")
+	txtobj:SetTextColorResID("color.tab.normal")
+	nodebkg:AddChild(txtobj)
+	nodebkg:SetZorder(100)
+	if listrank == 1 then
+		txtobj:SetText(v["weekday"])
+	elseif listrank == 2 then
+		txtobj:SetText(v[2])
+	else
+		txtobj:SetText(v[3]["pwcsTitle"] or v[3]["pwcsUrl"])
+	end
+	txtobj:SetObjPos2(20, 0, 120, 16)
+	--转发文本框事件，让父控件处理
+	txtobj:AttachListener("OnLButtonDown", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnMouseLeave", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnMouseEnter", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnMouseMove", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnRButtonDown", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnRButtonUp", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnLButtonUp", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	
+	local objparent = uiOwner:GetControlObject("Layout.Container")
+	objparent:AddChild(nodebkg)
+	if lastselectlistname == key then--恢复选中状态
+		local _select = objparent:GetObject("nodebkg4select")
+		if not _select then
+			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
+			objparent:AddChild(_select)
+			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+			_select:SetZorder(101)
+		end
+		local l, t, r, b = objparent:GetObjPos()
+		_select:SetObjPos2(0, top, r-l, 16)
+		_select:SetVisible(true)
+	end
+	--处理事件
+	local lbtndown = false
+	nodebkg:AttachListener("OnLButtonDown", false, function(self, x, y)
+		lbtndown = true
+		lastselectlistname = key
+		--选中状态
+		local _select = objparent:GetObject("nodebkg4select")
+		if not _select then
+			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
+			objparent:AddChild(_select)
+			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+		end
+		_select:SetZorder(101)
+		local l, t, r, b = objparent:GetObjPos()
+		_select:SetObjPos2(0, top, r-l, 16)
+		_select:SetVisible(true)
+	end)
+	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
+		txtobj:SetTextFontResID("font.menuitem")
+		txtobj:SetTextColorResID("color.tab.normal")
+	end)
+	--鼠标划过状态变化
+	nodebkg:AttachListener("OnMouseEnter", false, function(self, x, y)
+		txtobj:SetTextFontResID("font.menuitemkey")
+		txtobj:SetTextColorResID("system.blue")
+		
+	end)
+	nodebkg:AttachListener("OnMouseMove", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	nodebkg:AttachListener("OnLButtonUp", false, function(self, x, y)
+		if lbtndown then
+			if listrank ~= 3 then
+				tListAttr[key] = tListAttr[key] or {}
+				tListAttr[key]["ext"] = not tListAttr[key]["ext"]
+				RemoveAll()
+				CreateHistoryListUI()
+			else
+				XLMessageBox(v[3]["pwcsTitle"] or v[3]["pwcsUrl"])
+			end
+		end
+		self:RouteToFather()
+	end)
+	nIEListIndex = nIEListIndex + 1
 end
 
 function Dir2TreeList(dir, left)
@@ -119,18 +314,24 @@ function CreateNode(v, icon, left, isdir)
 		local _, _, _, b = objpre:GetObjPos()
 		top = b+2
 	end
-	nodebkg:SetObjPos2(left, top, 120, 16)
+	nodebkg:SetObjPos2(left, top, 140, 16)
 	nodebkg:AddChild(imgobj)
 	imgobj:SetObjPos2(0, 0, 16, 16)
 	local txtobj = objFactory:CreateUIObject("txt_treenode"..treeNodeIndex, "TextObject")
+	txtobj:SetTextFontResID("font.menuitem")
+	txtobj:SetTextColorResID("color.tab.normal")
 	nodebkg:AddChild(txtobj)
+	nodebkg:SetZorder(100)
 	txtobj:SetText(name)
-	txtobj:SetObjPos2(20, 0, 100, 16)
+	txtobj:SetObjPos2(20, 0, 120, 16)
 	
 	txtobj:AttachListener("OnLButtonDown", false, function(self, x, y)
 		self:RouteToFather()
 	end)
 	txtobj:AttachListener("OnMouseLeave", false, function(self, x, y)
+		self:RouteToFather()
+	end)
+	txtobj:AttachListener("OnMouseEnter", false, function(self, x, y)
 		self:RouteToFather()
 	end)
 	txtobj:AttachListener("OnMouseMove", false, function(self, x, y)
@@ -148,6 +349,18 @@ function CreateNode(v, icon, left, isdir)
 	
 	local objparent = uiOwner:GetControlObject("Layout.Container")
 	objparent:AddChild(nodebkg)
+	if lastclickname == v then--恢复选中状态
+		local _select = objparent:GetObject("nodebkg4select")
+		if not _select then
+			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
+			objparent:AddChild(_select)
+			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+			_select:SetZorder(101)
+		end
+		local l, t, r, b = objparent:GetObjPos()
+		_select:SetObjPos2(0, top, r-l, 16)
+		_select:SetVisible(true)
+	end
 	treeNodeAttr[v] = treeNodeAttr[v] or {}
 	if isdir then
 		treeNodeAttr[v].ext = treeNodeAttr[v].ext or false
@@ -158,14 +371,34 @@ function CreateNode(v, icon, left, isdir)
 		movemovecanstart = true
 		lastclickname = v
 		lastclickicon = icon
+		--选中状态
+		local _select = objparent:GetObject("nodebkg4select")
+		if not _select then
+			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
+			objparent:AddChild(_select)
+			_select:SetTextureID("YBYL.DropMenu.ItemBkg.Hover")
+		end
+		_select:SetZorder(101)
+		local l, t, r, b = objparent:GetObjPos()
+		_select:SetObjPos2(0, top, r-l, 16)
+		_select:SetVisible(true)
 	end)
 	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
 		treeNodeAttr[v].lbtndown = false
 		treeNodeAttr[v].rbtndown = false
+		txtobj:SetTextFontResID("font.menuitem")
+		txtobj:SetTextColorResID("color.tab.normal")
+	end)
+	--鼠标划过状态变化
+	nodebkg:AttachListener("OnMouseEnter", false, function(self, x, y)
+		txtobj:SetTextFontResID("font.menuitemkey")
+		txtobj:SetTextColorResID("system.blue")
+		
 	end)
 	nodebkg:AttachListener("OnMouseMove", false, function(self, x, y)
 		self:RouteToFather()
 	end)
+	
 	if not isattchbkgmoveevent then
 		isattchbkgmoveevent = true
 		objparent:AttachListener("OnMouseMove", false, function(self, x, y)
@@ -175,7 +408,7 @@ function CreateNode(v, icon, left, isdir)
 				if not _nodebkg then
 					--XLMessageBox(type(_nodebkg))
 					_nodebkg = objFactory:CreateUIObject("nodebkg4drag", "LayoutObject")
-					_nodebkg:SetObjPos2(x, y, 120, 16)
+					_nodebkg:SetObjPos2(x, y, 140, 16)
 					local _imgobj = objFactory:CreateUIObject("img_nodebkg4drag", "ImageObject")
 					_nodebkg:AddChild(_imgobj)
 					_imgobj:SetObjPos2(0, 0, 16, 16)
