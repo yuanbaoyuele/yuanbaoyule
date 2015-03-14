@@ -74,6 +74,14 @@ local gMenuCMD = {
 			--Zoom = apiUtil.IEMenu_Zoom,
 			--工具
 			Options = {0x0111, 2135+1*65536,0},	
+			--OrganizeFav = apiUtil.IEFavorite_Organize,
+			
+			--编辑
+			SelectAll = {0x0111, 31+1*65536,0},
+			Copy = {0x0111, 15+1*65536,0},
+			Cut = {0x0111, 16+1*65536,0},
+			Paste = {0x0111, 26+1*65536,0},
+			
 	  }
 
 function gIEMenu:ExecuteCMD(strKey,...)
@@ -105,6 +113,8 @@ function gIEMenu:ExecuteCMD(strKey,...)
 	elseif 	strKey == "Zoom" then
 		apiUtil:IEMenu_Zoom(self.lpWeb2,...)
 		--gMenuCMD[strKey](self.lpWeb2,...)
+	elseif 	strKey == "OrganizeFav" then
+		apiUtil:IEFavorite_Organize(nil)
 	elseif 	type(gMenuCMD[strKey]) == "function" then
 		return gMenuCMD[strKey](...)
 	end	
