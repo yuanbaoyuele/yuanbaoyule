@@ -212,6 +212,7 @@
 								<width>father.width-12</width>
 								<height>father.height-55-40</height>
 								<texture>YBYL.Menu.Bkg</texture>
+								<limitchild>1</limitchild>
 							</attr>
 							<children>
 								<obj id="Container" class="ie.collect">
