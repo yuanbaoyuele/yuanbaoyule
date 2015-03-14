@@ -19,7 +19,7 @@ function OnFocusChange(self, focus)	if not focus then		local data = self:GetUs
 endfunction CloseWindow(tree)	AsynCall(function ()			local hostwnd = tree:GetBindHostWnd()						if hostwnd then				hostwnd:Destroy()								local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")				hostwndMgr:RemoveHostWnd("BoltFox.SearchPopupWnd")								local treeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")				treeMgr:DestroyTree("BoltFox.SearchPopupTree")			end		end	)end
 
 function OnSelectChange(self, func, text)
-	XLPrint("OnSelectChange(self, func, text) "..text)
+	--XLPrint("OnSelectChange(self, func, text) "..text)
 
 	local tree = self:GetOwner()
 	local hostwnd = tree:GetBindHostWnd()
