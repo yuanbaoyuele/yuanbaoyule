@@ -453,10 +453,17 @@ end
 local g_bIsBrowserFullScrn = false
 
 function GetMainWndInst()
-	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
-	local objMainWnd = hostwndManager:GetHostWnd("YBYLTipWnd.MainFrame")
+	local objMainWnd = GetWndInstByName("YBYLTipWnd.MainFrame")
 	return objMainWnd
 end
+
+
+function GetWndInstByName(strWndName)
+	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	local objMainWnd = hostwndManager:GetHostWnd(strWndName)
+	return objMainWnd
+end
+
 
 
 function IsBrowserFullScrn()
@@ -726,6 +733,7 @@ end
 function ShowPopupWndByName(strWndName, bSetTop)
 	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local frameHostWnd = hostwndManager:GetHostWnd(tostring(strWndName))
+
 	if frameHostWnd == nil then
 		TipLog("[ShowPopupWindow] GetHostWnd failed: "..tostring(strWndName))
 		return
@@ -752,6 +760,38 @@ function ShowPopupWndByName(strWndName, bSetTop)
 	end
 	
 	frameHostWnd:Show(5)
+end
+
+
+
+function CreateSubWndByName(strHostWndName, strTreeName, strInstFix)
+	local bSuccess = false
+	local strFix = strInstFix or ""
+	local strInstWndName = strHostWndName..strFix
+	local strInstTreeName = strTreeName..strFix
+	
+	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
+	local frameHostWndTemplate = templateMananger:GetTemplate(strHostWndName, "HostWndTemplate" )
+	if frameHostWndTemplate then
+		local frameHostWnd = frameHostWndTemplate:CreateInstance(strInstWndName)
+		if frameHostWnd then
+			local objectTreeTemplate = nil
+			objectTreeTemplate = templateMananger:GetTemplate(strTreeName, "ObjectTreeTemplate")
+			if objectTreeTemplate then
+				local uiObjectTree = objectTreeTemplate:CreateInstance(strInstTreeName)
+				if uiObjectTree then
+					frameHostWnd:BindUIObjectTree(uiObjectTree)
+					local objMainWnd = GetMainWndInst()
+					local iRet = frameHostWnd:Create(objMainWnd)					
+					if iRet ~= nil and iRet ~= 0 then
+						bSuccess = true
+					end
+				end
+			end
+		end
+	end
+	
+	return bSuccess
 end
 
 
@@ -1715,7 +1755,10 @@ obj.SetZoomFactor = SetZoomFactor
 obj.GetDfltNewTabURL = GetDfltNewTabURL
 obj.GetActiveTabCtrl = GetActiveTabCtrl
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
+obj.GetWndInstByName = GetWndInstByName
+obj.GetMainWndInst = GetMainWndInst
 obj.ShowPopupWndByName = ShowPopupWndByName
+obj.CreateSubWndByName = CreateSubWndByName
 
 obj.SetToolTipText = SetToolTipText
 obj.ShowToolTip = ShowToolTip

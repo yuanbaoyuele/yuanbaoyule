@@ -27,6 +27,8 @@
 		<texture id="YBYL.Menu.Splitter.Vertical"  image="bitmap\YBYL.Menu.Splitter.Vertical.png" />
 		<texture id="YBYL.CollectList.ShowHide.Normal"  image="bitmap\YBYL.CollectList.ShowHide.Normal.png" />
 		<texture id="CollectPanel.FixBtn"  image="bitmap\CollectPanel.FixBtn.png" />
+		<texture id="Collect.Button.Close.Normal"  image="bitmap\Collect.Button.Close.Normal.png" />
+		<texture id="Collect.Button.Close.Hover"  image="bitmap\Collect.Button.Close.Hover.png" />
 		
 		<texture id="Collect.Panel.Bkg" type="NineInOne" image="bitmap\Collect.Panel.Bkg.png" />
 				
