@@ -1278,7 +1278,7 @@ end
 function AddCurWebToCollect()
 	local objWebTab = GetActiveTabCtrl()
 	local strFavoriteDir = GetUserCollectDir()
-	local strCollectDir = tipUtil:PathCombine(strFavoriteDir,"Links")
+	local strCollectDir = tipUtil:PathCombine(strFavoriteDir,"链接")
 	local strText = objWebTab:GetTabText() or "空白页"
 	local strFilePath = GetCollectFilePath(strCollectDir, strText, ".url")
 	local strURL = objWebTab:GetLocalURL()
