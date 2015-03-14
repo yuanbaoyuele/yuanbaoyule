@@ -20,6 +20,7 @@
 				<attr>
 					<Text>添加到收藏夹栏</Text>
 					<AccKey>B</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="CollectMenu.xml.lua" function="OnSelect_AddToCollectBar" />
@@ -30,6 +31,7 @@
 				<attr>
 					<Text>将当前选项卡添加到收藏夹</Text>
 					<AccKey>T</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="CollectMenu.xml.lua" function="OnSelect_AddCurTabToCollect" />

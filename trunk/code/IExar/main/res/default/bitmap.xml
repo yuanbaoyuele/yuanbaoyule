@@ -58,6 +58,9 @@
 		<bitmap id="WebTab.ThumbBtn" path="bitmap\WebTab.ThumbBtn.png" />
 		<bitmap id="Arrow.Down" path="bitmap\Arrow.Down.png" />
 		<bitmap id="WebTab.AddTab.Image" path="bitmap\WebTab.AddTab.Image.png" />
+		<bitmap id="Earth.Image" path="bitmap\Earth.Image.png" />
+		<bitmap id="Magnifier" path="bitmap\Magnifier.png" />
+		<bitmap id="StateBar.RightCorner" path="bitmap\StateBar.RightCorner.png" />
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.file.defaluticon" path="bitmap\collect.file.defaluticon.png" />
@@ -98,8 +101,6 @@
 <texture id="texture.search.google" path="bitmap\google.png"/>
 <texture id="texture.search.soso" path="bitmap\soso.png"/>
 <texture id="texture.search.bing" path="bitmap\bing.png"/>
-<bitmap id="img.week" path="bitmap\week.png"/>
-<bitmap id="img.weekday" path="bitmap\weekday.png"/>
 		<!-- BufferView -->
 		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
 		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	

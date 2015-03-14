@@ -66,6 +66,7 @@
 					<Text>在此页面上查找</Text>
 					<RightText>Ctrl+F</RightText>
 					<AccKey>F</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Find" />
