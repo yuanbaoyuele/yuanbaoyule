@@ -187,6 +187,8 @@ function OnInitControl(self)
 		bkn:SetVisible( false )
 	end
 	
+	SetItemBknID(self)
+	
 	local shadingID = attr.ShadingID
 	if shadingID ~= nil then
 		local shading = self:GetControlObject("menu.shading")
@@ -282,6 +284,18 @@ function SetHoverItem(self, item, show_sub )
 	end
 	return oldItem
 end
+
+function SetItemBknID (objRootCtrl)
+	local attr = objRootCtrl:GetAttribute()
+	local ItemBknID = attr.ItemBknID
+	if not IsRealString(ItemBknID) then
+		return
+	end
+	
+	local objItemBkn = objRootCtrl:GetControlObject("ItemBkn")
+	objItemBkn:SetTextureID(ItemBknID)
+end
+
 
 function SetBknID( self, id )
 	local attr = self:GetAttribute()
@@ -438,7 +452,8 @@ function RouteToFather(self)
 	self:RouteToFather()
 end
 
-
-
+function IsRealString(str)
+	return type(str) == "string" and str ~= ""
+end
 
 

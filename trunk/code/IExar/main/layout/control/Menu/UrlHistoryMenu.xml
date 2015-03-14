@@ -1,11 +1,13 @@
 <xlue>
 	<objtemplate id="urlhistorymenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>6</ItemTop>
-			<ItemLeft>6</ItemLeft> 
-			<ItemRight>10</ItemRight> 
-			<ItemBottom>-5</ItemBottom> 
-			<MenuType>urlhistory</MenuType> 
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
+			<ItemBknID>YBYL.AddressMenu.Select.Bkg</ItemBknID> 
 		</attr>
 		<children>
 			<!--动态创建-->

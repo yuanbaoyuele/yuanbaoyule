@@ -84,15 +84,16 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 
 	local attr = objMenuItem:GetAttribute()
 	attr.Text = tHistoryInfo["strURL"]
-	attr.RightText = tHistoryInfo["strLocationName"]
+	-- attr.RightText = tHistoryInfo["strLocationName"]
 	attr.RightTextColor = "404040"
 	attr.RightTextHAligh = "left"
 	attr.TextRightWidth = 40
-	attr.FontColorNormal = "949494"
+	attr.FontColorNormal = "system.black"
+	attr.FontColorHover = "system.white"
 	attr.TextPos = 30
 	attr.DeleteImgVisible = true
 	
-	SetIcoImage(objMenuItem, tHistoryInfo)
+	-- SetIcoImage(objMenuItem, tHistoryInfo)
 	objMenuItem:AttachListener("OnSelect", false, OpenURL)
 	return objMenuItem
 end

@@ -110,8 +110,23 @@ end
 
 ----------方法---
 function ShowTab(self, nIndex)
-
-
+	local objRootCtrl = self
+	local objTabCollect = objRootCtrl:GetControlObject("TipCollectWnd.Tab.Collect")
+	local objTabSource = objRootCtrl:GetControlObject("TipCollectWnd.Tab.Source")
+	local objTabHistory = objRootCtrl:GetControlObject("TipCollectWnd.Tab.History")
+	
+	local tTabList = {objTabCollect, objTabSource, objTabHistory}
+	
+	for key, objTab in ipairs(tTabList) do
+		if key == nIndex then
+			SetTabActiveStyle(objTab, true)
+		else
+			SetTabActiveStyle(objTab, false)
+		end		
+	end
+	
+	local objContainer = objRootCtrl:GetControlObject("Container")
+	objContainer:Show(nIndex)
 end
 
 
@@ -142,6 +157,12 @@ end
 function OnClickAddArrow(self)
 
 end
+
+
+function OnClickWebSite(self)
+	tFunHelper.OpenURLInNewTab("https://ieonline.microsoft.com/")
+end
+
 
 local g_bDownFixBtn = false
 function OnDownFixBtn(self)
@@ -182,6 +203,23 @@ function OnUpCloseBtn(self)
 	
 	local objRootCtrl = self:GetOwnerControl()
 	objRootCtrl:CloseCollectWnd()
+end
+
+
+--tab
+function OnClickTabCollect(self)
+	local objRootCtrl = self:GetOwnerControl()
+	objRootCtrl:ShowTab(1)
+end
+
+function OnClickTabSource(self)
+	local objRootCtrl = self:GetOwnerControl()
+	objRootCtrl:ShowTab(2)
+end
+
+function OnClickTabHistory(self)
+	local objRootCtrl = self:GetOwnerControl()
+	objRootCtrl:ShowTab(3)
 end
 
 
@@ -243,6 +281,20 @@ function SetBtnDownStyle(objBtn, bDownStyle)
 	end
 	
 	objBtn:SetObjPos(l, t, l+w, t+h)	
+end
+
+
+function SetTabActiveStyle(objTab, bActive)
+	local l, t, r, b = objTab:GetObjPos()
+	
+	if bActive then
+		objTab:SetObjPos(l, 0, r, "father.height")
+		objTab:SetTextureID("Collect.Tab.Bkg.Hover")	
+	else
+		objTab:SetObjPos(l, 2, r, "father.height-2")
+		objTab:SetTextureID("Collect.Tab.Bkg.Normal")
+	end
+
 end
 
 

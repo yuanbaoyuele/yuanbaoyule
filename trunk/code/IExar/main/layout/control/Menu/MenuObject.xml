@@ -2,6 +2,7 @@
 	<control class="MenuObject">
 		<attr_def>
 			<attr name="BknID" type="string" />
+			<attr name="ItemBknID" type="string" />
 			<attr name="ShadingID" type="string" />
 			<attr name="ItemLeft" type="int" desc="菜单条左边空白">
 				<default>3</default>

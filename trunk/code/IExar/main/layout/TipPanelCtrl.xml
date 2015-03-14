@@ -97,14 +97,14 @@
 												<left>0</left>
 												<top>33</top>
 												<width>father.width</width>
-												<height>father.height-33</height>
+												<height>father.height-33-23</height>
 												<zorder>-1</zorder>
 											</attr>		
 										</obj>
 									</children>
 								</obj> <!--MainPanel.Center end-->
 								
-								<obj id="MainPanel.Bottom" class="TextureObject">
+								<obj id="MainLayout.Bottom" class="TextureObject">
 									<attr>
 										<left>0</left>
 										<top>114</top>
@@ -114,9 +114,19 @@
 										<zorder>100</zorder>
 									</attr>		
 								</obj>
+								
+								<obj id="StateBar" class="StateBar">
+									<attr>
+										<left>0</left>
+										<top>father.height-23</top>
+										<width>father.width</width>
+										<height>23</height>
+										<zorder>100</zorder>
+									</attr>		
+								</obj>
 							</children>
 						</obj><!--bkg end-->
-										
+																
 					</children>
 					<eventlist>
 					</eventlist>

@@ -2,10 +2,8 @@
 	<!--点击收藏栏的箭头， 弹出菜单-->
 	<objtemplate id="collectmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> 
-			<ItemRight>15</ItemRight> 
-			<!--MenuType>collect</MenuType--> 
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<obj id="AddToCollectBox" class="MenuItemObject" templateid="menu.context.item">

@@ -242,7 +242,6 @@ function SetIconVisible(self, bVisible )
 end
 
 
-
 function SetIconID( self, iconID )
 	local attr = self:GetAttribute()
 	if attr == nil then

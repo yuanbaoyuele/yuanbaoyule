@@ -2,10 +2,8 @@
 	<!--点击收藏栏的箭头， 弹出菜单-->
 	<objtemplate id="collectbarmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> 
-			<ItemRight>15</ItemRight> 
-			<MenuType>collect</MenuType> 
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
 		</attr>
 		<children>
 			<!--动态创建-->
@@ -16,7 +14,7 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>260</width>
+			<width>248</width>
 			<height>278</height>
 		</attr>
 		
@@ -24,7 +22,7 @@
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>260</width>
+				<width>248</width>
 				<height>278</height>
 			</attr>
 			<children>
@@ -32,7 +30,7 @@
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>260</width>
+						<width>father.width</width>
 						<height>father.height</height>
 						<!--ContextID>collectmenu.context</ContextID-->
 						<BknID>YBYL.Menu.Bkg</BknID>

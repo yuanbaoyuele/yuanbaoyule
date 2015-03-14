@@ -49,11 +49,6 @@ end
 
 local g_tShowCollectMenu = {bShow=false}
 function OnClickCollect(self)
-	local tUserCollect = tFunHelper.ReadConfigFromMemByKey("tUserCollect") or {}
-	if #tUserCollect < 1 then
-		return
-	end
-	
 	PopupMenu(self, 18, "CollectMenu", g_tShowCollectMenu)
 end
 

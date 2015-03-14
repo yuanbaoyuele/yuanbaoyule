@@ -152,7 +152,7 @@
 			<children>
 				<obj id="MenuItem.Delete" class="TipAddin.Button">
 					<attr>
-						<left>father.width-16</left>
+						<left>father.width-26</left>
 						<top>(father.height-16)/2</top>
 						<width>16</width>
 						<height>16</height>
@@ -163,6 +163,7 @@
 					</attr>
 					<eventlist>
 						<event name="OnClick" file="MenuItemObject.xml.lua" func="OnClickDelete" />
+						<event name="OnMouseEnter" file="MenuItemObject.xml.lua" func="RouteToFather" />
 					</eventlist>
 				</obj>
 			</children>
