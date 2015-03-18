@@ -495,7 +495,6 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
-
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
