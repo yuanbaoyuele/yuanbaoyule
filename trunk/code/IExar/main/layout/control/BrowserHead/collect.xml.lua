@@ -125,7 +125,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	elseif listrank == 2 then
 		imgobj:SetResID("img.weekday")
 	else
-		imgobj:SetResID("collect.file.defaluticon")
+		imgobj:SetResID("history.icon")
 	end
 	
 	local objpre = uiOwner:GetControlObject("bkg_listnode"..(nIEListIndex-1))
@@ -137,9 +137,9 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	nodebkg:SetObjPos2(left, top, 140, 16)
 	nodebkg:AddChild(imgobj)
 	if listrank == 1 then
-		imgobj:SetObjPos2(0, 0, 15, 14)
+		imgobj:SetObjPos2(0, 0, 16, 16)
 	elseif listrank == 2 then
-		imgobj:SetObjPos2(0, 0, 13, 19)
+		imgobj:SetObjPos2(0, 0, 16, 16)
 	else
 		imgobj:SetObjPos2(0, 0, 16, 16)
 	end
@@ -287,7 +287,12 @@ function Dir2TreeList(dir, left)
 		if string.match(v, "[\\/]([^\\/%.]*)$") == nil then
 			CreateNode(v, "collect.file.defaluticon", left, false)
 		else
-			CreateNode(v, "collect.dir.defaluticon", left, true)
+			local strIconID = "collect.dir.defaluticon"
+			treeNodeAttr[v] = treeNodeAttr[v] or {}
+			if treeNodeAttr[v].ext then
+				strIconID = "collect.dir.defaluticon.open"
+			end
+			CreateNode(v, strIconID, left, true)
 			if treeNodeAttr[v].ext then
 				Dir2TreeList(v, left+20)
 			end

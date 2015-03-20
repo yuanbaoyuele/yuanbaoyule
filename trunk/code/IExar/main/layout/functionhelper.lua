@@ -780,8 +780,51 @@ function ShowPopupWndByName(strWndName, bSetTop)
 	frameHostWnd:Show(5)
 end
 
+function ShowModalDialog(wndClass, wndID, treeClass, treeID, userData, xarName)
+	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
+    local modalHostWndTemplate = templateMananger:GetTemplate(wndClass,"HostWndTemplate")
+    if modalHostWndTemplate == nil then
+		XLMessageBox("找不到"..wndClass)
+        return false
+    end
+    local modalHostWnd = modalHostWndTemplate:CreateInstance(wndID)
+    if modalHostWnd == nil then
+		XLMessageBox("无法创建"..wndID)
+        return false
+    end
+	
+    local objectTreeTemplate = templateMananger:GetTemplate(treeClass,"ObjectTreeTemplate")
+    if objectTreeTemplate == nil then
+		XLMessageBox("找不到"..treeClass)
+        return false
+    end
+    local uiObjectTree = objectTreeTemplate:CreateInstance(treeID, xarName)
+    if uiObjectTree == nil then
+		XLMessageBox("无法创建"..treeID)
+        return false
+    end
+	modalHostWnd:SetUserData(userData)
+    modalHostWnd:BindUIObjectTree(uiObjectTree)
 
+    local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
+    local hostwnd = hostwndManager:GetHostWnd("YBYLTipWnd.MainFrame")
+	local hostwndobjtree = hostwnd:GetBindUIObjectTree()
+	local ctrl = hostwndobjtree:GetUIObject("root.layout:root.ctrl")
+	if ctrl ~= nil then
+		local bkg = ctrl:GetControlObject("bkg")
+		bkg:SetTextureID("YBYL.MainWnd.Bkg.nofocus")
+	end
+    local nRes = modalHostWnd:DoModal(hostwnd)
+	if ctrl ~= nil then
+		local bkg = ctrl:GetControlObject("bkg")
+		bkg:SetTextureID("YBYL.MainWnd.Bkg")
+	end
+    hostwndManager:RemoveHostWnd(modalHostWnd:GetID())
+    local objtreeManager = XLGetObject("Xunlei.UIEngine.TreeManager")
+    objtreeManager:DestroyTree(uiObjectTree)	
 
+	return nRes
+end
 function CreateSubWndByName(strHostWndName, strTreeName, strInstFix)
 	local bSuccess = false
 	local strFix = strInstFix or ""
@@ -1777,6 +1820,7 @@ obj.GetMainCtrlChildObj = GetMainCtrlChildObj
 obj.GetWndInstByName = GetWndInstByName
 obj.GetMainWndInst = GetMainWndInst
 obj.ShowPopupWndByName = ShowPopupWndByName
+obj.ShowModalDialog = ShowModalDialog
 obj.CreateSubWndByName = CreateSubWndByName
 
 obj.SetToolTipText = SetToolTipText

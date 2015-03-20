@@ -12,7 +12,6 @@ function OnCreate( self )
 	local wndleft = ((workright-workleft)-webwidth)/2-webleft
 	local wndtop = ((workbottom-worktop)-webheight)/2-webtop
 	self:Move(wndleft, wndtop, wndwidth, wndheight)
-	
 	SetVersionText(objRootCtrl)
 end
 
@@ -35,20 +34,62 @@ function SetVersionText(objRootCtrl)
 	end
 end
 
+function OnOnLButtonDownYesText(self, x, y)
+	local parent = self:GetParent()
+	local attr = parent:GetAttribute()
+	attr.textbtndown = true
+end
+function OnLButtonUpYesText(self, x, y)
+	local parent = self:GetParent()
+	local attr = parent:GetAttribute()
+	if attr.textbtndown then
+		attr.textbtndown = false
+		parent:FireExtEvent("OnClick", x, y)
+	end
+end
+
+function OnMouseLeaveYesText(self, x, y)
+	local parent = self:GetParent()
+	local attr = parent:GetAttribute()
+	attr.textbtndown = false
+end
+
 function OnClickSysInfo(self)
 end
 
 function OnClicksure(self)
+	local owner = self:GetOwner()
+	local thatradio = owner:GetUIObject("TipFeedback.no")
+	local attr = thatradio:GetAttribute()
+	local selfattr = self:GetAttribute()
+	if not selfattr.select or selfattr.NormalBkgID == "radiobox.1" then
+		selfattr.select = true
+		selfattr.NormalBkgID = "radiobox.2"
+		selfattr.HoverBkgID = "radiobox.4"
+		selfattr.DownBkgID = "radiobox.4"
+		attr.NormalBkgID = "radiobox.1"
+		attr.HoverBkgID = "radiobox.3"
+		attr.DownBkgID = "radiobox.3"
+		self:Updata()
+		thatradio:Updata()
+	end
 end
 
-function OnClicklink(self)
-	local attr  = self:GetAttribute()
-	if not attr.clickflag then
-		attr.clickflag = true
-		attr.NormalBkgID = "about.link.2"
-		attr.HoverBkgID = "about.link.2"
-		attr.DownBkgID = "about.link.4"
+function OnClickRadioNo(self)
+	local owner = self:GetOwner()
+	local thatradio = owner:GetUIObject("TipFeedback.yes")
+	local attr = thatradio:GetAttribute()
+	local selfattr = self:GetAttribute()
+	if attr.select or attr.NormalBkgID == "radiobox.2" then
+		attr.select = false
+		attr.NormalBkgID = "radiobox.1"
+		attr.HoverBkgID = "radiobox.3"
+		attr.DownBkgID = "radiobox.3"
+		selfattr.NormalBkgID = "radiobox.2"
+		selfattr.HoverBkgID = "radiobox.4"
+		selfattr.DownBkgID = "radiobox.4"
 		self:Updata()
+		thatradio:Updata()
 	end
 end
 
