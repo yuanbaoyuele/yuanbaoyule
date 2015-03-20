@@ -57,6 +57,15 @@ end
 function OnClickSysInfo(self)
 end
 
+function OnClickconfirm(self)
+end
+
+function OnClickcancel(self)
+end
+
+function OnClickrichinfo(self)
+end
+
 function OnClicksure(self)
 	local owner = self:GetOwner()
 	local thatradio = owner:GetUIObject("TipFeedback.no")
