@@ -15,11 +15,12 @@ function OnSelect_Support(self)
 end
 
 function OnSelect_ReportSet(self)
-	
+	tFunHelper.ShowModalDialog("TipFeedbackWnd", "TipFeedbackWndInstance", "TipFeedbackTree", "TipFeedbackTreeInstance")
 end
 
 function OnSelect_About(self)
-	-- tFunHelper.ShowPopupWndByName("TipAboutWnd.Instance", true)
+	--tFunHelper.ShowPopupWndByName("TipAboutWnd.Instance", true)
+	tFunHelper.ShowModalDialog("TipAboutWnd", "TipAboutWndInstance", "TipAboutTree", "TipAboutTreeInstance")
 end
 
 

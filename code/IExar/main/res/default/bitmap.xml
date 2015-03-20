@@ -1,6 +1,7 @@
 <XLUE>
 	<resource>
 		<texture id="YBYL.MainWnd.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.png" />
+		<texture id="YBYL.MainWnd.Bkg.nofocus" type="NineInOne" image="bitmap\bkg_1.png" />
 		<texture id="YBYL.MainWnd.Bkg.Shadow" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Shadow.png" />
 		<texture id="YBYL.MainWnd.Head.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Head.Bkg.png" />
 		<texture id="YBYL.Tab.Active" type="ThreeInOneH" image="bitmap\YBYL.Tab.Active.png" />
@@ -63,6 +64,7 @@
 		<bitmap id="StateBar.RightCorner" path="bitmap\StateBar.RightCorner.png" />
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
+	<bitmap id="collect.dir.defaluticon.open" path="bitmap\collect.dir.defaluticon.open.png" />
 	<bitmap id="collect.file.defaluticon" path="bitmap\collect.file.defaluticon.png" />
 	
 	<texture id="Collect.Button.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Hover.png" />
@@ -103,6 +105,23 @@
 <texture id="texture.search.bing" path="bitmap\bing.png"/>
 <bitmap id="img.week" path="bitmap\week.png"/>
 <bitmap id="img.weekday" path="bitmap\weekday.png"/>
+<bitmap id="history.icon" path="bitmap\history.icon.png"/>
+<texture id="about.content" path="bitmap\about.content.png" />
+<texture id="about.title" path="bitmap\about.title.png" />
+<texture id="about.link.1" path="bitmap\about.link.1.png" />
+<texture id="about.link.2" path="bitmap\about.link.2.png" />
+<texture id="about.link.3" path="bitmap\about.link.3.png" />
+<texture id="about.link.4" path="bitmap\about.link.4.png" />
+<imagelist id="about.button.bkg" splitter="1" varyblock="1" image="bitmap\about.button.bkg.png" />
+<texture id="about.button.bkg.normal" type="ThreeInOneH" imagelist="about.button.bkg" index="1" />
+<texture id="about.button.bkg.hover" type="ThreeInOneH" imagelist="about.button.bkg" index="2" />
+<texture id="about.button.bkg.down" type="ThreeInOneH" imagelist="about.button.bkg" index="3" />
+<texture id="feedback.content" path="bitmap\feedback.content.png" />
+<imagelist id="radiobox" splitter="1" varyblock="1" image="bitmap\radiobox.png" />
+<texture id="radiobox.1" imagelist="radiobox" index="1" />
+<texture id="radiobox.2" imagelist="radiobox" index="2" />
+<texture id="radiobox.3" imagelist="radiobox" index="3" />
+<texture id="radiobox.4" imagelist="radiobox" index="4" />
 		<!-- BufferView -->
 		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
 		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	

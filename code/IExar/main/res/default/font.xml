@@ -22,5 +22,6 @@
 		<font id="font.menubar.text" height="12" facename="宋体" /> 
 		<font id="font.collectbar.text" height="12" facename="宋体" /> 
 		<font id="font.text12.bold" height="12" facename="宋体" weight="bold"/> 
+		<font id="font.text14.bold" height="14" facename="宋体" weight="bold"/> 
 	</resource>
 </XLUE>
