@@ -1,5 +1,6 @@
 <XLUE>
 	<resource>
+		<texture id="YBYL.MainWnd.Bkg.Disable" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Disable.png" />
 		<texture id="YBYL.MainWnd.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.png" />
 		<texture id="YBYL.MainWnd.Bkg.nofocus" type="NineInOne" image="bitmap\bkg_1.png" />
 		<texture id="YBYL.MainWnd.Bkg.Shadow" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Shadow.png" />
@@ -12,6 +13,7 @@
 		<texture id="YBYL.Head.RightBkg" image="bitmap\YBYL.Head.RightBkg.png" />
 		<texture id="YBYL.DropMenu.ItemBkg.Normal" type="NineInOne" image="bitmap\YBYL.DropMenu.ItemBkg.Normal.png" />
 		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		<texture id="MenuItem.Active" image="bitmap\MenuItem.Active.png" />
 		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
 		<texture id="YBYL.Menu.Select.Bkg"  image="bitmap\YBYL.Menu.Select.Bkg.png" />
 		<texture id="YBYL.AddressMenu.Select.Bkg"  image="bitmap\YBYL.AddressMenu.Select.Bkg.png" />
@@ -62,6 +64,8 @@
 		<bitmap id="Earth.Image" path="bitmap\Earth.Image.png" />
 		<bitmap id="Magnifier" path="bitmap\Magnifier.png" />
 		<bitmap id="StateBar.RightCorner" path="bitmap\StateBar.RightCorner.png" />
+		<bitmap id="History.Logo" path="bitmap\History.Logo.png" />
+		<bitmap id="ArrowLeft" path="bitmap\ArrowLeft.png" />
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.dir.defaluticon.open" path="bitmap\collect.dir.defaluticon.open.png" />
@@ -69,6 +73,10 @@
 	
 	<texture id="Collect.Button.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Hover.png" />
 	<texture id="Collect.Button.Bkg.Down" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Down.png" />
+		
+		<imagelist id="Menu.Check.imagelist" splitter="1" varyblock="1" image="bitmap\Menu.Check.png"/>
+			<bitmap id="Menu.Check.Black" imagelist="Menu.Check.imagelist" index="1"/>
+			<bitmap id="Menu.Check.White" imagelist="Menu.Check.imagelist" index="2"/>		
 		
 		<imagelist id="bitmap.search.imagelist" splitter="1" varyblock="1" image="bitmap\Search_button.png"/>
 			<texture id="bitmap.search.normal" imagelist="bitmap.search.imagelist" index="1"/>
@@ -80,6 +88,14 @@
 			<texture id="SearchBox.DropArrow.Hover" imagelist="SearchBox.DropArrow.imagelist" index="2"/>
 			<texture id="SearchBox.DropArrow.Down" imagelist="SearchBox.DropArrow.imagelist" index="3"/>
 			
+		<imagelist id="UrlHistory.Arrow.List" splitter="1" varyblock="1" image="bitmap\UrlHistory.Arrow.png"/>
+			<texture id="UrlHistory.Arrow.Normal" imagelist="UrlHistory.Arrow.List" index="1" />
+			<texture id="UrlHistory.Arrow.Hover"  imagelist="UrlHistory.Arrow.List" index="2" />
+			<texture id="UrlHistory.Arrow.Down"  imagelist="UrlHistory.Arrow.List" index="3" />
+		
+		<imagelist id="UrlHistory.Arrow.NoBkg.List" splitter="1" varyblock="1" image="bitmap\UrlHistory.Arrow.NoBkg.png"/>
+			<texture id="UrlHistory.Arrow.Disable" imagelist="UrlHistory.Arrow.NoBkg.List" index="1" />
+		
 <imagelist id="imagelist.search.edit.imagelist" vertical="0" splitter="1" varyblock="1" image="bitmap\imagelist.edit.png"/>
 <texture id="texture.edit.bkg.disable" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="10"/>
 <texture id="texture.edit.bkg.normal" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="11"/>
@@ -201,6 +217,12 @@
 			<texture id="YBYL.Head.GoForward.Down"   imagelist="YBYL.Head.GoForward" index="3" />
 			<texture id="YBYL.Head.GoForward.Disable"   imagelist="YBYL.Head.GoForward" index="4" />	
 		
+		<imagelist id="YBYL.Head.CompatBtn" splitter="1" varyblock="1" image="bitmap\CompatBtn.png"/>
+			<texture id="YBYL.Head.CompatBtn.Normal" imagelist="YBYL.Head.CompatBtn" index="1" />
+			<texture id="YBYL.Head.CompatBtn.Hover"  imagelist="YBYL.Head.CompatBtn" index="2" />
+			<texture id="YBYL.Head.CompatBtn.Down"   imagelist="YBYL.Head.CompatBtn" index="3" />
+			<texture id="YBYL.Head.CompatBtn.Disable"   imagelist="YBYL.Head.CompatBtn" index="1" />	
+		
 		<imagelist id="YBYL.Head.Refresh" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Refresh.png"/>
 			<texture id="YBYL.Head.Refresh.Normal" imagelist="YBYL.Head.Refresh" index="1" />
 			<texture id="YBYL.Head.Refresh.Hover"  imagelist="YBYL.Head.Refresh" index="2" />
@@ -241,7 +263,7 @@
 			<texture id="YBYL.Scroll.Bar.Normal" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="1" />
 			<texture id="YBYL.Scroll.Bar.Hover" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="2" />
 			<texture id="YBYL.Scroll.Bar.Down" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="3" />
-			<texture id="YBYL.Scroll.Bar.Disable" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="4" />	
+			<texture id="YBYL.Scroll.Bar.Disable" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="1" />	
 		
 		<imagelist id="YBYL.ToolTip.Close" splitter="1" varyblock="1" image="bitmap\YBYL.ToolTip.Close.png"/>
 			<texture id="YBYL.ToolTip.Close.Normal"  imagelist="YBYL.ToolTip.Close" index="1" />
