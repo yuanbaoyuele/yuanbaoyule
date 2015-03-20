@@ -7,7 +7,7 @@ local treeNodeAttr={}
 local tfilelistcache = nil
 local frameHostWnd
 local tFilePathMap = nil
-local strFavoritesPath = tFunHelper.GetUserCollectDir()
+local strFavoritesPath = tFunHelper.GetFavoriteDir()
 local strSysTemp = tipUtil:GetSystemTempPath()
 local strPathCachePath = tipUtil:PathCombine(strSysTemp, "iefilepathmap.dat")
 local tUrlHistory = nil

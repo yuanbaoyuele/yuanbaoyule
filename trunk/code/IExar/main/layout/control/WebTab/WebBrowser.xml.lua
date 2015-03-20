@@ -210,7 +210,12 @@ function InitWebBrowserObj(self)
 	browser:AttachListener("OnBeforeNavigate2", false, function(obj, URL)		
 		self:FireExtEvent("OnBeforeNavigate2", URL)
 	end)	
+	
+	browser:AttachListener("OnFocusChange", false, function( self, bFocus )
+		XLMessageBox(1111)
+	end)
 end
+
 
 function Navigate( self, url )
 	local attr = self:GetAttribute()
@@ -282,6 +287,7 @@ function OnDestroy( self )
 	end
 	return true
 end
+
 
 function OnBtnRefresh(self)
 	local page = self:GetOwnerControl()

@@ -128,6 +128,47 @@ function SetGoForwardState(self, bGoForwardState)
 end
 
 
+function SetNewURLState(self, bIsOpening)
+	local attr = self:GetAttribute()
+	attr.bNewURLState = bIsOpening
+end
+
+function GetNewURLState(self)
+	local attr = self:GetAttribute()
+	return attr.bNewURLState
+end
+
+function AddCurURLIndex(self, nDiff)
+	local attr = self:GetAttribute()
+	attr.nCurURLIndex = attr.nCurURLIndex+nDiff
+	
+	if attr.nCurURLIndex < 1 then
+		attr.nCurURLIndex = 1
+		return
+	end
+	
+	if attr.nCurURLIndex > #attr.tCurURLList then
+		attr.nCurURLIndex = #attr.tCurURLList
+		return
+	end
+end
+
+function SetCloseBtnVisible(self, bVisible)
+	local objCloseBtn = self:GetControlObject("WebTabCtrl.ClostBtn")
+	objCloseBtn:SetVisible(bVisible)
+	objCloseBtn:SetChildrenVisible(bVisible)
+end
+
+
+function CloseTab(objRootCtrl)
+	local nTabID = objRootCtrl:GetSelfID()
+	
+	objRootCtrl:SetVisible(false)
+	objRootCtrl:SetChildrenVisible(false)
+	
+	objRootCtrl:FireExtEvent("OnCloseTabItem", nTabID)
+end
+
 -----事件----
 function OnInitControl(self)
 	self:SetSelfID(0)
@@ -172,18 +213,30 @@ function OnMouseMoveTab(self, x, y, nFlag)
 end
 
 
+function OnMButtonUp(self)
+	local objCloseBtn = self:GetControlObject("WebTabCtrl.ClostBtn")
+	local bCloseBtnVisible = objCloseBtn:GetVisible()
+	
+	if bCloseBtnVisible then
+		CloseTab(self)
+	end
+end
+
+
+function OnRButtonUpItem(self)
+	local bRButtonPopup = true
+	tFunHelper.TryDestroyOldMenu(self, "RBtnWebTabMenu")
+	tFunHelper.CreateAndShowMenu(self, "RBtnWebTabMenu", 0, bRButtonPopup)
+end
+
+
 --只隐藏控件， 是否销毁交给父控件决定
 function OnClickCloseTab(self)
-	local objRootCtrl = self:GetOwnerControl()
-	local nTabID = objRootCtrl:GetSelfID()
-	
-	objRootCtrl:SetVisible(false)
-	objRootCtrl:SetChildrenVisible(false)
-	
-	objRootCtrl:FireExtEvent("OnCloseTabItem", nTabID)
+	CloseTab(self:GetOwnerControl())
 end
 
 ------
+
 function FocusOnBrowser(objRootCtrl)
 	local objBrowser = objRootCtrl:GetBindBrowserCtrl()
 	if objBrowser then
@@ -222,13 +275,50 @@ function SaveIcoNameToHistory(objRootCtrl, strIcoName)
 end
 
 
+function PushTitleToList(objRootCtrl, strTitle)
+	local attr = objRootCtrl:GetAttribute()
+	local bNewURLState = objRootCtrl:GetNewURLState()
+	if not bNewURLState then
+		return
+	end
+	objRootCtrl:SetNewURLState(false)
+	
+	if type(attr.tCurURLList) ~= "table" then
+		attr.tCurURLList = {}
+	end
+	local tCurURLList = {}
+	tCurURLList["strURL"] = objRootCtrl:GetLocalURL()
+	tCurURLList["strTitle"] = strTitle
+	table.insert(attr.tCurURLList, 1, tCurURLList)
+	
+	local nIndex = #tCurURLList+1
+	attr.nCurURLIndex = nIndex
+end
+
+local g_hTimer = nil
+local g_strLastTitle = ""
 function SetTabTitle(objRootCtrl, strTitle)
 	if not IsRealString(strTitle) then
 		return
 	end
-
+	
 	objRootCtrl:SetTabText(strTitle)
 	SaveTitleToHistory(objRootCtrl, strTitle)
+	
+	--记录本web的访问历史
+	local nTimeSpanInMs = 1 * 1000
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	g_strLastTitle = strTitle
+	
+	if not g_hTimer then
+		g_hTimer = timerManager:SetTimer(function(item, id)
+		
+			PushTitleToList(objRootCtrl, g_strLastTitle)
+			
+			timerManager:KillTimer(g_hTimer)
+			g_hTimer = nil
+		end, nTimeSpanInMs)
+	end
 end
 
 

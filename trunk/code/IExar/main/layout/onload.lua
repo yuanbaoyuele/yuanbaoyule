@@ -242,7 +242,7 @@ end
 
 --弹出窗口--
 local g_tPopupWndList = {
-	[1] = {"TipAboutWnd", "TipAboutTree"},
+	-- [1] = {"TipAboutWnd", "TipAboutTree"},
 	-- [2] = {"TipCollectWnd", "TipCollectTree"},
 	-- [3] = {"TipConfigWnd", "TipConfigTree"},
 }
@@ -348,13 +348,6 @@ end
 
 function TryOpenURLWhenStup()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local strRegPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\ShowIntroduce"
-	local strValue = FunctionObj.RegQueryValue(strRegPath)
-	
-	if not IsNilString(strValue) then
-		return
-	end
-	
 	FunctionObj.OpenURLWhenStup()
 end
 

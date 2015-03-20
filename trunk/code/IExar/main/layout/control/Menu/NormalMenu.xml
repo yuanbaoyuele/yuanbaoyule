@@ -105,10 +105,10 @@
 								<ThumbBtn_hover>YBYL.Scroll.Bar.Hover</ThumbBtn_hover>
 								<ThumbBtn_down>YBYL.Scroll.Bar.Down</ThumbBtn_down>
 								<ThumbRightMagrin>0</ThumbRightMagrin>
-								<ThumbBtnWidth>5</ThumbBtnWidth>
+								<ThumbBtnWidth>16</ThumbBtnWidth>
 								<ThumbBtnLength>13</ThumbBtnLength>
 								<SideBtnLength>0</SideBtnLength>
-								<left>father.width - 15</left>
+								<left>father.width-7</left>
 								<top>5</top>
 								<width>5</width>
 								<height>father.height-9</height>

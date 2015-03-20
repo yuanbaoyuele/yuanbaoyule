@@ -11,6 +11,24 @@ function GetText(self)
 end
 
 
+function GetTextExtent(self)
+	local objText = self:GetControlObject("ShortCutText.Text")
+	return objText:GetTextExtent()
+end
+
+
+function SetEndellipsis(self, bEndellipsis)
+	if type(bEndellipsis) ~= "boolean" then
+		return
+	end
+
+	local attr = self:GetAttribute()
+	attr.Endellipsis = bEndellipsis
+	SetMainTextAttr(self)
+	SetKeyLayoutPos(self)
+end
+
+
 function IsTextOverFlow(self)
 	local objText = self:GetControlObject("ShortCutText.Text")
 	local objLayout = self:GetControlObject("ShortCutText.Layout")
@@ -169,6 +187,7 @@ end
 
 
 function SetKeyLayoutPos(objRootCtrl)
+	local attr = objRootCtrl:GetAttribute()
 	local objMainLayout = objRootCtrl:GetControlObject("ShortCutText.Layout")
 	local objText = objRootCtrl:GetControlObject("ShortCutText.Text")
 	local objKeyLayout = objRootCtrl:GetControlObject("ShortCutText.Key")
@@ -178,8 +197,12 @@ function SetKeyLayoutPos(objRootCtrl)
 	local nNewTextR = nTextL+nSuitWidth
 	
 	local nRootL, nRootT, nRootR, nRootB = objMainLayout:GetObjPos()
+	if nNewTextR > nRootR and attr.Endellipsis then
+		nNewTextR = nRootR
+	end
+	
 	objText:SetObjPos(nTextL, nTextT, nNewTextR, nRootB)
-
+	
 	local nKeyL, nKeyT, nKeyR, nKeyB = objKeyLayout:GetObjPos()
 	local nKeyWidth = nKeyR - nKeyL
 	local nNewKeyL = nNewTextR

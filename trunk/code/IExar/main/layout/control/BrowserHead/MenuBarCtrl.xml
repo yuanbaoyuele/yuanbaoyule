@@ -50,7 +50,7 @@
 							</attr>
 						</obj>	
 							
-						<obj id="MenuBarCtrl.HideBtn.File" class="ShortCutText" templateid="menu.item">
+						<obj id="MenuBarCtrl.HideBtn.FileMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
 								<left>0</left>
 								<Text>文件</Text>
@@ -61,7 +61,7 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Edit" class="ShortCutText" templateid="menu.item">
+						<obj id="MenuBarCtrl.HideBtn.EditMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
 								<left>58</left>
 								<Text>编辑</Text>
@@ -72,7 +72,7 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Lookup" class="ShortCutText" templateid="menu.item">
+						<obj id="MenuBarCtrl.HideBtn.LookupMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
 								<left>58*2</left>
 								<Text>查看</Text>
@@ -83,7 +83,7 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Collect" class="ShortCutText" templateid="menu.item">
+						<obj id="MenuBarCtrl.HideBtn.CollectMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
 								<left>58*3</left>
 								<width>69</width>
@@ -95,7 +95,7 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Tool" class="ShortCutText" templateid="menu.item">
+						<obj id="MenuBarCtrl.HideBtn.ToolMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
 								<left>58*4+11</left>
 								<Text>工具</Text>
@@ -106,7 +106,7 @@
 							</eventlist>
 						</obj>
 						
-						<obj id="MenuBarCtrl.HideBtn.Help" class="ShortCutText" templateid="menu.item">
+						<obj id="MenuBarCtrl.HideBtn.HelpMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
 								<left>58*5+11</left>
 								<Text>帮助</Text>

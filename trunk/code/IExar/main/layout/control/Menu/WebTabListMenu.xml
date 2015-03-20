@@ -1,5 +1,5 @@
 <xlue>
-	<objtemplate id="urlhistorymenu.context" class="MenuObject" templateid="menu.object.template">
+	<objtemplate id="webtablistmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
@@ -7,19 +7,17 @@
 			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
 			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
 			<ItemBottom>0</ItemBottom> 
-			<ItemBknID>YBYL.AddressMenu.Select.Bkg</ItemBknID> 
-			<MenuType>urlhistory</MenuType> 
 		</attr>
 		<children>
 			<!--动态创建-->
 		</children>
 	</objtemplate>
 	
-	<objtreetemplate id="UrlHistoryMenuTree" class="ObjectTreeTemplate">
+	<objtreetemplate id="WebTabListMenuTree" class="ObjectTreeTemplate">
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>552</width>
+			<width>500</width>
 			<height>195</height>
 		</attr>
 		
@@ -27,7 +25,7 @@
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>552</width>
+				<width>200</width>
 				<height>195</height>
 			</attr>
 			<children>
@@ -35,13 +33,13 @@
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>552</width>
+						<width>father.width</width>
 						<height>father.height</height>
 						<!--ContextID>urlhistorymenu.context</ContextID-->
 						<BknID>YBYL.Menu.Bkg</BknID>
 					</attr>
 					<eventlist>
-						<event name="OnInitControl" file="UrlHistoryMenu.xml.lua" func="OnInitControl" />
+						<event name="OnInitControl" file="WebTabListMenu.xml.lua" func="OnInitControl" />
 					</eventlist>
 				</obj>
 			</children>

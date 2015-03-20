@@ -17,6 +17,7 @@ function OnClickGobackBtn(self)
 	local objCurrentBrowser = GetCurrentBrowser(objRootCtrl)
 	if objCurrentBrowser then
 		objCurrentBrowser:GoBack()
+		AddCurURLIndex(objRootCtrl,1)
 	end		
 end
 
@@ -25,6 +26,7 @@ function OnClickGoForwardBtn(self)
 	local objCurrentBrowser = GetCurrentBrowser(objRootCtrl)
 	if objCurrentBrowser then
 		objCurrentBrowser:GoForward()
+		AddCurURLIndex(objRootCtrl,-1)
 	end	
 end
 
@@ -53,6 +55,15 @@ function GetCurrentBrowser(objRootCtrl)
 	end
 end
 
+function AddCurURLIndex(objRootCtrl, nDiff)
+	local attr = objRootCtrl:GetAttribute()
+	local objWebTabCtrl = attr.objCurrentWebTab
+	if objWebTabCtrl and objWebTabCtrl ~= 0 then
+		objWebTabCtrl:AddCurURLIndex(nDiff)
+	end
+end
+
+
 
 function UnBindLastBrowser(objRootCtrl)
 	local objCurrentBrowser = GetCurrentBrowser(objRootCtrl)
@@ -79,11 +90,13 @@ function SetBtnListStyle(objRootCtrl, objWebTabCtrl)
 		return 
 	end
 	
-	local bState = objWebTabCtrl:GetGoBackState()
-	objGoBack:Enable(bState)
+	local bBackState = objWebTabCtrl:GetGoBackState()
+	objGoBack:Enable(bBackState)
 	
-	local bState = objWebTabCtrl:GetGoForwardState()
-	objGoForward:Enable(bState)
+	local bFowdState = objWebTabCtrl:GetGoForwardState()
+	objGoForward:Enable(bFowdState)
+	
+	SetDropArrowActive(objRootCtrl, bBackState or bFowdState)
 	
 	local objCurrentBrowser = GetCurrentBrowser(objRootCtrl)
 	if not objCurrentBrowser then
@@ -101,11 +114,34 @@ function SetBtnListStyle(objRootCtrl, objWebTabCtrl)
 				objGoForward:Enable(bEnable)
 				objWebTabCtrl:SetGoForwardState(bEnable)
 			end
+			
+			if bEnable then
+				SetDropArrowActive(objRootCtrl, true)
+			end
 		end)	
 end
 
 
+function OnClickDropArrow(self)
+	local objRootCtrl = self:GetOwnerControl()
+	local objBkg = objRootCtrl:GetControlObject("NavgateBtnList.Bkg")
+
+	local nTopSpan = 30
+	tFunHelper.TryDestroyOldMenu(objBkg, "BrowserHistoryMenu")
+	tFunHelper.CreateAndShowMenu(objBkg, "BrowserHistoryMenu", nTopSpan)
+end
+
+
 ------辅助函数---
+function SetDropArrowActive(objRootCtrl, bActive)
+	local objArrowBkg = objRootCtrl:GetControlObject("DropArrow.Bkg")
+	local objArrowDisable = objArrowBkg:GetObject("DropArrow.Disable")
+	objArrowBkg:SetEnable(bActive)
+	objArrowDisable:SetVisible(not bActive)
+end
+
+
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
 end
+

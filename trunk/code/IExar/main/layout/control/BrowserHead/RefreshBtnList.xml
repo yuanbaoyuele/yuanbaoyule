@@ -14,9 +14,26 @@
 		
 		<objtemplate>
 			<children>
-				<obj id="RefreshBtnList.RefreshBtn" class="TipAddin.Button">
+				<obj id="RefreshBtnList.CompatBtn" class="TipAddin.Button">
 					<attr>
 						<left>0</left>
+						<top>0</top>
+						<width>22</width>
+						<height>22</height>
+						<NormalBkgID>YBYL.Head.CompatBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Head.CompatBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.Head.CompatBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Head.CompatBtn.Disable</DisableBkgID>
+						<Enable>false</Enable>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" />
+					</eventlist>
+				</obj>
+			
+				<obj id="RefreshBtnList.RefreshBtn" class="TipAddin.Button">
+					<attr>
+						<left>27</left>
 						<top>0</top>
 						<width>22</width>
 						<height>22</height>
@@ -33,7 +50,7 @@
 			
 				<obj id="RefreshBtnList.StopBtn" class="TipAddin.Button">
 					<attr>
-						<left>27</left>
+						<left>27*2</left>
 						<top>0</top>
 						<width>22</width>
 						<height>22</height>

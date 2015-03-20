@@ -1,27 +1,124 @@
 <xlue>
 	<objtemplate id="rbtn.collectbarmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
 		</attr>
 		<children>
 			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>打开</Text>
+					<AccKey>O</AccKey>
+					<Font>font.menuitem.bold</Font>
+					<KeyFont>font.menuitem.bold.underline</KeyFont>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Open" />
 				</eventlist>
 			</obj>
 			
+			<obj id="OpenInNewTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>在新选项卡中打开</Text>
+					<AccKey>W</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_OpenInNewTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="OpenInNewWindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>在新窗口中打开</Text>
+					<AccKey>N</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_OpenInNewWindow" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="Cut" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>剪切</Text>
+					<AccKey>T</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Cut" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Copy" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>复制</Text>
+					<AccKey>C</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Copy" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
 			<obj id="Delete" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>删除</Text>
+					<AccKey>D</AccKey>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Delete" />
 				</eventlist>
 			</obj>
+			
+			<obj id="Rename" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>重命名</Text>
+					<AccKey>C</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Rename" />
+				</eventlist>
+			</obj>
+			
+			<obj id="NewFolder" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建文件夹</Text>
+					<AccKey>F</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_NewFolder" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="Profile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>属性</Text>
+					<AccKey>P</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Profile" />
+				</eventlist>
+			</obj>
+			
 		</children>
 	</objtemplate>
 	
@@ -29,16 +126,16 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>100</width>
-			<height>70</height>
+			<width>160</width>
+			<height>222</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>100</width>
-				<height>70</height>
+				<width>160</width>
+				<height>222</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

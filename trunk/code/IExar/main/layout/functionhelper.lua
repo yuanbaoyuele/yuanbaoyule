@@ -85,7 +85,7 @@ function GetCommandStrValue(strKey)
 	if string.find(cmdString, strKey .. " ") then
 		local cmdList = tipUtil:CommandLineToList(cmdString)
 		if cmdList ~= nil then	
-			for i = 1, #cmdList, 2 do
+			for i = 1, #cmdList, 1 do
 				local strTmp = tostring(cmdList[i])
 				if strTmp == strKey 
 					and not string.find(tostring(cmdList[i + 1]), "^/") then		
@@ -886,7 +886,9 @@ function TryDestroyOldMenu(objUIElem, strMenuKey)
 	local strHostWndName = strMenuKey..".HostWnd.Instance" 
 	local strObjTreeName = strMenuKey..".Tree.Instance"
 
-	if uHostWndMgr:GetHostWnd(strHostWndName) then
+	local objHostWnd = uHostWndMgr:GetHostWnd(strHostWndName)
+	if objHostWnd then
+		objHostWnd:UnbindUIObjectTree()
 		uHostWndMgr:RemoveHostWnd(strHostWndName)
 	end
 	
@@ -1016,9 +1018,24 @@ end
 
 -----
 
+function SetMainWndFocusStyle(bFocus)
+	local objBkg = GetMainCtrlChildObj("bkg")
+	if bFocus then
+		objBkg:SetTextureID("YBYL.MainWnd.Bkg")	
+	else
+		local nX, nY = tipUtil:GetCursorPos() 	
+		local objMainWndInst = GetMainWndInst()
+		local l, t, r, b = objMainWndInst:GetWindowRect()
+		if nX > l and nX < r and nY > t and nY < b then
+			return
+		end
+		
+		objBkg:SetTextureID("YBYL.MainWnd.Bkg.Disable")	
+	end
+end
 
 
--------文件操作---
+------文件操作---
 local g_bLoadCfgSucc = false
 local g_tConfigFileStruct = {
 	["tUserConfig"] = {
@@ -1273,7 +1290,7 @@ end
 
 
 ---收藏夹
-function GetUserCollectDir()
+function GetFavoriteDir()
 	local CSIDL_FAVORITES = 6
 	local strCollectDir = tipUtil:GetSpecialFolderPathEx(CSIDL_FAVORITES)
 	if IsRealString(strCollectDir) and tipUtil:QueryFileExists(strCollectDir) then
@@ -1284,9 +1301,20 @@ function GetUserCollectDir()
 end
 
 
-function GetUserCollectList()
-	local strFavoriteDir = GetUserCollectDir()
+function GetUserCollectDir()
+	local strFavoriteDir = GetFavoriteDir()
 	local strCollectDir = tipUtil:PathCombine(strFavoriteDir,"链接")
+	
+	if IsUACOS() then
+		strCollectDir = tipUtil:PathCombine(strFavoriteDir,"Links")
+	end
+
+	return strCollectDir
+end
+
+
+function GetUserCollectList()
+	local strCollectDir = GetUserCollectDir()
 	
 	if not IsRealString(strCollectDir) or not tipUtil:QueryFileExists(strCollectDir) then
 		return nil
@@ -1310,6 +1338,7 @@ function GetUserCollectList()
 				tUserCollectList[nCurIndex]["strLocationName"] = GetFileNameFromPath(strFilePath)
 				tUserCollectList[nCurIndex]["strURL"] = strURL
 				tUserCollectList[nCurIndex]["strIcoName"] = GetIcoNameFromURL(strURL)
+				tUserCollectList[nCurIndex]["strFilePath"] = strFilePath
 			end
 		end
 	end
@@ -1320,8 +1349,7 @@ end
 
 function AddCurWebToCollect()
 	local objWebTab = GetActiveTabCtrl()
-	local strFavoriteDir = GetUserCollectDir()
-	local strCollectDir = tipUtil:PathCombine(strFavoriteDir,"链接")
+	local strCollectDir = GetUserCollectDir()
 	local strText = objWebTab:GetTabText() or "空白页"
 	local strFilePath = GetCollectFilePath(strCollectDir, strText, ".url")
 	local strURL = objWebTab:GetLocalURL()
@@ -1354,6 +1382,42 @@ function GetCollectFilePath(strDir, strFileName, strExt)
 	return strFilePath
 end
 
+
+local g_HasCreateCllctWnd = false
+function GetCollectWndRootCtrl()
+	if not g_HasCreateCllctWnd then
+		local bSuccess = CreateSubWndByName("TipCollectWnd", "TipCollectTree", ".Instance")
+		if bSuccess then
+			 g_HasCreateCllctWnd = true
+		else
+			return
+		end
+	end
+	
+	local objWnd = GetWndInstByName("TipCollectWnd.Instance")
+	local objtree = objWnd:GetBindUIObjectTree()
+	local objRootLayout = objtree:GetUIObject("root.layout")
+	local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
+	return objRootCtrl
+end
+
+
+function ShowCollectWnd(nShowType, bFix)
+	local objRootCtrl = GetCollectWndRootCtrl()
+	local objWnd = GetWndInstByName("TipCollectWnd.Instance")
+	
+	if objWnd:GetVisible() then
+		objRootCtrl:CloseCollectWnd()
+		return
+	end	
+	
+	ShowPopupWndByName("TipCollectWnd.Instance", false)
+	objRootCtrl:SetFixStyle(bFix)
+	objRootCtrl:ShowTab(nShowType)
+end
+
+
+--------------------
 
 function GetIcoNameFromURL(strURL)
 	local strDomain = string.match(strURL, "(http://[^/]+)")	
@@ -1448,7 +1512,6 @@ end
 
 function DeleteHistoryItem(strInputURL, strFileKey)
 	local strURL = FormatURL(strInputURL)
-
 	local tFileInfo = ReadConfigFromMemByKey(strFileKey)
 	if type(tFileInfo) ~= "table" then
 		tFileInfo= {}
@@ -1822,6 +1885,7 @@ obj.GetMainWndInst = GetMainWndInst
 obj.ShowPopupWndByName = ShowPopupWndByName
 obj.ShowModalDialog = ShowModalDialog
 obj.CreateSubWndByName = CreateSubWndByName
+obj.SetMainWndFocusStyle = SetMainWndFocusStyle
 
 obj.SetToolTipText = SetToolTipText
 obj.ShowToolTip = ShowToolTip
@@ -1846,7 +1910,9 @@ obj.GetIcoDir = GetIcoDir
 obj.GetIcoBitmapObj = GetIcoBitmapObj
 obj.GetDefaultIcoImgID = GetDefaultIcoImgID
 obj.UpdateCollectList = UpdateCollectList
-obj.GetUserCollectDir = GetUserCollectDir
+obj.ShowCollectWnd = ShowCollectWnd
+obj.GetCollectWndRootCtrl = GetCollectWndRootCtrl
+obj.GetFavoriteDir = GetFavoriteDir
 obj.GetUserCollectList = GetUserCollectList
 obj.AddCurWebToCollect = AddCurWebToCollect
 obj.GetIcoNameFromURL = GetIcoNameFromURL

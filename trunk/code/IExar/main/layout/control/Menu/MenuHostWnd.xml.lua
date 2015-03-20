@@ -14,7 +14,7 @@ end
 
 
 function OnShowWindow(self, bShow)
-
+	self:SetTrapMouse(false)
 end
 
 function OnFocusChange(self, bFocus)

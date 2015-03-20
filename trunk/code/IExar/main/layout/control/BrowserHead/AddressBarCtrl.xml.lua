@@ -145,6 +145,20 @@ function OnUrlEditRButtonUp(self)
 	tFunHelper.CreateAndShowMenu(self, "RBtnEditMenu", 0, true)
 end
 
+
+local g_bSelectAllFlag = false
+function OnUrlEditFocus(self, bFocus)
+	g_bSelectAllFlag = false
+end
+
+
+function OnUrlEditLButtonUp(self)
+	if not g_bSelectAllFlag then
+		self:SetSelAll()
+		g_bSelectAllFlag = true
+	end
+end
+
 ----------------
 function CheckHasCollect(strInputURL)
 	if not IsRealString(strInputURL) then

@@ -80,6 +80,7 @@ function SetIcoImage(objMenuItem, tCollectInfo)
 	attr.IconPos = 5
 	attr.IconWidth = 17
 	attr.IconHeight = 17
+	attr.IconVisible = true
 	
 	local objBitmap = tCollectInfo["objBitmap"]
 	local strDefaultImgID = tFunHelper.GetDefaultIcoImgID()
@@ -87,6 +88,7 @@ function SetIcoImage(objMenuItem, tCollectInfo)
 		
 	local objImage = objMenuItem:GetControlObject("icon")
 	if objBitmap and objImage then
+		-- local objClone = objBitmap:Clone()
 		objMenuItem:SetIconBitmap(objBitmap)
 	end
 end

@@ -12,8 +12,7 @@
 			<zorder>999999</zorder>
 		</attr>
 	</objtemplate>
-
-
+	
 	 <control class="CollectWndCtrl">
         <attr_def>
             <attr name="Index" type="int" >
@@ -26,6 +25,8 @@
         <method_def>
             <ShowTab file="TipCollectWnd.xml.lua" func="ShowTab" />
             <CloseCollectWnd file="TipCollectWnd.xml.lua" func="CloseCollectWnd" />
+            <SetFixStyle file="TipCollectWnd.xml.lua" func="SetFixStyle" />
+            <EnableSyncWindow file="TipCollectWnd.xml.lua" func="EnableSyncWindow" />
         </method_def>
         <objtemplate>
             <children>

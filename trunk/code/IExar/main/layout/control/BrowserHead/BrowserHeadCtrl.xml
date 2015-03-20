@@ -32,14 +32,14 @@
 							<attr>
 								<left>85</left>
 								<top>5</top>
-								<width>father.width-450</width>
+								<width>father.width-450-27</width>
 								<height>22</height>
 							</attr>	
 						</obj>
 						
 						<obj id="BrowserHeadCtrl.RefreshBtnList" class="RefreshBtnList">
 							<attr>
-								<left>father.width-450+90</left>
+								<left>father.width-450+90-27</left>
 								<top>5</top>
 								<width>70</width>
 								<height>22</height>
