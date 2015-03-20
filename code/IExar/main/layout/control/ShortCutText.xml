@@ -5,7 +5,7 @@
 			<attr name="Key" type="string" ></attr>
 			<attr name="KeyFont" type="string" ></attr>
 			<attr name="Font" type="string"/>
-			<attr name="Endellipsis" type="int"/>
+			<attr name="Endellipsis" type="bool"><default>false</default></attr>
 			<attr name="Textcolor" type="string"/>
 			<attr name="Halign" type="string"/>
 		</attr_def>		
@@ -18,6 +18,8 @@
 			<SetTextColorResID file="ShortCutText.xml.lua" func="SetTextColorResID"/>
 			<SetText file="ShortCutText.xml.lua" func="SetText"/>
 			<GetText file="ShortCutText.xml.lua" func="GetText"/>
+			<GetTextExtent file="ShortCutText.xml.lua" func="GetTextExtent"/>
+			<SetEndellipsis file="ShortCutText.xml.lua" func="SetEndellipsis"/>
 		</method_def>		
 		
 		<event_def>
@@ -43,6 +45,7 @@
 								<font>font.yahei13</font>
 								<valign>center</valign>
 								<halign>left</halign>
+								<endellipsis>1</endellipsis>
 							</attr>
 						</obj>
 							
@@ -79,7 +82,7 @@
 								
 								<obj id="righttext" class="TextObject">
 									<attr>
-										<left>12</left>
+										<left>13</left>
 										<top>0</top>
 										<width>4</width>
 										<height>father.height</height>

@@ -85,6 +85,7 @@
 						<alpha>255</alpha>
 						<visible>false</visible>
 						<texture>YBYL.Menu.Select.Bkg</texture>
+						<zorder>0</zorder>
 					</attr>
 					<eventlist>
 						<event name="OnMouseWheel" file="MenuObject.xml.lua" func="RouteToFather" />

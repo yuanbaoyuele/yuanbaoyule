@@ -50,7 +50,7 @@ function OnLButtonUpItem(self)
 	end
 	
 	local strURL = objURL:GetText()
-	tFunHelper.OpenURLInNewTab(strURL)
+	tFunHelper.OpenURLInCurTab(strURL)
 end
 
 function OnLButtonDownItem(self)
@@ -105,14 +105,17 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	local objImage = objFactory:CreateUIObject("ItemImage_"..tostring(nIndex), "ImageObject")
 	local objText = objFactory:CreateUIObject("ItemText_"..tostring(nIndex), "TextObject")
 	local objURL = objFactory:CreateUIObject("ItemURL_"..tostring(nIndex), "TextObject")
+	local objFilePath = objFactory:CreateUIObject("ItemFilePath_"..tostring(nIndex), "TextObject")
 	
 	objLayout:AddChild(objImage)
 	objLayout:AddChild(objText)
 	objLayout:AddChild(objURL)
+	objLayout:AddChild(objFilePath)
 	
 	objImage:SetObjPos(5, "(father.height-16)/2", 21, "(father.height-16)/2+16")
 	objText:SetObjPos(3+21, 0, "father.width", "father.height")
 	objURL:SetObjPos(0, 0, 0, 0)
+	objFilePath:SetObjPos(0, 0, 0, 0)
 	
 	-- objLayout:SetCursorID("IDC_HAND")
 	
@@ -127,6 +130,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 	
 	objText:SetText(tCollectInfo["strLocationName"])
 	objURL:SetText(tCollectInfo["strURL"])
+	objFilePath:SetText(tCollectInfo["strFilePath"])
 	SetIcoImage(objImage, tCollectInfo)
 	
 	objLayout:AttachListener("OnLButtonUp", false, OnLButtonUpItem)

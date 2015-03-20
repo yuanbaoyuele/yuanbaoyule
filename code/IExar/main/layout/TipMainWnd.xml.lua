@@ -92,4 +92,9 @@ function SetWindowSizeProfile(objHostWnd)
 end
 
 
+function OnFocusChange(self, bFocus)
+	tFunHelper.SetMainWndFocusStyle(bFocus)
+end
+
+
 

@@ -57,6 +57,8 @@
 										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
 										<event name="OnKeyDown" file="AddressBarCtrl.xml.lua" func="OnUrlEditKeyDown" />
 										<event name="OnRButtonUp" file="AddressBarCtrl.xml.lua" func="OnUrlEditRButtonUp" />
+										<event name="OnLButtonUp" file="AddressBarCtrl.xml.lua" func="OnUrlEditLButtonUp" />
+										<event name="OnFocusChange" file="AddressBarCtrl.xml.lua" func="OnUrlEditFocus" />
 									</eventlist>
 								</obj>
 								

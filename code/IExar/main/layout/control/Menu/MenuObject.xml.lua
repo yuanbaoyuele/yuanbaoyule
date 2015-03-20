@@ -30,18 +30,18 @@ end
 
 --
 
+-- 遍历当前菜单项，得出最宽项
 function GetMaxWidth(self)
 	local attr = self:GetAttribute()
-	local nL, nT, nR, nB = self:GetObjPos()
-	local max_width = nR-nL
-
-	-- IterateItems(self, function(item)
-		-- local temp_width = item:GetMinWidth()
-		-- if temp_width ~= nil and item:IsVisible() and max_width < temp_width then
-			-- max_width = temp_width
-		-- end
-	-- end)
-	
+	local pos_x = attr.ItemLeft
+	local pos_y = attr.ItemRight
+	local max_width = 0
+	IterateItems(self, function(item)
+		local temp_width = item:GetMinWidth()
+		if temp_width ~= nil and item:IsVisible() and max_width < temp_width then
+			max_width = temp_width
+		end
+	end)
 	return max_width
 end
 

@@ -2,6 +2,12 @@ local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 
+local g_bHasShowMenu = false
+local g_strCruMenuName = ""
+local g_strLastMenuBtn = nil
+local g_hTimer = nil
+local g_bForbidShowTwice = false
+
 -----方法----
 
 
@@ -67,51 +73,80 @@ end
 
 function OnMouseEnterMenuItem(self)
 	FocusOnItem(self, true)
+
+	local strID = self:GetID()
+	local strMenuName = string.match(strID, ".*%.([^%.]+)$")
+	
+	if g_bHasShowMenu and strMenuName ~= g_strCruMenuName then
+		FocusOnItem(g_strLastMenuBtn, false)
+		FocusOnItem(self, true)
+		g_bHasShowMenu = false
+		tFunHelper.TryDestroyOldMenu(g_strLastMenuBtn, g_strCruMenuName)
+		PopupMenu(self, 18, strMenuName)
+	end
 end
 
 
 function OnLButtonDownMenuItem(self)
-	-- self:SetCaptureMouse(true)
-	FocusOnItem(self, true)
+	-- FocusOnItem(self, true)
 end
 
 
 function OnMouseLeaveMenuItem(self)
+	local objMainWnd = tFunHelper.GetMainWndInst()
+	local nCursorX, nCursorY = tipUtil:GetCursorPos() 	
+	local l, t, r, b = self:GetAbsPos()
+	local left,top,right,bottom = objMainWnd:HostWndRectToScreenRect(l, t, r, b)
+			
+	local bShowMenu = IsCurBtnShowMenu(self)
+	if bShowMenu then--and nCursorY > bottom  then
+		return
+	end
+
 	FocusOnItem(self, false)
 end
 
 
 function OnFocusMenuItem(self, bFocus)
-	FocusOnItem(self, bFocus)
+	if g_bHasShowMenu then
+		return
+	end
+
+	if not bFocus then
+		-- FocusOnItem(self, false)
+	end
 end
 
 ------
 --对同一个菜单按钮连续点击时，点击次数为偶数则不显示菜单
 function PopupMenu(objMenuBtn, nTopSpan, strMenuName, tMenuOpenFlag)
-	FocusOnItem(objMenuBtn, true)
-	
-	if type(tMenuOpenFlag) ~= "table" then
-		tMenuOpenFlag = {}
-	end
-	if tMenuOpenFlag.bShow then
+	if g_bHasShowMenu then
+		FocusOnItem(objMenuBtn, true)
 		return
 	end
-	tMenuOpenFlag.bShow = true
+	g_bHasShowMenu = true
+	g_strCruMenuName = strMenuName
+	g_strLastMenuBtn = objMenuBtn
 	
 	InitMenuHelper()
 	tFunHelper.TryDestroyOldMenu(objMenuBtn, strMenuName)
 	tFunHelper.CreateAndShowMenu(objMenuBtn, strMenuName, nTopSpan)
 	
-	FocusOnItem(objMenuBtn, false)
+	g_strCruMenuName = ""
+	
 	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
-	if tMenuOpenFlag.hTimer then
-		timeMgr:KillTimer(tMenuOpenFlag.hTimer)
+	if g_hTimer then
+		timeMgr:KillTimer(g_hTimer)
 	end
 	
-	tMenuOpenFlag.hTimer = timeMgr:SetTimer(function(Itm, id)
-		tMenuOpenFlag.bShow = false
+	g_hTimer = timeMgr:SetTimer(function(Itm, id)
 		Itm:KillTimer(id)
+		g_bHasShowMenu = false
+		FocusOnItem(g_strLastMenuBtn, false)
+		
 	end, 300)	
+	
+	-- g_bHasShowMenu = false
 end
 
 
@@ -144,9 +179,6 @@ end
 function ShowMenuItemBkg(objMenuItem, bShow, strTextureID)
 	local objRootCtrl = objMenuItem:GetOwnerControl()
 	local objBkg = objRootCtrl:GetControlObject("MenuBarCtrl.MenuItem.Bkg")
-	if not objBkg then
-		return
-	end
 	
 	local l, t, r, b = objMenuItem:GetObjPos()
 	objBkg:SetObjPos(l, t, r, b)
@@ -158,14 +190,31 @@ end
 
 
 function FocusOnItem(objItem, bOnFocus)
+	if not objItem then
+		return
+	end
+	
 	if bOnFocus then
-		ShowMenuItemBkg(objItem, true, "YBYL.Menu.Select.Bkg")
 		objItem:SetTextColorResID("system.white")
+		ShowMenuItemBkg(objItem, true, "YBYL.Menu.Select.Bkg")
 	else
-		ShowMenuItemBkg(objItem, false, "")
 		objItem:SetTextColorResID("color.menubar.text")
+		ShowMenuItemBkg(objItem, false, "")
 	end
 end
+
+
+function IsCurBtnShowMenu(objBtn)
+	local strID = objBtn:GetID()
+	local strMenuName = string.match(strID, ".*%.([^%.]+)$")
+	
+	if g_bHasShowMenu and strMenuName == g_strCruMenuName then
+		return true
+	end
+	
+	return false
+end
+
 
 
 

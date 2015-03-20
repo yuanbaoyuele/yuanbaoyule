@@ -50,11 +50,13 @@ end
 
 
 function SetBtnListStyle(objRootCtrl, objWebTabCtrl)
+	local objCompatBtn = objRootCtrl:GetControlObject("RefreshBtnList.CompatBtn")
 	local objRefresh = objRootCtrl:GetControlObject("RefreshBtnList.RefreshBtn")
 	local objStop = objRootCtrl:GetControlObject("RefreshBtnList.StopBtn")
 	
 	objRefresh:Enable(true)
 	objStop:Enable(true)
+	objCompatBtn:Enable(true)
 end
 
 

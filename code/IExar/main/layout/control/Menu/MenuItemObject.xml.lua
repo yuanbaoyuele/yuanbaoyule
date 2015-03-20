@@ -105,6 +105,7 @@ function OnInitControl(self)
 	
 	local bShow = attr.DeleteImgVisible
 	self:ShowDeleteBtn(bShow)
+	self:SetBkgResID(self, attr.ItemBkg)
 end
 
 function SetFontColorNormal(self,color)
@@ -181,6 +182,7 @@ function SetText(self, text_, strRightText)
 				item:SetTextFontResID( attr.Font )
 			end
 			item:SetTextColorResID( attr.FontColorNormal )
+			item:SetEndellipsis( attr.Endellipsis )
 		end
 		
 		item:SetText(text_)
@@ -260,9 +262,9 @@ function SetIconID( self, iconID )
 					icon:SetDrawMode( 1 )
 					icon:SetAntialias( 2 )
 					self:AddChild( icon )
-					icon:SetObjPos( ""..attr.IconPos, "(father.height-"..attr.IconHeight..")/2", ""..attr.IconPos.."+"..attr.IconWidth, "(father.height+"..attr.IconHeight..")/2" )
 				end
 			end
+			icon:SetObjPos( ""..attr.IconPos, "(father.height-"..attr.IconHeight..")/2", ""..attr.IconPos.."+"..attr.IconWidth, "(father.height+"..attr.IconHeight..")/2" )
 			icon:SetResID( iconID )
 			icon:SetVisible( attr.IconVisible )
 		else
@@ -375,6 +377,16 @@ function ChangeState(self,newState)
 				arrow:SetResID( attr.HoverArrow )
 			end
 		end
+		
+		local icon = self:GetControlObject( "icon" )
+		if icon ~= nil then
+			if newState == 0 and IsRealString(attr.Icon) then
+				icon:SetResID( attr.Icon )
+			elseif IsRealString(attr.IconHover) then
+				icon:SetResID( attr.IconHover )
+			end
+		end
+		
 		local item = self:GetControlObject("text")
 		local righttext = self:GetControlObject("righttext")
 		if item ~= nil then
@@ -420,6 +432,10 @@ function OnLButtonUp(self, x, y)
 		return
 	end
 	
+	if self:HasSubMenu() then
+		return
+	end
+	
 	-- self:SetCaptureMouse(false)
 	local left,top,right,bottom = self:GetObjPos()
 	local width,height = right - left, bottom - top
@@ -459,9 +475,10 @@ function OnMouseHover(self)
 end
 
 -- 通过父亲MenuObject接口SetHoverItem统一处理（选中此菜单项，弹出子菜单等）
-function OnMouseMove(self)
+function OnMouseEnter(self)
 	local attr = self:GetAttribute()
-	if self:IsEnable() and attr.Type == 0 then
+	-- if self:IsEnable() and attr.Type == 0 then
+	if attr.Type == 0 then
 		if attr.State == 1 then
 			return
 		end
@@ -514,7 +531,7 @@ function OnLButtonDown(self)
 	    return
 	end
 	if self:IsEnable() then
-		self:SetCaptureMouse(true)
+		-- self:SetCaptureMouse(true)
 	end
 end
 
@@ -710,6 +727,19 @@ function ShowDeleteBtn(self, bShow)
 		objDelete:SetVisible(bShow)
 		objDelete:SetChildrenVisible(bShow)
 	end
+end
+
+
+function SetBkgResID(self, strResID)
+	if not IsRealString(strResID) then
+		return
+	end
+
+	local objBkg = self:GetControlObject("MenuItem.Bkg")
+	if not objBkg then
+		return
+	end
+	objBkg:SetTextureID(strResID)
 end
 
 

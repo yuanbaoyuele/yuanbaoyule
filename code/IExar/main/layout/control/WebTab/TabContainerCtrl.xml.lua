@@ -34,6 +34,19 @@ function CloseCurrentTab(self)
 	CloseTabByID(objRootCtrl, nTabID)
 end
 
+
+function GetTotalShowTabNum(self)
+	local tTabShowList = GetTabShowList(self)
+	return #tTabShowList
+end
+
+function GetTotalShowTabList(self)
+	local tTabShowList = GetTabShowList(self)
+	return tTabShowList
+end
+
+
+
 -----事件----
 function OnInitControl(self)
 	SetCurMaxTabID(self, 0)
@@ -47,6 +60,17 @@ function OnClickAddNewTab(self)
 	local strDefURL = tFunHelper.GetDfltNewTabURL()
 	objRootCtrl:OpenURL(strDefURL, true)
 end
+
+function OnMsEnterAddNewTab(self)
+	local objImage = self:GetObject("TabContainerCtrl.AddNewTab.Image")
+	objImage:SetVisible(true)
+end
+
+function OnMsLeaveAddNewTab(self)
+	local objImage = self:GetObject("TabContainerCtrl.AddNewTab.Image")
+	objImage:SetVisible(false)
+end
+
 
 function OnClickThumbBtn(self)
 	local owner = self:GetOwner():GetUIObject("root.layout:root.ctrl")
@@ -212,6 +236,7 @@ function OpenURLInNewTab(objRootCtrl, strURL)
 	objWebBrower:Navigate(strURL)
 	objNewTab:SaveUserInputURL(strURL)
 	objNewTab:BindBrowserCtrl(objWebBrower)
+	objNewTab:SetNewURLState(true)
 	
 	return nNewTabID
 end
@@ -236,6 +261,7 @@ function OpenURLInCurTab(objRootCtrl, strURL)
 		return
 	end
 	
+	objActiveTab:SetNewURLState(true)
 	objWebBrowCtrl:Navigate(strURL)
 end
 
@@ -337,7 +363,10 @@ function AdjustTabSize(objRootCtrl)
 		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
 		if nTotalNum == 1 then
 			objTabCtrl:SetObjPos(nLeft, 0, nLeft+300, "father.height")
+			objTabCtrl:SetCloseBtnVisible(false)
 			nFinalRight = nLeft+300-4
+		else
+			objTabCtrl:SetCloseBtnVisible(true)
 		end		
 	end
 	
@@ -428,10 +457,6 @@ function InitTabShowList(objRootCtrl)
 	attr.tTabShowList = {}
 end
 
-function GetTotalShowTabNum(objRootCtrl)
-	local tTabShowList = GetTabShowList(objRootCtrl)
-	return #tTabShowList
-end
 
 function PushShowTab(objRootCtrl, nNewTabID)
 	local attr = objRootCtrl:GetAttribute()
@@ -570,7 +595,6 @@ function ChangeTabPos(objRootCtrl, nActiveIndex, nToMoveIndex, strActiveDrct)
 	tTabShowList[nActiveIndex] = objToMoveTab
 	tTabShowList[nToMoveIndex] = objActiveTab
 end
-
 
 
 function GetTabCtrlByID(objRootCtrl, nTabID)

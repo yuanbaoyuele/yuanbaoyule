@@ -27,7 +27,6 @@ function AdjustSelfPos(self)
 end
 
 
-
 function ShowUrlHistory(self)
 	local tUrlHistory = tFunHelper.ReadConfigFromMemByKey("tUrlHistory") or {}
 	local tUserConfig = tFunHelper.ReadConfigFromMemByKey("tUserConfig") or {}
@@ -84,6 +83,7 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 
 	local attr = objMenuItem:GetAttribute()
 	attr.Text = tHistoryInfo["strURL"]
+	attr.Endellipsis = true
 	-- attr.RightText = tHistoryInfo["strLocationName"]
 	attr.RightTextColor = "404040"
 	attr.RightTextHAligh = "left"

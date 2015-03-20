@@ -82,7 +82,7 @@
 								<NormalBkgID>radiobox.2</NormalBkgID>
 								<DownBkgID>radiobox.4</DownBkgID>
 								<HoverBkgID>radiobox.4</HoverBkgID>
-								<select>true</select>
+								<!--select>true</select-->
 								<zorder>2</zorder>
 							</attr>
 							<children>
@@ -156,7 +156,7 @@
 								<zorder>2</zorder>
 							</attr>
 							<eventlist>
-								<event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickrichinfo" />
+								<!--event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickrichinfo" /-->
 							</eventlist>
 						</obj>
 						<obj id="TipFeedback.confirm" class="TipAddin.Button">

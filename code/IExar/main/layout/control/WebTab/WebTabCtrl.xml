@@ -10,6 +10,9 @@
 			<attr name="bGoBackState" type="bool" />
 			<attr name="bGoForwardState" type="bool" />
 			<attr name="strDragState" type="string" />
+			<attr name="tCurURLList" type="string" />
+			<attr name="nCurURLIndex" type="string" />
+			<attr name="bNewURLState" type="bool" ><default>false</default></attr>
 		</attr_def>		
 		<method_def>
 			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
@@ -27,6 +30,11 @@
 			<SetGoBackState file="WebTabCtrl.xml.lua" func="SetGoBackState"/>
 			<GetGoForwardState file="WebTabCtrl.xml.lua" func="GetGoForwardState"/>
 			<SetGoForwardState file="WebTabCtrl.xml.lua" func="SetGoForwardState"/>
+			<GetNewURLState file="WebTabCtrl.xml.lua" func="GetNewURLState"/>
+			<SetNewURLState file="WebTabCtrl.xml.lua" func="SetNewURLState"/>
+			<AddCurURLIndex file="WebTabCtrl.xml.lua" func="AddCurURLIndex"/>
+			<SetCloseBtnVisible file="WebTabCtrl.xml.lua" func="SetCloseBtnVisible"/>
+			<CloseTab file="WebTabCtrl.xml.lua" func="CloseTab"/>
 		</method_def>		
 		
 		<event_def>
@@ -129,6 +137,8 @@
 				<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="OnMouseLeaveTab" />
 				<event name="OnInitControl" file="WebTabCtrl.xml.lua" func="OnInitControl" />
 				<event name="OnLButtonDown" file="WebTabCtrl.xml.lua" func="OnLButtonDown" />
+				<event name="OnMButtonUp" file="WebTabCtrl.xml.lua" func="OnMButtonUp" />
+				<event name="OnRButtonUp" file="WebTabCtrl.xml.lua" func="OnRButtonUpItem" />
 			</eventlist>
 		</objtemplate>
 	</control>

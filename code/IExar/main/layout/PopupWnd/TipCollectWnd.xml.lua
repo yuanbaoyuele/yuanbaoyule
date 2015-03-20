@@ -1,6 +1,6 @@
 local tipUtil = XLGetObject("API.Util")
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
-
+local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 
 -------------窗口
 function OnCreate( self )
@@ -8,7 +8,7 @@ function OnCreate( self )
 	SetWindowFullSize(objCollectWnd)
 	
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
-	-- objMainHostWnd:AddSyncWnd(objCollectWnd:GetWndHandle(), {"position" ,"visible", "enable"})
+	objMainHostWnd:AddSyncWnd(objCollectWnd:GetWndHandle(), {"position", "enable"})
 	
 	objMainHostWnd:AttachListener("OnSize", false, 
 		function(objMainWnd)
@@ -133,7 +133,7 @@ end
 function CloseCollectWnd(self)
 	local objRootCtrl = self
 	SetFixStyle(objRootCtrl, false)
-	EnableSyncWindow(objRootCtrl, false)
+	-- EnableSyncWindow(objRootCtrl, false)
 	
 	local objTree= objRootCtrl:GetOwner()
 	local objWnd = objTree:GetBindHostWnd()
@@ -141,7 +141,46 @@ function CloseCollectWnd(self)
 end
 
 
+function SetFixStyle(objRootCtrl, bFix)
+	local objFixBtn = objRootCtrl:GetControlObject("TipCollectWnd.FixBtn")
+	local objCloseBtn = objRootCtrl:GetControlObject("TipCollectWnd.CloseBtn")
+	
+	objFixBtn:SetVisible(not bFix)
+	objFixBtn:SetChildrenVisible(not bFix)
+	objCloseBtn:SetVisible(bFix)
+	objCloseBtn:SetChildrenVisible(bFix)
+	
+	local attr = objRootCtrl:GetAttribute()
+	attr.bFix = bFix
+	
+	local l, t, r, b = objRootCtrl:GetObjPos()
+	local WndWidth = r - l
 
+	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.Center")
+	local l, t, r, b = webbrowser:GetObjPos()
+	if bFix then
+		webbrowser:SetObjPos(WndWidth, t, "father.width", "father.height")
+	else
+		webbrowser:SetObjPos(0, t, "father.width", "father.height")
+	end
+end
+
+
+local g_bHasAddSync = false
+function EnableSyncWindow(objRootCtrl, bEnable)
+	local objMainHostWnd = tFunHelper.GetMainWndInst()
+	local objTree= objRootCtrl:GetOwner()
+	local objWnd = objTree:GetBindHostWnd()
+	if bEnable and not g_bHasAddSync then
+		objMainHostWnd:AddSyncWnd(objWnd:GetWndHandle(), {"position" ,"visible", "enable"})
+		g_bHasAddSync = true
+		return
+	end
+	if not bEnable and g_bHasAddSync then
+		objMainHostWnd:RemoveSyncWnd(objWnd:GetWndHandle())
+		g_bHasAddSync = false
+	end
+end
 
 -----------事件
 function OnInitControl(self)
@@ -150,7 +189,7 @@ end
 
 
 function OnClickAddToBar(self)
-
+	tIEMenuHelper:ExecuteCMD("AddFav")
 end
 
 
@@ -178,7 +217,7 @@ function OnUpFixBtn(self)
 	end
 	
 	SetFixStyle(objRootCtrl, true)
-	EnableSyncWindow(objRootCtrl, true)
+	-- EnableSyncWindow(objRootCtrl, true)
 	
 	local objTree= self:GetOwner()
 	local objWnd = objTree:GetBindHostWnd()
@@ -224,49 +263,6 @@ end
 
 
 -----------
-function SetFixStyle(objRootCtrl, bFix)
-	local objFixBtn = objRootCtrl:GetControlObject("TipCollectWnd.FixBtn")
-	local objCloseBtn = objRootCtrl:GetControlObject("TipCollectWnd.CloseBtn")
-	
-	objFixBtn:SetVisible(not bFix)
-	objFixBtn:SetChildrenVisible(not bFix)
-	objCloseBtn:SetVisible(bFix)
-	objCloseBtn:SetChildrenVisible(bFix)
-	
-	local attr = objRootCtrl:GetAttribute()
-	attr.bFix = bFix
-	
-	local l, t, r, b = objRootCtrl:GetObjPos()
-	local WndWidth = r - l
-
-	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.Center")
-	local l, t, r, b = webbrowser:GetObjPos()
-	if bFix then
-		webbrowser:SetObjPos(WndWidth, t, "father.width", "father.height")
-	else
-		webbrowser:SetObjPos(0, t, "father.width", "father.height")
-	end
-end
-
-
-local g_bHasAddSync = false
-
-function EnableSyncWindow(objRootCtrl, bEnable)
-	local objMainHostWnd = tFunHelper.GetMainWndInst()
-	local objTree= objRootCtrl:GetOwner()
-	local objWnd = objTree:GetBindHostWnd()
-	if bEnable and not g_bHasAddSync then
-		objMainHostWnd:AddSyncWnd(objWnd:GetWndHandle(), {"position" ,"visible", "enable"})
-		g_bHasAddSync = true
-		return
-	end
-	if not bEnable and g_bHasAddSync then
-		objMainHostWnd:RemoveSyncWnd(objWnd:GetWndHandle())
-		g_bHasAddSync = false
-	end
-end
-
-
 function SetBtnDownStyle(objBtn, bDownStyle)
 	local l, t, r, b = objBtn:GetObjPos()
 	local w = r - l
