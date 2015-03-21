@@ -157,7 +157,7 @@
 			<children>
 				<obj id="MenuItem.Delete" class="TipAddin.Button">
 					<attr>
-						<left>father.width-26</left>
+						<left>father.width-35</left>
 						<top>(father.height-16)/2</top>
 						<width>16</width>
 						<height>16</height>

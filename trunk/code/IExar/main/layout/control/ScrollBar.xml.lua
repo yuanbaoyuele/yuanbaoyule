@@ -585,7 +585,7 @@ function OnInitControl(self)
 	if attr.Type == 0 then
 		decorate:SetObjPos("(father.width-5)/2", 0, "(father.width-5)/2+5", "father.height")
 	else
-		decorate:SetObjPos(0, "(father.height-5)/2", "father.width", "(father.height-5)/2+5")
+		decorate:SetObjPos(4, "(father.height-5)/2", "father.width", "(father.height-5)/2+5")
 	end
 end
 

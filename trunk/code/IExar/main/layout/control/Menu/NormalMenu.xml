@@ -104,19 +104,29 @@
 								<ThumbBtn_normal>YBYL.Scroll.Bar.Normal</ThumbBtn_normal>
 								<ThumbBtn_hover>YBYL.Scroll.Bar.Hover</ThumbBtn_hover>
 								<ThumbBtn_down>YBYL.Scroll.Bar.Down</ThumbBtn_down>
-								<ThumbRightMagrin>0</ThumbRightMagrin>
+								<LeftBtn_normal>Scroll.UpArrow.Normal</LeftBtn_normal>
+								<LeftBtn_hover>Scroll.UpArrow.Hover</LeftBtn_hover>
+								<LeftBtn_down>Scroll.UpArrow.Down</LeftBtn_down>
+								<RightBtn_normal>Scroll.DownArrow.Normal</RightBtn_normal>
+								<RightBtn_hover>Scroll.DownArrow.Hover</RightBtn_hover>
+								<RightBtn_down>Scroll.DownArrow.Down</RightBtn_down>
+								<NormalDecorateID>Scroll.Decorate</NormalDecorateID>
+								<HoverDecorateID>Scroll.Decorate</HoverDecorateID>
+								<DownDecorateID>Scroll.Decorate</DownDecorateID>
+								<ThumbRightMagrin>1</ThumbRightMagrin>
 								<ThumbBtnWidth>16</ThumbBtnWidth>
-								<ThumbBtnLength>13</ThumbBtnLength>
-								<SideBtnLength>0</SideBtnLength>
-								<left>father.width-7</left>
-								<top>5</top>
-								<width>5</width>
-								<height>father.height-9</height>
+								<ThumbBtnLength>19</ThumbBtnLength>
+								<SideBtnLength>17</SideBtnLength>
+								<left>father.width-17</left>
+								<top>1</top>
+								<width>16</width>
+								<height>father.height-3</height>
 								<zorder>99999</zorder>
 							</attr>
 							<eventlist>
 								<event name="OnScrollBarMouseWheel" file="NormalMenu.xml.lua" func="CLB__OnScrollBarMouseWheel"/>
 								<event name="OnMousePosEvent" file="NormalMenu.xml.lua" func="CLB__OnScrollMousePosEvent"/>
+								<event name="OnVScroll" file="NormalMenu.xml.lua" func="CLB__OnVScroll" />
 							</eventlist>
 						</obj>	
 					</children>

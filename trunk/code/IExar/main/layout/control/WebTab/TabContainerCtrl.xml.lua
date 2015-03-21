@@ -386,7 +386,6 @@ end
 
 function CreateNewBrowser(objRootCtrl, nNewID)
 	local objFather = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
-	
 	if not objFather then
 		tFunHelper.TipLog("[CreateNewBrowser] GetMainCtrlChildObj failed")
 		return nil
