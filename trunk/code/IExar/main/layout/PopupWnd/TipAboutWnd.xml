@@ -82,7 +82,7 @@
 						<left>5+243</left>
 						<top>285</top>
 						<width>107</width>
-						<height>24</height>
+						<height>23</height>
 						<LeftTextPos>40</LeftTextPos>
 						<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 						<DownBkgID>about.button.bkg.down</DownBkgID>
@@ -101,7 +101,7 @@
 						<left>5+243</left>
 						<top>319</top>
 						<width>107</width>
-						<height>24</height>
+						<height>23</height>
 						<LeftTextPos>12</LeftTextPos>
 						<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 						<DownBkgID>about.button.bkg.down</DownBkgID>
