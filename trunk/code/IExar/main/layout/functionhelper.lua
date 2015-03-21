@@ -129,11 +129,19 @@ function HideMainWindow()
 	end
 end
 
+function HideHeadWindow()
+	local objMainWnd = GetWndInstByName("TipHeadFullScrnWnd.Instance")
+	if objMainWnd then
+		objMainWnd:Show(0)
+	end
+end
+
 
 local g_bHasExit = false
 function ReportAndExit()
 	local tStatInfo = {}
-	HideMainWindow()		
+	HideHeadWindow()
+	HideMainWindow()	
 	SendRunTimeReport(0, true)
 	
 	function FinalExit()
@@ -502,8 +510,8 @@ function SetBrowserFullScrnState(bFullScreen)
 	local bEnableCap = not bFullScreen
 	EnableCaptionDrag(bEnableCap)
 	
-	local objBrowserHead = GetMainCtrlChildObj("MainPanel.Head")
-	objBrowserHead:SetHeadFullScrnStyle(bFullScreen)
+	local objHead = GetHeadCtrlChildObj("MainPanel.Head")
+	objHead:SetHeadFullScrnStyle(bFullScreen)
 end
 
 
@@ -570,6 +578,9 @@ function SetBrowserFullScrn()
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
 	
 	objMainWnd:Move(0-nBrowserL, 0-nBrowserT, nNewWidth, nNewHeight)	
+		
+	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
+	objHeadWindow:Move(0-nBrowserL, -119, nNewWidth, 120)
 end
 
 
@@ -648,7 +659,7 @@ end
 
 
 function GetActiveTabCtrl()
-	local objTabContainer = GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabContainer = GetHeadCtrlChildObj("MainPanel.TabContainer")
 	local objTabCtrl = objTabContainer:GetActiveTabCtrl()
 	return objTabCtrl 
 end
@@ -696,7 +707,7 @@ function OpenURLInNewTab(strURL)
 		return
 	end
 	
-	local objTabContainer = GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabContainer = GetHeadCtrlChildObj("MainPanel.TabContainer")
 	objTabContainer:OpenURL(strURL, true)
 end
 
@@ -706,7 +717,7 @@ function OpenURLInCurTab(strURL)
 		return
 	end
 	
-	local objTabContainer = GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabContainer = GetHeadCtrlChildObj("MainPanel.TabContainer")
 	objTabContainer:OpenURL(strURL, false)
 end
 
@@ -743,6 +754,32 @@ function GetMainCtrlChildObj(strObjName)
 
 	return objRootCtrl:GetControlObject(tostring(strObjName))
 end
+
+
+function GetHeadCtrlChildObj(strObjName)
+	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
+	if not objHeadWindow then
+		return nil
+	end
+	
+	local objTree = objHeadWindow:GetBindUIObjectTree()
+	
+	if not objTree then
+		TipLog("[GetHeadCtrlChildObj] get main wnd or tree failed")
+		return nil
+	end
+	
+	local objRootLayout = objTree:GetUIObject("root.layout")
+	local objRootCtrl = objRootLayout:GetObject("root.ctrl")
+	if not objRootCtrl then
+		TipLog("[GetMainCtrlChildObj] get objRootCtrl failed")
+		return nil
+	end 
+
+	return objRootCtrl:GetControlObject(tostring(strObjName))
+end
+
+
 
 function ShowPopupWndByName(strWndName, bSetTop)
 	local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
@@ -846,6 +883,22 @@ function CreateSubWndByName(strHostWndName, strTreeName, strInstFix)
 	
 	return bSuccess
 end
+
+
+function ShowHeadWindow(self)
+	local bSuccess = CreateSubWndByName("TipHeadFullScrnWnd", "TipHeadFullScrnTree", ".Instance")
+	if not bSuccess then
+		FailExitTipWnd(5)
+		return
+	end
+	
+	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
+	local objMainHostWnd = GetMainWndInst()
+	objMainHostWnd:AddSyncWnd(objHeadWindow:GetWndHandle(), {"position", "enable"})
+	
+	ShowPopupWndByName("TipHeadFullScrnWnd.Instance", false)
+end
+
 
 
 function GetIcoBitmapObj(strIcoName)
@@ -1143,7 +1196,7 @@ end
 
 
 function GetDfltNewTabURL()
-	return GetHomePage
+	return GetHomePage()
 end
 
 
@@ -1651,7 +1704,6 @@ function SetFilterState(bOpenFilter)
 end
 
 
-
 ---升级--
 local g_bIsUpdating = false
 
@@ -1883,12 +1935,14 @@ obj.SetZoomFactor = SetZoomFactor
 obj.GetDfltNewTabURL = GetDfltNewTabURL
 obj.GetActiveTabCtrl = GetActiveTabCtrl
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
+obj.GetHeadCtrlChildObj = GetHeadCtrlChildObj
 obj.GetWndInstByName = GetWndInstByName
 obj.GetMainWndInst = GetMainWndInst
 obj.ShowPopupWndByName = ShowPopupWndByName
 obj.ShowModalDialog = ShowModalDialog
 obj.CreateSubWndByName = CreateSubWndByName
 obj.SetMainWndFocusStyle = SetMainWndFocusStyle
+obj.ShowHeadWindow = ShowHeadWindow
 
 obj.SetToolTipText = SetToolTipText
 obj.ShowToolTip = ShowToolTip

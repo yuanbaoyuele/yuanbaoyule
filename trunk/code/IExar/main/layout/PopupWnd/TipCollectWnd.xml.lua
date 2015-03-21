@@ -57,14 +57,14 @@ end
 
 function SetWindowFullSize(objWnd)
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	local objCollectBtn = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectBtn")
 	local HeadL, HeadT, HeadR, HeadB = objHeadCtrl:GetAbsPos()
 	local BtnL, BtnT, BtnR, BtnB = objCollectBtn:GetAbsPos()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
 	
-	local nWndTop = nMainWndT+BtnB
-	local nWndLeft = nMainWndL+HeadL
+	local nWndTop = nMainWndT+BtnB+30
+	local nWndLeft = nMainWndL+HeadL+4
 	local nWndHeight = nMainWndB-nWndTop-4
 		
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
@@ -81,14 +81,14 @@ end
 
 function SetWindowPos(objWnd)
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	local objCollectBtn = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectBtn")
 	local HeadL, HeadT, HeadR, HeadB = objHeadCtrl:GetAbsPos()
 	local BtnL, BtnT, BtnR, BtnB = objCollectBtn:GetAbsPos()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
 	
-	local nWndTop = nMainWndT+BtnB
-	local nWndLeft = nMainWndL+HeadL
+	local nWndTop = nMainWndT+BtnB+30
+	local nWndLeft = nMainWndL+HeadL+4
 	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
@@ -165,7 +165,7 @@ function SetFixStyle(objRootCtrl, bFix)
 	local l, t, r, b = objRootCtrl:GetObjPos()
 	local WndWidth = r - l
 
-	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.Center")
+	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
 	local l, t, r, b = webbrowser:GetObjPos()
 	if bFix then
 		webbrowser:SetObjPos(WndWidth, t, "father.width", "father.height")
