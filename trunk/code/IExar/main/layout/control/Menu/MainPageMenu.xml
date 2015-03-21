@@ -1,0 +1,59 @@
+<xlue>
+	<objtemplate id="mainpage.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="modify" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>添加或更改主页(C)...</Text>
+					<AccKey>C</AccKey>
+					<IconVisible>true</IconVisible>
+					<Icon>texture.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="delete" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>删除(R)</Text>
+					<AccKey>R</AccKey>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="MainPageMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>130</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>250</width>
+				<height>130</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>mainpage.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

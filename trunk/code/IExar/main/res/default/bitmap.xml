@@ -114,12 +114,10 @@
 <texture id="pluginitem.all.down" imagelist="pluginitem.bkg" index="9" type="NineInOne"/>
 <bitmap id="bitmap.search.baidu" path="bitmap\baidu.png"/>
 <bitmap id="bitmap.search.google" path="bitmap\google.png"/>
-<bitmap id="bitmap.search.soso" path="bitmap\soso.png"/>
-<bitmap id="bitmap.search.bing" path="bitmap\bing.png"/>
+<bitmap id="bitmap.search.livesearch" path="bitmap\livesearch.png"/>
 <texture id="texture.search.baidu" path="bitmap\baidu.png"/>
 <texture id="texture.search.google" path="bitmap\google.png"/>
-<texture id="texture.search.soso" path="bitmap\soso.png"/>
-<texture id="texture.search.bing" path="bitmap\bing.png"/>
+<texture id="texture.search.livesearch" path="bitmap\livesearch.png"/>
 <bitmap id="img.week" path="bitmap\week.png"/>
 <bitmap id="img.weekday" path="bitmap\weekday.png"/>
 <bitmap id="history.icon" path="bitmap\history.icon.png"/>
@@ -139,6 +137,16 @@
 <texture id="radiobox.2" imagelist="radiobox" index="2" />
 <texture id="radiobox.3" imagelist="radiobox" index="3" />
 <texture id="radiobox.4" imagelist="radiobox" index="4" />
+<texture id="homeico" path="bitmap\home.png" />
+<texture id="helpico" path="bitmap\help.png"/>
+<texture id="sourcedisable" path="bitmap\sourcedisable.png"/>
+<texture id="slotmail" path="bitmap\slotmail.png"/>
+<texture id="print" path="bitmap\print.png"/>
+<texture id="Arrow.Down.texture" path="bitmap\Arrow.Down.png" />
+<imagelist id="searchselect.imglist" splitter="1" varyblock="1" image="bitmap\searchselect.png"/>
+<texture id="searchselect.hover" imagelist="searchselect.imglist" index="1"/>
+<texture id="searchselect.down" imagelist="searchselect.imglist" index="2"/>
+
 		<!-- BufferView -->
 		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
 		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	

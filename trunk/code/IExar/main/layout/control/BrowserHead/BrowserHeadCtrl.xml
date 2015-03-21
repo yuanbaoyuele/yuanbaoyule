@@ -146,6 +146,14 @@
 								<height>26</height>
 							</attr>	
 						</obj>
+						<obj id="head.toolbar.instance" class="head.toolbar">
+							<attr>
+								<left>father.width-411</left>
+								<top>87</top>
+								<width>411</width>
+								<height>27</height>
+							</attr>	
+						</obj>
 					</children>
 				</obj> <!--end root.layout-->
             </children>

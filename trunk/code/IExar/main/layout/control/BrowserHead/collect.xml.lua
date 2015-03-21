@@ -125,7 +125,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	elseif listrank == 2 then
 		imgobj:SetResID("img.weekday")
 	else
-		imgobj:SetResID("history.icon")
+		imgobj:SetResID("collect.file.defaluticon")
 	end
 	
 	local objpre = uiOwner:GetControlObject("bkg_listnode"..(nIEListIndex-1))
@@ -157,7 +157,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	else
 		txtobj:SetText(v[3]["pwcsTitle"] or v[3]["pwcsUrl"])
 	end
-	txtobj:SetObjPos2(20, 0, 120, 16)
+	txtobj:SetObjPos2(20, 2, 120, 16)
 	--转发文本框事件，让父控件处理
 	txtobj:AttachListener("OnLButtonDown", false, function(self, x, y)
 		self:RouteToFather()

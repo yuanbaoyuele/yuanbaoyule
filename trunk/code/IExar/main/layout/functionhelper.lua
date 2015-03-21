@@ -945,7 +945,7 @@ end
 
 --nTopSpan: 离弹出控件的高度差
 --bRBtnPopup：右键弹出菜单
-function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup)
+function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup, brightalign)
 	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
 	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
@@ -970,7 +970,7 @@ function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup)
 		end
 		if uHostWnd and uObjTree then
 			--函数会阻塞
-			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
+			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, brightalign)
 			
 			if bSucc and uHostWnd:GetMenuMode() == "manual" then
 				uObjTreeMgr:DestroyTree(strObjTreeName)
@@ -981,7 +981,7 @@ function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup)
 end
 
 
-function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
+function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, brightalign)
 	uHostWnd:BindUIObjectTree(uObjTree)
 					
 	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
@@ -1021,7 +1021,9 @@ function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup)
 	if tonumber(nTopSpan) == nil then
 		nTopSpan = nMenuHeight
 	end
-	
+	if brightalign then
+		nMenuLeft = nMenuLeft - nMenuContainerWidth+nMenuR-nMenuL
+	end
 	local nMenuLeft, nMenuTop = AdjustScreenEdge(nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight, nTopSpan)
 	
 	--函数会阻塞

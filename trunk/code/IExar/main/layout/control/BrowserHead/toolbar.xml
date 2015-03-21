@@ -1,0 +1,260 @@
+<xlue>
+	 <control class="head.toolbar">
+        <attr_def>
+        </attr_def>
+        <method_def>
+        </method_def>
+        <objtemplate>
+            <children>
+                <obj id="Layout.main" class="TextureObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+						<texture></texture>
+                    </attr>
+					<children>
+						<!--首页-->
+						<obj id="Layout.MainPage.Left" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>30</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<ForegroundResID>homeico</ForegroundResID>
+								<ForegroundLeftPos>7</ForegroundLeftPos>
+								<ForegroundWidth>16</ForegroundWidth>
+								<ForegroundHeight>16</ForegroundHeight>
+							</attr>
+							<children>
+								<obj id="Layout.MainPage.Right" class="TipAddin.Button">
+									<attr>
+										<left>29</left>
+										<top>0</top>
+										<width>13</width>
+										<height>26</height>
+										<zorder>2</zorder>
+										<NormalBkgID></NormalBkgID>
+										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+										<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+										<ForegroundResID>Arrow.Down.texture</ForegroundResID>
+										<ForegroundLeftPos>4</ForegroundLeftPos>
+										<ForegroundWidth>5</ForegroundWidth>
+										<ForegroundHeight>3</ForegroundHeight>
+									</attr>
+									<eventlist>
+										<event name="OnButtonMouseMove" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseEnter" />
+										<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseEnter" />
+										<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseLeave" />
+										<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageRightButtonClick" />
+										<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageRightButtonFocusChange" />
+									</eventlist>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnButtonMouseMove" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseEnter" />
+								<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseEnter" />
+								<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseLeave" />
+								<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageLeftButtonClick" />
+								<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageLeftButtonFocusChange" />
+							</eventlist>
+						</obj>
+						<!--源-->
+						<obj id="Layout.Source.Left" class="TextureObject">
+							<attr>
+								<left>44+6</left>
+								<top>6</top>
+								<width>16</width>
+								<height>16</height>
+								<texture>sourcedisable</texture>
+							</attr>
+						</obj>
+						<obj id="Layout.Source.Right" class="TextureObject">
+							<attr>
+								<left>72</left>
+								<top>11</top>
+								<width>5</width>
+								<height>3</height>
+								<texture>Arrow.Down.texture</texture>
+							</attr>
+						</obj>
+						<!--阅读邮件-->
+						<obj id="Layout.SlotMail.Left" class="TipAddin.Button">
+							<attr>
+								<left>76+6</left>
+								<top>0</top>
+								<width>30</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<ForegroundResID>slotmail</ForegroundResID>
+								<ForegroundLeftPos>7</ForegroundLeftPos>
+								<ForegroundWidth>16</ForegroundWidth>
+								<ForegroundHeight>16</ForegroundHeight>
+							</attr>
+						</obj>
+						<!--打印机-->
+						<obj id="Layout.Printer.Left" class="TipAddin.Button">
+							<attr>
+								<left>104+6</left>
+								<top>0</top>
+								<width>30</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<ForegroundResID>print</ForegroundResID>
+								<ForegroundLeftPos>7</ForegroundLeftPos>
+								<ForegroundWidth>16</ForegroundWidth>
+								<ForegroundHeight>16</ForegroundHeight>
+							</attr>
+							<children>
+								<obj id="Layout.Printer.Right" class="TipAddin.Button">
+									<attr>
+										<left>30</left>
+										<top>0</top>
+										<width>13</width>
+										<height>26</height>
+										<zorder>2</zorder>
+										<NormalBkgID></NormalBkgID>
+										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+										<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+										<ForegroundResID>Arrow.Down.texture</ForegroundResID>
+										<ForegroundLeftPos>4</ForegroundLeftPos>
+										<ForegroundWidth>5</ForegroundWidth>
+										<ForegroundHeight>3</ForegroundHeight>
+									</attr>
+									<eventlist>
+										<event name="OnButtonMouseMove" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseEnter" />
+										<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseEnter" />
+										<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseLeave" />
+										<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageRightButtonClick" />
+										<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageRightButtonFocusChange" />
+									</eventlist>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnButtonMouseMove" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseEnter" />
+								<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseEnter" />
+								<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseLeave" />
+								<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageLeftButtonClick" />
+								<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageLeftButtonFocusChange" />
+							</eventlist>
+						</obj>
+						<!--页面-->
+						<obj id="Layout.PageP.Left" class="TipAddin.Button">
+							<attr>
+								<left>153+6</left>
+								<top>0</top>
+								<width>60</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<Text>页面(P)</Text>
+								<LeftTextPos>4</LeftTextPos>
+								<ForegroundResID>Arrow.Down.texture</ForegroundResID>
+								<ForegroundLeftPos>51</ForegroundLeftPos>
+								<ForegroundWidth>5</ForegroundWidth>
+								<ForegroundHeight>3</ForegroundHeight>
+							</attr>
+						</obj>
+						<!--安全-->
+						<obj id="Layout.SafeS.Left" class="TipAddin.Button">
+							<attr>
+								<left>219+6</left>
+								<top>0</top>
+								<width>60</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<Text>安全(S)</Text>
+								<LeftTextPos>4</LeftTextPos>
+								<ForegroundResID>Arrow.Down.texture</ForegroundResID>
+								<ForegroundLeftPos>51</ForegroundLeftPos>
+								<ForegroundWidth>5</ForegroundWidth>
+								<ForegroundHeight>3</ForegroundHeight>
+							</attr>
+						</obj>
+						<!--工具-->
+						<obj id="Layout.ToolO.Left" class="TipAddin.Button">
+							<attr>
+								<left>285+6</left>
+								<top>0</top>
+								<width>60</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<Text>工具(O)</Text>
+								<LeftTextPos>4</LeftTextPos>
+								<ForegroundResID>Arrow.Down.texture</ForegroundResID>
+								<ForegroundLeftPos>51</ForegroundLeftPos>
+								<ForegroundWidth>5</ForegroundWidth>
+								<ForegroundHeight>3</ForegroundHeight>
+							</attr>
+						</obj>
+						<!--帮助-->
+						<obj id="Layout.Help.Btn" class="TipAddin.Button">
+							<attr>
+								<left>351+6</left>
+								<top>0</top>
+								<width>35</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<ForegroundResID>helpico</ForegroundResID>
+								<ForegroundLeftPos>6</ForegroundLeftPos>
+								<ForegroundWidth>16</ForegroundWidth>
+								<ForegroundHeight>16</ForegroundHeight>
+							</attr>
+							<children>
+								<obj id="Layout.Help.Right" class="TextureObject">
+									<attr>
+										<left>26</left>
+										<top>10</top>
+										<width>5</width>
+										<height>3</height>
+										<zorder>99999</zorder>
+										<texture>Arrow.Down.texture</texture>
+									</attr>
+								</obj>
+							</children>
+						</obj>
+						<!--更多-->
+						<obj id="Layout.More.Btn" class="TipAddin.Button">
+							<attr>
+								<left>392+6</left>
+								<top>0</top>
+								<width>13</width>
+								<height>26</height>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+							</attr>
+							<children>
+								<obj id="Layout.More.Right" class="TextureObject">
+									<attr>
+										<left>3</left>
+										<top>4</top>
+										<width>8</width>
+										<height>5</height>
+										<zorder>99999</zorder>
+										<texture>YBYL.CollectList.ShowHide.Normal</texture>
+									</attr>
+								</obj>
+							</children>
+						</obj>
+					</children>
+				</obj>
+			 </children>
+		</objtemplate>
+	</control>
+</xlue>
