@@ -39,6 +39,7 @@ function OnClickSysInfo(self)
 end
 
 function OnClicksure(self)
+	HideWindow(self)
 end
 
 function OnClicklink(self)
@@ -50,6 +51,8 @@ function OnClicklink(self)
 		attr.DownBkgID = "about.link.4"
 		self:Updata()
 	end
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+	tFunHelper.OpenURLInNewWindow("http://www.microsoft.com/en-us/legal/intellectualproperty/copyright/default.aspx")
 end
 
 function GetIEVersion()
