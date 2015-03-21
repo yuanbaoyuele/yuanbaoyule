@@ -21,6 +21,33 @@ function ProcessTabChange(self, objTabCtrl)
 	ProecssNavgateBtnList(self, objTabCtrl)
 end
 
+
+function SetHeadFullScrnStyle(self, bFullScrn)
+	if not tFunHelper.IsBrowserFullScrn() then
+		return
+	end
+
+end
+
+
+
+---------事件--
+function OnMouseEnter(self)
+	if not tFunHelper.IsBrowserFullScrn() then
+		return
+	end
+
+end
+
+
+function OnMouseLeave(self)
+	if not tFunHelper.IsBrowserFullScrn() then
+		return
+	end
+
+end
+
+
 --------
 function ProecssAddressBar(objRootCtrl, objTabCtrl)
 	local objAddressBar = objRootCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")

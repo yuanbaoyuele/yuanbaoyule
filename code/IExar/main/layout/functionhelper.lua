@@ -399,7 +399,7 @@ function QueryAllUsersDir()
 end
 
 function GetExePath()
-	return RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\path")
+	return tipUtil:GetModuleExeName()
 end
 
 function GetYBYLVersion()
@@ -501,6 +501,9 @@ function SetBrowserFullScrnState(bFullScreen)
 	g_bIsBrowserFullScrn = bFullScreen
 	local bEnableCap = not bFullScreen
 	EnableCaptionDrag(bEnableCap)
+	
+	local objBrowserHead = GetMainCtrlChildObj("MainPanel.Head")
+	objBrowserHead:SetHeadFullScrnStyle(bFullScreen)
 end
 
 
@@ -539,7 +542,7 @@ end
 		
 
 function SetBrowserFullScrn()
-	local objBrowserLayout = GetMainCtrlChildObj("MainPanel.Center")
+	local objBrowserLayout = GetMainCtrlChildObj("MainPanel.WebContainer")
 	if not objBrowserLayout then
 		return
 	end
@@ -681,16 +684,9 @@ function OpenURLWhenStup()
 		return
 	end
 	
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local tOpenStupURL = tUserConfig["tOpenStupURL"]
-	if type(tOpenStupURL) ~= "table" then
-		return
-	end
-	
-	for key, strURL in pairs(tOpenStupURL) do
-		if IsRealString(strURL) then
-			OpenURLInNewTab(strURL)
-		end
+	local strURL = GetHomePage()
+	if IsRealString(strURL) then
+		OpenURLInNewTab(strURL)
 	end
 end
 
@@ -784,23 +780,19 @@ function ShowModalDialog(wndClass, wndID, treeClass, treeID, userData, xarName)
 	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
     local modalHostWndTemplate = templateMananger:GetTemplate(wndClass,"HostWndTemplate")
     if modalHostWndTemplate == nil then
-		XLMessageBox("找不到"..wndClass)
         return false
     end
     local modalHostWnd = modalHostWndTemplate:CreateInstance(wndID)
     if modalHostWnd == nil then
-		XLMessageBox("无法创建"..wndID)
         return false
     end
 	
     local objectTreeTemplate = templateMananger:GetTemplate(treeClass,"ObjectTreeTemplate")
     if objectTreeTemplate == nil then
-		XLMessageBox("找不到"..treeClass)
         return false
     end
     local uiObjectTree = objectTreeTemplate:CreateInstance(treeID, xarName)
     if uiObjectTree == nil then
-		XLMessageBox("无法创建"..treeID)
         return false
     end
 	modalHostWnd:SetUserData(userData)
@@ -1151,14 +1143,7 @@ end
 
 
 function GetDfltNewTabURL()
-	local strURL = "about:blank"
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local strOpenTabURL = tUserConfig["strOpenTabURL"]
-	if IsRealString(strOpenTabURL) then
-		strURL = strOpenTabURL
-	end
-	
-	return strURL
+	return GetHomePage
 end
 
 

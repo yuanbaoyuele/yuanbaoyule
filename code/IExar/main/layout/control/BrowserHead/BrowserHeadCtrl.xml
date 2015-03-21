@@ -2,7 +2,7 @@
     <control class="BrowserHeadCtrl">
         <method_def>
 			<ProcessTabChange file="BrowserHeadCtrl.xml.lua" func="ProcessTabChange"/>
-			<!--SetMaxBtnStyle file="BrowserHeadCtrl.xml.lua" func="SetMaxBtnStyle"/-->
+			<SetHeadFullScrnStyle file="BrowserHeadCtrl.xml.lua" func="SetHeadFullScrnStyle"/>
         </method_def>
 		
         <event_def>
@@ -141,6 +141,8 @@
 				</obj> <!--end root.layout-->
             </children>
 			<eventlist>
+				<event name="OnMouseEnter" file="BrowserHeadCtrl.xml.lua" func="OnMouseEnter" />
+				<event name="OnMouseLeave" file="BrowserHeadCtrl.xml.lua" func="OnMouseLeave" />
 			</eventlist>
         </objtemplate>
     </control>

@@ -79,6 +79,7 @@ local g_tShortKeyFun = {
 	["001_79"] = function() ShortK_Open() end, --Ctrl+O  
 	["001_83"] = function() ShortK_SaveAs() end, --Ctrl+S  
 	["001_80"] = function() ShortK_PageSetup() end, --Ctrl+P  
+	["000_122"] = function() ShortK_FullScreen() end, --F11
 }
 
 function OnKeyDown(tParam)
@@ -119,6 +120,15 @@ end
 function ShortK_PageSetup(self)
 	InitMenuHelper()
 	tIEMenuHelper:ExecuteCMD("PageSetup")
+end
+
+function ShortK_FullScreen(self)
+	local bIsFullScreen = tFunHelper.IsBrowserFullScrn()
+	if not bIsFullScreen then
+		tFunHelper.SetBrowserFullScrn()
+	else
+		tFunHelper.RestoreWndSize()
+	end
 end
 
 
