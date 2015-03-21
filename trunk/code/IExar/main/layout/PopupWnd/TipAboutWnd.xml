@@ -28,10 +28,10 @@
 				
 				<obj id="TipAbout.CloseBtn" class="TipAddin.Button">
 					<attr>
-						<left>father.width-8-26</left>
-						<top>4</top>
-						<width>26</width>
-						<height>24</height>
+						<left>father.width-5-21</left>
+						<top>5</top>
+						<width>21</width>
+						<height>21</height>
 						<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
 						<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
 						<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
@@ -55,7 +55,7 @@
 				<obj id="TipAbout.Content" class="TextureObject">
 					<attr>
 						<left>5+21</left>
-						<top>30</top>
+						<top>30+20</top>
 						<width>320</width>
 						<height>200</height>
 						<texture>about.content</texture>

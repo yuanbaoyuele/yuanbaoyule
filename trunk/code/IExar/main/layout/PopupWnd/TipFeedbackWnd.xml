@@ -37,8 +37,8 @@
 						</obj>
 						<obj id="TipFeedback.CloseBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-8-26</left>
-								<top>6</top>
+								<left>father.width-5-21</left>
+								<top>5</top>
 								<width>21</width>
 								<height>21</height>
 								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
@@ -53,12 +53,12 @@
 						</obj>
 						<obj id="TipFeedback.title" class="TextObject">
 							<attr>
-								<left>8</left>
-								<top>6</top>
+								<left>7</left>
+								<top>7</top>
 								<width>194</width>
 								<height>22</height>
 								<text>客户体验改善计划</text>
-								<font>font.text14.bold</font>
+								<font>font.text12.bold</font>
 								<textcolor>system.white</textcolor>
 								<zorder>2</zorder>
 							</attr>

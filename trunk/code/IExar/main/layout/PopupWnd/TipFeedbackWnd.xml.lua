@@ -58,6 +58,7 @@ function OnClickSysInfo(self)
 end
 
 function OnClickconfirm(self)
+	HideWindow(self)
 end
 
 function OnClickcancel(self)
