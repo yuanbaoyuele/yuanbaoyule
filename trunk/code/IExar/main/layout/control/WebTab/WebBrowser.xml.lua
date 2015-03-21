@@ -212,7 +212,7 @@ function InitWebBrowserObj(self)
 	end)	
 	
 	browser:AttachListener("OnFocusChange", false, function( self, bFocus )
-		XLMessageBox(1111)
+		
 	end)
 end
 

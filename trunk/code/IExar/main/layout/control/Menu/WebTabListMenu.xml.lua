@@ -29,7 +29,8 @@ function ShowWebTabList(self)
 			local tWebTabInfo = {} 
 			tWebTabInfo["strTitle"] = objWebTab:GetTabText()
 			tWebTabInfo["strIcoName"] = objWebTab:GetIcoName()
-			tWebTabInfo["strURL"] = objWebTab:GetLocalURL()
+			tWebTabInfo["nWebTabID"] = objWebTab:GetSelfID()
+			tWebTabInfo["objWebTab"] = objWebTab
 			
 			local objMenuItem = CreateMenuItem(tWebTabInfo, nIndex)	
 			if objMenuItem then
@@ -71,20 +72,20 @@ function CreateMenuItem(tWebTabInfo, nIndex)
 
 	local attr = objMenuItem:GetAttribute()
 	attr.Text = tWebTabInfo["strTitle"]
-	attr.ExtraData = tWebTabInfo["strURL"]
+	attr.ExtraData = tWebTabInfo["nWebTabID"]
 	attr.FontColorNormal = "system.black"
 	attr.FontColorHover = "system.white"
 	attr.TextPos = 24
 	attr.DeleteImgVisible = false
 	
 	attr.IconPos = 5
-	attr.IconWidth = 10
-	attr.IconHeight = 10
+	attr.IconWidth = 16
+	attr.IconHeight = 16
 	attr.IconVisible = true
 	
 	SetIcoImage(objMenuItem, tWebTabInfo)
-	TrySetActiveItem(objMenuItem, nIndex)
-	objMenuItem:AttachListener("OnSelect", false, OpenURL)
+	TrySetActiveItem(objMenuItem, tWebTabInfo)
+	objMenuItem:AttachListener("OnSelect", false, SetActiveTab)
 	return objMenuItem
 end
 
@@ -106,12 +107,9 @@ function SetIcoImage(objMenuItem, tWebTabInfo)
 end
 
 
-function TrySetActiveItem(objMenuItem, nIndex)
+function TrySetActiveItem(objMenuItem, tWebTabInfo)
 	local objWebTab = tFunHelper.GetActiveTabCtrl()
-	local attr = objWebTab:GetAttribute()
-	local nActiveIndex = attr.nCurURLIndex
-	
-	if nActiveIndex ~= nIndex then
+	if objWebTab:GetID() ~= tWebTabInfo.objWebTab:GetID() then
 		return
 	end
 	
@@ -125,26 +123,17 @@ function TrySetActiveItem(objMenuItem, nIndex)
 	
 	objMenuItem:SetIconID("Menu.Check.Black")
 	objMenuItem:SetFont("font.menuitem.bold")
-	objMenuItem:SetBkgResID("MenuItem.Active")
 end
 
 
-function OpenURL(objMenuItem)
+function SetActiveTab(objMenuItem)
 	local attr = objMenuItem:GetAttribute()
-	local strURL = attr.ExtraData
-	
-	tFunHelper.OpenURLInCurTab(strURL)
-	local objWebCtrl = tFunHelper.GetActiveTabCtrl()
-	objWebCtrl:SetNewURLState(false)
-	
-	local strKey = objMenuItem:GetID()
-	local nIndex = tonumber(string.match(strKey, "[^%d]*(%d+)"))
-	if not nIndex then
+	local nWebTabID = attr.ExtraData
+	local objTabContainer = tFunHelper.GetMainCtrlChildObj("MainPanel.TabContainer")
+	if not objTabContainer then
 		return
 	end
-	
-	local attr = objWebCtrl:GetAttribute()
-	attr.nCurURLIndex = nIndex
+	objTabContainer:SetActiveTab(nWebTabID)
 end
 
 

@@ -47,6 +47,14 @@ function OnFocusChange(self, bFocus)
 end
 
 
+function OnSize(self, _type, width, height)	
+	local objTree = self:GetBindUIObjectTree()
+	local objRootLayout = objTree:GetUIObject("root.layout")
+	local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
+	objRootCtrl:SetObjPos(0, 0, width, height)
+end
+
+
 function SetWindowFullSize(objWnd)
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
 	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
@@ -65,7 +73,8 @@ function SetWindowFullSize(objWnd)
 	objWnd:Move(nWndLeft, nWndTop, wndwidth, nWndHeight)
 	
 	local objtree = objWnd:GetBindUIObjectTree()
-	local objRootCtrl = objtree:GetUIObject("root.layout")
+	local objRootLayout = objtree:GetUIObject("root.layout")
+	local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
 	objRootCtrl:SetObjPos(0, 0, wndwidth, nWndHeight)
 end
 

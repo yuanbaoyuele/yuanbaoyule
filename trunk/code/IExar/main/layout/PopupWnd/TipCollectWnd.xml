@@ -30,6 +30,15 @@
         </method_def>
         <objtemplate>
             <children>
+				<obj id="ResizeFrame" class="TipCollectFrame">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+                    </attr>
+				</obj>
+			
                 <obj id="Layout.main" class="TextureObject">
                     <attr>
                         <left>0</left>
@@ -319,6 +328,7 @@
             <event name="OnCreate" file="TipCollectWnd.xml.lua" func="OnCreate"/>
             <event name="OnShowWindow" file="TipCollectWnd.xml.lua" func="OnShowWindow"/>
             <event name="OnFocusChange" file="TipCollectWnd.xml.lua" func="OnFocusChange"/>
+            <event name="OnSize" file="TipCollectWnd.xml.lua" func="OnSize"/>
         </eventlist>
     </hostwndtemplate>
 	

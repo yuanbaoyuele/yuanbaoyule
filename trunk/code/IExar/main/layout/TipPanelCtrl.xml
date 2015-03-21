@@ -70,7 +70,7 @@
 										<top>0</top>
 										<width>father.width</width>
 										<height>120</height>
-									</attr>		
+									</attr>										
 								</obj>
 								
 								<obj id="MainPanel.Center" class="LayoutObject">

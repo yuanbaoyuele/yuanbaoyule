@@ -340,6 +340,7 @@ function ProcessCommandLine()
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
 	if bRet and IsRealString(strURL) then
 		FunctionObj.OpenURLInNewTab(strURL)
+		return
 	end
 	
 	TryOpenURLWhenStup()

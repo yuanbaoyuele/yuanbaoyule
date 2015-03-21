@@ -46,6 +46,30 @@ function GetTotalShowTabList(self)
 end
 
 
+function SetActiveTab(objRootCtrl, nNewActiveID)
+	tFunHelper.TipLog("[SetActiveTab] nNewActiveID:" .. tostring(nNewActiveID))
+
+	local objNewActiveTab = GetTabCtrlByID(objRootCtrl, nNewActiveID)
+	if nNewActiveID == 0 then
+		objRootCtrl:FireExtEvent("OnActiveTabChange", 0)
+		return
+	else
+		objRootCtrl:FireExtEvent("OnActiveTabChange", objNewActiveTab)
+	end
+	
+	if not objNewActiveTab then
+		return
+	end
+	
+	local nCurActiveID = GetActiveTabID(objRootCtrl)
+	
+	ShowTabAndBrowser(objRootCtrl, nCurActiveID, false)
+	ShowTabAndBrowser(objRootCtrl, nNewActiveID, true)
+
+	SetCurActiveTabID(objRootCtrl, nNewActiveID)
+	AdjustTabSize(objRootCtrl)
+end
+
 
 -----事件----
 function OnInitControl(self)
@@ -108,7 +132,9 @@ end
 
 
 function OnClickThumbArrow(self)
-
+	local nTopSpan = 30
+	tFunHelper.TryDestroyOldMenu(self, "WebTabListMenu")
+	tFunHelper.CreateAndShowMenu(self, "WebTabListMenu", nTopSpan)
 end
 
 
@@ -365,8 +391,6 @@ function AdjustTabSize(objRootCtrl)
 			objTabCtrl:SetObjPos(nLeft, 0, nLeft+300, "father.height")
 			objTabCtrl:SetCloseBtnVisible(false)
 			nFinalRight = nLeft+300-4
-		else
-			objTabCtrl:SetCloseBtnVisible(true)
 		end		
 	end
 	
@@ -389,32 +413,6 @@ function TryShowThumbBtn(objRootCtrl, nTabNumber)
 		objThumbLayout:SetChildrenVisible(false)
 		objContLayout:SetObjPos(0,0,"father.width","father.height")
 	end
-end
-
-
-
-function SetActiveTab(objRootCtrl, nNewActiveID)
-	tFunHelper.TipLog("[SetActiveTab] nNewActiveID:" .. tostring(nNewActiveID))
-
-	local objNewActiveTab = GetTabCtrlByID(objRootCtrl, nNewActiveID)
-	if nNewActiveID == 0 then
-		objRootCtrl:FireExtEvent("OnActiveTabChange", 0)
-		return
-	else
-		objRootCtrl:FireExtEvent("OnActiveTabChange", objNewActiveTab)
-	end
-	
-	if not objNewActiveTab then
-		return
-	end
-	
-	local nCurActiveID = GetActiveTabID(objRootCtrl)
-	
-	ShowTabAndBrowser(objRootCtrl, nCurActiveID, false)
-	ShowTabAndBrowser(objRootCtrl, nNewActiveID, true)
-
-	SetCurActiveTabID(objRootCtrl, nNewActiveID)
-	AdjustTabSize(objRootCtrl)
 end
 
 

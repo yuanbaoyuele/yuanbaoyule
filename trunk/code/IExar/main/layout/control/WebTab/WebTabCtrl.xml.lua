@@ -63,8 +63,10 @@ function SetActiveStyle(self, bActive)
 	if bActive then
 		FocusOnBrowser(self)
 		ShowActiveBkg(self, true)
+		self:SetCloseBtnVisible(true)
 	else
 		ShowActiveBkg(self, false)
+		self:SetCloseBtnVisible(false)
 	end
 		
 	ShowMouseEnterBkg(self, false)
