@@ -311,7 +311,25 @@
 			<texture id="Scroll.UpArrow.Normal"  imagelist="Scroll.UpArrow" index="1" />
 			<texture id="Scroll.UpArrow.Hover"  imagelist="Scroll.UpArrow" index="2" />
 			<texture id="Scroll.UpArrow.Down" imagelist="Scroll.UpArrow" index="3" />	
-	
+		
+		<imagelist id="checkbox" splitter="1" varyblock="1" image="bitmap\checkbox.png" />
+			<texture id="checkbox.normal" imagelist="checkbox" index="1" />
+			<texture id="checkbox.hover" imagelist="checkbox" index="2" />
+			<texture id="checkbox.check.normal" imagelist="checkbox" index="3" />
+			<texture id="checkbox.check.hover" imagelist="checkbox" index="4" />
+			
+			
+		<texture id="Tool.DelHistroy.Title" image="bitmap\Tool.DelHistroy.Title.png" />
+		<texture id="Tool.DelHistroy.Cookie" image="bitmap\Tool.DelHistroy.Cookie.png" />
+		<texture id="Tool.DelHistroy.TempFile" image="bitmap\Tool.DelHistroy.TempFile.png" />
+		<texture id="Tool.DelHistroy.PassWord" image="bitmap\Tool.DelHistroy.PassWord.png" />
+		<texture id="Tool.DelHistroy.InPrivate" image="bitmap\Tool.DelHistroy.InPrivate.png" />
+		<texture id="Tool.DelHistroy.Histroy" image="bitmap\Tool.DelHistroy.Histroy.png" />
+		<texture id="Tool.DelHistroy.Form" image="bitmap\Tool.DelHistroy.Form.png" />
+		<texture id="Tool.DelHistroy.Fav" image="bitmap\Tool.DelHistroy.Fav.png" />
+		<texture id="Tool.DelHistroy.About.Normal" image="bitmap\Tool.DelHistroy.About.Normal.png" />
+		<texture id="Tool.DelHistroy.About.Click" image="bitmap\Tool.DelHistroy.About.Click.png" />
+		
 	</resource>
 </XLUE>
 
