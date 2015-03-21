@@ -62,9 +62,12 @@ function OnClickconfirm(self)
 end
 
 function OnClickcancel(self)
+	HideWindow(self)
 end
 
 function OnClickrichinfo(self)
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+	tFunHelper.OpenURLInNewWindow("http://www.microsoft.com/products/ceip/zh-cn/default.mspx")
 end
 
 function OnClicksure(self)
