@@ -1,6 +1,9 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 
+local g_nActiveTabID = 0
+local g_nCurMaxTabID = 0
+local g_tTabShowList = {}
 
 -----方法----
 function OpenURL(self, strURL, bInNewTab)
@@ -71,11 +74,78 @@ function SetActiveTab(objRootCtrl, nNewActiveID)
 end
 
 
+function AdjustTabSize(objRootCtrl)
+	local attr = objRootCtrl:GetAttribute()
+	local tTabShowList = GetTabShowList(objRootCtrl)
+	
+	local nTotalNum = #tTabShowList
+	if nTotalNum < 1 then
+		return
+	end
+
+	TryShowThumbBtn(objRootCtrl, nTotalNum)
+	
+	local objContLayout = objRootCtrl:GetControlObject("TabContainerCtrl.Container.Layout") 
+	local nFatherL, nFatherT, nFatherR, nFatherB = objContLayout:GetObjPos()
+	local nFatherW = nFatherR - nFatherL
+	
+	local objAddBtn = objRootCtrl:GetControlObject("TabContainerCtrl.AddNewTab")
+	local nAddBtnL, nAddBtnT, nAddBtnR, nAddBtnB = objAddBtn:GetObjPos()
+	local nAddBtnW = nAddBtnR - nAddBtnL
+	local nBtnSpan = 0
+	
+	local nMaxTabWidth = attr.nMaxTabWidth
+	local nTabWidth = nMaxTabWidth
+
+	if nTotalNum*nMaxTabWidth>nFatherW-(nAddBtnW+nBtnSpan) then
+		nTabWidth = nFatherW/nTotalNum
+	end
+	
+	--处理激活态的tab
+	-- local nActiveTabID = GetActiveTabID(objRootCtrl)
+	g_nActiveTabID = GetActiveTabID(objRootCtrl)
+	-- local nActiveShowIndex = GetTabShowIndexByID(objRootCtrl, nActiveTabID)
+	local nActiveShowIndex = GetTabShowIndexByID(objRootCtrl, g_nActiveTabID)
+	local nActiveSpan = 3
+	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan - nActiveSpan*2 - nTotalNum
+	local objFather = objRootCtrl:GetControlObject("TabContainerCtrl.Container")
+	
+	for nIndex, objTabCtrl in ipairs(tTabShowList) do
+		objTabCtrl:SetZorder(10)	
+		local nLeft = (nIndex-1)*nTabWidth
+		
+		if nIndex > 1 then
+			nLeft = nLeft - nIndex + 1
+		end
+		
+		if nIndex == nActiveShowIndex then
+			nLeft = nLeft - nActiveSpan
+			objTabCtrl:SetZorder(100)
+		end
+		
+		if nIndex > nActiveShowIndex then
+			nLeft = nLeft - nActiveSpan*2
+		end 
+		
+		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
+		if nTotalNum == 1 then
+			objTabCtrl:SetObjPos(nLeft, 0, nLeft+300, "father.height")
+			objTabCtrl:SetCloseBtnVisible(false)
+			nFinalRight = nLeft+300-4
+		end		
+	end
+	
+	objAddBtn:SetObjPos(nFinalRight, nAddBtnT, nFinalRight+nAddBtnW, nAddBtnB)
+end
+
+
+
+
 -----事件----
 function OnInitControl(self)
-	SetCurMaxTabID(self, 0)
-	SetCurActiveTabID(self, 0)
-	InitTabShowList(self)
+	-- SetCurMaxTabID(self, 0)
+	-- SetCurActiveTabID(self, 0)
+	-- InitTabShowList(self)
 end
 
 
@@ -340,63 +410,6 @@ function CreateNewBrowser(objRootCtrl, nNewID)
 end
 
 
-function AdjustTabSize(objRootCtrl)
-	local attr = objRootCtrl:GetAttribute()
-	local tTabShowList = GetTabShowList(objRootCtrl)
-	
-	local nTotalNum = #tTabShowList
-	TryShowThumbBtn(objRootCtrl, nTotalNum)
-	
-	local objContLayout = objRootCtrl:GetControlObject("TabContainerCtrl.Container.Layout") 
-	local nFatherL, nFatherT, nFatherR, nFatherB = objContLayout:GetObjPos()
-	local nFatherW = nFatherR - nFatherL
-	
-	local objAddBtn = objRootCtrl:GetControlObject("TabContainerCtrl.AddNewTab")
-	local nAddBtnL, nAddBtnT, nAddBtnR, nAddBtnB = objAddBtn:GetObjPos()
-	local nAddBtnW = nAddBtnR - nAddBtnL
-	local nBtnSpan = 0
-	
-	local nMaxTabWidth = attr.nMaxTabWidth
-	local nTabWidth = nMaxTabWidth
-
-	if nTotalNum*nMaxTabWidth>nFatherW-(nAddBtnW+nBtnSpan) then
-		nTabWidth = nFatherW/nTotalNum
-	end
-	
-	--处理激活态的tab
-	local nActiveTabID = GetActiveTabID(objRootCtrl)
-	local nActiveShowIndex = GetTabShowIndexByID(objRootCtrl, nActiveTabID)
-	local nActiveSpan = 3
-	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan - nActiveSpan*2 - nTotalNum
-	
-	for nIndex, objTabCtrl in ipairs(tTabShowList) do
-		objTabCtrl:SetZorder(10)	
-		local nLeft = (nIndex-1)*nTabWidth
-		
-		if nIndex > 1 then
-			nLeft = nLeft - nIndex + 1
-		end
-		
-		if nIndex == nActiveShowIndex then
-			nLeft = nLeft - nActiveSpan
-			objTabCtrl:SetZorder(100)
-		end
-		
-		if nIndex > nActiveShowIndex then
-			nLeft = nLeft - nActiveSpan*2
-		end 
-		
-		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
-		if nTotalNum == 1 then
-			objTabCtrl:SetObjPos(nLeft, 0, nLeft+300, "father.height")
-			objTabCtrl:SetCloseBtnVisible(false)
-			nFinalRight = nLeft+300-4
-		end		
-	end
-	
-	objAddBtn:SetObjPos(nFinalRight, nAddBtnT, nFinalRight+nAddBtnW, nAddBtnB)
-end
-
 
 function TryShowThumbBtn(objRootCtrl, nTabNumber)
 	local objThumbLayout = objRootCtrl:GetControlObject("TabContainerCtrl.ThumbLayout") 
@@ -406,7 +419,6 @@ function TryShowThumbBtn(objRootCtrl, nTabNumber)
 	if nTabNumber > 1 then
 		objThumbLayout:SetVisible(true)
 		objThumbLayout:SetChildrenVisible(true)
-		
 		objContLayout:SetObjPos(35,0,"father.width-35","father.height")
 	else
 		objThumbLayout:SetVisible(false)
@@ -434,20 +446,24 @@ end
 
 
 function GetActiveTabID(objRootCtrl)
-	local attr = objRootCtrl:GetAttribute()
-	return attr.nActiveTabID
+	-- local attr = objRootCtrl:GetAttribute()
+	-- return attr.nActiveTabID
+	return g_nActiveTabID
 end
 
 function SetCurActiveTabID(objRootCtrl, nTabID)
-	local attr = objRootCtrl:GetAttribute()
-	attr.nActiveTabID = tonumber(nTabID)
+	-- local attr = objRootCtrl:GetAttribute()
+	-- attr.nActiveTabID = tonumber(nTabID)
+	g_nActiveTabID = tonumber(nTabID)
 end
 
 
 --TabShowList指在界面上顺序显示的tab序列
 function GetTabShowList(objRootCtrl)
-	local attr = objRootCtrl:GetAttribute()
-	return attr.tTabShowList
+	-- local attr = objRootCtrl:GetAttribute()
+	-- return attr.tTabShowList
+	
+	return g_tTabShowList
 end
 
 function InitTabShowList(objRootCtrl)
@@ -457,18 +473,21 @@ end
 
 
 function PushShowTab(objRootCtrl, nNewTabID)
-	local attr = objRootCtrl:GetAttribute()
-	local tTabShowList = attr.tTabShowList
+	-- local attr = objRootCtrl:GetAttribute()
+	-- local tTabShowList = attr.tTabShowList
 	local objTabCtrl = GetTabCtrlByID(objRootCtrl, nNewTabID)
 	
-	tTabShowList[#tTabShowList+1] = objTabCtrl
+	-- tTabShowList[#tTabShowList+1] = objTabCtrl
+	g_tTabShowList[#g_tTabShowList+1] = objTabCtrl
+	
 end
 
 
 function RemoveShowTab(objRootCtrl, nIndex)
-	local attr = objRootCtrl:GetAttribute()
-	local tTabShowList = attr.tTabShowList
-	table.remove(tTabShowList, nIndex)
+	-- local attr = objRootCtrl:GetAttribute()
+	-- local tTabShowList = attr.tTabShowList
+	-- table.remove(tTabShowList, nIndex)
+	table.remove(g_tTabShowList, nIndex)
 end
 
 
@@ -612,13 +631,15 @@ end
 
 
 function GetCurMaxTabID(objRootCtrl)
-	local attr = objRootCtrl:GetAttribute()
-	return attr.nCurMaxTabID
+	-- local attr = objRootCtrl:GetAttribute()
+	-- return attr.nCurMaxTabID
+	return g_nCurMaxTabID
 end
 
 function SetCurMaxTabID(objRootCtrl, nCurMaxTabID)
-	local attr = objRootCtrl:GetAttribute()
-	attr.nCurMaxTabID = nCurMaxTabID
+	-- local attr = objRootCtrl:GetAttribute()
+	-- attr.nCurMaxTabID = nCurMaxTabID
+	g_nCurMaxTabID = nCurMaxTabID
 end
 
 

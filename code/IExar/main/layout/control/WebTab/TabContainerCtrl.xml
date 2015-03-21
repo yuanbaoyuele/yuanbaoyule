@@ -13,6 +13,7 @@
 			<CloseCurrentTab file="TabContainerCtrl.xml.lua" func="CloseCurrentTab"/>
 			<GetTotalShowTabNum file="TabContainerCtrl.xml.lua" func="GetTotalShowTabNum"/>
 			<GetTotalShowTabList file="TabContainerCtrl.xml.lua" func="GetTotalShowTabList"/>
+			<AdjustTabSize file="TabContainerCtrl.xml.lua" func="AdjustTabSize"/>
 		</method_def>	
 
 		<event_def>

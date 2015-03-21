@@ -64,54 +64,25 @@
 								<texture></texture>
 							</attr>		
 							<children>									
-								<obj id="MainPanel.Head" class="BrowserHeadCtrl">
+								<obj id="MainPanel.HeadWnd" class="LayoutObject">
 									<attr>
 										<left>0</left>
 										<top>0</top>
 										<width>father.width</width>
 										<height>120</height>
-									</attr>										
-								</obj>
+									</attr>
+									<eventlist>
+										<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitHeadWnd" />
+									</eventlist>
+								</obj> <!--MainPanel.Head end-->
 								
-								<obj id="MainPanel.Center" class="LayoutObject">
+								<obj id="MainPanel.WebContainer" class="LayoutObject">
 									<attr>
 										<left>1</left>
-										<top>120-33</top>
+										<top>120</top>
 										<width>father.width-2</width>
-										<height>father.height-(120-33)</height>
-									</attr>
-									<children>	
-										<obj id="MainPanel.TabContainer" class="TabContainerCtrl">
-											<attr>
-												<left>5</left>
-												<top>1</top>
-												<width>father.width</width>
-												<height>27</height>
-											</attr>		
-											<eventlist>
-												<event name="OnActiveTabChange" file="TipPanelCtrl.xml.lua" func="OnActiveTabChange" />
-											</eventlist>
-										</obj>
-										<obj id="MainPanel.WebContainer" class="LayoutObject">
-											<attr>
-												<left>0</left>
-												<top>33</top>
-												<width>father.width</width>
-												<height>father.height-33-23</height>
-												<zorder>-1</zorder>
-											</attr>		
-										</obj>
-									</children>
-								</obj> <!--MainPanel.Center end-->
-								
-								<obj id="MainLayout.Bottom" class="TextureObject">
-									<attr>
-										<left>0</left>
-										<top>114</top>
-										<width>father.width</width>
-										<height>6</height>
-										<texture>WebTab.BottomBkg.Line</texture>
-										<zorder>100</zorder>
+										<height>father.height-120-23</height>
+										<zorder>-1</zorder>
 									</attr>		
 								</obj>
 								

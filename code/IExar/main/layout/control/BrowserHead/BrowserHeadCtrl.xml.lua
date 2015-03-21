@@ -23,30 +23,31 @@ end
 
 
 function SetHeadFullScrnStyle(self, bFullScrn)
-	if not tFunHelper.IsBrowserFullScrn() then
-		return
+	local objFullScrnBtn = self:GetControlObject("BrowserHeadCtrl.FullScrnBtnList")
+	objFullScrnBtn:SetVisible(bFullScrn)
+	objFullScrnBtn:SetChildrenVisible(bFullScrn)
+	
+	local objAddressBar = self:GetControlObject("BrowserHeadCtrl.AddressBar")
+	local objRefreshBtnList = self:GetControlObject("BrowserHeadCtrl.RefreshBtnList")
+	local objSearchCtrl = self:GetControlObject("BrowserHeadCtrl.SearchCtrl")
+	
+	if bFullScrn then
+		objAddressBar:SetObjPos(85, 5, "father.width-472", 27)
+		objRefreshBtnList:SetObjPos("father.width-467", 5, "father.width-377", 27)
+		objSearchCtrl:SetObjPos("father.width-382", 5, "father.width-127", 27)
+	else
+		objAddressBar:SetObjPos(85, 5, "father.width-392", 27)
+		objRefreshBtnList:SetObjPos("father.width-387", 5, "father.width-317", 27)
+		objSearchCtrl:SetObjPos("father.width-302", 5, "father.width-47", 27)
 	end
-
 end
 
 
 
 ---------事件--
-function OnMouseEnter(self)
-	if not tFunHelper.IsBrowserFullScrn() then
-		return
-	end
-
+function OnInitControl(self)
+	self:SetHeadFullScrnStyle(false)
 end
-
-
-function OnMouseLeave(self)
-	if not tFunHelper.IsBrowserFullScrn() then
-		return
-	end
-
-end
-
 
 --------
 function ProecssAddressBar(objRootCtrl, objTabCtrl)

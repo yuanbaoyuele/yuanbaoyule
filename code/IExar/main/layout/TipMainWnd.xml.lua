@@ -19,6 +19,8 @@ function OnShowWindow(self, bShow)
 	if bShow then
 		gTipStartTime = tipUtil:GetCurrentUTCTime()
 		SetWindowSizeProfile(self)
+		
+		tFunHelper.ShowHeadWindow()
 	end
 end
 

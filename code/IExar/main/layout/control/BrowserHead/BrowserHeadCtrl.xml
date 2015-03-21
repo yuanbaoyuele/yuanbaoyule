@@ -32,23 +32,23 @@
 							<attr>
 								<left>85</left>
 								<top>5</top>
-								<width>father.width-450-27</width>
+								<width>father.width-477</width>
 								<height>22</height>
 							</attr>	
 						</obj>
 						
 						<obj id="BrowserHeadCtrl.RefreshBtnList" class="RefreshBtnList">
 							<attr>
-								<left>father.width-450+90-27</left>
+								<left>father.width-387</left>
 								<top>5</top>
 								<width>70</width>
 								<height>22</height>
 							</attr>	
-						</obj>
-						
+						</obj>					
+												
 						<obj id="BrowserHeadCtrl.SearchCtrl" class="BoltFox.Search.Ctrl">
 							<attr>
-								<left>father.width-450+148</left>
+								<left>father.width-302</left>
 								<top>5</top>
 								<width>255</width>
 								<height>22</height>
@@ -56,6 +56,15 @@
 							<eventlist>
 								<event name="OnSearch" file="BrowserHeadCtrl.xml.lua" func="OnSearch" />
 							</eventlist>
+						</obj>
+					
+						<obj id="BrowserHeadCtrl.FullScrnBtnList" class="FullScrnBtnList">
+							<attr>
+								<left>father.width-80</left>
+								<top>5</top>
+								<width>70</width>
+								<height>22</height>
+							</attr>	
 						</obj>
 					
 						
@@ -141,8 +150,7 @@
 				</obj> <!--end root.layout-->
             </children>
 			<eventlist>
-				<event name="OnMouseEnter" file="BrowserHeadCtrl.xml.lua" func="OnMouseEnter" />
-				<event name="OnMouseLeave" file="BrowserHeadCtrl.xml.lua" func="OnMouseLeave" />
+				<event name="OnInitControl" file="BrowserHeadCtrl.xml.lua" func="OnInitControl" />
 			</eventlist>
         </objtemplate>
     </control>

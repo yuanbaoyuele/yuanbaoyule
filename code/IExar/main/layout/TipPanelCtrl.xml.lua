@@ -10,26 +10,9 @@ end
 
 
 ---事件--
---tabcontainer事件
-function OnActiveTabChange(self, strEvntName,objActiveTab)
-	if not objActiveTab then
-		return
-	end
 
-	local objRootCtrl = self:GetOwnerControl()
-	local objHeadCtrl = objRootCtrl:GetControlObject("MainPanel.Head")
-	if not objHeadCtrl then
-		tFunHelper.TipLog("[OnActiveTabChange] get objHeadCtrl failed")
-		return
-	end
-	objHeadCtrl:ProcessTabChange(objActiveTab)
+function OnInitHeadWnd(self)
 	
-	local objTitleCtrl = objRootCtrl:GetControlObject("MainPanel.Title")
-	if not objTitleCtrl then
-		tFunHelper.TipLog("[OnActiveTabChange] get objTitleCtrl failed")
-		return
-	end
-	objTitleCtrl:ProcessTabChange(objActiveTab)
 end
 
 
@@ -48,27 +31,13 @@ function CreateFilterListener(objRootCtrl)
 			tFunHelper.TipLog("[CreateFilterListener] key: " .. tostring(key))
 			
 			local tParam = {...}	
-			if tostring(key) == "OnFilterResult" then
-				OnFilterResult(tParam)
-			elseif tostring(key) == "OnKeyDown" then
+			if tostring(key) == "OnKeyDown" then
 				OnKeyDown(tParam)
 			end
 		end
 	)
 end
 
-
---检测到过滤广告， 弹tooltip
-function OnFilterResult(tParam)
-	local bFilterSucc = tParam[1]
-	local strDomain = tParam[2]
-	
-	if not bFilterSucc then
-		return
-	end
-	
-	tFunHelper.PopupToolTipOneDay()
-end
 
 
 --快捷键

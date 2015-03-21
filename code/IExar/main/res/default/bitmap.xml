@@ -282,7 +282,24 @@
 			<texture id="YBYL.Menu.DeleteItem.Hover"  imagelist="YBYL.Menu.DeleteItem" index="2" />
 			<texture id="YBYL.Menu.DeleteItem.Down" imagelist="YBYL.Menu.DeleteItem" index="3" />
 			<texture id="YBYL.Menu.DeleteItem.Disable" imagelist="YBYL.Menu.DeleteItem" index="3" />
+	
+		<imagelist id="YBYL.FullScrn.Close" splitter="1" varyblock="1" image="bitmap\FullScrn.Close.png"/>
+			<texture id="YBYL.FullScrn.Close.Normal"  imagelist="YBYL.FullScrn.Close" index="1" />
+			<texture id="YBYL.FullScrn.Close.Hover"  imagelist="YBYL.FullScrn.Close" index="2" />
+			<texture id="YBYL.FullScrn.Close.Down" imagelist="YBYL.FullScrn.Close" index="3" />
+			<texture id="YBYL.FullScrn.Close.Disable" imagelist="YBYL.FullScrn.Close" index="3" />
+
+		<imagelist id="YBYL.FullScrn.Min" splitter="1" varyblock="1" image="bitmap\FullScrn.Min.png"/>
+			<texture id="YBYL.FullScrn.Min.Normal"  imagelist="YBYL.FullScrn.Min" index="1" />
+			<texture id="YBYL.FullScrn.Min.Hover"  imagelist="YBYL.FullScrn.Min" index="2" />
+			<texture id="YBYL.FullScrn.Min.Down" imagelist="YBYL.FullScrn.Min" index="3" />
+			<texture id="YBYL.FullScrn.Min.Disable" imagelist="YBYL.FullScrn.Min" index="3" />
 			
+		<imagelist id="YBYL.FullScrn.Restore" splitter="1" varyblock="1" image="bitmap\FullScrn.Restore.png"/>
+			<texture id="YBYL.FullScrn.Restore.Normal"  imagelist="YBYL.FullScrn.Restore" index="1" />
+			<texture id="YBYL.FullScrn.Restore.Hover"  imagelist="YBYL.FullScrn.Restore" index="2" />
+			<texture id="YBYL.FullScrn.Restore.Down" imagelist="YBYL.FullScrn.Restore" index="3" />
+			<texture id="YBYL.FullScrn.Restore.Disable" imagelist="YBYL.FullScrn.Restore" index="3" />
 	</resource>
 </XLUE>
 
