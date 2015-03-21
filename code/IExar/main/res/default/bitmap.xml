@@ -66,6 +66,7 @@
 		<bitmap id="StateBar.RightCorner" path="bitmap\StateBar.RightCorner.png" />
 		<bitmap id="History.Logo" path="bitmap\History.Logo.png" />
 		<bitmap id="ArrowLeft" path="bitmap\ArrowLeft.png" />
+		<bitmap id="Scroll.Decorate" path="bitmap\Scroll.Decorate.png" />
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.dir.defaluticon.open" path="bitmap\collect.dir.defaluticon.open.png" />
@@ -300,6 +301,17 @@
 			<texture id="YBYL.FullScrn.Restore.Hover"  imagelist="YBYL.FullScrn.Restore" index="2" />
 			<texture id="YBYL.FullScrn.Restore.Down" imagelist="YBYL.FullScrn.Restore" index="3" />
 			<texture id="YBYL.FullScrn.Restore.Disable" imagelist="YBYL.FullScrn.Restore" index="3" />
+		
+		<imagelist id="Scroll.DownArrow" splitter="1" varyblock="1" image="bitmap\Scroll.DownArrow.png"/>
+			<texture id="Scroll.DownArrow.Normal"  imagelist="Scroll.DownArrow" index="1" />
+			<texture id="Scroll.DownArrow.Hover"  imagelist="Scroll.DownArrow" index="2" />
+			<texture id="Scroll.DownArrow.Down" imagelist="Scroll.DownArrow" index="3" />	
+			
+		<imagelist id="Scroll.UpArrow" splitter="1" varyblock="1" image="bitmap\Scroll.UpArrow.png"/>
+			<texture id="Scroll.UpArrow.Normal"  imagelist="Scroll.UpArrow" index="1" />
+			<texture id="Scroll.UpArrow.Hover"  imagelist="Scroll.UpArrow" index="2" />
+			<texture id="Scroll.UpArrow.Down" imagelist="Scroll.UpArrow" index="3" />	
+	
 	</resource>
 </XLUE>
 

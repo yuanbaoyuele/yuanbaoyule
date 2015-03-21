@@ -9,7 +9,7 @@ end
 
 ----
 function AdjustSelfPos(self)
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end
@@ -21,9 +21,11 @@ function AdjustSelfPos(self)
 	
 	local nAddBarL, nAddBarT, nAddBarR, nAddBarB = objAddressBar:GetObjPos()
 	local nAddBarW = nAddBarR - nAddBarL
+	
+	local nMenuHeight = GetMenuHeight(self)
 		
 	local nSelfL, nSelfT, nSelfR, nSelfB = self:GetObjPos()
-	self:SetObjPos(nSelfL, nSelfT, nSelfL+nAddBarW, nSelfB )
+	self:SetObjPos(nSelfL, nSelfT, nSelfL+nAddBarW, nSelfT+nMenuHeight )
 end
 
 
@@ -35,7 +37,7 @@ function ShowUrlHistory(self)
 		return false
 	end
 
-	local nMaxShowHistory = 6
+	local nMaxShowHistory = GetMaxCount(self)
 	
 	local nTotalCount = 0
 	for nIndex=1, #tUrlHistory do
@@ -87,7 +89,7 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	-- attr.RightText = tHistoryInfo["strLocationName"]
 	attr.RightTextColor = "404040"
 	attr.RightTextHAligh = "left"
-	attr.TextRightWidth = 40
+	attr.TextRightSpan = 60
 	attr.FontColorNormal = "system.black"
 	attr.FontColorHover = "system.white"
 	attr.TextPos = 30
@@ -128,6 +130,24 @@ function BindMenuContainer(self, objMenuContainer, nMaxShowHistory, nTotalCount)
 	attr.nTotalLineCount = nTotalCount
 
 	self:OnInitControl(objMenuContainer)
+end
+
+
+function GetMaxCount(objRootCtrl)
+	local nRealHeight = GetMenuHeight(objRootCtrl)
+	return math.floor(nRealHeight/20)
+end
+
+
+function GetMenuHeight(objRootCtrl)
+	local objMainWnd = tFunHelper.GetMainWndInst()
+	local l, t, r, b = objMainWnd:GetWindowRect()
+	local workleft, worktop, workright, workbottom = tipUtil:GetWorkArea()
+	
+	local selfL, selfT,selfR, selfB = objRootCtrl:GetAbsPos()
+	local nRealHeight = workbottom-(t+50)
+	
+	return nRealHeight
 end
 
 -----

@@ -614,11 +614,13 @@ function ResetScrollBar(objRootCtrl)
 	if nLinePerPage == 0 or nLinePerPage >= nTotalLineCount then
 		objScrollBar:SetVisible(false)
 		objScrollBar:SetChildrenVisible(false)
+		-- SetDeleteBtnPos(objRootCtrl, false)
 		return true
 	else
 		objScrollBar:SetVisible(true)
 		objScrollBar:SetChildrenVisible(true)
 		objScrollBar:Show(true)
+		-- SetDeleteBtnPos(objRootCtrl, true)
 	end
 	
 	return true
@@ -648,6 +650,27 @@ function CLB__OnScrollMousePosEvent(self)
 	local nScrollPos = self:GetScrollPos()
 	
 	MoveItemListPanel(objRootCtrl, nScrollPos)
+end
+
+
+function CLB__OnVScroll(self, fun, type_, pos)
+	local objRootCtrl = self:GetOwnerControl()
+	local nScrollPos = self:GetScrollPos()
+    local nItemHeight = GetItemHeight(objRootCtrl)
+		
+	--点击向上按钮或上方空白
+    if type_==1 then
+        self:SetScrollPos( nScrollPos - nItemHeight, true )
+	end
+	
+	--点击向下按钮或下方空白
+    if type_==2 then
+		self:SetScrollPos( nScrollPos + nItemHeight, true )
+    end
+
+	local nNewScrollPos = self:GetScrollPos()
+	MoveItemListPanel(objRootCtrl, nNewScrollPos)
+	return true
 end
 
 

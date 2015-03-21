@@ -1039,6 +1039,7 @@ end
 
 
 function AdjustScreenEdge(nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight, nTopSpan)
+	local OldTop= nMenuTop
 	local nScrnLeft, nScrnTop, nScrnRight, nScrnBottom = tipUtil:GetWorkArea()
 	
 	if nMenuLeft < nScrnLeft then
@@ -1056,6 +1057,11 @@ function AdjustScreenEdge(nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContain
 	else
 		nMenuTop = nTopSpan+nMenuTop
 	end	
+		
+		
+	if nMenuTop < nScrnTop then
+		nMenuTop = OldTop+nTopSpan
+	end
 		
 	return nMenuLeft, nMenuTop
 end

@@ -354,7 +354,7 @@ function SetAddressBarState(objRootCtrl)
 		return
 	end
 
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end
@@ -380,7 +380,7 @@ function SetAddressBarImage(objRootCtrl, strIcoName)
 		return
 	end
 
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end

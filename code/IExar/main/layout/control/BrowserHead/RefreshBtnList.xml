@@ -27,7 +27,7 @@
 						<Enable>false</Enable>
 					</attr>
 					<eventlist>
-						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" />
+						<!--event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" /-->
 					</eventlist>
 				</obj>
 			
