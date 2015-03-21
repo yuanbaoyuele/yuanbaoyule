@@ -63,7 +63,8 @@ function OnSelect_FindSource(self)
 end
 
 function OnSelect_WindowsUpdate(self)
-	
+	local strUpdateUrl = "http://windowsupdate.microsoft.com/windowsupdate/v6/default.aspx?ln=zh-cn"
+	tFunHelper.OpenURLInCurTab(strSupportUrl)
 end
 
 function OnSelect_DevelopTool(self)

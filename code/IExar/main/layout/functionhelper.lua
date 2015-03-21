@@ -1651,6 +1651,7 @@ function SetFilterState(bOpenFilter)
 end
 
 
+
 ---升级--
 local g_bIsUpdating = false
 
@@ -1817,6 +1818,23 @@ function DownLoadFileWithCheck(strURL, strSavePath, strCheckMD5, fnCallBack)
 	end)
 end
 
+function GetResourceDir()
+	local strExePath = tipUtil:GetModuleExeName()
+	local _, _, strProgramDir = string.find(strExePath, "(.*)\\.*$")
+	if not IsRealString(strProgramDir) then
+		return nil
+	end
+	local _, _, strInstallDir = string.find(strProgramDir, "(.*)\\.*$")
+	if not IsRealString(strInstallDir) then
+		return nil
+	end
+	local strResPath = tipUtil:PathCombine(strInstallDir, "ieres")
+	if IsRealString(strResPath) and tipUtil:QueryFileExists(strResPath) then
+		return strResPath
+	end
+	return nil
+end
+
 --
 
 ------------------文件--
@@ -1902,6 +1920,7 @@ obj.GetUserCollectList = GetUserCollectList
 obj.AddCurWebToCollect = AddCurWebToCollect
 obj.GetIcoNameFromURL = GetIcoNameFromURL
 obj.DownLoadIco = DownLoadIco
+obj.GetResourceDir = GetResourceDir
 
 --菜单
 obj.TryDestroyOldMenu = TryDestroyOldMenu
