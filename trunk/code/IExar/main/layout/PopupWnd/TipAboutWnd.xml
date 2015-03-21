@@ -102,7 +102,7 @@
 						<top>319</top>
 						<width>107</width>
 						<height>24</height>
-						<LeftTextPos>4</LeftTextPos>
+						<LeftTextPos>12</LeftTextPos>
 						<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 						<DownBkgID>about.button.bkg.down</DownBkgID>
 						<HoverBkgID>about.button.bkg.hover</HoverBkgID>
