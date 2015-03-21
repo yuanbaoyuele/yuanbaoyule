@@ -57,17 +57,22 @@
 					<children>
 						<obj id="icon" class="ImageObject">
 							<attr>
-								<left>7</left>
+								<left>3</left>
 								<width>16</width>
 								<height>father.height</height>
 								<valign>center</valign>
+								<visible>0</visible>
 							</attr>
 						</obj>
 						<obj id="text" class="TextObject">
 							<attr>
 								<left>7+16+3</left>
+								<top>0</top>
+								<valign>center</valign>
 								<width>father.width-14</width>
 								<height>father.height</height>
+								<textcolor>system.black</textcolor>
+								<font>font.text12</font>
 							</attr>
 						</obj>
 					</children>

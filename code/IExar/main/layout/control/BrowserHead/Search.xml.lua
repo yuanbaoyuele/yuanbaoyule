@@ -14,10 +14,10 @@ function OnClick(self)
 end
 
 local SearchEngineMap = {
-	{ displayName = "百度", name = "baidu", icon = "bitmap.search.baidu"},
+	{ displayName = "百度一下 (默认)", name = "baidu", icon = "bitmap.search.baidu"},
 	{ displayName = "Google", name = "google", icon = "bitmap.search.google"},
-	{ displayName = "SOSO", name = "soso", icon = "bitmap.search.soso"},
-	{ displayName = "Bing", name = "bing", icon = "bitmap.search.bing"},
+	{ displayName = "Live Search", name = "bing", icon = "bitmap.search.livesearch"},
+	{ displayName = "百度", name = "baidu2", icon = "bitmap.search.baidu"},
 }
 
 local SearchEngineDisplay = {
@@ -25,6 +25,9 @@ local SearchEngineDisplay = {
 	SearchEngineMap[2].displayName,
 	SearchEngineMap[3].displayName,
 	SearchEngineMap[4].displayName,
+	"在此页上查找...",
+	"查找更多提供程序...",
+	"管理搜索提供程序",
 }
 
 local SearchEngineIcon = {
@@ -58,7 +61,7 @@ function OnClick2(self)
 	}
 
 	
-	ShowPopupWnd(control, x-120, y + (bottom-top) , 120+16, 200, data)
+	ShowPopupWnd(control, x-190, y + (bottom-top) , 190+16, 200, data)
 end
 
 function OnLButtonDbClick(self)
@@ -86,7 +89,7 @@ function ShowPopupWnd(control, left, top, width, bottom, data)
 					frameHostWnd:SetUserData(data)
 					frameHostWnd:Create()
 					
-					frameHostWnd:Move(left, top, width, #data.textArray*22+6)
+					frameHostWnd:Move(left, top, width, #data.textArray*22+6+10)
 					
 					frameHostWnd:AttachListener("OnDestroy", false, 
 						function ()
@@ -138,10 +141,10 @@ function OnControlFocusChange(self, focus)
 				editextctrl = objFactory:CreateUIObject("editextctrl_layout", "FillObject")
 				local parentbkg =  self:GetControlObject("border")
 				local l, t, r, b =  parentbkg:GetObjPos()
-				editextctrl:SetObjPos(l, b+1, r, b+21)
+				editextctrl:SetObjPos(l, b+1, r, b+33)
 				editextctrl:SetSrcColor("#ffffff")
 				editextctrl:SetDestColor("#ffffff")
-				editextctrl:SetDestPt(r-l, 20)
+				editextctrl:SetDestPt(r-l, 32)
 				editextctrl:SetSrcPt(0, 0)
 				editextctrl:SetBlendType("Source")
 				editextctrl:SetFillType("Monochrome")
@@ -151,7 +154,7 @@ function OnControlFocusChange(self, focus)
 					if not btn then
 						btn = objFactory:CreateUIObject("minibtn"..i, "TipAddin.Button")
 						editextctrl:AddChild(btn)
-						btn:SetObjPos(6+(i-1)*24, 2, 20+(i-1)*24, 16)
+						btn:SetObjPos2(6+(i-1)*24, 4, 22, 22)
 						btn:AttachListener("OnClick", false, function(_self)
 							--XLMessageBox()
 							SetSearchEngine(self, SearchEngineMap[i]["displayName"])
@@ -159,9 +162,13 @@ function OnControlFocusChange(self, focus)
 					end
 					local attr = btn:GetAttribute()
 					local icon = string.gsub(SearchEngineMap[i]["icon"], "bitmap", "texture")
-					attr.NormalBkgID = icon
-					attr.HoverBkgID = icon
-					attr.DownBkgID = icon
+					attr.ForegroundResID = icon
+					attr.ForegroundLeftPos = 3
+					attr.ForegroundWidth = 16
+					attr.ForegroundHeight = 16
+					attr.NormalBkgID = ""
+					attr.HoverBkgID = "searchselect.hover"
+					attr.DownBkgID = "searchselect.down"
 				end
 				parentbkg:AddChild(editextctrl)
 			end
@@ -204,12 +211,17 @@ end
 
 function SetSearchEngine(control, engine)
 	local icon = control:GetControlObject("icon")
+	local attr = control:GetAttribute()
 	for i=1, #SearchEngineMap do
 		if SearchEngineMap[i].displayName == engine then
 			icon:SetResID(SearchEngineMap[i].icon)
-	
-			local attr = control:GetAttribute()
 			attr.SearchEngine = SearchEngineMap[i].name
+			break
+		end
+	end
+	for i, v in ipairs(SearchEngineDisplay) do
+		if v == engine then
+			--XLMessageBox(v)
 			break
 		end
 	end
