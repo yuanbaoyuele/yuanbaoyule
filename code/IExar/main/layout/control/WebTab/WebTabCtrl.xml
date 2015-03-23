@@ -35,6 +35,7 @@
 			<AddCurURLIndex file="WebTabCtrl.xml.lua" func="AddCurURLIndex"/>
 			<SetCloseBtnVisible file="WebTabCtrl.xml.lua" func="SetCloseBtnVisible"/>
 			<CloseTab file="WebTabCtrl.xml.lua" func="CloseTab"/>
+			<ShowGif file="WebTabCtrl.xml.lua" func="ShowGif"/>
 		</method_def>		
 		
 		<event_def>
@@ -96,7 +97,24 @@
 								<antialias>2</antialias>
 								<zorder>999999</zorder>
 							</attr>
-						</obj>   	
+						</obj>  
+
+						<obj id="WebTabCtrl.Loading" class="SeqImageObject">
+							<attr>
+								<left>8</left>
+								<top>(father.height-16)/2+1</top>
+								<width>16</width>
+								<height>16</height>
+								<drawmode>1</drawmode>
+								<antialias>2</antialias>
+								<zorder>999999</zorder>
+								<gif>WebTab.Loading</gif>
+								<loop>1</loop>
+								<reverse>0</reverse>
+								<interval>32</interval>
+							</attr>
+						</obj>	
+						
 
 						<obj id="WebTabCtrl.Text" class="TextObject">
 							<attr>

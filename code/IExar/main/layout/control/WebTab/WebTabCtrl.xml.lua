@@ -171,6 +171,29 @@ function CloseTab(objRootCtrl)
 	objRootCtrl:FireExtEvent("OnCloseTabItem", nTabID)
 end
 
+
+function ShowGif(self)
+	local objCurrentBrowser = self:GetBindBrowserCtrl()
+	if not objCurrentBrowser then
+		return
+	end
+	
+	if objCurrentBrowser:GetBusy() then
+		SetHeadImageGif(self, true)
+	end
+	
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	timerManager:SetTimer(function(item, id)
+			if objCurrentBrowser:GetBusy() then
+				-- SetHeadImageGif(self, true)
+			else
+				SetHeadImageGif(self, false)
+				item:KillTimer(id)	
+			end
+			
+		end, 500)
+end
+
 -----事件----
 function OnInitControl(self)
 	self:SetSelfID(0)
@@ -238,6 +261,25 @@ function OnClickCloseTab(self)
 end
 
 ------
+
+
+function SetHeadImageGif(objRootCtrl, bSetGif)
+	local objGif = objRootCtrl:GetControlObject("WebTabCtrl.Loading")
+	local objHeadImg = objRootCtrl:GetControlObject("WebTabCtrl.HeadImg")
+	if not objGif then
+		return
+	end
+
+	objGif:SetVisible(bSetGif)
+	objHeadImg:SetVisible(not bSetGif)
+	
+	if bSetGif then
+		objGif:Play()
+	else
+		objGif:Stop()
+	end
+end
+
 
 function FocusOnBrowser(objRootCtrl)
 	local objBrowser = objRootCtrl:GetBindBrowserCtrl()

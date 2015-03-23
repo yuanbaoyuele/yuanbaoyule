@@ -115,9 +115,13 @@
 <bitmap id="bitmap.search.baidu" path="bitmap\baidu.png"/>
 <bitmap id="bitmap.search.google" path="bitmap\google.png"/>
 <bitmap id="bitmap.search.livesearch" path="bitmap\livesearch.png"/>
+<texture id="texture.search.livesearch" path="bitmap\livesearch.png"/>
+<bitmap id="bitmap.search.soso" path="bitmap\soso.png"/>
+<bitmap id="bitmap.search.bing" path="bitmap\bing.png"/>
 <texture id="texture.search.baidu" path="bitmap\baidu.png"/>
 <texture id="texture.search.google" path="bitmap\google.png"/>
-<texture id="texture.search.livesearch" path="bitmap\livesearch.png"/>
+<texture id="texture.search.soso" path="bitmap\soso.png"/>
+<texture id="texture.search.bing" path="bitmap\bing.png"/>
 <bitmap id="img.week" path="bitmap\week.png"/>
 <bitmap id="img.weekday" path="bitmap\weekday.png"/>
 <bitmap id="history.icon" path="bitmap\history.icon.png"/>
@@ -321,6 +325,9 @@
 			<texture id="Scroll.UpArrow.Normal"  imagelist="Scroll.UpArrow" index="1" />
 			<texture id="Scroll.UpArrow.Hover"  imagelist="Scroll.UpArrow" index="2" />
 			<texture id="Scroll.UpArrow.Down" imagelist="Scroll.UpArrow" index="3" />	
+	
+	
+		<gif id="WebTab.Loading" file="bitmap\WebTab.Loading.gif" />
 		
 		<imagelist id="checkbox" splitter="1" varyblock="1" image="bitmap\checkbox.png" />
 			<texture id="checkbox.normal" imagelist="checkbox" index="1" />

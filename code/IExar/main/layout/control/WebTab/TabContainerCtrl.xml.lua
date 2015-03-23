@@ -333,7 +333,7 @@ function OpenURLInNewTab(objRootCtrl, strURL)
 	objNewTab:SaveUserInputURL(strURL)
 	objNewTab:BindBrowserCtrl(objWebBrower)
 	objNewTab:SetNewURLState(true)
-	
+	objNewTab:ShowGif()
 	return nNewTabID
 end
 
@@ -359,6 +359,7 @@ function OpenURLInCurTab(objRootCtrl, strURL)
 	
 	objActiveTab:SetNewURLState(true)
 	objWebBrowCtrl:Navigate(strURL)
+	objActiveTab:ShowGif()
 end
 
 
