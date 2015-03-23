@@ -12,6 +12,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -40,6 +41,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -55,6 +57,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -93,6 +96,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_FullScreen" />
 				</eventlist>
 			</obj>
 			<obj id="toolbar" class="MenuItemObject" templateid="menu.context.item">
@@ -164,6 +168,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InternetPro" />
 				</eventlist>
 			</obj>
 		</children>

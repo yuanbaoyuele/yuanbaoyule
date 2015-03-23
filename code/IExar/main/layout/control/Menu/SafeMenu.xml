@@ -14,6 +14,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearHistory" />
 				</eventlist>
 			</obj>
 			
@@ -24,6 +25,7 @@
 					<RightText>Ctrl+Shift+P</RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -52,6 +54,7 @@
 					<RightText>Ctrl+Shift+F</RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -63,6 +66,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -102,6 +106,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -119,6 +124,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_WindowsUpdate" />
 				</eventlist>
 			</obj>
 		</children>

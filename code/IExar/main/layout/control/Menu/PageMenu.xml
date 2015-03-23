@@ -14,6 +14,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewWindow" />
 				</eventlist>
 			</obj>
 			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
@@ -29,6 +30,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Cut" />
 				</eventlist>
 			</obj>
 			
@@ -41,6 +43,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Copy" />
 				</eventlist>
 			</obj>
 			
@@ -53,6 +56,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Paste" />
 				</eventlist>
 			</obj>
 			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
@@ -124,6 +128,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_SaveAs" />
 				</eventlist>
 			</obj>
 			<obj id="sendthispagewithmail" class="MenuItemObject" templateid="menu.context.item">
@@ -201,6 +206,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -212,6 +218,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -223,6 +230,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -264,6 +272,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Properties" />
 				</eventlist>
 			</obj>
 				<obj id="sourceview" class="MenuItemObject" templateid="menu.context.item">
@@ -275,6 +284,7 @@
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_SourceCode" />
 				</eventlist>
 			</obj>
 		</children>
