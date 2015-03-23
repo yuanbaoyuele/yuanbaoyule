@@ -70,22 +70,26 @@ function OnMainPageRightButtonFocusChange(self, isfocus)
 end
 
 function OnMainPageLeftButtonClick(self, x, y)
-	local left = self:GetObject("Layout.MainPage.Right")
-	if not left then
-		left = self:GetObject("Layout.Printer.Right")
-	end
-	
-	local parentattr = left:GetAttribute()
-	parentattr.NormalBkgID = parentattr.DownBkgID
-	parentattr.HoverBkgID = parentattr.DownBkgID
-	left:Updata()
-	local selfattr = self:GetAttribute()
-	selfattr.NormalBkgID = selfattr.DownBkgID
-	selfattr.HoverBkgID = selfattr.DownBkgID
-	self:Updata()
+	 local right = self:GetObject("Layout.MainPage.Right")
+	 if not right then
+		 right = self:GetObject("Layout.Printer.Right")
+	 end
+	right:SetState(0)
+	-- local parentattr = left:GetAttribute()
+	-- parentattr.NormalBkgID = parentattr.DownBkgID
+	-- parentattr.HoverBkgID = parentattr.DownBkgID
+	-- left:Updata()
+	-- local selfattr = self:GetAttribute()
+	-- selfattr.NormalBkgID = selfattr.DownBkgID
+	-- selfattr.HoverBkgID = selfattr.DownBkgID
+	-- self:Updata()
 	if self:GetID() == "Layout.MainPage.Left" then
 		--´ò¿ªÖ÷Ò³
 		--tFunHelper.CreateAndShowMenu(self, "MainPageMenu", 0, true)
+		local strHomePage = tFunHelper.GetHomePage()
+		if strHomePage ~= "" and strHomePage ~= nil then
+			tFunHelper.OpenURLInCurTab(strHomePage)	
+		end
 	else
 	end
 end
@@ -137,11 +141,35 @@ function OnSafeClick(self)
 	tFunHelper.CreateAndShowMenu(self, "SafeMenu", 26, false, true)
 end
 
+function HideOutChild(self)
+	local parent = self:GetControlObject("Layout.main")
+	local nCount = parent:GetChildCount()
+	local pl, pt, pr, pb = parent:GetObjPos()
+	for i = 1, nCount do
+		local objChild = parent:GetChildByIndex(i)
+		if objChild then
+			local l, t, r, b = objChild:GetObjPos()
+			if pr-pl <= 50 and objChild:GetID() == "Layout.More.Btn"  then
+				objChild:SetVisible(false)
+				objChild:SetChildrenVisible(false)
+			elseif r > pr-pl-13 and objChild:GetID() ~= "Layout.More.Btn"  then
+				objChild:SetVisible(false)
+				objChild:SetChildrenVisible(false)
+			else
+				objChild:SetVisible(true)
+				objChild:SetChildrenVisible(true)
+			end
+		end
+	end
+end
+
 function OnPosChange(self, oldl, oldt, oldr, oldb, newl, newr, newr, newb)
 	local owner = self:GetOwnerControl()
 	local l, t, r, b = owner:GetObjPos()
 	local width = r-l
-	if width < 738 then
+	if width <= 350 then
+		self:SetObjPos2("father.width-"..(30), 87, 30, 25)
+	elseif width < 738 then
 		local newWidth = 411-738+width
 		if newWidth<0 then
 			newWidth = 0
@@ -151,6 +179,7 @@ function OnPosChange(self, oldl, oldt, oldr, oldb, newl, newr, newr, newb)
 	else
 		self:SetObjPos2("father.width-"..(411), 87, 411, 25)
 	end
+	HideOutChild(self)
 end
 
 function OnToolOClick(self)
