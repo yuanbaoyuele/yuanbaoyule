@@ -20,6 +20,7 @@
 				<attr>
 					<Text>删除(R)</Text>
 					<AccKey></AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>

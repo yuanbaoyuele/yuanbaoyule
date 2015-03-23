@@ -160,6 +160,7 @@
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
 								<Text>页面(P)</Text>
+								<TextFont>font.text12</TextFont>
 								<LeftTextPos>4</LeftTextPos>
 								<ForegroundResID>Arrow.Down.texture</ForegroundResID>
 								<ForegroundLeftPos>51</ForegroundLeftPos>
@@ -181,6 +182,7 @@
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
 								<Text>安全(S)</Text>
+								<TextFont>font.text12</TextFont>
 								<LeftTextPos>4</LeftTextPos>
 								<ForegroundResID>Arrow.Down.texture</ForegroundResID>
 								<ForegroundLeftPos>51</ForegroundLeftPos>
@@ -202,12 +204,16 @@
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
 								<Text>工具(O)</Text>
+								<TextFont>font.text12</TextFont>
 								<LeftTextPos>4</LeftTextPos>
 								<ForegroundResID>Arrow.Down.texture</ForegroundResID>
 								<ForegroundLeftPos>51</ForegroundLeftPos>
 								<ForegroundWidth>5</ForegroundWidth>
 								<ForegroundHeight>3</ForegroundHeight>
 							</attr>
+							<eventlist>
+								<event name="OnClick" file="toolbar.xml.lua" func="OnToolOClick" />
+							</eventlist>
 						</obj>
 						<!--帮助-->
 						<obj id="Layout.Help.Btn" class="TipAddin.Button">
@@ -236,6 +242,9 @@
 									</attr>
 								</obj>
 							</children>
+							<eventlist>
+								<event name="OnClick" file="toolbar.xml.lua" func="OnHelpClick" />
+							</eventlist>
 						</obj>
 						<!--更多-->
 						<obj id="Layout.More.Btn" class="TipAddin.Button">
