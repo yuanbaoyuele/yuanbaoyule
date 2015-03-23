@@ -338,6 +338,11 @@
 		<texture id="Tool.DelHistroy.About.Normal" image="bitmap\Tool.DelHistroy.About.Normal.png" />
 		<texture id="Tool.DelHistroy.About.Click" image="bitmap\Tool.DelHistroy.About.Click.png" />
 		
+		<texture id="YBYL.CloseAllTab.Content" image="bitmap\YBYL.CloseAllTab.Content.png" />
+		<texture id="YBYL.CloseAllTab.Title" image="bitmap\YBYL.CloseAllTab.Title.png" />
+		
+		<texture id="YBYL.CloseAllTab.CheckBox.Content" image="bitmap\YBYL.CloseAllTab.CheckBox.Content.png" />
+		
 	</resource>
 </XLUE>
 
