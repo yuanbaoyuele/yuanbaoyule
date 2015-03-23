@@ -249,7 +249,7 @@
 						<!--更多-->
 						<obj id="Layout.More.Btn" class="TipAddin.Button">
 							<attr>
-								<left>392+6</left>
+								<left>father.width-13</left>
 								<top>0</top>
 								<width>13</width>
 								<height>26</height>
