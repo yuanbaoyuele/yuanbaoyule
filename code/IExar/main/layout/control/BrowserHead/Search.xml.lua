@@ -180,11 +180,17 @@ function OnControlFocusChange(self, focus)
 				end
 				local lasttext = self:GetControlObject("searchctrltext")
 				if not lasttext then
-					lasttext = objFactory:CreateUIObject("searchctrltext", "TextObject")
+					lasttext = objFactory:CreateUIObject("searchctrltext", "TipAddin.Button")
 					editextctrl:AddChild(lasttext)
-					lasttext:SetObjPos2(r-l-53, 8, 50, 22)
-					lasttext:SetText("查找...")
-					lasttext:SetTextFontResID("font.text12")
+					lasttext:SetObjPos2(r-l-53, 5, 50, 23)
+					lasttext:SetText("  查找...")
+					lasttext:SetTextFont("font.text12")
+					local attr = lasttext:GetAttribute()
+					--attr.LeftTextPos = 30
+					attr.TopTextPos = 2
+					attr.NormalBkgID = ""
+					attr.HoverBkgID = "about.button.bkg.hover"
+					attr.DownBkgID = "about.button.bkg.down"
 				end
 				parentbkg:AddChild(editextctrl)
 			end
