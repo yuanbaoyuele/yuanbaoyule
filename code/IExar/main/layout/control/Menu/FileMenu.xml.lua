@@ -39,7 +39,7 @@ function OnSelect_SaveAs(self)
 end
 
 function OnSelect_CloseTab(self)
-	local objTabCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
 	objTabCtrl:CloseCurrentTab()
 end
 

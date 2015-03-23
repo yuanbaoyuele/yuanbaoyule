@@ -30,6 +30,22 @@ function SetTitleText(objRootCtrl, strText)
 end
 
 
+function SetFocusStyle(self, bFocus)
+	local objRootCtrl = self
+
+	local objMax = objRootCtrl:GetControlObject("BrowserTitleCtrl.Caption.MaxBtn")
+	local objMin = objRootCtrl:GetControlObject("BrowserTitleCtrl.Caption.MinBtn")
+	local objClose = objRootCtrl:GetControlObject("BrowserTitleCtrl.Caption.CloseBtn")
+	local objRestore = objRootCtrl:GetControlObject("BrowserTitleCtrl.Caption.Restore")
+	
+	local bDisable = not bFocus
+	SetBtnStyleDisable(objMax, bDisable)
+	SetBtnStyleDisable(objMin, bDisable)
+	SetBtnStyleDisable(objClose, bDisable)
+	SetBtnStyleDisable(objRestore, bDisable)
+end
+
+
 ----事件--
 function OnClickCpationClose(self)
 	--tFunHelper.ReportAndExit()	
@@ -106,6 +122,19 @@ function UpdateTitle(objRootCtrl, objTabCtrl)
 	objRootCtrl:SetTitleText(strTabTitle)
 end
 
+
+
+function SetBtnStyleDisable(objBtn, bDisable)
+	local attr = objBtn:GetAttribute()
+
+	if bDisable then
+		attr.NormalBkgID = attr.DisableBkgID
+	else
+		attr.NormalBkgID = attr.ExtraBkgID
+	end	
+	
+	objBtn:Updata()
+end
 
 ------辅助函数---
 function GetHostWndByUIElem(objUIElem)

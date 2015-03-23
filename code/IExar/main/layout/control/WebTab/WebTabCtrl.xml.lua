@@ -378,12 +378,15 @@ function SetTabIco(objRootCtrl, strIcoPath, strIcoName)
 	end
 	
 	local xlgraphic = XLGetObject("Xunlei.XLGraphic.Factory.Object")
-	local objBitmap = xlgraphic:CreateBitmap(strIcoPath,"ARGB32")
+	local objBitmap = tFunHelper.GetIcoBitmapObj(strIcoName)
 	
 	local objImage = objRootCtrl:GetControlObject("WebTabCtrl.HeadImg")
-	if objImage then
+	if objBitmap then
 		objImage:SetBitmap(objBitmap)
-	end		
+	else
+		local strDefResID = tFunHelper.GetDefaultWebTabImgID()
+		objImage:SetResID(strDefResID)
+	end
 	
 	SetIcoName(objRootCtrl, strIcoName)
 	SaveIcoNameToHistory(objRootCtrl, strIcoName)

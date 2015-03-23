@@ -87,6 +87,9 @@ function AdjustTabSize(objRootCtrl)
 	
 	local objContLayout = objRootCtrl:GetControlObject("TabContainerCtrl.Container.Layout") 
 	local nFatherL, nFatherT, nFatherR, nFatherB = objContLayout:GetObjPos()
+	if nFatherR < 205 then
+		nFatherR = 205
+	end
 	local nFatherW = nFatherR - nFatherL
 	
 	local objAddBtn = objRootCtrl:GetControlObject("TabContainerCtrl.AddNewTab")
@@ -129,9 +132,14 @@ function AdjustTabSize(objRootCtrl)
 		
 		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
 		if nTotalNum == 1 then
-			objTabCtrl:SetObjPos(nLeft, 0, nLeft+300, "father.height")
+			local nRight = nLeft+300
+			if nRight > nFatherR then
+				nRight = nFatherR-(nAddBtnW+nBtnSpan)
+			end
+		
+			objTabCtrl:SetObjPos(nLeft, 0, nRight, "father.height")
 			objTabCtrl:SetCloseBtnVisible(false)
-			nFinalRight = nLeft+300-4
+			nFinalRight = nRight-4
 		end		
 	end
 	

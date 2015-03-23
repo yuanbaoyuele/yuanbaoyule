@@ -3,7 +3,7 @@ local tipUtil = tFunHelper.tipUtil
 
 -------事件---
 function OnInit_CloseTab(self)
-	local objTabContainer = tFunHelper.GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabContainer = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
 	if not objTabContainer then
 		return
 	end

@@ -15,6 +15,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
+						<limitchild>1</limitchild>
 					</attr>	
 					<children>	
 						<obj id="MainPanel.Head" class="BrowserHeadCtrl">
@@ -49,7 +50,7 @@
 								<width>father.width</width>
 								<height>6</height>
 								<texture>WebTab.BottomBkg.Line</texture>
-								<zorder>100</zorder>
+								<zorder>200</zorder>
 							</attr>		
 						</obj>				
 					</children>

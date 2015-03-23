@@ -5,6 +5,7 @@
 			<attr name="DownBkgID" type="string" />
 			<attr name="DisableBkgID" type="string" />
 			<attr name="HoverBkgID" type="string" />
+			<attr name="ExtraBkgID" type="string" />
 			<attr name="Bkg4In1ID" type="string" desc="自动扩展成4态ID"><default>general.button</default></attr>
 			<attr name="Enable" type="bool" ><default>true</default></attr>
 			<attr name="Visible" type="bool" ><default>true</default></attr>
