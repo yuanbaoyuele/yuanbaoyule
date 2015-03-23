@@ -10,7 +10,7 @@
 					<Text>添加或更改主页(C)...</Text>
 					<AccKey>C</AccKey>
 					<IconVisible>true</IconVisible>
-					<Icon>texture.search.baidu</Icon>
+					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
 				</eventlist>
