@@ -9,7 +9,7 @@ end
 
 ----
 function ShowWebTabList(self)
-	local objTabContainer = tFunHelper.GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabContainer = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
 	if not objTabContainer then
 		return
 	end
@@ -129,7 +129,7 @@ end
 function SetActiveTab(objMenuItem)
 	local attr = objMenuItem:GetAttribute()
 	local nWebTabID = attr.ExtraData
-	local objTabContainer = tFunHelper.GetMainCtrlChildObj("MainPanel.TabContainer")
+	local objTabContainer = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
 	if not objTabContainer then
 		return
 	end

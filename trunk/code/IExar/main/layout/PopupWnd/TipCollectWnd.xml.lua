@@ -2,6 +2,7 @@ local tipUtil = XLGetObject("API.Util")
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 
+local g_bHasMenu = false
 -------------窗口
 function OnCreate( self )
 	local objCollectWnd = self
@@ -38,11 +39,22 @@ end
 function OnFocusChange(self, bFocus)
 	local objRootCtrl = GetRootCtrlByWndObj(self)
 	local attr = objRootCtrl:GetAttribute()
-	
-	if not bFocus then
-		if not attr.bFix then
-			self:Show(0)
+		
+	if not bFocus and not attr.bFix then
+		-- local nCursorX, nCursorY = tipUtil:GetCursorPos() 	
+		-- local l, t, r, b = objRootCtrl:GetAbsPos()
+		-- local objWnd = self
+
+		-- local left,top,right,bottom = objWnd:HostWndRectToScreenRect(l, t, r, b)
+		-- if nCursorX > left and nCursorX < right and nCursorY>top and nCursorY<bottom then
+			-- return
+		-- end
+		
+		if g_bHasMenu then
+			return
 		end
+		
+		self:Show(0)
 	end	
 end
 
@@ -198,12 +210,20 @@ end
 
 
 function OnClickAddToBar(self)
+	InitMenuHelper()
 	tIEMenuHelper:ExecuteCMD("AddFav")
 end
 
 
 function OnClickAddArrow(self)
+	g_bHasMenu = true
 
+	local objAddtoBtn = self:GetOwnerControl()
+	InitMenuHelper()
+	tFunHelper.TryDestroyOldMenu(objAddtoBtn, "CollectWndMenu")
+	tFunHelper.CreateAndShowMenu(objAddtoBtn,  "CollectWndMenu", 20)
+	
+	g_bHasMenu = false
 end
 
 
@@ -302,6 +322,19 @@ function SetTabActiveStyle(objTab, bActive)
 
 end
 
+
+function InitMenuHelper()
+	local objActiveTab = tFunHelper.GetActiveTabCtrl()
+	if objActiveTab == nil or objActiveTab == 0 then
+		return
+	end
+	
+	local objBrowserCtrl = objActiveTab:GetBindBrowserCtrl()
+	if objBrowserCtrl then
+		local objUEBrowser = objBrowserCtrl:GetControlObject("browser")
+		tIEMenuHelper:Init(objUEBrowser)
+	end
+end
 
 function RouteToFather(self)
 	self:RouteToFather()
