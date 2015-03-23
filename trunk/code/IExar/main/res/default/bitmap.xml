@@ -70,7 +70,7 @@
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.dir.defaluticon.open" path="bitmap\collect.dir.defaluticon.open.png" />
-	<bitmap id="collect.file.defaluticon" path="bitmap\collect.file.defaluticon.png" />
+	<bitmap id="collect.file.defaluticon" path="bitmap\YBYL.Head.Logo.Default.png" />
 	
 	<texture id="Collect.Button.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Hover.png" />
 	<texture id="Collect.Button.Bkg.Down" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Down.png" />
