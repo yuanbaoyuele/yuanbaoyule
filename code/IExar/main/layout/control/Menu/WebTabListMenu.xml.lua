@@ -4,10 +4,29 @@ local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
 
 -------事件---
 function OnInitControl(self)
+	AdjustSelfPos(self)
 	ShowWebTabList(self)
 end
 
 ----
+function AdjustSelfPos(self)
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objAddressBar = objHeadCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")
+	if not objAddressBar then
+		return
+	end
+	
+	local nAddBarL, nAddBarT, nAddBarR, nAddBarB = objAddressBar:GetObjPos()
+	local nMenuHeight = GetMenuHeight(self)
+		
+	local nSelfL, nSelfT, nSelfR, nSelfB = self:GetObjPos()
+	self:SetObjPos(nSelfL, nSelfT, nSelfR, nSelfT+nMenuHeight )
+end
+
 function ShowWebTabList(self)
 	local objTabContainer = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
 	if not objTabContainer then
@@ -20,7 +39,7 @@ function ShowWebTabList(self)
 		return false
 	end
 
-	local nMaxShowHistory = 6
+	local nMaxShowHistory = GetMaxCount(self)
 	
 	local nTotalCount = 0
 	for nIndex=1, #tWebTabList do
@@ -102,6 +121,7 @@ function SetIcoImage(objMenuItem, tWebTabInfo)
 	end	
 	
 	if objBitmap then
+		objMenuItem:SetIconID("")
 		objMenuItem:SetIconBitmap(objBitmap)
 	end
 end
@@ -151,6 +171,22 @@ function BindMenuContainer(self, objMenuContainer, nMaxShowHistory, nTotalCount)
 
 	self:OnInitControl(objMenuContainer)
 end
+
+
+function GetMaxCount(objRootCtrl)
+	local nRealHeight = GetMenuHeight(objRootCtrl)
+	return math.floor(nRealHeight/20)
+end
+
+
+function GetMenuHeight(objRootCtrl)
+	local objMainWnd = tFunHelper.GetMainWndInst()
+	local l, t, r, b = objMainWnd:GetWindowRect()
+	local workleft, worktop, workright, workbottom = tipUtil:GetWorkArea()
+	
+	return workbottom
+end
+
 
 -----
 function IsRealString(str)

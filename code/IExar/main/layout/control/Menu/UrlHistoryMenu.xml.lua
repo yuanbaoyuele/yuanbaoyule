@@ -86,7 +86,6 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	local attr = objMenuItem:GetAttribute()
 	attr.Text = tHistoryInfo["strURL"]
 	attr.Endellipsis = true
-	-- attr.RightText = tHistoryInfo["strLocationName"]
 	attr.RightTextColor = "404040"
 	attr.RightTextHAligh = "left"
 	attr.TextRightSpan = 60

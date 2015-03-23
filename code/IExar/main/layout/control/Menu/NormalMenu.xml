@@ -158,7 +158,7 @@
 			<RightTextHAligh>right</RightTextHAligh>
 			<RightTextPos>10</RightTextPos>
 			<KeyFont>font.menuitemkey</KeyFont>
-			<Icon>YBYL.DropMenu.Check</Icon>
+			<Icon>YBYL.UrlIco.Default</Icon>
 			<IconPos>5</IconPos>
 			<IconVisible>false</IconVisible>
 		</attr>

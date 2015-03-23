@@ -19,7 +19,7 @@
 		<texture id="YBYL.AddressMenu.Select.Bkg"  image="bitmap\YBYL.AddressMenu.Select.Bkg.png" />
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
 		<texture id="YBYL.TipAbout.Bkg" image="bitmap\YBYL.TipAbout.Bkg.png" />
-		<texture id="YBYL.ToolTip.Bkg" type="ThreeInOneH" image="bitmap\YBYL.ToolTip.Bkg.png" />
+		<texture id="YBYL.ToolTip.Bkg" type="NineInOne" image="bitmap\YBYL.ToolTip.Bkg.png" />
 		<texture id="YBYL.Menu.Splitter" image="bitmap\YBYL.Menu.Splitter.Bkg.png" />
 		<texture id="YBYL.TitleBar.Bkg" image="bitmap\YBYL.TitleBar.Bkg.png" />
 		<texture id="YBYL.AddressBar.UrlSearch.Bkg" type="ThreeInOneH" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png" />
@@ -277,17 +277,6 @@
 			<texture id="YBYL.Scroll.Bar.Down" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="3" />
 			<texture id="YBYL.Scroll.Bar.Disable" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="1" />	
 		
-		<imagelist id="YBYL.ToolTip.Close" splitter="1" varyblock="1" image="bitmap\YBYL.ToolTip.Close.png"/>
-			<texture id="YBYL.ToolTip.Close.Normal"  imagelist="YBYL.ToolTip.Close" index="1" />
-			<texture id="YBYL.ToolTip.Close.Hover"  imagelist="YBYL.ToolTip.Close" index="2" />
-			<texture id="YBYL.ToolTip.Close.Down"  imagelist="YBYL.ToolTip.Close" index="3" />
-			<texture id="YBYL.ToolTip.Close.Disable"  imagelist="YBYL.ToolTip.Close" index="4" />	
-		
-		<imagelist id="YBYL.IntroduceWnd.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.Close.png"/>
-			<texture id="YBYL.IntroduceWnd.CloseBtn.Normal"  imagelist="YBYL.IntroduceWnd.CloseBtn" index="1" />
-			<texture id="YBYL.IntroduceWnd.CloseBtn.Hover"  imagelist="YBYL.IntroduceWnd.CloseBtn" index="2" />
-			<texture id="YBYL.IntroduceWnd.CloseBtn.Down" imagelist="YBYL.IntroduceWnd.CloseBtn" index="3" />
-			<texture id="YBYL.IntroduceWnd.CloseBtn.Disable" imagelist="YBYL.IntroduceWnd.CloseBtn" index="4" />	
 		
 		<imagelist id="YBYL.Menu.DeleteItem" splitter="1" varyblock="1" image="bitmap\YBYL.Menu.DeleteItem.png"/>
 			<texture id="YBYL.Menu.DeleteItem.Normal"  imagelist="YBYL.Menu.DeleteItem" index="1" />
