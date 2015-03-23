@@ -115,13 +115,9 @@
 <bitmap id="bitmap.search.baidu" path="bitmap\baidu.png"/>
 <bitmap id="bitmap.search.google" path="bitmap\google.png"/>
 <bitmap id="bitmap.search.livesearch" path="bitmap\livesearch.png"/>
-<texture id="texture.search.livesearch" path="bitmap\livesearch.png"/>
-<bitmap id="bitmap.search.soso" path="bitmap\soso.png"/>
-<bitmap id="bitmap.search.bing" path="bitmap\bing.png"/>
-<texture id="texture.search.baidu" image="bitmap\baidu.png"/>
+<texture id="texture.search.baidu" path="bitmap\baidu.png"/>
 <texture id="texture.search.google" path="bitmap\google.png"/>
-<texture id="texture.search.soso" path="bitmap\soso.png"/>
-<texture id="texture.search.bing" path="bitmap\bing.png"/>
+<texture id="texture.search.livesearch" path="bitmap\livesearch.png"/>
 <bitmap id="img.week" path="bitmap\week.png"/>
 <bitmap id="img.weekday" path="bitmap\weekday.png"/>
 <bitmap id="history.icon" path="bitmap\history.icon.png"/>
@@ -152,6 +148,7 @@
 <imagelist id="searchselect.imglist" splitter="1" varyblock="1" image="bitmap\searchselect.png"/>
 <texture id="searchselect.hover" imagelist="searchselect.imglist" index="1"/>
 <texture id="searchselect.down" imagelist="searchselect.imglist" index="2"/>
+<texture id="search.drap.bkg" type="NineInOne" image="bitmap\search.drap.bkg.png"/>
 
 		<!-- BufferView -->
 		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
