@@ -103,6 +103,8 @@ public:
 	static int FGetKeyState(lua_State* pLuaState);
 
 	static int FCreateParentWnd(lua_State* pLuaState);
+
+	static int GetForegroundProcessInfo(lua_State* pLuaState);
 	//нд╪Ч
 	static int GetMD5Value(lua_State* pLuaState);
 	static int GetStringMD5(lua_State* pLuaState);
@@ -203,6 +205,7 @@ public:
 
 	static int FSetKeyboardHook(lua_State* pLuaState);
 	static int FDelKeyboardHook(lua_State* pLuaState);
+
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 };

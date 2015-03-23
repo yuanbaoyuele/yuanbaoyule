@@ -18,7 +18,7 @@
 //#pragma comment(lib,"libeay32.lib")
 //#pragma comment(lib,"ssleay32.lib")
 #include <MsHtmcid.h>
-
+#include <Psapi.h>
 #include <mshtml.h> 
 #include <Exdisp.h>
 
@@ -85,6 +85,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"GetKeyState", FGetKeyState},
 	
 	{"CreateParentWnd", FCreateParentWnd},
+	{"GetForegroundProcessInfo", GetForegroundProcessInfo},
 
 	//文件
 	{"GetMD5Value", GetMD5Value},
@@ -181,6 +182,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	//快捷键相关
 	{"FSetKeyboardHook", FSetKeyboardHook},
 	{"FDelKeyboardHook", FDelKeyboardHook},
+
+
 	{NULL, NULL}
 };
 
@@ -2211,6 +2214,27 @@ int LuaAPIUtil::FCreateParentWnd(lua_State* pLuaState)
 	return 1;
 }
 
+int LuaAPIUtil::GetForegroundProcessInfo(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil && *ppUtil)
+	{
+		HWND hwndForeground = ::GetForegroundWindow();
+		DWORD dwPID;
+		GetWindowThreadProcessId(hwndForeground, &dwPID);
+		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPID);
+		TCHAR buf[MAX_PATH] = {0};
+		GetModuleFileNameEx(hProcess, NULL, buf, MAX_PATH);
+		std::string strUtf8;
+		BSTRToLuaString(buf,strUtf8);
+		lua_pushlightuserdata(pLuaState, hwndForeground);
+		lua_pushstring(pLuaState, strUtf8.c_str());
+		return 2;
+	}
+
+	lua_pushnil(pLuaState);
+	return 1;
+}
 
 long LuaAPIUtil::ShellExecHelper(HWND hWnd, const char* lpOperation, const char* lpFile, const char* lpParameters, const char* lpDirectory, const char* lpShowCmd, int iShowCmd)
 {
@@ -4459,3 +4483,6 @@ int LuaAPIUtil::GetIEHistoryInfo(lua_State *pLuaState)
 	}
 	return 0;
 }
+
+
+
