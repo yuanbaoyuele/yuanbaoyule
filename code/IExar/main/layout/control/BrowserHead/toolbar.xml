@@ -61,6 +61,7 @@
 								<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseLeave" />
 								<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageLeftButtonClick" />
 								<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageLeftButtonFocusChange" />
+								<event name="OnLButtonDown" file="toolbar.xml.lua" func="OnMainPageLeftLButtonDown" />
 							</eventlist>
 						</obj>
 						<!--源-->
@@ -144,6 +145,7 @@
 								<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageLeftButtonMouseLeave" />
 								<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageLeftButtonClick" />
 								<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageLeftButtonFocusChange" />
+								<event name="OnLButtonDown" file="toolbar.xml.lua" func="OnMainPageLeftLButtonDown" />
 							</eventlist>
 						</obj>
 						<!--页面-->
@@ -163,6 +165,9 @@
 								<ForegroundWidth>5</ForegroundWidth>
 								<ForegroundHeight>3</ForegroundHeight>
 							</attr>
+							<eventlist>
+								<event name="OnClick" file="toolbar.xml.lua" func="OnPagePClick" />
+							</eventlist>
 						</obj>
 						<!--安全-->
 						<obj id="Layout.SafeS.Left" class="TipAddin.Button">
@@ -181,6 +186,9 @@
 								<ForegroundWidth>5</ForegroundWidth>
 								<ForegroundHeight>3</ForegroundHeight>
 							</attr>
+							<eventlist>
+								<event name="OnClick" file="toolbar.xml.lua" func="OnSafeClick" />
+							</eventlist>
 						</obj>
 						<!--工具-->
 						<obj id="Layout.ToolO.Left" class="TipAddin.Button">

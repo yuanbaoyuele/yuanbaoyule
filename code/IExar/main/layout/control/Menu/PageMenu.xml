@@ -1,0 +1,274 @@
+﻿<xlue>
+	<objtemplate id="page.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="newwindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建窗口(N)</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+N</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="cut" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>剪切(T)</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+X</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="copy" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>复制(C)</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+C</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="paste" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>粘贴(P)</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+V</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="livesearchchange" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>使用Live Search转换</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="windowlivemail" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>使用Windows Live发送电子邮件</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="windowliveblog" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>使用Windows Live撰写博客</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="allspeed" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>所有加速器</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="othersave" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>另存为(A)...</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="sendthispagewithmail" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>使用电子邮件发送此页面(E)...</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="sendthislinkwithmail" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>使用电子邮件发送此链接(L)...</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="editbyexcel" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>使用Microsoft Office Excel编辑(D)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="adapview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>兼容性试图(V)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="adapviewset" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>兼容性试图设置(V)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="zoom" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>缩放(Z)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="textsize" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>文字大小(X)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="style" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>样式(Y)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="code" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>编码(G)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="insercursorview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>插入光标浏览(B)</Text>
+					<AccKey></AccKey>
+					<RightText>F7</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="attribute" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>属性(R)</Text>
+					<AccKey></AccKey>
+					<RightText>F7</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+				<obj id="sourceview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>查看源文件(S)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="PageMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>470</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>250</width>
+				<height>470</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>page.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
