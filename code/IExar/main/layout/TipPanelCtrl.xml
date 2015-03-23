@@ -74,7 +74,7 @@
 									<eventlist>
 										<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitHeadWnd" />
 									</eventlist>
-								</obj> <!--MainPanel.Head end-->
+								</obj> 
 								
 								<obj id="MainPanel.WebContainer" class="LayoutObject">
 									<attr>

@@ -106,6 +106,7 @@ function OnInitControl(self)
 	local bShow = attr.DeleteImgVisible
 	self:ShowDeleteBtn(bShow)
 	self:SetBkgResID(self, attr.ItemBkg)
+	CreateIconObject(self)
 end
 
 function SetFontColorNormal(self,color)
@@ -241,6 +242,26 @@ function SetIconVisible(self, bVisible )
 	if icon ~= nil then
 		icon:SetVisible(bVisible)
 	end	
+end
+
+
+function CreateIconObject(self)
+	local attr = self:GetAttribute()
+	local icon = self:GetControlObject( "icon" )
+	if icon == nil then
+		local uiFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
+		local xarManager = XLGetObject("Xunlei.UIEngine.XARManager")
+		icon = uiFactory:CreateUIObject("icon", "ImageObject")
+		if icon ~= nil then
+			icon:SetResProvider(xarManager)
+			icon:SetDrawMode( 1 )
+			icon:SetAntialias( 2 )
+			self:AddChild( icon )
+		end
+	end
+	icon:SetObjPos( ""..attr.IconPos, "(father.height-"..attr.IconHeight..")/2", ""..attr.IconPos.."+"..attr.IconWidth, "(father.height+"..attr.IconHeight..")/2" )
+	icon:SetResID( attr.Icon )
+	icon:SetVisible( attr.IconVisible )
 end
 
 

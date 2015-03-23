@@ -188,6 +188,7 @@
 			<SeparatorHeight>1</SeparatorHeight>
 			<Type>1</Type>
 			<Icon>YBYL.Menu.Splitter.Bkg</Icon>
+			<IconVisible>false</IconVisible>
         </attr>
     </objtemplate>
 	
