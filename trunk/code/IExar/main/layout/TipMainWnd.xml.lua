@@ -54,6 +54,19 @@ end
 
 function OnCreate( self )
 	 PopupInDeskCenter(self)
+	 local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	 local dwCurrentPID = tipUtil:GetCurrentProcessId()
+	 local timerID = timerManager:SetTimer( function ( item, id )
+						local hForegroundWnd = tipUtil:GetForegroundProcessInfo()
+						if hForegroundWnd ~= nil then
+							local dwPID = tipUtil:GetWndProcessThreadId(hForegroundWnd)
+							if dwPID == dwCurrentPID then
+								tFunHelper.SetMainWndFocusStyle(true)
+							else
+								tFunHelper.SetMainWndFocusStyle(false)
+							end
+						end
+						   end, 100)
 end
 
 
@@ -95,7 +108,7 @@ end
 
 
 function OnFocusChange(self, bFocus)
-	tFunHelper.SetMainWndFocusStyle(bFocus)
+	--tFunHelper.SetMainWndFocusStyle(bFocus)
 end
 
 
