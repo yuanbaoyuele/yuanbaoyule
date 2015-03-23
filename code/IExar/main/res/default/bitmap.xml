@@ -118,7 +118,7 @@
 <texture id="texture.search.livesearch" path="bitmap\livesearch.png"/>
 <bitmap id="bitmap.search.soso" path="bitmap\soso.png"/>
 <bitmap id="bitmap.search.bing" path="bitmap\bing.png"/>
-<bitmap id="texture.search.baidu" path="bitmap\baidu.png"/>
+<texture id="texture.search.baidu" image="bitmap\baidu.png"/>
 <texture id="texture.search.google" path="bitmap\google.png"/>
 <texture id="texture.search.soso" path="bitmap\soso.png"/>
 <texture id="texture.search.bing" path="bitmap\bing.png"/>
