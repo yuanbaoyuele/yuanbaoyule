@@ -125,3 +125,14 @@ function OnSafeClick(self)
 	self:Updata()
 	tFunHelper.CreateAndShowMenu(self, "SafeMenu", 26, false, true)
 end
+
+function OnPosChange(self, oldl, oldt, oldr, oldb, newl, newr, newr, newb)
+	local owner = self:GetOwnerControl()
+	local l, t, r, b = owner:GetObjPos()
+	local width = r-l
+	if width < 738 then
+		self:SetObjPos2("father.width-"..(411-738+width), 87, 411-738+width, 25)
+	else
+		self:SetObjPos2("father.width-"..(411), 87, 411, 25)
+	end
+end
