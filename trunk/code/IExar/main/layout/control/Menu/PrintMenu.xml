@@ -1,14 +1,15 @@
 ﻿<xlue>
-	<objtemplate id="mainpage.context" class="MenuObject" templateid="menu.object.template">
+	<objtemplate id="print.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> <!--阴影-->
 		</attr>
 		<children>
-			<obj id="modify" class="MenuItemObject" templateid="menu.context.item">
+			<obj id="ptint1" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
-					<Text>添加或更改主页(C)...</Text>
-					<AccKey></AccKey>
+					<Text>打印(P)...</Text>
+					<AccKey>P</AccKey>
+					<RightText>Ctrl+P</RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
 				</attr>
@@ -16,10 +17,23 @@
 				</eventlist>
 			</obj>
 			
-			<obj id="delete" class="MenuItemObject" templateid="menu.context.item">
+			<obj id="printview" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
-					<Text>删除(R)</Text>
-					<AccKey></AccKey>
+					<Text>打印预览(V)...</Text>
+					<AccKey>V</AccKey>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="printview2" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>页面设置(U)...</Text>
+					<AccKey>U</AccKey>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -27,7 +41,7 @@
 		</children>
 	</objtemplate>
 	
-	<objtreetemplate id="MainPageMenuTree" class="ObjectTreeTemplate">
+	<objtreetemplate id="PrintMenuTree" class="ObjectTreeTemplate">
 		<attr>
 			<left>0</left>
 			<top>0</top>
@@ -49,7 +63,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						<ContextID>mainpage.context</ContextID>
+						<ContextID>print.context</ContextID>
 						<BknID>YBYL.Menu.Bkg</BknID>
 					</attr>
 				</obj>

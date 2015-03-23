@@ -113,9 +113,9 @@ end
 
 function OnControlFocusChange(self, focus)
 	if not focus then
-		local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
-		local hostwnd = hostwndMgr:GetHostWnd("BoltFox.SearchPopupWnd")
 		AsynCall(function ()
+				local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+				local hostwnd = hostwndMgr:GetHostWnd("BoltFox.SearchPopupWnd")
 				if hostwnd and not hostwnd:GetFocus() then
 					hostwnd:Destroy()
 				
@@ -138,16 +138,17 @@ function OnControlFocusChange(self, focus)
 			local editextctrl = self:GetControlObject("editextctrl_layout") 
 			if not editextctrl then
 				local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
-				editextctrl = objFactory:CreateUIObject("editextctrl_layout", "FillObject")
+				editextctrl = objFactory:CreateUIObject("editextctrl_layout", "TextureObject")
 				local parentbkg =  self:GetControlObject("border")
 				local l, t, r, b =  parentbkg:GetObjPos()
 				editextctrl:SetObjPos(l, b+1, r, b+33)
-				editextctrl:SetSrcColor("#ffffff")
-				editextctrl:SetDestColor("#ffffff")
-				editextctrl:SetDestPt(r-l, 32)
-				editextctrl:SetSrcPt(0, 0)
-				editextctrl:SetBlendType("Source")
-				editextctrl:SetFillType("Monochrome")
+				-- editextctrl:SetSrcColor("#ffffff")
+				-- editextctrl:SetDestColor("#ffffff")
+				-- editextctrl:SetDestPt(r-l, 32)
+				-- editextctrl:SetSrcPt(0, 0)
+				-- editextctrl:SetBlendType("Source")
+				-- editextctrl:SetFillType("Monochrome")
+				editextctrl:SetTextureID("search.drap.bkg")
 				editextctrl:SetZorder(999999999)
 				for i=1, #SearchEngineMap do
 					local btn = self:GetControlObject("minibtn"..i)
@@ -169,6 +170,21 @@ function OnControlFocusChange(self, focus)
 					attr.NormalBkgID = ""
 					attr.HoverBkgID = "searchselect.hover"
 					attr.DownBkgID = "searchselect.down"
+				end
+				local lineobj = self:GetControlObject("searchctrlline")
+				if not lineobj then
+					lineobj = objFactory:CreateUIObject("searchctrlline", "TextureObject")
+					editextctrl:AddChild(lineobj)
+					lineobj:SetObjPos2(r-l-62, 5, 1, "father.height-10")
+					lineobj:SetTextureID("YBYL.Menu.Splitter.Vertical")
+				end
+				local lasttext = self:GetControlObject("searchctrltext")
+				if not lasttext then
+					lasttext = objFactory:CreateUIObject("searchctrltext", "TextObject")
+					editextctrl:AddChild(lasttext)
+					lasttext:SetObjPos2(r-l-53, 8, 50, 22)
+					lasttext:SetText("查找...")
+					lasttext:SetTextFontResID("font.text12")
 				end
 				parentbkg:AddChild(editextctrl)
 			end
