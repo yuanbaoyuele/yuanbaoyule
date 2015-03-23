@@ -25,6 +25,7 @@
 					<Text>InPrivate 浏览</Text>
 					<AccKey>I</AccKey>
 					<RightText>Ctrl+Shift+P</RightText>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InPrivate" />
@@ -35,6 +36,7 @@
 				<attr>
 					<Text>重新打开上次浏览会话</Text>
 					<AccKey>S</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_OpenLast" />
@@ -50,6 +52,7 @@
 				<attr>
 					<Text>InPrivate 筛选</Text>
 					<RightText>Ctrl+Shift+F</RightText>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_PrivateFilter" />
@@ -60,6 +63,7 @@
 				<attr>
 					<Text>InPrivate 筛选设置</Text>
 					<AccKey>S</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_PrivateProfile" />
@@ -75,6 +79,7 @@
 				<attr>
 					<Text>弹出窗口阻止程序</Text>
 					<AccKey>P</AccKey>
+					<Enable>0</Enable>
 					<!--SubMenuID>lookupmenu.submenu.zoom</SubMenuID-->
 				</attr>
 			</obj>
@@ -83,6 +88,7 @@
 				<attr>
 					<Text>SmartScreen 筛选器</Text>
 					<AccKey>T</AccKey>
+					<Enable>0</Enable>
 					<!--SubMenuID>lookupmenu.submenu.zoom</SubMenuID-->
 				</attr>
 			</obj>
@@ -91,6 +97,7 @@
 				<attr>
 					<Text>管理加载项</Text>
 					<AccKey>A</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ManagePlugin" />
@@ -107,6 +114,7 @@
 				<attr>
 					<Text>兼容性视图</Text>
 					<AccKey>V</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_CompatibleView" />
@@ -118,6 +126,7 @@
 				<attr>
 					<Text>兼容性视图设置</Text>
 					<AccKey>B</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_CompatibleSet" />
@@ -134,6 +143,7 @@
 				<attr>
 					<Text>订阅该源</Text>
 					<AccKey>F</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_Subscribe" />
@@ -144,6 +154,7 @@
 				<attr>
 					<Text>源发现</Text>
 					<AccKey>E</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_FindSource" />
@@ -170,6 +181,7 @@
 				<attr>
 					<Text>开发人员工具</Text>
 					<AccKey>L</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_DevelopTool" />
@@ -186,6 +198,7 @@
 				<attr>
 					<Text>诊断连接问题</Text>
 					<AccKey>L</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_Diagnose" />

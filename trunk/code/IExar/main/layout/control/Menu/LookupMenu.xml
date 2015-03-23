@@ -407,6 +407,7 @@
 				<attr>
 					<Text>文字大小</Text>
 					<AccKey>X</AccKey>
+					<Enable>0</Enable>
 					<!--SubMenuID></SubMenuID-->
 				</attr>
 			</obj>
@@ -415,6 +416,7 @@
 				<attr>
 					<Text>编码</Text>
 					<AccKey>D</AccKey>
+					<Enable>0</Enable>
 					<!--SubMenuID></SubMenuID-->
 				</attr>
 			</obj>
@@ -423,6 +425,7 @@
 				<attr>
 					<Text>样式</Text>
 					<AccKey>Y</AccKey>
+					<Enable>0</Enable>
 					<!--SubMenuID></SubMenuID-->
 				</attr>
 			</obj>
@@ -432,6 +435,7 @@
 					<Text>插入光标浏览</Text>
 					<AccKey>B</AccKey>
 					<RightText>F7</RightText>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_InsertCursor" />
@@ -458,6 +462,7 @@
 					<Text>安全报告</Text>
 					<AccKey>S</AccKey>
 					<Enable>0</Enable>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_Report" />
@@ -479,6 +484,7 @@
 				<attr>
 					<Text>网页隐私策略</Text>
 					<AccKey>V</AccKey>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_PrivacyPolicy" />

@@ -4,6 +4,7 @@
 			<ProcessTabChange file="BrowserTitleCtrl.xml.lua" func="ProcessTabChange"/>
 			<SetMaxBtnStyle file="BrowserTitleCtrl.xml.lua" func="SetMaxBtnStyle"/>
 			<SetTitleText file="BrowserTitleCtrl.xml.lua" func="SetTitleText"/>
+			<SetFocusStyle file="BrowserTitleCtrl.xml.lua" func="SetFocusStyle"/>
         </method_def>
 		
         <event_def>
@@ -50,6 +51,7 @@
 								<width>21</width>
 								<height>21</height>
 								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+								<ExtraBkgID>YBYL.Caption.CloseBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
 								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
 								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
@@ -66,6 +68,7 @@
 								<width>21</width>
 								<height>21</height>
 								<NormalBkgID>YBYL.Caption.MaxBtn.Normal</NormalBkgID>
+								<ExtraBkgID>YBYL.Caption.MaxBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.MaxBtn.Down</DownBkgID>
 								<HoverBkgID>YBYL.Caption.MaxBtn.Hover</HoverBkgID>
 								<DisableBkgID>YBYL.Caption.MaxBtn.Disable</DisableBkgID>
@@ -83,6 +86,7 @@
 								<width>21</width>
 								<height>21</height>
 								<NormalBkgID>YBYL.Caption.RestoreBtn.Normal</NormalBkgID>
+								<ExtraBkgID>YBYL.Caption.RestoreBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.RestoreBtn.Down</DownBkgID>
 								<HoverBkgID>YBYL.Caption.RestoreBtn.Hover</HoverBkgID>
 								<DisableBkgID>YBYL.Caption.RestoreBtn.Disable</DisableBkgID>
@@ -100,6 +104,7 @@
 								<width>21</width>
 								<height>21</height>
 								<NormalBkgID>YBYL.Caption.MinBtn.Normal</NormalBkgID>
+								<ExtraBkgID>YBYL.Caption.MinBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.MinBtn.Down</DownBkgID>
 								<HoverBkgID>YBYL.Caption.MinBtn.Hover</HoverBkgID>
 								<DisableBkgID>YBYL.Caption.MinBtn.Disable</DisableBkgID>

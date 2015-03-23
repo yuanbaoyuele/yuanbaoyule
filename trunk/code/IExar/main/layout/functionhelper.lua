@@ -903,24 +903,30 @@ end
 
 function GetIcoBitmapObj(strIcoName)
 	if not IsRealString(strIcoName) then
-		return -1
+		return nil, -1
 	end
 
 	local strIcoDir = GetIcoDir()
 	local strIcoPath = tipUtil:PathCombine(strIcoDir, strIcoName)
 	if not tipUtil:QueryFileExists(strIcoPath) then
-		return -2	
+		return nil, -2	
 	end
 		
 	local xlgraphic = XLGetObject("Xunlei.XLGraphic.Factory.Object")
 	local objBitmap = xlgraphic:CreateBitmap(strIcoPath,"ARGB32") --XGP做了隐试处理
-	return objBitmap
+	return objBitmap, 0
 end
 
 function GetDefaultIcoImgID()
 	local strDefaultImgID = "YBYL.UrlIco.Default"
 	return strDefaultImgID
 end
+
+function GetDefaultWebTabImgID()
+	local strDefaultImgID = "Title.Logo"
+	return strDefaultImgID
+end
+
 
 ------------UI--
 
@@ -1073,8 +1079,11 @@ end
 
 function SetMainWndFocusStyle(bFocus)
 	local objBkg = GetMainCtrlChildObj("bkg")
+	local objMainTitle = GetMainCtrlChildObj("MainPanel.Title")
+	
 	if bFocus then
 		objBkg:SetTextureID("YBYL.MainWnd.Bkg")	
+		objMainTitle:SetFocusStyle(true)
 	else
 		local nX, nY = tipUtil:GetCursorPos() 	
 		local objMainWndInst = GetMainWndInst()
@@ -1084,6 +1093,7 @@ function SetMainWndFocusStyle(bFocus)
 		end
 		
 		objBkg:SetTextureID("YBYL.MainWnd.Bkg.Disable")	
+		objMainTitle:SetFocusStyle(false)
 	end
 end
 
@@ -1617,7 +1627,7 @@ end
 
 
 function UpdateCollectList()
-	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end
@@ -1645,7 +1655,7 @@ end
 
 
 function SetToolTipText(strText)
-	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end
@@ -1660,7 +1670,7 @@ end
 
 
 function ShowToolTip(bShow)
-	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end
@@ -1974,6 +1984,7 @@ obj.SaveIcoNameToFile = SaveIcoNameToFile
 obj.GetIcoDir = GetIcoDir
 obj.GetIcoBitmapObj = GetIcoBitmapObj
 obj.GetDefaultIcoImgID = GetDefaultIcoImgID
+obj.GetDefaultWebTabImgID = GetDefaultWebTabImgID
 obj.UpdateCollectList = UpdateCollectList
 obj.ShowCollectWnd = ShowCollectWnd
 obj.GetCollectWndRootCtrl = GetCollectWndRootCtrl

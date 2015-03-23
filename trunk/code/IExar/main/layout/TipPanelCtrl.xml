@@ -24,6 +24,7 @@
 								<width>father.width</width>
 								<height>father.height</height>
 								<texture>YBYL.MainWnd.Bkg</texture>
+								<limitchild>1</limitchild>
 							</attr>		
 						</obj>
 						

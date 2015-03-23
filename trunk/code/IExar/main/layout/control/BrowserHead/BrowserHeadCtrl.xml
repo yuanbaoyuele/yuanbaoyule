@@ -144,6 +144,7 @@
 								<top>59</top>
 								<width>father.width-80</width>
 								<height>26</height>
+								<limitchild>1</limitchild>
 							</attr>	
 						</obj>
 						<obj id="head.toolbar.instance" class="head.toolbar">

@@ -13,7 +13,7 @@
 			<children>
 				<obj id="mainwnd.resize.right" class="ResizeObject" templateid = "collect.caption.failhittest">
 					<attr>
-						<left>father.width-3</left>
+						<left>father.width-13</left>
 						<width>20</width>
 						<height>father.height</height>
 						<type>right</type>
@@ -22,32 +22,11 @@
 				</obj>
 				<obj id="mainwnd.resize.bottom" class="ResizeObject" templateid = "collect.caption.failhittest">
 					<attr>
-						<top>father.height-3</top>
+						<top>father.height-13</top>
 						<width>father.width</width>
 						<height>20</height>
 						<type>bottom</type>
 						<zorder>100000000</zorder>
-					</attr>
-				</obj>
-				
-				<obj id="mainwnd.resize.left" class="ResizeObject" templateid = "collect.caption.failhittest">
-					<attr>
-						<left>-15</left>
-						<width>20</width>
-						<height>father.height</height>
-						<type>left</type>
-						<zorder>100000000</zorder>
-					</attr>
-				</obj>
-				
-				<obj id="mainwnd.resize.bottomleft" class="ResizeObject" templateid = "collect.caption.failhittest">
-					<attr>
-						<left>-15</left>
-						<top>father.height-5</top>
-						<width>20</width>
-						<height>20</height>
-						<type>bottomleft</type>
-						<zorder>100000001</zorder>
 					</attr>
 				</obj>
 				

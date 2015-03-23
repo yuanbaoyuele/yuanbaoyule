@@ -147,8 +147,8 @@ function SetIcoImage(objImage, tCollectInfo)
 	local strDefaultImgID = tFunHelper.GetDefaultIcoImgID()
 	objImage:SetResID(strDefaultImgID)
 	
-	local objBitmap = tFunHelper.GetIcoBitmapObj(strIcoName)
-	if objBitmap and objBitmap == -2 then
+	local objBitmap, nRet = tFunHelper.GetIcoBitmapObj(strIcoName)
+	if nRet == -2 then
 		tFunHelper.DownLoadIco(tCollectInfo["strURL"], function() end)
 		return
 	end	

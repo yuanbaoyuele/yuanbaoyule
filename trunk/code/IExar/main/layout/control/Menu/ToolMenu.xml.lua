@@ -13,7 +13,7 @@ function OnSelect_ClearCollect(self)
 	tFunHelper.ClearFileInfo(strFileKey)
 	tFunHelper.UpdateCollectList()
 	
-	local objHeadCtrl = tFunHelper.GetMainCtrlChildObj("MainPanel.Head")
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	if not objHeadCtrl then
 		return
 	end
@@ -65,7 +65,7 @@ end
 
 function OnSelect_WindowsUpdate(self)
 	local strUpdateUrl = "http://windowsupdate.microsoft.com/windowsupdate/v6/default.aspx?ln=zh-cn"
-	tFunHelper.OpenURLInCurTab(strUpdateUrl)
+	tFunHelper.OpenURLInCurTab(strSupportUrl)
 end
 
 function OnSelect_DevelopTool(self)

@@ -95,8 +95,8 @@ function SetIcoImage(objMenuItem, tWebTabInfo)
 	local strDefaultImgID = tFunHelper.GetDefaultIcoImgID()
 	objMenuItem:SetIconID(strDefaultImgID)
 	
-	local objBitmap = tFunHelper.GetIcoBitmapObj(strIcoName)
-	if objBitmap and objBitmap == -2 then
+	local objBitmap, nRet = tFunHelper.GetIcoBitmapObj(strIcoName)
+	if nRet == -2 then
 		tFunHelper.DownLoadIco(tWebTabInfo["strURL"], function() end)
 		return
 	end	
