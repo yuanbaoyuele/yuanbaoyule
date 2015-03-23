@@ -253,6 +253,9 @@ function CreatePopupTipWnd()
 		local bSucc = CreateWndByName(strHostWndName, strTreeName)
 	end
 	
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	FunctionObj.InitToolTip()
+	
 	return true
 end
 

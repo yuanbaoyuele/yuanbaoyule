@@ -142,7 +142,12 @@ function OnPosChange(self, oldl, oldt, oldr, oldb, newl, newr, newr, newb)
 	local l, t, r, b = owner:GetObjPos()
 	local width = r-l
 	if width < 738 then
-		self:SetObjPos2("father.width-"..(411-738+width), 87, 411-738+width, 25)
+		local newWidth = 411-738+width
+		if newWidth<0 then
+			newWidth = 0
+		end
+	
+		self:SetObjPos2("father.width-"..(411-738+width), 87, newWidth, 25)
 	else
 		self:SetObjPos2("father.width-"..(411), 87, 411, 25)
 	end

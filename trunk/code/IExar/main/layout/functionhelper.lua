@@ -1654,73 +1654,6 @@ function FormatURL(strURL)
 end
 
 
-function SetToolTipText(strText)
-	local objHeadCtrl = GetHeadCtrlChildObj("MainPanel.Head")
-	if not objHeadCtrl then
-		return
-	end
-	
-	local objToolTip = objHeadCtrl:GetControlObject("BrowserHeadCtrl.ToolTipCtrl")
-	if not objToolTip then
-		return
-	end
-
-	objToolTip:SetToolTipText(strText)
-end
-
-
-function ShowToolTip(bShow)
-	local objHeadCtrl = GetHeadCtrlChildObj("MainPanel.Head")
-	if not objHeadCtrl then
-		return
-	end
-	
-	local objToolTip = objHeadCtrl:GetControlObject("BrowserHeadCtrl.ToolTipCtrl")
-	if not objToolTip then
-		return
-	end
-
-	objToolTip:ShowToolTip(bShow)
-end
-
-
-function PopupToolTipOneDay()
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local nLastBubbleUTC = tonumber(tUserConfig["nLastToolTipUTC"]) 
-	
-	if not IsNilString(nLastBubbleUTC) and not CheckTimeIsAnotherDay(nLastBubbleUTC) then
-		return
-	end
-	
-	local nNoShowFilterBubble = tonumber(tUserConfig["nNoShowFilterBubble"]) 
-	if not IsNilString(nNoShowFilterBubble) then
-		return
-	end
-
-	SetToolTipText("已智能帮您去除广告")
-	ShowToolTip(true)
-	
-	tUserConfig["nLastToolTipUTC"] = tipUtil:GetCurrentUTCTime()
-	SaveConfigToFileByKey("tUserConfig")
-end
-
-
-function GetFilterState()
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local bOpenFilter = tUserConfig["bOpenFilter"]
-
-	return bOpenFilter
-end
-
-
-function SetFilterState(bOpenFilter)
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-		
-	tUserConfig["bOpenFilter"] = bOpenFilter
-	tipUtil:FYBFilter(bOpenFilter)
-	SaveConfigToFileByKey("tUserConfig")
-end
-
 
 ---升级--
 local g_bIsUpdating = false
@@ -1906,6 +1839,92 @@ function GetResourceDir()
 end
 
 --
+-------------悬浮窗
+local g_objToolTipWnd = nil
+function InitToolTip()
+	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
+	local tipsHostWndTemplate = templateMananger:GetTemplate("ToolTipWnd","HostWndTemplate")
+	if tipsHostWndTemplate == nil then return nil end
+	
+	local tipsHostWnd = tipsHostWndTemplate:CreateInstance("ToolTipWndIns")
+	if tipsHostWnd == nil then return nil end
+
+	local objectTreeTemplate = templateMananger:GetTemplate("ToolTipTree", "ObjectTreeTemplate")
+	if objectTreeTemplate == nil then return nil end
+	
+	local uiObjectTree = objectTreeTemplate:CreateInstance("ToolTipTreeIns")
+	if uiObjectTree == nil then return nil end
+	
+	tipsHostWnd:BindUIObjectTree(uiObjectTree)
+
+	local nSuccess = tipsHostWnd:Create()
+	if not nSuccess then
+		return nil
+	end
+	
+	tipsHostWnd:SetVisible(false)
+	g_objToolTipWnd = tipsHostWnd
+	
+	return tipsHostWnd
+end
+
+
+function SetToolTipText(strText)
+	local objToolTipWnd = g_objToolTipWnd
+	if objToolTipWnd == nil then return end
+	
+	local objTree = objToolTipWnd:GetBindUIObjectTree()
+	if objTree == nil then return end
+	
+	local objRootCtrl = objTree:GetUIObject("RootCtrl")
+	if objRootCtrl == nil then return end
+	
+	objRootCtrl:SetToolTipText(strText)
+end
+
+
+function SetToolTipPos()
+	local objToolTipWnd = g_objToolTipWnd
+	if objToolTipWnd == nil then return end
+	
+	local objToolTipTree = objToolTipWnd:GetBindUIObjectTree()
+	if objToolTipTree == nil then return end
+	
+	local objRootCtrl = objToolTipTree:GetUIObject("RootCtrl")
+	if objRootCtrl == nil then return end
+		
+	local nToolLeft, nToolTop, nToolRight, nToolBottom = objToolTipWnd:GetWindowRect()
+	local nWidth = objRootCtrl:GetToolTipWidth()
+	local nToolX, nToolY = tipUtil:GetCursorPos()
+	objToolTipWnd:Move(nToolX, nToolY+20, nWidth, nToolBottom-nToolTop) 
+
+	local nDeskLeft, nDeskTop, nDeskRight, nDeskBottom = tipUtil:GetWorkArea()
+	local nToolLeft, nToolTop, nToolRight, nToolBottom = objToolTipWnd:GetWindowRect()
+	local nToolHeight = nToolBottom - nToolTop
+	
+	if nToolRight > nDeskRight then
+		local nWidth = objRootCtrl:GetToolTipWidth()
+		objToolTipWnd:SetPositionByObject(nDeskRight-nWidth, nToolTop, nWidth, nToolBottom-nToolTop) 
+	end
+end
+
+
+function ShowToolTip(bShow, strText)
+	local objToolTipWnd = g_objToolTipWnd
+	if objToolTipWnd == nil then return end
+	
+	if IsRealString(strText) then
+		SetToolTipText(strText)
+	end
+	
+	if bShow then
+		SetToolTipPos()
+		objToolTipWnd:DelayPopup(10)
+	else
+		objToolTipWnd:SetVisible(false)
+	end
+end
+
 
 ------------------文件--
 
@@ -1962,11 +1981,6 @@ obj.CreateSubWndByName = CreateSubWndByName
 obj.SetMainWndFocusStyle = SetMainWndFocusStyle
 obj.ShowHeadWindow = ShowHeadWindow
 
-obj.SetToolTipText = SetToolTipText
-obj.ShowToolTip = ShowToolTip
-obj.PopupToolTipOneDay = PopupToolTipOneDay
-obj.GetFilterState = GetFilterState
-obj.SetFilterState = SetFilterState
 
 --文件
 obj.GetCfgPathWithName = GetCfgPathWithName
@@ -2022,6 +2036,10 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 
+--悬浮窗
+obj.InitToolTip = InitToolTip
+obj.SetToolTipText = SetToolTipText
+obj.ShowToolTip = ShowToolTip
 
 XLSetGlobal("YBYL.FunctionHelper", obj)
 

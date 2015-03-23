@@ -46,6 +46,16 @@ function OnClickRefreshBtn(self)
 	end	
 end
 
+
+function OnMouseEnterGoback(self)
+	tFunHelper.ShowToolTip(true, "返回")
+end
+
+function HideToolTip(self)
+	tFunHelper.ShowToolTip(false)
+end
+
+
 ----
 function GetCurrentBrowser(objRootCtrl)
 	local attr = objRootCtrl:GetAttribute()

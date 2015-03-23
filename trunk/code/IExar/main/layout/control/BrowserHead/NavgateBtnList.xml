@@ -38,6 +38,8 @@
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGobackBtn" />
+								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterGoback" />
+								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 						

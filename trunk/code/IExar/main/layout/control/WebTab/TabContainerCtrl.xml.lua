@@ -223,7 +223,7 @@ end
 
 
 function HideToolTip()
-	tFunHelper.ShowToolTip(false)
+	
 end
 
 
