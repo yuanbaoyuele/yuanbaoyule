@@ -12,6 +12,7 @@
                         <top>0</top>
                         <width>father.width</width>
                         <height>father.height</height>
+						<limitchild>1</limitchild>
 						<texture></texture>
                     </attr>
 					<children>
@@ -263,6 +264,9 @@
 					</children>
 				</obj>
 			 </children>
+			 <eventlist>
+				<event name="OnPosChange" file="toolbar.xml.lua" func="OnPosChange" />
+			</eventlist>
 		</objtemplate>
 	</control>
 </xlue>
