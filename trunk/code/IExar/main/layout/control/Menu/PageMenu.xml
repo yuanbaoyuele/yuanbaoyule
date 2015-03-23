@@ -16,7 +16,10 @@
 				<eventlist>
 				</eventlist>
 			</obj>
-			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
 			<obj id="cut" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>剪切(T)</Text>
@@ -52,6 +55,10 @@
 				<eventlist>
 				</eventlist>
 			</obj>
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
 			<obj id="livesearchchange" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>使用Live Search转换</Text>
@@ -59,6 +66,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -70,6 +78,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -81,9 +90,14 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
+			</obj>
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
 			</obj>
 			<obj id="allspeed" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
@@ -92,9 +106,14 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
+			</obj>
+			<obj id="spilt4" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
 			</obj>
 			<obj id="othersave" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
@@ -114,6 +133,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -125,6 +145,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -136,9 +157,14 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
+			</obj>
+			<obj id="spilt5" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
 			</obj>
 			<obj id="adapview" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
@@ -147,6 +173,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -158,9 +185,14 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
+			</obj>
+			<obj id="spilt6" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
 			</obj>
 			<obj id="zoom" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
@@ -202,6 +234,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -213,9 +246,14 @@
 					<RightText>F7</RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
+			</obj>
+			<obj id="spilt7" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
 			</obj>
 			<obj id="attribute" class="MenuItemObject" templateid="menu.context.item">
 				<attr>

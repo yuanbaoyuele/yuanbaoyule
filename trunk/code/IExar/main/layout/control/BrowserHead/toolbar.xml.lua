@@ -25,8 +25,16 @@ function OnMainPageRightButtonMouseLeave(self, x, y)
 	left:SetState(0)
 end
 
+function TryDistoryOldMenu(self)
+	local tMenuNames = {"MainPageMenu", "PrintMenu", "PageMenu", "SafeMenu", "ToolBarMenu", "HelpMenu"}
+	for i, v in ipairs(tMenuNames) do
+		tFunHelper.TryDestroyOldMenu(self, v)
+	end
+end
+
 function OnMainPageRightButtonClick(self, x, y)
 	local left = self:GetParent()
+	OnMainPageLeftButtonMouseEnter(left)
 	--local parentattr = left:GetAttribute()
 	--parentattr.NormalBkgID = parentattr.DownBkgID
 	--parentattr.HoverBkgID = parentattr.DownBkgID
@@ -35,6 +43,7 @@ function OnMainPageRightButtonClick(self, x, y)
 	selfattr.NormalBkgID = selfattr.DownBkgID
 	selfattr.HoverBkgID = selfattr.DownBkgID
 	self:Updata()
+	TryDistoryOldMenu(self)
 	if self:GetID() == "Layout.MainPage.Right" then
 		tFunHelper.CreateAndShowMenu(self, "MainPageMenu", 26, false, true)
 	else
@@ -44,9 +53,9 @@ end
 
 function OnMainPageRightButtonFocusChange(self, isfocus)
 	--if true then return end
-	local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
-	local hostwnd = hostwndMgr:GetHostWnd("MainPageMenu.HostWnd.Instance")
-	if hostwnd then return end
+	--local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	--local hostwnd = hostwndMgr:GetHostWnd("MainPageMenu.HostWnd.Instance")
+	--if hostwnd then return end
 	if not isfocus then
 		local left = self:GetParent()
 		local parentattr = left:GetAttribute()
@@ -83,9 +92,9 @@ end
 
 function OnMainPageLeftButtonFocusChange(self, isfocus)
 	--if true then return end
-	local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
-	local hostwnd = hostwndMgr:GetHostWnd("MainPageMenu.HostWnd.Instance")
-	if hostwnd then return end
+	--local hostwndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
+	--local hostwnd = hostwndMgr:GetHostWnd("MainPageMenu.HostWnd.Instance")
+	--if hostwnd then return end
 	if not isfocus then
 		local left = self:GetObject("Layout.MainPage.Right")
 		if not left then
@@ -111,18 +120,20 @@ function OnMainPageLeftLButtonDown(self)
 end
 
 function OnPagePClick(self)
-	local selfattr = self:GetAttribute()
-	selfattr.NormalBkgID = selfattr.DownBkgID
-	selfattr.HoverBkgID = selfattr.DownBkgID
-	self:Updata()
+	--local selfattr = self:GetAttribute()
+	--selfattr.NormalBkgID = selfattr.DownBkgID
+	--selfattr.HoverBkgID = selfattr.DownBkgID
+	--self:Updata()
+	TryDistoryOldMenu(self)
 	tFunHelper.CreateAndShowMenu(self, "PageMenu", 26, false, true)
 end
 
 function OnSafeClick(self)
-	local selfattr = self:GetAttribute()
-	selfattr.NormalBkgID = selfattr.DownBkgID
-	selfattr.HoverBkgID = selfattr.DownBkgID
-	self:Updata()
+	--local selfattr = self:GetAttribute()
+	--selfattr.NormalBkgID = selfattr.DownBkgID
+	--selfattr.HoverBkgID = selfattr.DownBkgID
+	--self:Updata()
+	TryDistoryOldMenu(self)
 	tFunHelper.CreateAndShowMenu(self, "SafeMenu", 26, false, true)
 end
 
@@ -135,4 +146,14 @@ function OnPosChange(self, oldl, oldt, oldr, oldb, newl, newr, newr, newb)
 	else
 		self:SetObjPos2("father.width-"..(411), 87, 411, 25)
 	end
+end
+
+function OnToolOClick(self)
+	TryDistoryOldMenu(self)
+	tFunHelper.CreateAndShowMenu(self, "ToolBarMenu", 26, false, true)
+end
+
+function OnHelpClick(self)
+	TryDistoryOldMenu(self)
+	tFunHelper.CreateAndShowMenu(self, "HelpMenu", 26, false, true)
 end

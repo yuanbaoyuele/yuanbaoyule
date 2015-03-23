@@ -36,11 +36,15 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
 			</obj>
-			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
 			<obj id="InPrivateSelect" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>InPrivate 筛选(F)</Text>
@@ -63,6 +67,10 @@
 				<eventlist>
 				</eventlist>
 			</obj>
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
 			<obj id="safereport" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>安全报告(R)</Text>
@@ -70,6 +78,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -81,6 +90,7 @@
 					<RightText></RightText>
 					<IconVisible>1</IconVisible>
 					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 				</eventlist>
@@ -95,6 +105,10 @@
 				</attr>
 				<eventlist>
 				</eventlist>
+			</obj>
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
 			</obj>
 			<obj id="WindowsUpdate" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
