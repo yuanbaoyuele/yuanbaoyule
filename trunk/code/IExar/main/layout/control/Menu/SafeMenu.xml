@@ -1,4 +1,15 @@
 ﻿<xlue>
+	<objtemplate id="safe.context.submenu" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>350</width>
+			<height>210</height>
+			<ContextID>safe.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
 	<objtemplate id="safe.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
 			<ItemTop>3</ItemTop>

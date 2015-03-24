@@ -248,3 +248,17 @@ function SetSearchEngine(control, engine)
 		end
 	end
 end
+
+function OnPosChange(self)
+	local l, t, r, b = self:GetOwnerControl():GetObjPos()
+	local w = r- l
+	if w <= 508 then 
+		local left = 218
+		if w < 378 then
+			left = 160
+		end
+		self:SetObjPos(left, 5, "father.width-50", 5+22)
+	else
+		self:SetObjPos2("father.width-302", 5, 255,22)
+	end
+end
