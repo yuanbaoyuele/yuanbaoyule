@@ -159,6 +159,15 @@
 					<string/>
 				</param>
 			</OnDocumentComplete>
+			<OnDownload>
+				<param>
+					<string/>
+					<string/>
+					<string/>
+					<userdata/>
+					<userdata/>
+				</param>
+			</OnDownload>
 			<onTitleChanged>
 				<param>
 					<string/>
