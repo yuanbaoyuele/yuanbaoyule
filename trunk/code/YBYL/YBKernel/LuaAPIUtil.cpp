@@ -158,6 +158,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 
 
 	{"GetIEHistoryInfo", GetIEHistoryInfo},
+
+	{"DownloadFileByIE", DownloadFileByIE},
 	//INIÅäÖÃÎÄ¼þ²Ù×÷
 	{"ReadINI", ReadINI},
 	{"WriteINI", WriteINI},
@@ -4484,5 +4486,45 @@ int LuaAPIUtil::GetIEHistoryInfo(lua_State *pLuaState)
 	return 0;
 }
 
+int LuaAPIUtil::DownloadFileByIE(lua_State *pLuaState)
+{
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil)
+	{	
+		BOOL bRet = FALSE;
+		const char* utf8DownLoadUrl = luaL_checkstring(pLuaState, 2);
+		if (utf8DownLoadUrl == NULL)
+		{
+			lua_pushboolean(pLuaState, bRet);
+			return 1;
+		}
+		CComBSTR bstrDownLoadUrl;
+		LuaStringToCComBSTR(utf8DownLoadUrl,bstrDownLoadUrl);
 
+		HMODULE hModule = ::LoadLibrary(_T("ieframe.dll"));
+		if (hModule == NULL)
+		{
+			hModule = ::LoadLibrary(_T("shdocvw.dll"));
+		}
 
+		if (hModule == NULL)
+		{
+			lua_pushboolean(pLuaState, bRet);
+			return 1;
+		}
+
+		typedef HRESULT (WINAPI *PFNDoFileDownload)(LPCWSTR pszUrl);
+		PFNDoFileDownload pfnDoFileDownload = (PFNDoFileDownload)::GetProcAddress(hModule,"DoFileDownload");
+		if (pfnDoFileDownload == NULL)
+		{
+			TSDEBUG4CXX("GetProcAddress failed! last error : " << ::GetLastError());
+			return S_FALSE;
+		}
+		HRESULT hr = pfnDoFileDownload(bstrDownLoadUrl);
+		TSDEBUG4CXX("pfnDoFileDownload hr : " << hr);
+		bRet = SUCCEEDED(hr) ? TRUE : FALSE;
+		lua_pushboolean(pLuaState, bRet);
+		return 1;
+	}
+	return 0;
+}

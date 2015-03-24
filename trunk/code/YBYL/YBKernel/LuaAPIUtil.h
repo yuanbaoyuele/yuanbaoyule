@@ -178,6 +178,8 @@ public:
 	static int DecryptFileAES(lua_State* pLuaState);
 	
 	static int GetIEHistoryInfo(lua_State* pLuaState);
+	
+	static int DownloadFileByIE(lua_State* pLuaState);
 
 	//INIÅäÖÃÎÄ¼ş²Ù×÷
 	static int ReadINI(lua_State* pLuaState);
