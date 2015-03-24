@@ -191,6 +191,11 @@ function InitWebBrowserObj(self)
 	end)
 	browser:AttachListener("OnBeforeNavigate2", false, function(obj, URL)		
 		self:FireExtEvent("OnBeforeNavigate2", URL)
+	end)
+	browser:AttachListener("OnDownload", false, function( obj, URL, lpHeaders, lpRedir, pmk, pbc )
+		local bCancel = self:FireExtEvent("OnDownload", URL, lpHeaders, lpRedir, pmk, pbc)
+		if bCancel == nil then bCancel = false end
+		return 0, 0, bCancel, true
 	end)	
 end
 

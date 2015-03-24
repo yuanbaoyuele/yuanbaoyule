@@ -99,7 +99,18 @@ function BindBrowserCtrl(self, objWebBrowser)
 				tFunHelper.OpenURLInNewTab(strUrl)
 				return true
 			end
-		end)		
+		end)	
+	
+	attr.objBrowserCtrl:AttachListener("OnDownload", false, 
+		function (objBrowser, strEventName, URL, lpHeaders, lpRedir, pmk, pbc)
+			if IsRealString(URL) then
+				AsynCall(function()
+					local bDownload = tipUtil:DownloadFileByIE(URL)
+				end)
+				CloseTab(self)
+				return true
+			end
+		end)
 end
 
 
@@ -172,7 +183,14 @@ function OnMouseMoveTab(self, x, y, nFlag)
 	end
 end
 
-
+function CloseTab(objRootCtrl)
+	local nTabID = objRootCtrl:GetSelfID()
+	
+	objRootCtrl:SetVisible(false)
+	objRootCtrl:SetChildrenVisible(false)
+	
+	objRootCtrl:FireExtEvent("OnCloseTabItem", nTabID)
+end
 
 --只隐藏控件， 是否销毁交给父控件决定
 function OnClickCloseTab(self)
