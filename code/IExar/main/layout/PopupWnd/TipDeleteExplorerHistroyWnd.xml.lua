@@ -5,12 +5,23 @@ function OnCreate( self )
 	local workleft, worktop, workright, workbottom = tipUtil:GetWorkArea()
 	local selfleft, selftop, selfright, selfbottom = self:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
-	local objtree = self:GetBindUIObjectTree()
-	local objRootCtrl = objtree:GetUIObject("root.layout")
-	local webleft, webtop, webright, webbottom = objRootCtrl:GetAbsPos()
-	local webwidth, webheight = webright - webleft, webbottom - webtop
-	local wndleft = ((workright-workleft)-webwidth)/2-webleft
-	local wndtop = ((workbottom-worktop)-webheight)/2-webtop
+	
+	local hMainWnd = tFunHelper.GetMainWndInst()
+	local MainWndleft, MainWndtop, MainWndright, MainWndbottom = hMainWnd:GetWindowRect()
+
+	local wndleft = ((MainWndright-MainWndleft)-wndwidth)/2+MainWndleft
+	if wndleft < workleft then
+		wndleft = workleft
+	elseif wndleft+wndwidth > workright then
+		wndleft = workright - wndwidth
+	end
+	
+	local wndtop = ((MainWndbottom-MainWndtop)-wndheight)/2+MainWndtop
+	if wndtop < worktop then
+		wndtop = worktop
+	elseif wndtop+wndheight > workbottom then
+		wndtop = workbottom - wndheight
+	end
 	self:Move(wndleft, wndtop, wndwidth, wndheight)
 end
 
