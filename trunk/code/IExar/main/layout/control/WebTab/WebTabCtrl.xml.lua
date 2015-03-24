@@ -100,7 +100,17 @@ function BindBrowserCtrl(self, objWebBrowser)
 				tFunHelper.OpenURLInNewTab(strUrl)
 				return true
 			end
-		end)		
+		end)	
+	attr.objBrowserCtrl:AttachListener("OnDownload", false, 
+		function (objBrowser, strEventName, URL, lpHeaders, lpRedir, pmk, pbc)
+			if IsRealString(URL) then
+				AsynCall(function()
+					local bDownload = tipUtil:DownloadFileByIE(URL)
+				end)
+				self:CloseTab()
+				return true
+			end
+		end)
 end
 
 
