@@ -1,4 +1,15 @@
 ﻿<xlue>
+	<objtemplate id="toolbar.context.submenu" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>290</height>
+			<ContextID>toolbar.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+	
 	<objtemplate id="toolbar.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
 			<ItemTop>3</ItemTop>

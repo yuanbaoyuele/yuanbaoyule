@@ -144,6 +144,10 @@
 <texture id="sourcedisable" path="bitmap\sourcedisable.png"/>
 <texture id="slotmail" path="bitmap\slotmail.png"/>
 <texture id="print" path="bitmap\print.png"/>
+<bitmap id="bmphelpico" path="bitmap\help.png"/>
+<bitmap id="bmpsourcedisable" path="bitmap\sourcedisable.png"/>
+<bitmap id="bmpslotmail" path="bitmap\slotmail.png"/>
+<bitmap id="bmpprint" path="bitmap\print.png"/>
 <texture id="Arrow.Down.texture" path="bitmap\Arrow.Down.png" />
 <imagelist id="searchselect.imglist" splitter="1" varyblock="1" image="bitmap\searchselect.png"/>
 <texture id="searchselect.hover" imagelist="searchselect.imglist" index="1"/>

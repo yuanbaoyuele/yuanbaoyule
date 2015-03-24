@@ -269,6 +269,9 @@
 									</attr>
 								</obj>
 							</children>
+							<eventlist>
+								<event name="OnClick" file="toolbar.xml.lua" func="OnMoreClick" />
+							</eventlist>
 						</obj>
 					</children>
 				</obj>

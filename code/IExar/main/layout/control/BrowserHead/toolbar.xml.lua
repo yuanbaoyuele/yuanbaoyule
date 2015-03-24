@@ -191,3 +191,8 @@ function OnHelpClick(self)
 	TryDistoryOldMenu(self)
 	tFunHelper.CreateAndShowMenu(self, "HelpMenu", 26, false, true)
 end
+
+function OnMoreClick(self)
+	tFunHelper.TryDestroyOldMenu(self, "ToolBarMoreMenu")
+	tFunHelper.CreateAndShowMenu(self, "ToolBarMoreMenu", 26, false, true)
+end
