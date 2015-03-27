@@ -49,6 +49,11 @@ function SetVersionText(objRootCtrl)
 end
 
 function OnClickSysInfo(self)
+	local strMsinfo32 = tFunHelper.RegQueryValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Shared Tools\\MSInfo\\Path")
+	if not IsRealString(strMsinfo32) or not tipUtil:QueryFileExists(strMsinfo32) then
+		return
+	end
+	tipUtil:ShellExecute(0, "open", strMsinfo32, "", 0, "SW_SHOW")
 end
 
 function OnClicksure(self)
