@@ -46,15 +46,12 @@
 						<texture>StateBar.Bkg</texture>
 					</attr>
 					<children>
-						<obj id="StateBar.Text" class="TextObject">
+						<obj id="StateBar.Text" class="TextObject" templateid="text.template">
 							<attr>
-								<left>0</left>
-								<top>0</top>
-								<width>father.width-30</width>
+								<left>2</left>
+								<top>2</top>
+								<width>father.width-445-2</width>
 								<height>father.height</height>
-								<font>font.yahei13</font>
-								<textcolor>255E18</textcolor>
-								<valign>center</valign>
 								<halign>left</halign>
 								<text></text>
 							</attr>
