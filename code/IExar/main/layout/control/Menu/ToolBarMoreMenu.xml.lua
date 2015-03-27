@@ -154,13 +154,8 @@ end
 
 
 function GetMenuBarCtrl(objMenuItem)
-	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
-	if not objHeadCtrl then
-		return
-	end
-	
-	local objMenuBarCtrl = objHeadCtrl:GetControlObject("head.toolbar.instance")
-	return objMenuBarCtrl
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("head.toolbar.instance")
+	return objHeadCtrl
 end
 
 
