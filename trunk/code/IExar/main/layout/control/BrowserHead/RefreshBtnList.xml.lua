@@ -28,6 +28,24 @@ function OnClickRefreshBtn(self)
 	end	
 end
 
+function OnMouseEnterCompat(self)
+	tFunHelper.ShowToolTip(true, "兼容性视图：专门为旧版本的浏览器设计的网站"
+	.."通常更美观，\n而且菜单、图像或文本位置不当等这类问题将被纠正。")
+end
+
+function OnMouseEnterRefresh(self)
+	tFunHelper.ShowToolTip(true, "刷新 (F5)")
+end
+
+function OnMouseEnterStop(self)
+	tFunHelper.ShowToolTip(true, "停止 (Esc)")
+end
+
+
+function HideToolTip(self)
+	tFunHelper.ShowToolTip(false)
+end
+
 ----
 function GetCurrentBrowser(objRootCtrl)
 	local attr = objRootCtrl:GetAttribute()

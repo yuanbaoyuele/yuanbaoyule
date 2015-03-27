@@ -77,15 +77,16 @@ function ProcessTabChange(self, objTabCtrl)
 	end
 end
 
+
 -----事件----
---背景框
-function OnMouseEnterBkg(self)
-	
+function OnMouseEnterArrow(self)
+	tFunHelper.ShowToolTip(true, "显示地址栏自动完成")
 end
 
-function OnMouseLeaveBkg(self)
-	
+function HideToolTip(self)
+	tFunHelper.ShowToolTip(false)
 end
+
 
 
 --收藏--

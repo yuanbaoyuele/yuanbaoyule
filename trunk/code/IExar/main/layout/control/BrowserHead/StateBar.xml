@@ -23,7 +23,6 @@
 	</objtemplate>
 	
 
-
 	<control class="StateBar">
 		<attr_def>
 
@@ -105,6 +104,10 @@
 								<height>16</height>
 								<image>Earth.Image</image>
 							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="StateBar.xml.lua" func="OnMouseEnterEarth" />
+								<event name="OnMouseLeave" file="StateBar.xml.lua" func="HideToolTip" />
+							</eventlist>
 						</obj>
 					
 						<obj id="StateBar.TextInternet" class="TextObject" templateid="text.template">
@@ -115,6 +118,10 @@
 								<height>father.height</height>
 								<text>Internet</text>
 							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="StateBar.xml.lua" func="OnMouseEnterEarth" />
+								<event name="OnMouseLeave" file="StateBar.xml.lua" func="HideToolTip" />
+							</eventlist>
 						</obj>
 						
 						<obj id="StateBar.Splitter8" class="TextureObject" templateid="splitter.template">

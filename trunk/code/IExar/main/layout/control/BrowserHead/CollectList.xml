@@ -86,7 +86,9 @@
 						</obj>
 					</children>
 					<eventlist>
-							<event name="OnClick" file="CollectList.xml.lua" func="OnClickAddBtn" />
+						<event name="OnClick" file="CollectList.xml.lua" func="OnClickAddBtn" />
+						<event name="OnMouseEnter" file="CollectList.xml.lua" func="OnMouseEnterAddBtn" />
+						<event name="OnMouseLeave" file="CollectList.xml.lua" func="HideToolTip" />
 					</eventlist>
 				</obj>
 			

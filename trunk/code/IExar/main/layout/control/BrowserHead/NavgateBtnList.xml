@@ -57,6 +57,8 @@
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGoForwardBtn" />
+								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterGoForward" />
+								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 					</children>
@@ -85,9 +87,15 @@
 								<texture>UrlHistory.Arrow.Disable</texture>
 								<zorder>9999</zorder>
 							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
+								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
+							</eventlist>
 						</obj>
 					</children>
 					<eventlist>
+						<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
+						<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
 						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickDropArrow" />
 					</eventlist>
 				</obj>
