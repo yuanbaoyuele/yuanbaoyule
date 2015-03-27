@@ -1,0 +1,26 @@
+HKCR
+{
+	iekernel.WebBrowserHelper.1 = s 'WebBrowserHelper Class'
+	{
+		CLSID = s '{D1384570-CB47-43D6-AB35-ACEC4636FB41}'
+	}
+	iekernel.WebBrowserHelper = s 'WebBrowserHelper Class'
+	{
+		CLSID = s '{D1384570-CB47-43D6-AB35-ACEC4636FB41}'
+		CurVer = s 'iekernel.WebBrowserHelper.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D1384570-CB47-43D6-AB35-ACEC4636FB41} = s 'WebBrowserHelper Class'
+		{
+			ProgID = s 'iekernel.WebBrowserHelper.1'
+			VersionIndependentProgID = s 'iekernel.WebBrowserHelper'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{D2A840AB-1B18-481E-9B7F-672E1C00AC7B}'
+		}
+	}
+}
