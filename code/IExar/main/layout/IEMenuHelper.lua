@@ -73,7 +73,7 @@ local gMenuCMD = {
 			ViewSource = {0x0111, 2139+1*65536,0},
 			--Zoom = apiUtil.IEMenu_Zoom,
 			--工具
-			Options = {0x0111, 2135+1*65536,0},	
+			--Options = {0x0111, 2135+1*65536,0},	
 			
 			--收藏夹
 			AddFav = {0x0111, 2261+1*65536,0},	
@@ -119,6 +119,13 @@ function gIEMenu:ExecuteCMD(strKey,...)
 	elseif 	strKey == "OrganizeFav" then
 		local hMainWnd = ...
 		apiUtil:IEFavorite_Organize(hMainWnd)
+	elseif strKey == "Options" then
+		local hMainWnd = 0
+		local hUEMainWnd = FunctionObj:GetMainWndInst()
+		if hUEMainWnd ~= nil then
+			hMainWnd = hUEMainWnd:GetWndHandle() or 0
+		end
+		apiUtil:ShellExecute(hMainWnd, "open", "rundll32.exe", "shell32.dll,Control_RunDLL inetcpl.cpl,,0", 0, "SW_SHOW")
 	elseif 	type(gMenuCMD[strKey]) == "function" then
 		return gMenuCMD[strKey](...)
 	end	
