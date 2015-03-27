@@ -67,7 +67,6 @@
 							</attr>	
 						</obj>
 					
-						
 						<obj id="BrowserHeadCtrl.Splitter1" class="TextureObject">
 							<attr>
 								<left>0</left>
@@ -145,14 +144,6 @@
 								<width>father.width-80</width>
 								<height>26</height>
 								<limitchild>1</limitchild>
-							</attr>	
-						</obj>
-						<obj id="head.toolbar.instance" class="head.toolbar">
-							<attr>
-								<left>father.width-411</left>
-								<top>85</top>
-								<width>411</width>
-								<height>27</height>
 							</attr>	
 						</obj>
 					</children>

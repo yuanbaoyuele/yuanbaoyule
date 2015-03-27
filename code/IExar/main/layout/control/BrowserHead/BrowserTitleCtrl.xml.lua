@@ -26,6 +26,7 @@ function SetTitleText(objRootCtrl, strText)
 		return
 	end
 	
+	strText = strText.." - Windows Internet Explorer"
 	objTitle:SetText(strText)
 end
 
@@ -118,7 +119,7 @@ function UpdateTitle(objRootCtrl, objTabCtrl)
 	if not IsRealString(strTabTitle) then
 		return
 	end
-
+	
 	objRootCtrl:SetTitleText(strTabTitle)
 end
 

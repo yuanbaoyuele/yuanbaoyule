@@ -1,3 +1,5 @@
+local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+
 function OnClick(self)
 	local control = self:GetOwnerControl()
 	local edit = control:GetControlObject("edit")
@@ -250,6 +252,11 @@ function SetSearchEngine(control, engine)
 end
 
 function OnPosChange(self)
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+	if tFunHelper.IsBrowserFullScrn() then
+		return
+	end
+
 	local l, t, r, b = self:GetOwnerControl():GetObjPos()
 	local w = r- l
 	if w <= 508 then 
@@ -262,3 +269,31 @@ function OnPosChange(self)
 		self:SetObjPos2("father.width-302", 5, 255,22)
 	end
 end
+
+
+function OnMouseEnterArrow(self)
+	tFunHelper.ShowToolTip(true, "搜索选项")
+end
+
+
+function OnMouseEnterSearch(self)
+	tFunHelper.ShowToolTip(true, "搜索(按 Alt+Enter 在新选项卡中搜索)")
+end
+
+
+function OnMouseEnterImage(self)
+	tFunHelper.ShowToolTip(true, "")
+end
+
+
+function OnMouseEnterEdit(self)
+	tFunHelper.ShowToolTip(true, "键入以搜索网站(Ctrl+E)")
+end
+
+
+function HideToolTip(self)
+	tFunHelper.ShowToolTip(false)
+end
+
+
+

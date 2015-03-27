@@ -40,6 +40,14 @@ function OnClickAddBtn(self)
 	UpdateCollectList(self:GetOwnerControl())
 end
 
+function OnMouseEnterAddBtn(self)
+	tFunHelper.ShowToolTip(true, "添加到收藏夹栏")
+end
+
+function HideToolTip(self)
+	tFunHelper.ShowToolTip(false)
+end
+
 ---collect item--
 function OnLButtonUpItem(self)
 	self:SetTextureID("")
@@ -59,10 +67,27 @@ end
 
 function OnMouseEnterItem(self)
 	self:SetTextureID("Collect.Button.Bkg.Hover")
+		
+	
+	local objTitle = self:GetChildByIndex(1)
+	if not objTitle then
+		return
+	end	
+	local strTitle = objTitle:GetText()
+		
+	local objURL = self:GetChildByIndex(2)
+	if not objURL then
+		return
+	end
+	local strURL = objURL:GetText()
+	
+	local strText = strTitle..tostring("\r\n")..strURL
+	tFunHelper.ShowToolTip(true, strText)
 end
 
 function OnMouseLeaveItem(self)
 	self:SetTextureID("")
+	tFunHelper.ShowToolTip(false)
 end
 
 function OnRButtonUpItem(self)

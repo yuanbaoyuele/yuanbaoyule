@@ -27,7 +27,8 @@
 						<Enable>false</Enable>
 					</attr>
 					<eventlist>
-						<!--event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" /-->
+						<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterCompat" />
+						<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
 					</eventlist>
 				</obj>
 			
@@ -45,6 +46,8 @@
 					</attr>
 					<eventlist>
 						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" />
+						<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterRefresh" />
+						<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
 					</eventlist>
 				</obj>
 			
@@ -61,6 +64,8 @@
 						<Enable>false</Enable>
 					</attr>
 					<eventlist>
+						<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterStop" />
+						<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
 						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickStopBtn" />
 					</eventlist>
 				</obj>

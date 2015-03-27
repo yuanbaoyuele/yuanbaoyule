@@ -75,15 +75,13 @@
 									</attr>
 									<eventlist>
 										<event name="OnClick" file="AddressBarCtrl.xml.lua" func="OnClickDropArrow" />
-										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
-										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="OnMouseEnterArrow" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="HideToolTip" />
 									</eventlist>
 								</obj>
 							</children>
 							
 							<eventlist>
-								<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="OnMouseEnterBkg" />
-								<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="OnMouseLeaveBkg" />
 							</eventlist>
 						</obj> 
 					</children>

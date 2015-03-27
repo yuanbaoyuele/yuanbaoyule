@@ -51,6 +51,14 @@ function OnMouseEnterGoback(self)
 	tFunHelper.ShowToolTip(true, "返回")
 end
 
+function OnMouseEnterGoForward(self)
+	tFunHelper.ShowToolTip(true, "前进")
+end
+
+function OnMouseEnterArrow(self)
+	tFunHelper.ShowToolTip(true, "最新网页")
+end
+
 function HideToolTip(self)
 	tFunHelper.ShowToolTip(false)
 end
