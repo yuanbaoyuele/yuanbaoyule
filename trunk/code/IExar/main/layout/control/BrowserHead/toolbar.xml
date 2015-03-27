@@ -53,6 +53,8 @@
 										<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseLeave" />
 										<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageRightButtonClick" />
 										<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageRightButtonFocusChange" />
+										<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterMainPage" />
+										<event name="OnMouseLeave" file="toolbar.xml.lua" func="HideToolTip" />
 									</eventlist>
 								</obj>
 							</children>
@@ -63,6 +65,8 @@
 								<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageLeftButtonClick" />
 								<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageLeftButtonFocusChange" />
 								<event name="OnLButtonDown" file="toolbar.xml.lua" func="OnMainPageLeftLButtonDown" />
+								<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterMainPage" />
+								<event name="OnMouseLeave" file="toolbar.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 						<!--源-->
@@ -99,6 +103,10 @@
 								<ForegroundWidth>16</ForegroundWidth>
 								<ForegroundHeight>16</ForegroundHeight>
 							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterMail" />
+								<event name="OnMouseLeave" file="toolbar.xml.lua" func="HideToolTip" />
+							</eventlist>
 						</obj>
 						<!--打印机-->
 						<obj id="Layout.Printer.Left" class="TipAddin.Button">
@@ -137,6 +145,8 @@
 										<event name="OnControlMouseLeave" file="toolbar.xml.lua" func="OnMainPageRightButtonMouseLeave" />
 										<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageRightButtonClick" />
 										<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageRightButtonFocusChange" />
+										<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterPrint" />
+										<event name="OnMouseLeave" file="toolbar.xml.lua" func="HideToolTip" />
 									</eventlist>
 								</obj>
 							</children>
@@ -147,6 +157,8 @@
 								<event name="OnClick" file="toolbar.xml.lua" func="OnMainPageLeftButtonClick" />
 								<event name="OnControlFocusChange" file="toolbar.xml.lua" func="OnMainPageLeftButtonFocusChange" />
 								<event name="OnLButtonDown" file="toolbar.xml.lua" func="OnMainPageLeftLButtonDown" />
+								<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterPrint" />
+								<event name="OnMouseLeave" file="toolbar.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 						<!--页面-->
@@ -244,6 +256,8 @@
 							</children>
 							<eventlist>
 								<event name="OnClick" file="toolbar.xml.lua" func="OnHelpClick" />
+								<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterHelp" />
+								<event name="OnMouseLeave" file="toolbar.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 						<!--更多-->

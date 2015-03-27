@@ -166,7 +166,7 @@ function AddCurURLIndex(self, nDiff)
 end
 
 function SetCloseBtnVisible(self, bVisible)
-	local objCloseBtn = self:GetControlObject("WebTabCtrl.ClostBtn")
+	local objCloseBtn = self:GetControlObject("WebTabCtrl.CloseBtn")
 	objCloseBtn:SetVisible(bVisible)
 	objCloseBtn:SetChildrenVisible(bVisible)
 end
@@ -226,13 +226,22 @@ function OnClickTab(self, x, y)   --LButtonUp
 	self:SetCaptureMouse(false)
 end
 
+
 function OnMouseEnterTab(self)
 	ShowMouseEnterBkg(self, true)
+	
+	local strTitle = self:GetTabText()
+	local strURL = self:GetLocalURL()
+	local strText = strTitle.."\r\n"..strURL
+	tFunHelper.ShowToolTip(true, strText)
 end
+
 
 function OnMouseLeaveTab(self)
 	ShowMouseEnterBkg(self, false)
+	tFunHelper.ShowToolTip(false)
 end
+
 
 function OnMouseMoveTab(self, x, y, nFlag)
     local attr = self:GetAttribute()
@@ -249,7 +258,7 @@ end
 
 
 function OnMButtonUp(self)
-	local objCloseBtn = self:GetControlObject("WebTabCtrl.ClostBtn")
+	local objCloseBtn = self:GetControlObject("WebTabCtrl.CloseBtn")
 	local bCloseBtnVisible = objCloseBtn:GetVisible()
 	
 	if bCloseBtnVisible then
@@ -268,6 +277,15 @@ end
 --只隐藏控件， 是否销毁交给父控件决定
 function OnClickCloseTab(self)
 	CloseTab(self:GetOwnerControl())
+end
+
+
+function OnMouseEnterClose(self)
+	tFunHelper.ShowToolTip(true, "关闭选项卡(Ctrl+W)")
+end
+
+function HideToolTip(self)
+	tFunHelper.ShowToolTip(false)
 end
 
 ------

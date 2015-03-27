@@ -115,7 +115,6 @@
 							</attr>
 						</obj>	
 						
-
 						<obj id="WebTabCtrl.Text" class="TextObject">
 							<attr>
 								<left>30</left>
@@ -130,7 +129,7 @@
 							</attr>
 						</obj>   	
 
-						<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
+						<obj id="WebTabCtrl.CloseBtn" class="TipAddin.Button">
 							<attr>
 								<left>father.width-19</left>
 								<top>(father.height-9)/2</top>
@@ -143,6 +142,8 @@
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="WebTabCtrl.xml.lua" func="OnClickCloseTab" />
+								<event name="OnMouseEnter" file="WebTabCtrl.xml.lua" func="OnMouseEnterClose" />
+								<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 					</children>
