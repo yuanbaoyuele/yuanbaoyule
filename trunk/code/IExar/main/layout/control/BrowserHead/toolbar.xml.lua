@@ -1,10 +1,24 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 function OnMainPageLeftButtonMouseEnter(self, x, y)
 	local right = self:GetObject("Layout.MainPage.Right")
 	if not right then
 		right = self:GetObject("Layout.Printer.Right")
 	end
 	right:SetState(1)
+end
+
+function InitMenuHelper()
+	local objActiveTab = tFunHelper.GetActiveTabCtrl()
+	if objActiveTab == nil or objActiveTab == 0 then
+		return
+	end
+	
+	local objBrowserCtrl = objActiveTab:GetBindBrowserCtrl()
+	if objBrowserCtrl then
+		local objUEBrowser = objBrowserCtrl:GetControlObject("browser")
+		tIEMenuHelper:Init(objUEBrowser)
+	end
 end
 
 function OnMainPageLeftButtonMouseLeave(self, x, y)
@@ -26,6 +40,7 @@ function OnMainPageRightButtonMouseLeave(self, x, y)
 end
 
 function TryDistoryOldMenu(self)
+	InitMenuHelper()
 	local tMenuNames = {"MainPageMenu", "PrintMenu", "PageMenu", "SafeMenu", "ToolBarMenu", "HelpMenu"}
 	for i, v in ipairs(tMenuNames) do
 		tFunHelper.TryDestroyOldMenu(self, v)
