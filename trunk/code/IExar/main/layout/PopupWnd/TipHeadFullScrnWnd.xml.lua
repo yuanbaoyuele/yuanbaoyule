@@ -34,15 +34,19 @@ end
 
 
 function OnShowWindow(self, bShow)
-	if bShow then
 
-	end
 end
 
 
 -----------
 --headctrl事件
 function OnMouseEnterHead(self)
+	-- SetCollectWndTopMost(self, false)
+	local objTree = self:GetOwner()
+	local objHostWnd = objTree:GetBindHostWnd()
+	
+	-- objHostWnd:BringWindowToTop()
+	
 	if not tFunHelper.IsBrowserFullScrn() then
 		return
 	end
@@ -53,15 +57,15 @@ function OnMouseEnterHead(self)
 	end
 	
 	local workleft, worktop, workright, workbottom = tipUtil:GetWorkArea()
-	local objTree = self:GetOwner()
-	local objHostWnd = objTree:GetBindHostWnd()
+	
 	local width = workright-workleft
 	objHostWnd:Move(workleft, 0, workright, 118)
-	objHostWnd:SetTopMost(true)
 end
 
 
 function OnMouseLeaveHead(self)
+	-- SetCollectWndTopMost(self, false)
+
 	if not tFunHelper.IsBrowserFullScrn() then
 		return
 	end
@@ -103,8 +107,6 @@ function OnActiveTabChange(self, strEvntName,objActiveTab)
 end
 
 
-
-
 ---------
 function HideWindow(objUIElem)
 	local objTree = objUIElem:GetOwner()
@@ -122,13 +124,18 @@ function GetCtrlByWnd(objWnd, strCtrlName)
 end
 
 
+function SetCollectWndTopMost(objUIElem, bTopMost)
+	local objCollectWnd = tFunHelper.GetWndInstByName("TipCollectWnd.Instance")
+	if objCollectWnd then
+		objCollectWnd:SetTopMost(bTopMost)
+	end
+end
+
+
 ------辅助函数---
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
 end
-
-
-
 
 
 

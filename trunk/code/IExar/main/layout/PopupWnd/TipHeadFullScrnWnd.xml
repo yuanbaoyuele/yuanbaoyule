@@ -31,16 +31,35 @@
 							</eventlist>										
 						</obj>
 						
-						<obj id="MainPanel.TabContainer" class="TabContainerCtrl">
+						<obj id="MainPanel.ResizeLayout" class="LayoutObject">
 							<attr>
-								<left>6</left>
-								<top>120-32</top>
-								<width>father.width-410</width>
-								<height>27</height>
-							</attr>		
-							<eventlist>
-								<event name="OnActiveTabChange" file="TipHeadFullScrnWnd.xml.lua" func="OnActiveTabChange" />
-							</eventlist>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>									
+							<children>
+								<obj id="MainPanel.TabContainer" class="TabContainerCtrl">
+									<attr>
+										<left>6</left>
+										<top>120-32</top>
+										<width>father.width-410</width>
+										<height>27</height>
+									</attr>		
+									<eventlist>
+										<event name="OnActiveTabChange" file="TipHeadFullScrnWnd.xml.lua" func="OnActiveTabChange" />
+									</eventlist>
+								</obj>
+								
+								<obj id="head.toolbar.instance" class="head.toolbar">
+									<attr>
+										<left>father.width-411</left>
+										<top>87</top>
+										<width>411</width>
+										<height>25</height>
+									</attr>	
+								</obj>
+							</children>
 						</obj>
 						
 						<obj id="MainLayout.Bottom" class="TextureObject">

@@ -24,17 +24,23 @@
 					<children>
 						<obj id="ToolTipText" class="TextObject">
 							<attr>
-								<left>0</left>
+								<left>4</left>
 								<top>2</top>
 								<width>father.width</width>
 								<height>father.height</height>
 								<font>font.text12</font>
 								<textcolor>system.black</textcolor>
+								<multiline>1</multiline>
+								<halign>left</halign>
+								<valign>top</valign>
 							</attr>
 						</obj>
 					</children>
 				</obj>						
 			</children>
+			<eventlist>
+				<event name="OnInitControl" file="ToolTip.xml.lua" func="OnInitControl" />
+			</eventlist>
 		</objtemplate>
 	</control>
 	 

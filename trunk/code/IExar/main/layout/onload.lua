@@ -83,7 +83,7 @@ function CheckForceVersion(tForceVersion)
 
 	local bRightVer = false
 	
-	local strCurVersion = FunctionObj.GetYBYLVersion()
+	local strCurVersion = FunctionObj.GetExeVersion()
 	local _, _, _, _, _, strCurVersion_4 = string.find(strCurVersion, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
 	local nCurVersion_4 = tonumber(strCurVersion_4)
 	if type(nCurVersion_4) ~= "number" then
@@ -131,7 +131,7 @@ function TryForceUpdate(tServerConfig)
 		return 
 	end
 	
-	local strCurVersion = FunctionObj.GetYBYLVersion()
+	local strCurVersion = FunctionObj.GetExeVersion()
 	local strNewVersion = tForceUpdate.strVersion		
 	if not IsRealString(strCurVersion) or not IsRealString(strNewVersion)
 		or not FunctionObj.CheckIsNewVersion(strNewVersion, strCurVersion) then

@@ -7,12 +7,15 @@ local g_bHasMenu = false
 function OnCreate( self )
 	local objCollectWnd = self
 	SetWindowFullSize(objCollectWnd)
+	SetCollectWndTrackSize(objCollectWnd, MainWndW, MainWndH)
 	
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
 	objMainHostWnd:AddSyncWnd(objCollectWnd:GetWndHandle(), {"position", "enable"})
 	
 	objMainHostWnd:AttachListener("OnSize", false, 
-		function(objMainWnd)
+		function(objMainWnd, MainWndW, MainWndH)
+			SetCollectWndTrackSize(objCollectWnd, MainWndW, MainWndH)
+			
 			local objRootCtrl = GetRootCtrlByWndObj(objCollectWnd)
 			local attr = objRootCtrl:GetAttribute()
 			if attr.bFix then
@@ -20,6 +23,22 @@ function OnCreate( self )
 			end
 		end		
 	)
+end
+
+
+function SetCollectWndTrackSize(objCollectWnd, MainWndW, MainWndH)
+	local objHeadWindow = tFunHelper.GetWndInstByName("TipHeadFullScrnWnd.Instance")
+	local objMainHostWnd = tFunHelper.GetMainWndInst()
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
+	local objCollectBtn = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectBtn")
+	local BtnL, BtnT, BtnR, BtnB = objCollectBtn:GetAbsPos()
+	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
+	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
+	
+	local nWndTop = nHeadWndT+BtnB
+	local nSizeH = nMainWndB-nWndTop-4
+	
+	objCollectWnd:SetMaxTrackSize(450, nSizeH)
 end
 
 
@@ -63,26 +82,36 @@ function OnSize(self, _type, width, height)
 	local objTree = self:GetBindUIObjectTree()
 	local objRootLayout = objTree:GetUIObject("root.layout")
 	local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
+	
 	objRootCtrl:SetObjPos(0, 0, width, height)
+	AdjustMainPanelSize(objRootCtrl, width)
 end
 
 
 function SetWindowFullSize(objWnd)
+	local objHeadWindow = tFunHelper.GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
 	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	local objCollectBtn = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectBtn")
 	local HeadL, HeadT, HeadR, HeadB = objHeadCtrl:GetAbsPos()
 	local BtnL, BtnT, BtnR, BtnB = objCollectBtn:GetAbsPos()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
+	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
 	
-	local nWndTop = nMainWndT+BtnB+30
+	local nWndTop = nHeadWndT+BtnB
 	local nWndLeft = nMainWndL+HeadL+4
 	local nWndHeight = nMainWndB-nWndTop-4
 		
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
 	
-	objWnd:Move(nWndLeft, nWndTop, wndwidth, nWndHeight)
+	if tFunHelper.IsBrowserFullScrn() then
+		local nWidth, nHeight = tipUtil:GetScreenSize()
+		nWndHeight = nHeight
+		objWnd:Move(0, 0, wndwidth, nHeight)
+	else
+		objWnd:Move(nWndLeft, nWndTop, wndwidth, nWndHeight)
+	end	
 	
 	local objtree = objWnd:GetBindUIObjectTree()
 	local objRootLayout = objtree:GetUIObject("root.layout")
@@ -91,15 +120,18 @@ function SetWindowFullSize(objWnd)
 end
 
 
+
 function SetWindowPos(objWnd)
+	local objHeadWindow = tFunHelper.GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
 	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	local objCollectBtn = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectBtn")
 	local HeadL, HeadT, HeadR, HeadB = objHeadCtrl:GetAbsPos()
 	local BtnL, BtnT, BtnR, BtnB = objCollectBtn:GetAbsPos()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
+	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
 	
-	local nWndTop = nMainWndT+BtnB+30
+	local nWndTop = nHeadWndT+BtnB
 	local nWndLeft = nMainWndL+HeadL+4
 	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
@@ -176,14 +208,8 @@ function SetFixStyle(objRootCtrl, bFix)
 	
 	local l, t, r, b = objRootCtrl:GetObjPos()
 	local WndWidth = r - l
-
-	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
-	local l, t, r, b = webbrowser:GetObjPos()
-	if bFix then
-		webbrowser:SetObjPos(WndWidth, t, "father.width", "father.height")
-	else
-		webbrowser:SetObjPos(0, t, "father.width", "father.height")
-	end
+	
+	AdjustMainPanelSize(objRootCtrl, WndWidth)
 end
 
 
@@ -298,14 +324,19 @@ function SetBtnDownStyle(objBtn, bDownStyle)
 	local h = b - t
 	
 	if bDownStyle then
-		l = l + 2
-		t = t + 2
+		l = l + 1
+		t = t + 1
 	else
-		l = l - 2
-		t = t - 2
+		l = l - 1
+		t = t - 1
 	end
 	
-	objBtn:SetObjPos(l, t, l+w, t+h)	
+	local objRootCtrl = objBtn:GetParent()
+	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
+	local fw = fr - fl
+	local fh = fb - ft
+	
+	objBtn:SetObjPos2("father.width-"..tostring(fw-l), "father.height-"..tostring(fh-t), w, h)	
 end
 
 
@@ -319,7 +350,34 @@ function SetTabActiveStyle(objTab, bActive)
 		objTab:SetObjPos(l, 2, r, "father.height-2")
 		objTab:SetTextureID("Collect.Tab.Bkg.Normal")
 	end
+end
 
+
+function AdjustMainPanelSize(objRootCtrl, width)
+	local attr = objRootCtrl:GetAttribute()
+	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
+	local l, t, r, b = webbrowser:GetObjPos()
+	if attr.bFix then
+		webbrowser:SetObjPos2(width, t, "father.width-"..tostring(width), "father.height-23-120")
+	else
+		webbrowser:SetObjPos2(0, t, "father.width-2", "father.height-23-120")
+	end
+	
+	local objResizeLayout = tFunHelper.GetHeadCtrlChildObj("MainPanel.ResizeLayout")
+	local l, t, r, b = objResizeLayout:GetObjPos()
+	if attr.bFix then
+		objResizeLayout:SetObjPos2(width, t, "father.width-"..tostring(width), "father.height")
+	else
+		objResizeLayout:SetObjPos2(0, t, "father.width-2", "father.height")
+	end
+	
+	local objStateBar = tFunHelper.GetMainCtrlChildObj("StateBar")
+	local l, t, r, b = objStateBar:GetObjPos()
+	if attr.bFix then
+		objStateBar:SetObjPos2(width, "father.height-23", "father.width-"..tostring(width), 23)
+	else
+		objStateBar:SetObjPos2(0, "father.height-23", "father.width", 23)
+	end
 end
 
 
