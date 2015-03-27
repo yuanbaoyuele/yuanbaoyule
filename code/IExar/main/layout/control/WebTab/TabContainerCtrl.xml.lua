@@ -564,16 +564,19 @@ end
 
 
 function DestroyTabAndBrowByID(objRootCtrl, nID)
-	local objTabCtrl = GetTabCtrlByID(objRootCtrl, nID)
-		
+	local objTabCtrl = GetTabCtrlByID(objRootCtrl, nID)	
 	local objBrowserCtrl = objTabCtrl:GetBindBrowserCtrl()
+	local rawWebBrowser = objBrowserCtrl:GetRawWebBrowser()
+	if rawWebBrowser ~= nil then
+		tipUtil:DetachBrowserEvent(rawWebBrowser)
+	end
 	local objBrowserFather = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
 	if objBrowserCtrl and objBrowserFather then
 		objBrowserFather:RemoveChild(objBrowserCtrl)
 	end
 	
 	local objTabFather = objRootCtrl:GetControlObject("TabContainerCtrl.Container")
-	if objTabCtrl and objTabFather then
+	if objTabCtrl and objTabFather then	
 		objTabFather:RemoveChild(objTabCtrl)
 	end
 end

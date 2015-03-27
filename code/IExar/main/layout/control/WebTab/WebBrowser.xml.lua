@@ -1,3 +1,6 @@
+local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+local tipUtil = tFunHelper.tipUtil	
+	
 function GetWeb(self)
 	local browser = self:GetControlObject("browser")	
 	return browser
@@ -216,6 +219,11 @@ function InitWebBrowserObj(self)
 		if bCancel == nil then bCancel = false end
 		return 0, 0, bCancel, true
 	end)
+
+	local rawWebBrowser = browser:GetRawWebBrowser()
+	if rawWebBrowser ~= nil then
+		tipUtil:AttachBrowserEvent(rawWebBrowser)
+	end	
 end
 
 
