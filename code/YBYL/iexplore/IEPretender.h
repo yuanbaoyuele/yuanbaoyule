@@ -31,7 +31,7 @@ public:
 		}
 
 
-		m_hYBKernel = LoadLibrary(_T("YBKernel.dll"));
+		m_hYBKernel = LoadLibrary(_T("iekernel.dll"));
 		if (NULL == m_hYBKernel)
 		{
 			return;

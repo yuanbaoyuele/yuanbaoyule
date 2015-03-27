@@ -2,10 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="YBKernel"
-	ProjectGUID="{8A404C85-CE5F-40E1-8836-0DBD80A551A3}"
-	RootNamespace="YBKernel"
-	Keyword="Win32Proj"
+	Name="iekernel"
+	ProjectGUID="{7AFF1B7B-EF13-49E3-8407-B23C7EC323B2}"
+	RootNamespace="iekernel"
+	Keyword="AtlProj"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -22,6 +22,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfATL="2"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			>
 			<Tool
@@ -38,12 +39,22 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/iekernel.tlb"
+				HeaderFileName="iekernel_i.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="iekernel_i.c"
+				ProxyFileName="iekernel_p.c"
+				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../boltsdk/include;../../inc"
-				PreprocessorDefinitions="DETOURS_X86;DETOURS_32BIT;WIN32;_DEBUG;_WINDOWS;_USRDLL;YBKERNEL_EXPORTS"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_MERGE_PROXYSTUB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -57,16 +68,21 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				RegisterOutput="false"
+				IgnoreImportLibrary="true"
 				AdditionalDependencies="Wininet.lib Version.lib gdiplus.lib XLUE.lib XLGraphic.lib XLLuaRuntime.lib YBNetFilter.lib XLFSIO.lib libexpat.lib comsuppw.lib minizip.lib psapi.lib Winmm.lib XLGraphicPlus.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../../boltsdk/lib;../../lib;$(SolutionDir)$(ConfigurationName)"
-				ModuleDefinitionFile="YBKernel.def"
+				ModuleDefinitionFile=".\iekernel.def"
 				GenerateDebugInformation="true"
 				GenerateMapFile="true"
 				MapExports="true"
@@ -101,8 +117,8 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfATL="2"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -118,15 +134,23 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/iekernel.tlb"
+				HeaderFileName="iekernel_i.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="iekernel_i.c"
+				ProxyFileName="iekernel_p.c"
+				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="../../boltsdk/include;../../inc"
-				PreprocessorDefinitions="DETOURS_X86;DETOURS_32BIT;WIN32;NDEBUG;_WINDOWS;_USRDLL;YBKERNEL_EXPORTS"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_MERGE_PROXYSTUB"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				AssemblerOutput="2"
 				WarningLevel="3"
@@ -137,16 +161,21 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				RegisterOutput="false"
+				IgnoreImportLibrary="true"
 				AdditionalDependencies="Wininet.lib Version.lib gdiplus.lib XLUE.lib XLGraphic.lib XLLuaRuntime.lib YBNetFilter.lib XLFSIO.lib libexpat.lib comsuppw.lib minizip.lib psapi.lib Winmm.lib XLGraphicPlus.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../boltsdk/lib;../../lib;$(SolutionDir)$(ConfigurationName)"
-				ModuleDefinitionFile="YBKernel.def"
+				ModuleDefinitionFile=".\iekernel.def"
 				GenerateDebugInformation="true"
 				GenerateMapFile="true"
 				MapExports="true"
@@ -187,6 +216,28 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\dlldatax.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\dllmain.cpp"
 				>
 				<FileConfiguration
@@ -207,6 +258,18 @@
 						CompileAsManaged="0"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\iekernel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\iekernel.def"
+				>
+			</File>
+			<File
+				RelativePath=".\iekernel.idl"
+				>
 			</File>
 			<File
 				RelativePath=".\RegisterLuaAPI.cpp"
@@ -236,14 +299,6 @@
 				RelativePath=".\YBApp.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\YBKernel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\YBKernel.def"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -251,11 +306,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\dlldatax.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dllmain.h"
+				>
+			</File>
+			<File
 				RelativePath=".\RegisterLuaAPI.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
@@ -277,7 +340,58 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\YBKernel.rc"
+				RelativePath=".\BrowserHelper.rgs"
+				>
+			</File>
+			<File
+				RelativePath=".\CBrowserHelper.rgs"
+				>
+			</File>
+			<File
+				RelativePath=".\CBrowserHelper1.rgs"
+				>
+			</File>
+			<File
+				RelativePath=".\iekernel.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\iekernel.rgs"
+				>
+			</File>
+			<File
+				RelativePath=".\WebBrowserHelper.rgs"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Generated Files"
+			SourceControlFiles="false"
+			>
+			<File
+				RelativePath=".\iekernel_i.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\iekernel_i.h"
 				>
 			</File>
 		</Filter>
@@ -390,166 +504,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="YbSpeed"
-			>
-			<File
-				RelativePath=".\YbSpeed\creatwth.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\detours.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\detours.h"
-				>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\detver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\disasm.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\image.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\Lock.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\Lock.h"
-				>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\modules.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\YbSpeedHook.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\YbSpeed\YbSpeedHook.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="YBKernelHelper"
 			>
 			<File
@@ -574,6 +528,18 @@
 			</File>
 			<File
 				RelativePath=".\YBKernelHelper\LuaPrefactory.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="BrowserHelper"
+			>
+			<File
+				RelativePath=".\CBrowserHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CBrowserHelper.h"
 				>
 			</File>
 		</Filter>

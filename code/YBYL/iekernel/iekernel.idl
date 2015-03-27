@@ -1,0 +1,40 @@
+// iekernel.idl : IDL source for iekernel
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (iekernel.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "exdisp.idl";
+
+
+[
+	object,
+	uuid(EC582459-55E2-45AE-A20E-E13FC411E8C6),
+	dual,
+	nonextensible,
+	helpstring("ICBrowserHelper Interface"),
+	pointer_default(unique)
+]
+interface ICBrowserHelper : IDispatch{
+	[id(1), helpstring("method AttachBrowser")] HRESULT AttachBrowser([in] IDispatch* pUnkSite);
+	[id(2), helpstring("method DetachBrowser")] HRESULT DetachBrowser(void);
+};
+[
+	uuid(D2A840AB-1B18-481E-9B7F-672E1C00AC7B),
+	version(1.0),
+	helpstring("iekernel 1.0 Type Library")
+]
+
+library iekernelLib
+{
+	[
+		uuid(8303789F-C67A-4195-9BF1-924D6B10CAB5),
+		helpstring("CBrowserHelper Class")
+	]
+	coclass CBrowserHelper
+	{
+		[default] interface ICBrowserHelper;
+	};
+};

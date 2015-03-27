@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YBSetUpHelper", "YBSetUpHel
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iexplore", "iexplore\iexplore.vcproj", "{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iekernel", "iekernel\iekernel.vcproj", "{7AFF1B7B-EF13-49E3-8407-B23C7EC323B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -40,6 +42,10 @@ Global
 		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Debug|Win32.Build.0 = Debug|Win32
 		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Release|Win32.ActiveCfg = Release|Win32
 		{A186B0BB-D59D-41F5-BDC3-1B188D8DA6A9}.Release|Win32.Build.0 = Release|Win32
+		{7AFF1B7B-EF13-49E3-8407-B23C7EC323B2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7AFF1B7B-EF13-49E3-8407-B23C7EC323B2}.Debug|Win32.Build.0 = Debug|Win32
+		{7AFF1B7B-EF13-49E3-8407-B23C7EC323B2}.Release|Win32.ActiveCfg = Release|Win32
+		{7AFF1B7B-EF13-49E3-8407-B23C7EC323B2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
