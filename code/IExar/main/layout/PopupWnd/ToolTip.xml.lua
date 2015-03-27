@@ -1,8 +1,12 @@
+function OnInitControl(self)
+	local objText = self:GetControlObject("ToolTipText")
+	objText:SetMultilineTextLimitWidth(325)
+end
+
+
 function SetToolTipText(self, strText)
 	local objText = self:GetControlObject("ToolTipText")
 	objText:SetText(strText)	
-	objText:SetHAlign("center")
-	objText:SetVAlign("top")
 	
 	AdjustTextPos(self)
 end
@@ -14,6 +18,7 @@ function GetToolTipWidth(self)
 	return nRootRight - nRootLeft
 end
 
+
 function AdjustTextPos(self)
 	local objRootCtrl = self
 	local objText = objRootCtrl:GetControlObject("ToolTipText")
@@ -23,9 +28,8 @@ function AdjustTextPos(self)
 	local nRootWidth = nRootRight - nRootLeft
 	local nRootHeight = nRootBottom - nRootTop
 	
-	objRootCtrl:SetObjPos(nRootLeft, nRootTop, nRootLeft + nSuitWidth+8, nRootTop+nSuitHeight+5)
+	objRootCtrl:SetObjPos(nRootLeft, nRootTop, nRootLeft + nSuitWidth+8, nRootTop+nSuitHeight+6)
 end
-
 
 
 function OnMouseEnter_Root(self)

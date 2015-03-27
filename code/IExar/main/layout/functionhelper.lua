@@ -129,10 +129,15 @@ function HideMainWindow()
 	end
 end
 
-function HideHeadWindow()
-	local objMainWnd = GetWndInstByName("TipHeadFullScrnWnd.Instance")
-	if objMainWnd then
-		objMainWnd:Show(0)
+function HideSubWindow()
+	local objHeadWnd = GetWndInstByName("TipHeadFullScrnWnd.Instance")
+	if objHeadWnd then
+		objHeadWnd:Show(0)
+	end
+	
+	local objCollectWnd = GetWndInstByName("TipCollectWnd.Instance")
+	if objCollectWnd then
+		objCollectWnd:Show(0)
 	end
 end
 
@@ -140,7 +145,7 @@ end
 local g_bHasExit = false
 function ReportAndExit()
 	local tStatInfo = {}
-	HideHeadWindow()
+	HideSubWindow()
 	HideMainWindow()	
 	SendRunTimeReport(0, true)
 	
@@ -234,6 +239,7 @@ function FileTime2LocalTime(tFileTime)
 	return nUTCInSec, strWeekDay
 end
 
+
 function CheckIsNewVersion(strNewVer, strCurVer)
 	if not IsRealString(strNewVer) or not IsRealString(strCurVer) then
 		return false
@@ -241,6 +247,17 @@ function CheckIsNewVersion(strNewVer, strCurVer)
 
 	local a,b,c,d = string.match(strNewVer, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
 	local A,B,C,D = string.match(strCurVer, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
+	
+	a = tonumber(a)
+	b = tonumber(b)
+	c = tonumber(c)
+	d = tonumber(d)
+	
+	A = tonumber(A)
+	B = tonumber(B)
+	C = tonumber(C)
+	D = tonumber(D)
+	
 	return a>A or (a==A and (b>B or (b==B and (c>C or (c==C and d>D)))))
 end
 
@@ -410,7 +427,7 @@ function GetExePath()
 	return tipUtil:GetModuleExeName()
 end
 
-function GetYBYLVersion()
+function GetExeVersion()
 	local strEXEPath = GetExePath()
 	if not IsRealString(strEXEPath) or not tipUtil:QueryFileExists(strEXEPath) then
 		return ""
@@ -421,7 +438,7 @@ end
 
 
 function GetMinorVer()
-	local strVersion = GetYBYLVersion()
+	local strVersion = GetExeVersion()
 	if not IsRealString(strVersion) then
 		return ""
 	end
@@ -491,7 +508,6 @@ function GetWndInstByName(strWndName)
 end
 
 
-
 function IsBrowserFullScrn()
 	return g_bIsBrowserFullScrn
 end
@@ -554,15 +570,20 @@ function SetBrowserFullScrn()
 	if not objBrowserLayout then
 		return
 	end
+	local objHeadWndLayout = GetHeadCtrlChildObj("MainPanel.Head")
+	if not objHeadWndLayout then
+		return
+	end
 	local objRootLayout = GetMainCtrlChildObj("root.layout")
 	if not objRootLayout then
 		return
 	end
 	
+	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWndLayout:GetAbsPos()
 	local nBrowserL, nBrowserT, nBrowserR, nBrowserB = objBrowserLayout:GetAbsPos()
 	local nRootL, nRootT, nRootR, nRootB = objRootLayout:GetAbsPos()
 	
-	local nDiffW = (nBrowserL-nRootL) + (nRootR-nBrowserR)
+	local nDiffW = (nHeadWndL-nRootL) + (nRootR-nHeadWndR)
 	local nDiffH = (nBrowserT-nRootT) + (nRootB-nBrowserB)
 	
 	local nWidth, nHeight = tipUtil:GetScreenSize()
@@ -577,10 +598,10 @@ function SetBrowserFullScrn()
 	SetResizeEnable(false)
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
 	
-	objMainWnd:Move(0-nBrowserL, 0-nBrowserT, nNewWidth, nNewHeight)	
+	objMainWnd:Move(0-nHeadWndL, 0-nBrowserT, nNewWidth, nNewHeight)	
 		
 	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
-	objHeadWindow:Move(0-nBrowserL, -119, nNewWidth, 120)
+	objHeadWindow:Move(0, -119, nNewWidth, 120)
 end
 
 
@@ -854,7 +875,8 @@ function ShowModalDialog(wndClass, wndID, treeClass, treeID, userData, xarName)
 
 	return nRes
 end
-function CreateSubWndByName(strHostWndName, strTreeName, strInstFix)
+
+function CreateSubWndByName(strHostWndName, strTreeName, strInstFix, hOwner)
 	local bSuccess = false
 	local strFix = strInstFix or ""
 	local strInstWndName = strHostWndName..strFix
@@ -871,8 +893,11 @@ function CreateSubWndByName(strHostWndName, strTreeName, strInstFix)
 				local uiObjectTree = objectTreeTemplate:CreateInstance(strInstTreeName)
 				if uiObjectTree then
 					frameHostWnd:BindUIObjectTree(uiObjectTree)
-					local objMainWnd = GetMainWndInst()
-					local iRet = frameHostWnd:Create(objMainWnd)					
+					
+					-- local objMainWnd = GetMainWndInst()
+					-- frameHostWnd:SetParent(objMainWnd:GetWndHandle())
+					
+					local iRet = frameHostWnd:Create(hOwner)					
 					if iRet ~= nil and iRet ~= 0 then
 						bSuccess = true
 					end
@@ -886,7 +911,8 @@ end
 
 
 function ShowHeadWindow(self)
-	local bSuccess = CreateSubWndByName("TipHeadFullScrnWnd", "TipHeadFullScrnTree", ".Instance")
+	local objMainWnd = GetMainWndInst()
+	local bSuccess = CreateSubWndByName("TipHeadFullScrnWnd", "TipHeadFullScrnTree", ".Instance", objMainWnd)
 	if not bSuccess then
 		FailExitTipWnd(5)
 		return
@@ -1176,7 +1202,7 @@ function GetCfgPathWithName(strCfgName)
 		return ""
 	end
 	
-	local strCfgFilePath = tipUtil:PathCombine(strBaseDir, "YBYL\\"..tostring(strCfgName))
+	local strCfgFilePath = tipUtil:PathCombine(strBaseDir, "IECFG\\"..tostring(strCfgName))
 	return strCfgFilePath or ""
 end
 
@@ -1219,18 +1245,38 @@ end
 
 
 function GetHomePage()
+	local strHomePage = GetHomePageFromCfg()
+	if IsRealString(strHomePage) then
+		return strHomePage
+	end
+ 
+	strHomePage = GetHomePageFromReg()
+	if IsRealString(strHomePage) then
+		return strHomePage
+	end
+	
+	return "about:blank"
+end
+
+
+function GetHomePageFromCfg()
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	return tUserConfig["strHomePage"]
+end
+
+
+function GetHomePageFromReg()
 	local strHomePage = RegQueryValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\Main\\Start Page")
 	if not IsRealString(strHomePage) then
 		strHomePage = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\\Main\\Start Page")
 	end
-
 	return strHomePage
 end
 
 
 function SetHomePage(strURL)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	tUserConfig["strOpenTabURL"] = strURL
+	tUserConfig["strHomePage"] = strURL
 	SaveConfigToFileByKey("tUserConfig")
 end
 
@@ -1442,7 +1488,8 @@ end
 local g_HasCreateCllctWnd = false
 function GetCollectWndRootCtrl()
 	if not g_HasCreateCllctWnd then
-		local bSuccess = CreateSubWndByName("TipCollectWnd", "TipCollectTree", ".Instance")
+		local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
+		local bSuccess = CreateSubWndByName("TipCollectWnd", "TipCollectTree", ".Instance", objHeadWindow)
 		if bSuccess then
 			 g_HasCreateCllctWnd = true
 		else
@@ -1904,12 +1951,14 @@ function SetToolTipPos()
 	
 	if nToolRight > nDeskRight then
 		local nWidth = objRootCtrl:GetToolTipWidth()
-		objToolTipWnd:SetPositionByObject(nDeskRight-nWidth, nToolTop, nWidth, nToolBottom-nToolTop) 
+		objToolTipWnd:Move(nDeskRight-nWidth, nToolTop, nWidth, nToolBottom-nToolTop) 
 	end
 end
 
 
+local g_hToolTipTimer = nil
 function ShowToolTip(bShow, strText)
+	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
 	local objToolTipWnd = g_objToolTipWnd
 	if objToolTipWnd == nil then return end
 	
@@ -1917,10 +1966,20 @@ function ShowToolTip(bShow, strText)
 		SetToolTipText(strText)
 	end
 	
+	if g_hToolTipTimer then
+		timeMgr:KillTimer(g_hToolTipTimer)
+	end
+	
 	if bShow then
-		SetToolTipPos()
-		objToolTipWnd:DelayPopup(10)
-	else
+		g_hToolTipTimer = timeMgr:SetTimer(function(Itm, id)
+			Itm:KillTimer(id)
+
+			SetToolTipPos()
+			objToolTipWnd:UpdateWindow()
+			objToolTipWnd:DelayPopup(0)
+			
+		end, 500)	
+	else	
 		objToolTipWnd:SetVisible(false)
 	end
 end
@@ -1949,7 +2008,7 @@ obj.SendRunTimeReport = SendRunTimeReport
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir
-obj.GetYBYLVersion = GetYBYLVersion
+obj.GetExeVersion = GetExeVersion
 obj.GetInstallSrc = GetInstallSrc
 obj.GetMinorVer = GetMinorVer
 obj.AccelerateFlash = AccelerateFlash

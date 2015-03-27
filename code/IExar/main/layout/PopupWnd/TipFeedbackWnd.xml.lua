@@ -33,7 +33,7 @@ function SetVersionText(objRootCtrl)
 	local objYBYLVer = objRootCtrl:GetObject("TipAbout.YBYLVersion")
 	local objIEVer = objRootCtrl:GetObject("TipAbout.IEVersion")
 	
-	local strYBYLVer = tFunHelper.GetYBYLVersion()
+	local strYBYLVer = tFunHelper.GetExeVersion()
 	if objYBYLVer and IsRealString(strYBYLVer) then
 		objYBYLVer:SetText(strYBYLVer)
 	end

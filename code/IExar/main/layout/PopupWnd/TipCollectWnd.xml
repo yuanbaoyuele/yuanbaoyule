@@ -112,7 +112,7 @@
 						
 						<obj id="TipCollectWnd.FixBtn" class="TextureObject">
 							<attr>
-								<left>father.width-5-20</left>
+								<left>father.width-25</left>
 								<top>10</top>
 								<width>17</width>
 								<height>17</height>
@@ -127,7 +127,7 @@
 												
 						<obj id="TipCollectWnd.CloseBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-5-20</left>
+								<left>father.width-25</left>
 								<top>10</top>
 								<width>16</width>
 								<height>16</height>
@@ -317,8 +317,8 @@
             <enable>1</enable>
             <maxbox>0</maxbox>
             <minbox>1</minbox>
-            <minwidth>50</minwidth>
-            <minheight>50</minheight>
+            <minwidth>145</minwidth>
+            <minheight>125</minheight>
 			<sysmenu>0</sysmenu>
 			<appwindow>0</appwindow>
             <fps>30</fps>
