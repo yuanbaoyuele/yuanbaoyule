@@ -87,8 +87,8 @@ function AdjustTabSize(objRootCtrl)
 	
 	local objContLayout = objRootCtrl:GetControlObject("TabContainerCtrl.Container.Layout") 
 	local nFatherL, nFatherT, nFatherR, nFatherB = objContLayout:GetObjPos()
-	if nFatherR < 205 then
-		nFatherR = 205
+	if nFatherR < 210 then
+		nFatherR = 210
 	end
 	local nFatherW = nFatherR - nFatherL
 	
@@ -147,8 +147,6 @@ function AdjustTabSize(objRootCtrl)
 end
 
 
-
-
 -----事件----
 function OnInitControl(self)
 	-- SetCurMaxTabID(self, 0)
@@ -166,11 +164,20 @@ end
 function OnMsEnterAddNewTab(self)
 	local objImage = self:GetObject("TabContainerCtrl.AddNewTab.Image")
 	objImage:SetVisible(true)
+		
+	tFunHelper.ShowToolTip(true, "新选项卡(Ctrl+T)")
 end
 
 function OnMsLeaveAddNewTab(self)
 	local objImage = self:GetObject("TabContainerCtrl.AddNewTab.Image")
 	objImage:SetVisible(false)
+	
+	HideToolTip()
+end
+
+
+function OnMouseEnterThumb(self)
+	tFunHelper.ShowToolTip(true, "快速导航选项卡(Ctrl+Q)")
 end
 
 
@@ -216,14 +223,19 @@ function OnClickThumbArrow(self)
 end
 
 
-function OnClickCloseCurTab(self)
-	local objRootCtrl = self:GetOwnerControl()
-	objRootCtrl:CloseCurrentTab()	
+function OnMouseEnterArrow(self)
+	tFunHelper.ShowToolTip(true, "选项卡列表")
 end
 
 
 function HideToolTip()
-	
+	tFunHelper.ShowToolTip(false)
+end
+
+
+function OnClickCloseCurTab(self)
+	local objRootCtrl = self:GetOwnerControl()
+	objRootCtrl:CloseCurrentTab()	
 end
 
 

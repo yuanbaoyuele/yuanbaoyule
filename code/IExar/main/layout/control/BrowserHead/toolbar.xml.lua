@@ -84,7 +84,7 @@ function OnMainPageLeftButtonClick(self, x, y)
 	-- selfattr.HoverBkgID = selfattr.DownBkgID
 	-- self:Updata()
 	if self:GetID() == "Layout.MainPage.Left" then
-		--����ҳ
+		--打开主页
 		--tFunHelper.CreateAndShowMenu(self, "MainPageMenu", 0, true)
 		local strHomePage = tFunHelper.GetHomePage()
 		if strHomePage ~= "" and strHomePage ~= nil then
@@ -196,3 +196,53 @@ function OnMoreClick(self)
 	tFunHelper.TryDestroyOldMenu(self, "ToolBarMoreMenu")
 	tFunHelper.CreateAndShowMenu(self, "ToolBarMoreMenu", 26, false, true)
 end
+
+
+function OnMouseEnterMail(self)
+	tFunHelper.ShowToolTip(true, "阅读邮件")
+end
+
+
+function OnMouseEnterPrint(self)
+	tFunHelper.ShowToolTip(true, "打印(Atl+R)")
+end
+
+
+function OnMouseEnterMainPage(self)
+	tFunHelper.ShowToolTip(true, "主页(Atl+M)")
+end
+
+function OnMouseEnterHelp(self)
+	tFunHelper.ShowToolTip(true, "帮助 (Atl+L)")
+end
+
+
+function HideToolTip()
+	tFunHelper.ShowToolTip(false)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

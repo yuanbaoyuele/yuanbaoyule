@@ -60,6 +60,8 @@
 							</children>
 							<eventlist>
 								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickThumbBtn" />
+								<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterThumb" />
+								<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 						
@@ -89,6 +91,8 @@
 							</children>
 							<eventlist>
 								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickThumbArrow" />
+								<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterArrow" />
+								<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
 							</eventlist>
 						</obj>
 					</children>
