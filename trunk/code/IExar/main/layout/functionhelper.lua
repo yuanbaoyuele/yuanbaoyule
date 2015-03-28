@@ -895,16 +895,21 @@ function ShowModalDialog(wndClass, wndID, treeClass, treeID, userData, xarName)
 		local bkg = ctrl:GetControlObject("bkg")
 		bkg:SetTextureID("YBYL.MainWnd.Bkg.nofocus")
 	end
-    local nRes = modalHostWnd:DoModal(hostwnd)
-	if ctrl ~= nil then
-		local bkg = ctrl:GetControlObject("bkg")
-		bkg:SetTextureID("YBYL.MainWnd.Bkg")
-	end
-    hostwndManager:RemoveHostWnd(modalHostWnd:GetID())
-    local objtreeManager = XLGetObject("Xunlei.UIEngine.TreeManager")
-    objtreeManager:DestroyTree(uiObjectTree)	
-
-	return nRes
+	
+	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
+	
+	AsynCall(function ()
+		local nRes = modalHostWnd:DoModal(hostwnd)
+		if ctrl ~= nil then
+			local bkg = ctrl:GetControlObject("bkg")
+			bkg:SetTextureID("YBYL.MainWnd.Bkg")
+		end
+		hostwndManager:RemoveHostWnd(modalHostWnd:GetID())
+		local objtreeManager = XLGetObject("Xunlei.UIEngine.TreeManager")
+		objtreeManager:DestroyTree(uiObjectTree)
+	end)
+	
+	-- return nRes
 end
 
 function CreateSubWndByName(strHostWndName, strTreeName, strInstFix, hOwner)
@@ -1036,8 +1041,8 @@ function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup, brightal
 			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, brightalign)
 			
 			if bSucc and uHostWnd:GetMenuMode() == "manual" then
-				uObjTreeMgr:DestroyTree(strObjTreeName)
-				uHostWndMgr:RemoveHostWnd(strHostWndName)
+				-- uObjTreeMgr:DestroyTree(strObjTreeName)
+				-- uHostWndMgr:RemoveHostWnd(strHostWndName)
 			end
 		end
 	end
@@ -1536,11 +1541,11 @@ function GetCollectWndRootCtrl()
 end
 
 
-function ShowCollectWnd(nShowType, bFix)
+function ShowCollectWnd(nShowType, bFix, bForceShow)
 	local objRootCtrl = GetCollectWndRootCtrl()
 	local objWnd = GetWndInstByName("TipCollectWnd.Instance")
 	
-	if objWnd:GetVisible() then
+	if not bForceShow and objWnd:GetVisible() then
 		objRootCtrl:CloseCollectWnd()
 		return
 	end	

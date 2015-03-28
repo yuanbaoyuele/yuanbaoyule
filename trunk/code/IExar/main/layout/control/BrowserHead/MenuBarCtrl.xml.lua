@@ -88,7 +88,7 @@ end
 
 
 function OnLButtonDownMenuItem(self)
-	-- FocusOnItem(self, true)
+	FocusOnItem(self, true)
 end
 
 

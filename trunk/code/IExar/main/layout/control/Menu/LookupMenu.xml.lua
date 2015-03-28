@@ -47,16 +47,26 @@ end
 
 -----浏览器栏子菜单
 function OnSelect_CollectBox(self)
-	
-end
-
-function OnSelect_History(self)
-	
+	local bFix = true
+	local nTabIndex = 1
+	local bForceShow = true
+	tFunHelper.ShowCollectWnd(nTabIndex, bFix, bForceShow)
 end
 
 function OnSelect_Source(self)
-	
+	local bFix = true
+	local nTabIndex = 2
+	local bForceShow = true
+	tFunHelper.ShowCollectWnd(nTabIndex, bFix, bForceShow)
 end
+
+function OnSelect_History(self)
+	local bFix = true
+	local nTabIndex = 3
+	local bForceShow = true
+	tFunHelper.ShowCollectWnd(nTabIndex, bFix, bForceShow)
+end
+
 
 -----转到子菜单
 function OnInit_Back(self)

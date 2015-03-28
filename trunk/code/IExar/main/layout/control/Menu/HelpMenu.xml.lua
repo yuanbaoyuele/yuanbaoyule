@@ -29,7 +29,8 @@ function OnSelect_ReportSet(self)
 end
 
 function OnSelect_About(self)
-	--tFunHelper.ShowPopupWndByName("TipAboutWnd.Instance", true)
+	local objTree = self:GetOwner()
+	local objMenuHostWnd = objTree:GetBindHostWnd()
 	tFunHelper.ShowModalDialog("TipAboutWnd", "TipAboutWndInstance", "TipAboutTree", "TipAboutTreeInstance")
 end
 

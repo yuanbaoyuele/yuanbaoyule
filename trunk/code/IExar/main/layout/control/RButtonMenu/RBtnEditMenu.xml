@@ -1,16 +1,21 @@
 <xlue>
 	<objtemplate id="rbtn.editmenu.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
-			<ItemTop>5</ItemTop>
-			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
 		</attr>
 		<children>
-			<obj id="Clear" class="MenuItemObject" templateid="menu.context.item">
+			<obj id="Undo" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
-					<Text>清除</Text>
+					<Text>撤销</Text>
+					<AccKey>U</AccKey>
 				</attr>
 				<eventlist>
-					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Clear" />
+					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Undo" />
 				</eventlist>
 			</obj>
 			
@@ -20,35 +25,62 @@
 				</attr>
 			</obj>
 			
-			<obj id="Copy" class="MenuItemObject" templateid="menu.context.item">
-				<attr>
-					<Text>复制</Text>
-					<RightText>Ctrl+C</RightText>
-				</attr>
-				<eventlist>
-					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Copy" />
-				</eventlist>
-			</obj>
-			
 			<obj id="Cut" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>剪切</Text>
-						<RightText>Ctrl+X</RightText>
+					<AccKey>T</AccKey>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Cut" />
 				</eventlist>
 			</obj>
 			
+			<obj id="Copy" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>复制</Text>
+					<AccKey>C</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Copy" />
+				</eventlist>
+			</obj>
+			
 			<obj id="Paste" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>粘贴</Text>
-					<RightText>Ctrl+V</RightText>
+					<AccKey>P</AccKey>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Paste" />
 				</eventlist>
 			</obj>
+			
+			<obj id="Clear" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>删除</Text>
+					<AccKey>D</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_Clear" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="SelAll" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>全选</Text>
+					<AccKey>A</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnEditMenu.xml.lua" function="OnSelect_SelAll" />
+				</eventlist>
+			</obj>
+			
 		</children>
 	</objtemplate>
 	
@@ -57,7 +89,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>180</width>
-			<height>130</height>
+			<height>145</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -65,7 +97,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>180</width>
-				<height>130</height>
+				<height>145</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">
