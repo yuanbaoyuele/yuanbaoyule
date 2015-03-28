@@ -1,4 +1,7 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+local SearchEngineMap = {}
+local SearchEngineDisplay = {}
+local SearchEngineIcon = {}
 
 function OnClick(self)
 	local control = self:GetOwnerControl()
@@ -15,29 +18,25 @@ function OnClick(self)
 	end
 end
 
-local SearchEngineMap = {
-	{ displayName = "百度一下 (默认)", name = "baidu", icon = "bitmap.search.baidu"},
-	{ displayName = "Google", name = "google", icon = "bitmap.search.google"},
-	{ displayName = "Live Search", name = "bing", icon = "bitmap.search.livesearch"},
-	{ displayName = "百度", name = "baidu2", icon = "bitmap.search.baidu"},
-}
-
-local SearchEngineDisplay = {
-	SearchEngineMap[1].displayName,
-	SearchEngineMap[2].displayName,
-	SearchEngineMap[3].displayName,
-	SearchEngineMap[4].displayName,
-	"在此页上查找...",
-	"查找更多提供程序...",
-	"管理搜索提供程序",
-}
-
-local SearchEngineIcon = {
-	SearchEngineMap[1].icon,
-	SearchEngineMap[2].icon,
-	SearchEngineMap[3].icon,
-	SearchEngineMap[4].icon,
-}
+function OnInitControl(self)
+	local tUserConfig = tFunHelper.ReadConfigFromMemByKey("tUserConfig") or {}
+	SearchEngineMap = tUserConfig["SearchEngine"] or {
+		{ displayName = "百度一下 (默认)", name = "baidu", url="http://www.baidu.com/s?wd={searchword}"},
+		{ displayName = "Google", name = "google", url="http://www.google.com/q={searchword}"},
+		{ displayName = "Live Search", name = "bing",url="http://cn.bing.com/search?q={searchword}"},
+		--{ displayName = "百度", name = "baidu2", icon = "bitmap.search.baidu",url="http://cn.bing.com/search?q=xxx"},
+	}
+	
+	for i, v in ipairs(SearchEngineMap) do
+		SearchEngineDisplay[i] = v.displayName
+		SearchEngineIcon[i] = tFunHelper.GetIcoBitmapObj(tFunHelper.GetSearchEngineIcoName(v.url))
+	end
+	SearchEngineDisplay[#SearchEngineDisplay+1] = "在此页上查找..."
+	SearchEngineDisplay[#SearchEngineDisplay+1] = "查找更多提供程序..."
+	SearchEngineDisplay[#SearchEngineDisplay+1] = "管理搜索提供程序"
+	local attr = self:GetAttribute()
+	attr.SearchEngine = SearchEngineMap[1]
+end
 
 
 function OnClick2(self)
@@ -164,14 +163,27 @@ function OnControlFocusChange(self, focus)
 						end)
 					end
 					local attr = btn:GetAttribute()
-					local icon = string.gsub(SearchEngineMap[i]["icon"], "bitmap", "texture")
-					attr.ForegroundResID = icon
-					attr.ForegroundLeftPos = 3
-					attr.ForegroundWidth = 16
-					attr.ForegroundHeight = 16
+					local imgobj = self:GetControlObject("miniimgobj"..i)
+					if not imgobj then
+						imgobj = objFactory:CreateUIObject("miniimgobj"..i, "ImageObject")
+						if SearchEngineIcon[i] then
+							imgobj:SetBitmap(SearchEngineIcon[i])
+						else
+							local strDefResID = tFunHelper.GetDefaultIcoImgID()
+							imgobj:SetResID(strDefResID)
+						end
+						imgobj:SetDrawMode(1)
+						imgobj:SetDrawMode(2)
+						btn:AddChild(imgobj)
+						imgobj:SetObjPos2(3, 3, 16, 16)
+						imgobj:SetZorder(999999)
+					end
 					attr.NormalBkgID = ""
 					attr.HoverBkgID = "searchselect.hover"
 					attr.DownBkgID = "searchselect.down"
+					if i>=5 then
+						break
+					end
 				end
 				local lineobj = self:GetControlObject("searchctrlline")
 				if not lineobj then
@@ -238,8 +250,13 @@ function SetSearchEngine(control, engine)
 	local attr = control:GetAttribute()
 	for i=1, #SearchEngineMap do
 		if SearchEngineMap[i].displayName == engine then
-			icon:SetResID(SearchEngineMap[i].icon)
-			attr.SearchEngine = SearchEngineMap[i].name
+			if SearchEngineIcon[i] then
+				icon:SetBitmap(SearchEngineIcon[i])
+			else
+				local strDefResID = tFunHelper.GetDefaultIcoImgID()
+				icon:SetResID(strDefResID)
+			end
+			attr.SearchEngine = SearchEngineMap[i]
 			break
 		end
 	end

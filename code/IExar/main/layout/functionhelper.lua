@@ -1603,6 +1603,55 @@ function DownLoadIco(strURL, fnCallBack)
 	end			
 end
 
+function DownLoadSearchEngineIco(strURL, fnCallBack)
+	if not IsRealString(strURL) then
+		return 
+	end
+	
+	local strDomain = string.match(strURL, "(http://[^/]+)")		
+	if not IsRealString(strDomain) then	
+		return
+	end
+	
+	local strIconURL = strDomain .. "/favicon.ico"	
+	local strIcoDir = GetCfgPathWithName("SearchEngineIcon")
+	if not tipUtil:QueryFileExists(strIcoDir) then
+		tipUtil:CreateDir(strIcoDir)
+	end
+	local strIcoID = tipUtil:GetStringMD5(strIconURL)
+	local strIcoName = tostring(strIcoID)..".ico" 
+	local strSavePath = tipUtil:PathCombine(strIcoDir, strIcoName)
+	
+	if tipUtil:QueryFileExists(strSavePath) then
+		fnCallBack(0, strSavePath, strIcoName)
+	else
+		NewAsynGetHttpFile(strIconURL, strSavePath, false, 
+		function(bRet, strIcoPath)
+			fnCallBack(bRet, strIcoPath, strIcoName)
+		end, 60*1000)
+	end			
+end
+
+function GetSearchEngineIcoName(strURL)
+	local strDomain = string.match(strURL, "(http://[^/]+)")	
+	if not IsRealString(strDomain) then
+		strDomain = string.match(strURL, "(https://[^/]+)")	
+	end
+
+	if not IsRealString(strDomain) then	
+		return ""
+	end
+	
+	local strIconURL = strDomain .. "/favicon.ico"	
+	local strIcoDir = GetCfgPathWithName("SearchEngineIcon")
+	if not tipUtil:QueryFileExists(strIcoDir) then
+		tipUtil:CreateDir(strIcoDir)
+	end
+	local strIcoID = tipUtil:GetStringMD5(strIconURL)
+	local strIcoName = tostring(strIcoID)..".ico" 
+	
+	return tostring(strIcoName)
+end
 
 function GetURLInfoFromHistory(strInputURL)
 	local strURL = FormatURL(strInputURL)
@@ -2108,6 +2157,8 @@ obj.GetUserCollectList = GetUserCollectList
 obj.AddCurWebToCollect = AddCurWebToCollect
 obj.GetIcoNameFromURL = GetIcoNameFromURL
 obj.DownLoadIco = DownLoadIco
+obj.GetSearchEngineIcoName = GetSearchEngineIcoName
+obj.DownLoadSearchEngineIco = DownLoadSearchEngineIco
 obj.GetResourceDir = GetResourceDir
 
 --菜单

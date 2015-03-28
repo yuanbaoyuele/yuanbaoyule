@@ -98,10 +98,12 @@
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<DisableBkgID></DisableBkgID>
 								<ForegroundResID>slotmail</ForegroundResID>
 								<ForegroundLeftPos>7</ForegroundLeftPos>
 								<ForegroundWidth>16</ForegroundWidth>
 								<ForegroundHeight>16</ForegroundHeight>
+								<Enable>0</Enable>
 							</attr>
 							<eventlist>
 								<event name="OnMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterMail" />
@@ -181,6 +183,7 @@
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="toolbar.xml.lua" func="OnPagePClick" />
+								<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterPage" />
 							</eventlist>
 						</obj>
 						<!--安全-->
@@ -203,6 +206,7 @@
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="toolbar.xml.lua" func="OnSafeClick" />
+								<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterSafe" />
 							</eventlist>
 						</obj>
 						<!--工具-->
@@ -225,6 +229,7 @@
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="toolbar.xml.lua" func="OnToolOClick" />
+								<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterTool" />
 							</eventlist>
 						</obj>
 						<!--帮助-->
@@ -270,6 +275,7 @@
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<Visible>false</Visible>
 							</attr>
 							<children>
 								<obj id="Layout.More.Right" class="TextureObject">
