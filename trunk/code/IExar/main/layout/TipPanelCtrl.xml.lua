@@ -54,6 +54,8 @@ local g_tShortKeyFun = {
 	["100_76"] = function() ShortK_HelpMenu() end, --Ctrl+L
 	["100_77"] = function() ShortK_MainPageMenu() end, --Alt+M
 	["100_82"] = function() ShortK_PrinterMenu() end, --Alt+R
+	["000_112"] = function() ShortK_IEHelp() end, --F1
+	["011_46"] = function() ShortK_ClearHistory() end, --Ctrl+Shift+Del
 }
 
 function OnKeyDown(tParam)
@@ -137,6 +139,21 @@ function ShortK_FullScreen(self)
 	end
 end
 
+function ShortK_IEHelp(self)
+	local strResDir = tFunHelper.GetResourceDir()
+	if not IsRealString(strResDir) then
+		return
+	end
+	local strIEHelp_chm = tipUtil:PathCombine(strResDir, "iexplore.chm")
+	if not tipUtil:QueryFileExists(strIEHelp_chm) then
+		return
+	end
+	tipUtil:ShellExecute(0, "open", strIEHelp_chm, "", 0, "SW_SHOW")
+end
+
+function ShortK_ClearHistory(self)
+	tFunHelper.ShowModalDialog("TipDeleteExplorerHistroyWnd", "TipDeleteExplorerHistroyWndInstance", "TipDeleteExplorerHistroyWndTree", "TipDeleteExplorerHistroyWndTreeInstance")
+end
 
 --------------------------------------------------
 function OpenToolBarMenu(strBtnName, strMenuName)
