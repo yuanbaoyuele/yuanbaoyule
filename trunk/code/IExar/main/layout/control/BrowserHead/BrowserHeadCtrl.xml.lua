@@ -42,7 +42,60 @@ function OnInitControl(self)
 	self:SetHeadFullScrnStyle(false)
 end
 
+
+function OnPosChange(self)
+	if tFunHelper.IsBrowserFullScrn() then
+		return
+	end
+
+	SetAddressBarPos(self)
+	SetRefreshBtnPos(self)
+	SetSearchCtrlPos(self)
+end
+
 --------
+function SetAddressBarPos(objRootCtrl)
+	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
+	local fw = fr - fl
+	
+	local AddBarW = fw-477
+	if AddBarW < 130 then
+		AddBarW = 130
+	end
+	
+	local objAddressBar = objRootCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")	
+	objAddressBar:SetObjPos2(85, 5, AddBarW, 22)
+
+end
+
+function SetRefreshBtnPos(objRootCtrl)
+	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
+	local fw = fr - fl
+	
+	local BtnL = fw-387
+	if BtnL < 220 then
+		BtnL = 220
+	end
+	
+	local objBtn = objRootCtrl:GetControlObject("BrowserHeadCtrl.RefreshBtnList")	
+	objBtn:SetObjPos2(BtnL, 5, 70, 22)
+end
+
+
+function SetSearchCtrlPos(objRootCtrl)
+	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
+	local fw = fr - fl
+	
+	local SearchL = fw-302
+	if SearchL < 300 then
+		SearchL = 300
+	end
+	
+	local objSearchCtrl = objRootCtrl:GetControlObject("BrowserHeadCtrl.SearchCtrl")	
+	objSearchCtrl:SetObjPos2(SearchL, 5, 255, 22)
+end
+
+
 function ProecssAddressBar(objRootCtrl, objTabCtrl)
 	local objAddressBar = objRootCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")
 	if objAddressBar then

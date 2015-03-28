@@ -1,8 +1,8 @@
 <xlue>
 	<control class="BoltFox.Search.Ctrl">
 	    <attr_def>
-			<attr name="SearchEngine" type="userdata">
-				<default>{}</default>
+			<attr name="SearchEngine" type="string">
+				<default>baidu</default>
 			</attr>
 		</attr_def>
 		<method_def>
@@ -59,13 +59,10 @@
 						<obj id="icon" class="ImageObject">
 							<attr>
 								<left>3</left>
-								<top>3</top>
 								<width>16</width>
-								<height>16</height>
+								<height>father.height</height>
 								<valign>center</valign>
 								<image>bitmap.search.baidu</image>
-								<drawmode>1</drawmode>
-								<antialias>2</antialias>
 							</attr>
 							<eventlist>
 								<event name="OnLButtonUp" file="Search.xml.lua" func="icon_OnLButtonUp" />
@@ -87,8 +84,6 @@
 								<event name="OnKeyDown" file="Search.xml.lua" func="Edit_OnKeyDown"/>
 								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterEdit" />
 								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
-								<event name="OnRButtonUp" file="AddressBarCtrl.xml.lua" func="OnUrlEditRButtonUp" />
-								<event name="OnKeyDown" file="AddressBarCtrl.xml.lua" func="OnUrlEditKeyDown" />
 							</eventlist>
 						</obj>
 					</children>
@@ -100,8 +95,6 @@
 			</children>
 			<eventlist>
 				<event name="OnControlFocusChange" file="Search.xml.lua" func="OnControlFocusChange" />
-				<event name="OnPosChange" file="Search.xml.lua" func="OnPosChange" />
-				<event name="OnInitControl" file="Search.xml.lua" func="OnInitControl" />
 			</eventlist>
 		</objtemplate>
 	</control>

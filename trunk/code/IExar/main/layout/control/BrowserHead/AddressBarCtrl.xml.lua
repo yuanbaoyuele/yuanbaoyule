@@ -88,7 +88,6 @@ function HideToolTip(self)
 end
 
 
-
 --收藏--
 function OnLButtonUpCllct(self)
 	local objRootCtrl = self:GetOwnerControl()
@@ -202,6 +201,10 @@ function AddCollect(objRootCtrl, strURL)
 	
 	tFunHelper.SaveUserCollectURL(strURL)
 end
+
+
+
+
 
 
 function RouteToFather(self)
