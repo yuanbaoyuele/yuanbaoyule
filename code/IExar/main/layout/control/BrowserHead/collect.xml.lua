@@ -15,7 +15,7 @@ local g_nCurrentIndex = 0
 
 function Show(self, index)
 	g_nCurrentIndex = index
-	
+	UpdateScrollBar(self)
 	uiOwner = self
 	if index == 1 then --收藏夹
 		RemoveAll()
@@ -420,7 +420,7 @@ function CreateNode(v, icon, left, isdir)
 				local _nodebkg = objparent:GetObject("nodebkg4drag")
 				local _name = string.match(lastclickname, "^.*[/\\]([^/\\]*)$")
 				if not _nodebkg then
-					--XLMessageBox(type(_nodebkg))
+					
 					_nodebkg = objFactory:CreateUIObject("nodebkg4drag", "LayoutObject")
 					_nodebkg:SetObjPos2(x, y, 140, 16)
 					local _imgobj = objFactory:CreateUIObject("img_nodebkg4drag", "ImageObject")
@@ -604,10 +604,7 @@ end
 
 --滚动条
 function UpdateScrollBar(objRootCtrl)
-	local attr = objRootCtrl:GetAttribute()
-	local nTotalCount = GetItemCount(objRootCtrl)
-	attr.nTotalLineCount = nTotalCount
-		
+	-- UpdateContainerPos(objRootCtrl)
 	ResetScrollBar(objRootCtrl)
 end
 
@@ -620,10 +617,11 @@ function ResetScrollBar(objRootCtrl)
 		return false
 	end
 	
+	MoveItemListPanel(objRootCtrl, 0)
 	local attr = objRootCtrl:GetAttribute()
 	local nLinePerPage = GetLinePerPage(objRootCtrl)
-	local nTotalLineCount = attr.nTotalLineCount
-	
+	local nTotalLineCount = GetItemCount(objRootCtrl)
+
 	local nItemHeight = GetItemHeight(objRootCtrl)
 	local nMaxHeight = nItemHeight * nTotalLineCount
 	local nPageSize = nItemHeight * nLinePerPage
@@ -727,7 +725,7 @@ function GetLinePerPage(objRootCtrl)
 	local h = b - t
 	
 	local nItemHeight = GetItemHeight(objRootCtrl)
-	local nLinePerPage = math.ceil(h/nItemHeight)
+	local nLinePerPage = math.floor(h/nItemHeight)
 	return nLinePerPage
 end
 
@@ -735,6 +733,39 @@ function GetItemHeight(objRootCtrl)
 	return 18
 end
 
+
+function GetContainerRealHeight(objRootCtrl) 
+	local nItemHeight = GetItemHeight(objRootCtrl)
+	
+	if g_nCurrentIndex == 1 then
+		return treeNodeIndex * nItemHeight
+	elseif g_nCurrentIndex == 3 then
+		return nIEListIndex * nItemHeight
+	end
+end
+
+
+function UpdateContainerPos(objRootCtrl)
+	local objScrollBar = objRootCtrl:GetControlObject("listbox.vscroll")
+	if objScrollBar == nil then
+		return false
+	end
+	
+	local nMinPos, nMaxPos = objScrollBar:GetScrollRange()
+	local nScrollPos = objScrollBar:GetScrollPos()
+	
+	if nScrollPos >= nMaxPos then
+		local objMainLayout = objRootCtrl:GetControlObject("Layout.main")
+		local MainL, MainT, MainR, MainB = objMainLayout:GetObjPos()
+		
+		local objContainer = objRootCtrl:GetControlObject("Layout.Container")
+		local ContL, ContT, ContR, ContB = objContainer:GetObjPos()
+		local nRealHeight = GetContainerRealHeight(objRootCtrl) 
+		local nDiff = MainB - (nRealHeight+ContT)
+		
+		MoveItemListPanel(objRootCtrl, 0-nDiff)
+	end
+end
 
 -----------
 function RouteToFather(self)
