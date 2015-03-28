@@ -7,7 +7,11 @@ function OnInitControl(self)
 end
 
 function OnCreate(self)
-	local tree = self:GetBindUIObjectTree()	local list = tree:GetUIObject("list")		local data = self:GetUserData()	for i=1, #data.textArray do		list:AddString(data.textArray[i], data.iconArray[i])	end		list:UpdateUI()
+	local tree = self:GetBindUIObjectTree()	local list = tree:GetUIObject("list")		local data = self:GetUserData()	for i=1, #data.textArray do
+		list:AddString(data.textArray[i], data.iconArray[i])
+		if i >= 8 then
+			break
+		end	end		list:UpdateUI()
 end
 
 function OnSize(self)	XLPrint("OnSize")

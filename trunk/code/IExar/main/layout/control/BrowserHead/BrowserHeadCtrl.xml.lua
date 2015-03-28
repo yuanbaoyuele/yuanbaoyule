@@ -1,17 +1,10 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 
-
-local SearchParam = {
-	baidu = "http://www.baidu.com/s?wd=",
-	google = "http://www.google.com/q=",
-	soso = "http://www.soso.com/q?pid=s.idx&cid=s.idx.se&w=xxx",
-	bing = "http://cn.bing.com/search?q=xxx",
-}
 function OnSearch(self, func, txt)
 	local attr = self:GetAttribute()
 	
-	local searchurl = SearchParam[attr.SearchEngine]..txt
+	local searchurl = string.gsub(string.lower(attr.SearchEngine["url"]), "{searchword}", txt)
 	tFunHelper.OpenURLInNewTab(searchurl)
 end
 
