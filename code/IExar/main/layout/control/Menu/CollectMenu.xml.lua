@@ -19,9 +19,11 @@ function OnSelect_AddCurTabToCollect(self)
 end
 
 function OnSelect_ManageCollect(self)
-	local objMainInst = tFunHelper.GetMainWndInst()
-	local hMainWnd = objMainInst:GetWndHandle()
-	tIEMenuHelper:ExecuteCMD("OrganizeFav", hMainWnd)
+	AsynCall( function()
+		local objMainInst = tFunHelper.GetMainWndInst()
+		local hMainWnd = objMainInst:GetWndHandle()
+		tIEMenuHelper:ExecuteCMD("OrganizeFav", hMainWnd)
+	end)
 end
 
 function OnNewDir(self)

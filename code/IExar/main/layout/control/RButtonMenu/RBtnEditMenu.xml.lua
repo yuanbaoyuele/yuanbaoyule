@@ -2,6 +2,15 @@ local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 
 
 -------事件---
+
+function OnSelect_Undo(self)
+	local objEdit = GetEditObject(self)
+	if objEdit then
+		objEdit:Undo()
+	end
+end
+
+
 function OnSelect_Clear(self)
 	local objEdit = GetEditObject(self)
 	if objEdit then
@@ -33,6 +42,13 @@ function OnSelect_Paste(self)
 end
 
 
+function OnSelect_SelAll(self)
+	local objEdit = GetEditObject(self)
+	if objEdit then
+		objEdit:SetSelAll()
+	end
+end
+
 
 function GetEditObject(objMenuItem)
 	local objTree = objMenuItem:GetOwner()
@@ -42,6 +58,7 @@ function GetEditObject(objMenuItem)
 	local objEdit = objNormalCtrl:GetRelateObject()
 	return objEdit
 end
+
 
 
 function IsRealString(str)

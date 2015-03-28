@@ -142,6 +142,8 @@ end
 
 
 function OnUrlEditRButtonUp(self)
+	local nBegin, nEnd = self:GetSel()
+	self:SetSel(nBegin, nEnd)
 	tFunHelper.TryDestroyOldMenu(self, "RBtnEditMenu")
 	tFunHelper.CreateAndShowMenu(self, "RBtnEditMenu", 0, true)
 end
