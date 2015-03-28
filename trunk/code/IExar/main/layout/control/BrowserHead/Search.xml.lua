@@ -29,7 +29,7 @@ function OnInitControl(self)
 	
 	for i, v in ipairs(SearchEngineMap) do
 		SearchEngineDisplay[i] = v.displayName
-		SearchEngineIcon[i] = tFunHelper.GetIcoBitmapObj(tFunHelper.GetSearchEngineIcoName(v.url))
+		SearchEngineIcon[i] = tFunHelper.GetSearchEngineIcoObj(tFunHelper.GetIcoNameFromURL(v.url))
 	end
 	SearchEngineDisplay[#SearchEngineDisplay+1] = "在此页上查找..."
 	SearchEngineDisplay[#SearchEngineDisplay+1] = "查找更多提供程序..."
