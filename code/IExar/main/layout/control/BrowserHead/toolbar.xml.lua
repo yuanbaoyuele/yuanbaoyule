@@ -1,4 +1,5 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
+local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 local gStatMenuPop = false
 local gLastSelectObj
 local gLastMenuName
