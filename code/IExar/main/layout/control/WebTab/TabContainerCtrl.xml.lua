@@ -35,6 +35,7 @@ function CloseCurrentTab(self)
 	local objRootCtrl = self
 	local nTabID = GetActiveTabID(objRootCtrl)
 	CloseTabByID(objRootCtrl, nTabID)
+	TerminateWhenNoTab(objRootCtrl)
 end
 
 

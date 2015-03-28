@@ -3,12 +3,6 @@ local tipUtil = tFunHelper.tipUtil
 local gRootCtrl = nil
 
 
-function OnClose( self )
-	-- self:Show(0)
-	return false, false
-end
-
-
 local gTipStartTime = nil
 function GetTipStartTime()
 	return gTipStartTime
@@ -18,8 +12,6 @@ XLSetGlobal("YBYL.GetTipStartTime", GetTipStartTime)
 function OnShowWindow(self, bShow)
 	if bShow then
 		gTipStartTime = tipUtil:GetCurrentUTCTime()
-		SetWindowSizeProfile(self)
-		
 		tFunHelper.ShowHeadWindow()
 	end
 end
@@ -71,6 +63,8 @@ end
 
 
 function OnDestroy( self )
+	tFunHelper.ReportAndExit()
+	
 	local objtree = self:GetBindUIObjectTree()
 	if objtree ~= nil then
 		self:UnbindUIObjectTree()
@@ -82,28 +76,9 @@ function OnDestroy( self )
 		local hostwndManager = XLGetObject("Xunlei.UIEngine.HostWndManager")
 		local tempWnd = hostwndManager:GetHostWnd(wndId)
 		if tempWnd then
-			hostwndManager:RemoveHostWnd(wndId)
+			-- hostwndManager:RemoveHostWnd(wndId)
 		end
 	end
-end
-
-
-function SetWindowSizeProfile(objHostWnd)
-	local nLDiff, nTDiff, nRDiff, nBDiff = tFunHelper.GetWindowBorder()
-	objHostWnd:SetBorder(nLDiff/2, 0, 0, 0)
-	
-	local nScreenL, nScreenT, nScreenR, nScreenB = tipUtil:GetWorkArea()	
-	local nWidth = nScreenR-nScreenL
-	local nHeight = nScreenB-nScreenT
-	local nDiffW = nLDiff+nRDiff+1
-	local nDiffH = nTDiff+nBDiff
-	local nNewWidth = nWidth+nDiffW
-	local nNewHeight = nHeight+nDiffH
-	
-	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objHostWnd:GetWindowRect()
-	tFunHelper.RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
-	tFunHelper.RecordTrackSize(nNewWidth, nNewHeight)
-	objHostWnd:SetMaxTrackSize(nNewWidth, nNewHeight)	
 end
 
 

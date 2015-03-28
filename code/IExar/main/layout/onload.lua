@@ -51,7 +51,8 @@ function ShowMainTipWnd(objMainWnd)
 	objMainWnd:Show(5)
 	objMainWnd:SetTitle("Internet Explorer")
 	SendStartupReport(true)
-	-- FunctionObj.SetWindowMax()
+	
+	FunctionObj.RestoreWndSize()
 end
 
 
@@ -333,7 +334,6 @@ function PopTipWnd(OnCreateFunc)
 		FunctionObj:FailExitTipWnd(4)
 	end
 end
-
 
 
 function ProcessCommandLine()

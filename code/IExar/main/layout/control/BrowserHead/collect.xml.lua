@@ -11,7 +11,11 @@ local strFavoritesPath = tFunHelper.GetFavoriteDir()
 local strSysTemp = tipUtil:GetSystemTempPath()
 local strPathCachePath = tipUtil:PathCombine(strSysTemp, "iefilepathmap.dat")
 local tUrlHistory = nil
+local g_nCurrentIndex = 0
+
 function Show(self, index)
+	g_nCurrentIndex = index
+	
 	uiOwner = self
 	if index == 1 then --收藏夹
 		RemoveAll()
@@ -232,6 +236,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 				tListAttr[key]["ext"] = not tListAttr[key]["ext"]
 				RemoveAll()
 				CreateHistoryListUI()
+				UpdateScrollBar(uiOwner)
 			else
 				local strUrl = v[3]["pwcsUrl"]
 				if IsRealString(strUrl) then
@@ -303,6 +308,7 @@ end
 function ReBuild()
 	RemoveAll()
 	Dir2TreeList(strFavoritesPath, 10)
+	UpdateScrollBar(uiOwner)
 	--AdjustBkgPos()
 end
 
@@ -591,23 +597,144 @@ function RemoveAll()
 end
 
 
------------事件
-function OnClickAddToBar(self)
-
+function OnPosChange(self)
+	UpdateScrollBar(self)
 end
 
 
-function OnClickAddArrow(self)
-
+--滚动条
+function UpdateScrollBar(objRootCtrl)
+	local attr = objRootCtrl:GetAttribute()
+	local nTotalCount = GetItemCount(objRootCtrl)
+	attr.nTotalLineCount = nTotalCount
+		
+	ResetScrollBar(objRootCtrl)
 end
 
-function OnDownFixBtn(self)
-
+function ResetScrollBar(objRootCtrl)
+	if objRootCtrl == nil then
+		return false
+	end
+	local objScrollBar = objRootCtrl:GetControlObject("listbox.vscroll")
+	if objScrollBar == nil then
+		return false
+	end
+	
+	local attr = objRootCtrl:GetAttribute()
+	local nLinePerPage = GetLinePerPage(objRootCtrl)
+	local nTotalLineCount = attr.nTotalLineCount
+	
+	local nItemHeight = GetItemHeight(objRootCtrl)
+	local nMaxHeight = nItemHeight * nTotalLineCount
+	local nPageSize = nItemHeight * nLinePerPage
+	
+	objScrollBar:SetScrollRange( 0, nMaxHeight - nPageSize, true )
+	objScrollBar:SetPageSize(nPageSize, true)	
+		
+	if nLinePerPage == 0 or nLinePerPage >= nTotalLineCount then
+		objScrollBar:SetScrollPos(0, true)	
+		objScrollBar:SetVisible(false)
+		objScrollBar:SetChildrenVisible(false)
+		return true
+	else
+		objScrollBar:SetVisible(true)
+		objScrollBar:SetChildrenVisible(true)
+		objScrollBar:Show(true)
+	end
+	
+	return true
 end
 
-function OnUpFixBtn(self)
 
+function CLB__OnScrollBarMouseWheel(self, name, x, y, distance)
+	local objRootCtrl = self:GetOwnerControl()
+	local nScrollPos = self:GetScrollPos()
+
+	local nItemHeight = GetItemHeight(objRootCtrl)
+		
+    if distance > 0 then
+		self:SetScrollPos( nScrollPos - nItemHeight, true )
+    else		
+		self:SetScrollPos( nScrollPos + nItemHeight, true )
+    end
+
+	local nNewScrollPos = self:GetScrollPos()
+	MoveItemListPanel(objRootCtrl, nNewScrollPos)
+	return true	
 end
+
+
+function CLB__OnScrollMousePosEvent(self)
+	local objRootCtrl = self:GetOwnerControl()
+	local nScrollPos = self:GetScrollPos()
+	
+	MoveItemListPanel(objRootCtrl, nScrollPos)
+end
+
+
+function CLB__OnVScroll(self, fun, type_, pos)
+	local objRootCtrl = self:GetOwnerControl()
+	local nScrollPos = self:GetScrollPos()
+    local nItemHeight = GetItemHeight(objRootCtrl)
+		
+	--点击向上按钮或上方空白
+    if type_==1 then
+        self:SetScrollPos( nScrollPos - nItemHeight, true )
+	end
+	
+	--点击向下按钮或下方空白
+    if type_==2 then
+		self:SetScrollPos( nScrollPos + nItemHeight, true )
+    end
+
+	local nNewScrollPos = self:GetScrollPos()
+	MoveItemListPanel(objRootCtrl, nNewScrollPos)
+	return true
+end
+
+
+function MoveItemListPanel(objRootCtrl, nScrollPos)
+	if not objRootCtrl then
+		return
+	end
+	
+	local objContainer = objRootCtrl:GetControlObject("Layout.Container")
+	if not objContainer then
+		return
+	end
+	
+	local nL, nT, nR, nB = objContainer:GetObjPos()
+	local nHeight = nB-nT
+	local nNewT = 0-nScrollPos
+	
+	objContainer:SetObjPos(nL, nNewT, nR, nNewT+nHeight)
+end
+
+
+function GetItemCount(objRootCtrl)
+	if g_nCurrentIndex == 1 then
+		return treeNodeIndex
+	elseif g_nCurrentIndex == 3 then
+		return nIEListIndex
+	end
+	
+	return 0
+end
+
+function GetLinePerPage(objRootCtrl)
+	local objMainLayout = objRootCtrl:GetControlObject("Layout.main")
+	local l, t, r, b = objMainLayout:GetObjPos()
+	local h = b - t
+	
+	local nItemHeight = GetItemHeight(objRootCtrl)
+	local nLinePerPage = math.ceil(h/nItemHeight)
+	return nLinePerPage
+end
+
+function GetItemHeight(objRootCtrl)
+	return 18
+end
+
 
 -----------
 function RouteToFather(self)

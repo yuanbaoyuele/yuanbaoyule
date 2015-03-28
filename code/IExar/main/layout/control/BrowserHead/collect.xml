@@ -4,6 +4,8 @@
             <attr name="Index" type="int" >
               <default>1</default>
             </attr>
+			<attr name="nLinePerPage" type="int" ><default>0</default></attr>
+			<attr name="nTotalLineCount" type="int" ><default>0</default></attr>
         </attr_def>
         <method_def>
             <Show file="collect.xml.lua" func="Show" />
@@ -16,6 +18,7 @@
                         <top>0</top>
                         <width>father.width</width>
                         <height>father.height</height>
+						<limitchild>1</limitchild>
 						<texture></texture>
                     </attr>
 					<children>
@@ -34,7 +37,43 @@
 						</obj>
 					</children>
 				</obj>
-			 </children>
+				
+				<obj id="listbox.vscroll" class="TipAddin.ScrollBar">
+					<attr>
+						<Type>1</Type>
+						<ThumbBtn_normal>YBYL.Scroll.Bar.Normal</ThumbBtn_normal>
+						<ThumbBtn_hover>YBYL.Scroll.Bar.Hover</ThumbBtn_hover>
+						<ThumbBtn_down>YBYL.Scroll.Bar.Down</ThumbBtn_down>
+						<LeftBtn_normal>Scroll.UpArrow.Normal</LeftBtn_normal>
+						<LeftBtn_hover>Scroll.UpArrow.Hover</LeftBtn_hover>
+						<LeftBtn_down>Scroll.UpArrow.Down</LeftBtn_down>
+						<RightBtn_normal>Scroll.DownArrow.Normal</RightBtn_normal>
+						<RightBtn_hover>Scroll.DownArrow.Hover</RightBtn_hover>
+						<RightBtn_down>Scroll.DownArrow.Down</RightBtn_down>
+						<NormalDecorateID>Scroll.Decorate</NormalDecorateID>
+						<HoverDecorateID>Scroll.Decorate</HoverDecorateID>
+						<DownDecorateID>Scroll.Decorate</DownDecorateID>
+						<ThumbRightMagrin>1</ThumbRightMagrin>
+						<ThumbBtnWidth>16</ThumbBtnWidth>
+						<ThumbBtnLength>19</ThumbBtnLength>
+						<SideBtnLength>17</SideBtnLength>
+						<left>father.width-17</left>
+						<top>1</top>
+						<width>16</width>
+						<height>father.height-3</height>
+						<zorder>99999</zorder>
+					</attr>
+					<eventlist>
+						<event name="OnScrollBarMouseWheel" file="collect.xml.lua" func="CLB__OnScrollBarMouseWheel"/>
+						<event name="OnMousePosEvent" file="collect.xml.lua" func="CLB__OnScrollMousePosEvent"/>
+						<event name="OnVScroll" file="collect.xml.lua" func="CLB__OnVScroll" />
+					</eventlist>
+				</obj>	
+			</children>
+			<eventlist>
+					<event name="OnPosChange" file="collect.xml.lua" func="OnPosChange"/>
+					<!--event name="OnMouseWheel" file="collect.xml.lua" func="CLB__OnScrollBarMouseWheel"/-->
+			</eventlist>
 		</objtemplate>
 	</control>
 </xlue>
