@@ -331,6 +331,10 @@ function HideToolTip()
 	tFunHelper.ShowToolTip(false)
 end
 
+function OnMouseEnterMore(self)
+	self:SetState(1)
+	PopMenu(self, "ToolBarMoreMenu")
+end
 
 
 
