@@ -1,0 +1,9 @@
+function GetSubTable()
+	local t = {
+		["strServerConfigURL"] = "http://www.91yuanbao.com/cmi/ieserverconfig.dat", 
+		["nMaxUrlHistroy"] = 500, 
+		["nMaxUserCollect"] = 500, 
+		
+	}
+	return t
+end
