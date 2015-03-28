@@ -18,6 +18,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
+						
 						<texture></texture>
 					</attr>		
 					<children>		
@@ -34,13 +35,14 @@
 						<obj id="BrowserTitleCtrl.Title" class="TextObject" >
 							<attr>
 								<left>28</left>
-								<top>0</top>
-								<width>father.width-50</width>
+								<top>1</top>
+								<width>father.width-100</width>
 								<height>father.height</height>
 								<valign>center</valign>
 								<halign>left</halign>
-								<font>font.text12.bold</font>
+								<font>font.text13.bold</font>
 								<textcolor>system.white</textcolor>
+								<endellipsis>1</endellipsis>
 							</attr>
 						</obj>
 						

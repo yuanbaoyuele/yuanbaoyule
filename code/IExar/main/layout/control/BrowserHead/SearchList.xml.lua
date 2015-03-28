@@ -83,12 +83,8 @@ function UpdateUI(self)
 	for i=1, #attr.data do
 		local obj = container:GetChildByIndex(i-1)
 		obj:SetText(attr.data[i].text)
-		if i < #attr.data - 2 then
+		if attr.data[i].icon then
 			obj:SetIcon(attr.data[i].icon)
-		else
-			local txt = obj:GetControlObject("text")
-			txt:SetTextColorResID("system.gray")
-			obj:SetEnable(false)
 		end
 		if i == 5 then
 			obj:SetObjPos(0, nStratY, "father.width", nStratY + height+14)
@@ -107,11 +103,11 @@ function UpdateUI(self)
 			obj:SetObjPos(0, nStratY, "father.width", nStratY + height)
 			nStratY = nStratY + height
 		end
-		--[[if i >= 5 then
+		if i >= 5 then
 			local txt = obj:GetControlObject("text")
 			txt:SetTextColorResID("system.gray")
 			obj:SetEnable(false)
-		end]]--
+		end
 	end
 	
 	
@@ -124,16 +120,11 @@ end
 
 function SetIcon(self, ico)
 	local icon = self:GetControlObject("icon")
-	if ico then
-		icon:SetBitmap(ico)
-	else
-		local strDefResID = tFunHelper.GetDefaultIcoImgID()
-		icon:SetResID(strDefResID)
-	end
+	icon:SetResID(ico)
 	icon:SetVisible(true)
 end
 
 function GetIcon(self)
 	local icon = self:GetControlObject("icon")
-	return icon:GetBitmap()
+	return icon:GetResID()
 end

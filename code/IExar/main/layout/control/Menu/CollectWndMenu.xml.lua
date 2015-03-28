@@ -11,7 +11,10 @@ function OnSelect_AddToCollectBox(self)
 end
 
 function OnSelect_AddToCollectBar(self)
-	
+	tFunHelper.AddCurWebToCollect()
+	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
+	local objCollectCtrl = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectList")
+	objCollectCtrl:UpdateCollectList()
 end
 
 function OnSelect_AddCurTabToCollect(self)

@@ -608,7 +608,7 @@ function SetBrowserFullScrn()
 	SetResizeEnable(false)
 	
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
-	objMainWnd:Move(0-nHeadWndL, 0-nBrowserT, nNewWidth, nNewHeight)	
+	objMainWnd:Move(0-nHeadWndL-4, 0-nBrowserT, nNewWidth, nNewHeight)	
 		
 	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	objHeadWindow:Move(0, -119, nNewWidth, 120)

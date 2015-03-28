@@ -58,13 +58,10 @@
 						<obj id="icon" class="ImageObject">
 							<attr>
 								<left>3</left>
-								<top>3</top>
 								<width>16</width>
-								<height>16</height>
+								<height>father.height</height>
 								<valign>center</valign>
 								<visible>0</visible>
-								<drawmode>1</drawmode>
-								<antialias>2</antialias>
 							</attr>
 						</obj>
 						<obj id="text" class="TextObject">

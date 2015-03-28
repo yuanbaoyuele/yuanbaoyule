@@ -17,6 +17,7 @@
 						<width>father.width</width>
 						<height>father.height</height>
 						<texture>YBYL.MainWnd.Head.Bkg</texture>
+						<limitchild>1</limitchild>
 					</attr>		
 					<children>															
 						<obj id="BrowserHeadCtrl.NavgateBtnList" class="NavgateBtnList">
@@ -151,6 +152,7 @@
             </children>
 			<eventlist>
 				<event name="OnInitControl" file="BrowserHeadCtrl.xml.lua" func="OnInitControl" />
+				<event name="OnPosChange" file="BrowserHeadCtrl.xml.lua" func="OnPosChange" />
 			</eventlist>
         </objtemplate>
     </control>
