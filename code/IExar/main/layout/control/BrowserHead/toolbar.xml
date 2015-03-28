@@ -291,6 +291,7 @@
 							</children>
 							<eventlist>
 								<event name="OnClick" file="toolbar.xml.lua" func="OnMoreClick" />
+								<event name="OnControlMouseEnter" file="toolbar.xml.lua" func="OnMouseEnterMore" />
 							</eventlist>
 						</obj>
 					</children>
