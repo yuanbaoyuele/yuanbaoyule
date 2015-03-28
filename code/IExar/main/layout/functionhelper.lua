@@ -1632,25 +1632,23 @@ function DownLoadSearchEngineIco(strURL, fnCallBack)
 	end			
 end
 
-function GetSearchEngineIcoName(strURL)
-	local strDomain = string.match(strURL, "(http://[^/]+)")	
-	if not IsRealString(strDomain) then
-		strDomain = string.match(strURL, "(https://[^/]+)")	
+function GetSearchEngineIcoObj(strIcoName)
+	if not IsRealString(strIcoName) then
+		return nil, -1
 	end
 
-	if not IsRealString(strDomain) then	
-		return ""
-	end
-	
-	local strIconURL = strDomain .. "/favicon.ico"	
 	local strIcoDir = GetCfgPathWithName("SearchEngineIcon")
 	if not tipUtil:QueryFileExists(strIcoDir) then
 		tipUtil:CreateDir(strIcoDir)
 	end
-	local strIcoID = tipUtil:GetStringMD5(strIconURL)
-	local strIcoName = tostring(strIcoID)..".ico" 
-	
-	return tostring(strIcoName)
+	local strIcoPath = tipUtil:PathCombine(strIcoDir, strIcoName)
+	if not tipUtil:QueryFileExists(strIcoPath) then
+		return nil, -2	
+	end
+		
+	local xlgraphic = XLGetObject("Xunlei.XLGraphic.Factory.Object")
+	local objBitmap = xlgraphic:CreateBitmap(strIcoPath,"ARGB32") --XGP做了隐试处理
+	return objBitmap, 0
 end
 
 function GetURLInfoFromHistory(strInputURL)
@@ -2157,8 +2155,8 @@ obj.GetUserCollectList = GetUserCollectList
 obj.AddCurWebToCollect = AddCurWebToCollect
 obj.GetIcoNameFromURL = GetIcoNameFromURL
 obj.DownLoadIco = DownLoadIco
-obj.GetSearchEngineIcoName = GetSearchEngineIcoName
 obj.DownLoadSearchEngineIco = DownLoadSearchEngineIco
+obj.GetSearchEngineIcoObj = GetSearchEngineIcoObj
 obj.GetResourceDir = GetResourceDir
 
 --菜单
