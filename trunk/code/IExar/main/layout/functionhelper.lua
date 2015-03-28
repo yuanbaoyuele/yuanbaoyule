@@ -3,7 +3,6 @@ local tipAsynUtil = XLGetObject("API.AsynUtil")
 
 local gStatCount = 0
 local gForceExit = nil
-local g_tWindowSize = {left=0,right=0,top=0,bottom=0}
 
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
@@ -18,7 +17,7 @@ end
 
 function TipLog(strLog)
 	if type(tipUtil.Log) == "function" then
-		tipUtil:Log("@@YBYL_Log: " .. tostring(strLog))
+		tipUtil:Log("@@INT_Log: " .. tostring(strLog))
 	end
 end
 
@@ -145,6 +144,7 @@ end
 local g_bHasExit = false
 function ReportAndExit()
 	local tStatInfo = {}
+	RecordWndSize()
 	HideSubWindow()
 	HideMainWindow()	
 	SendRunTimeReport(0, true)
@@ -263,7 +263,7 @@ end
 
 
 function GetPeerID()
-	local strPeerID = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\PeerId")
+	local strPeerID = RegQueryValue("HKEY_CURRENT_USER\\Software\\iexplorer\\PeerId")
 	if IsRealString(strPeerID) then
 		return strPeerID
 	end
@@ -273,13 +273,13 @@ function GetPeerID()
 		return ""
 	end
 	
-	RegSetValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\PeerId", strRandPeerID)
+	RegSetValue("HKEY_CURRENT_USER\\Software\\iexplorer\\PeerId", strRandPeerID)
 	return strRandPeerID
 end
 
 --渠道
 function GetInstallSrc()
-	local strInstallSrc = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\InstallSource")
+	local strInstallSrc = RegQueryValue("HKEY_CURRENT_USER\\Software\\iexplorer\\InstallSource")
 	if not IsNilString(strInstallSrc) then
 		return tostring(strInstallSrc)
 	end
@@ -304,6 +304,17 @@ function CheckTimeIsAnotherDay(LastTime)
 		bRet = true
 	end
 	return bRet
+end
+
+
+function GetTimeStamp(nHour)
+	local nRealHour = nHour or 24
+	local strPeerId = GetPeerID()
+	local iFlag = tonumber(string.sub(strPeerId, 12, 12), 16) or 0
+	local iTime = tipUtil:GetCurrentUTCTime()
+	local ss = math.floor((iTime + 8 * 3600  - (iFlag + 1) * 3600)/(nRealHour*3600))
+	local strStamp = "?stamp=" .. tostring(ss)
+	return strStamp 
 end
 
 
@@ -592,12 +603,11 @@ function SetBrowserFullScrn()
 	
 	local objMainWnd = GetMainWndInst()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainWnd:GetWindowRect()
-	RecordWndSize(nMainWndL, nMainWndT, nMainWndR, nMainWndB)
 	
 	SetBrowserFullScrnState(true)
 	SetResizeEnable(false)
-	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
 	
+	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
 	objMainWnd:Move(0-nHeadWndL, 0-nBrowserT, nNewWidth, nNewHeight)	
 		
 	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
@@ -607,58 +617,79 @@ end
 
 function RestoreWndSize()
 	local objMainWnd = GetMainWndInst()
-	if type(g_tWindowSize) == "table" then
-		local nLeft = g_tWindowSize.nLeft or 0
-		local nTop = g_tWindowSize.nTop or 0
-		local nRight = g_tWindowSize.nRight or 1024
-		local nBottom = g_tWindowSize.nBottom or 768
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local tWindowSize = tUserConfig["tWindowSize"] or {}
 	
-		local nWidth = nRight-nLeft
-		local nHeight = nBottom-nTop
-		if nWidth <= 0 then
-			nWidth = 1024
-		end
-		if nHeight <= 0 then
-			nHeight = 768
-		end
-		
-		SetBrowserFullScrnState(false)
-		SetResizeEnable(true)
-		
-		ResetTrackSize(objMainWnd)
-		objMainWnd:Move(nLeft, nTop, nWidth, nHeight)
+	---退出前是全屏的状体
+	local bLastFullScreen = tWindowSize.bFullScreen
+	if not IsBrowserFullScrn() and bLastFullScreen then
+		SetBrowserFullScrn()
+		SetResizeEnable(false)
+		return
 	end
+		
+	local nLeft = tWindowSize.nLeft or 0
+	local nTop = tWindowSize.nTop or 0
+	local nRight = tWindowSize.nRight or 1024
+	local nBottom = tWindowSize.nBottom or 768
+	
+	local nWidth = nRight-nLeft
+	local nHeight = nBottom-nTop
+	if nWidth <= 0 then
+		nWidth = 1024
+	end
+	if nHeight <= 0 then
+		nHeight = 768
+	end
+		
+	SetBrowserFullScrnState(false)
+	SetResizeEnable(true)
+	
+	ResetTrackSize(objMainWnd)
+	objMainWnd:Move(nLeft, nTop, nWidth, nHeight)
 end
 
 
 function ResetTrackSize(objMainWnd)
-	if type(g_tWindowSize) ~= "table" then
-		return
-	end
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local tWindowSize = tUserConfig["tWindowSize"] or {}
 	
-	local nTrackWidth = g_tWindowSize.nMaxTrackWidth
-	local nTrackHeight = g_tWindowSize.nMaxTrackHeight
+	local nTrackWidth = tWindowSize.nMaxTrackWidth or -1
+	local nTrackHeight = tWindowSize.nMaxTrackHeight or -1
 	objMainWnd:SetMaxTrackSize(nTrackWidth, nTrackHeight)
 end
 
 
+--全屏不记录大小只记录状态
 function RecordWndSize(nLeft, nTop, nRight, nBottom)
-	if type(g_tWindowSize) ~= "table" then
-		g_tWindowSize={}
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local tWindowSize = tUserConfig["tWindowSize"] or {}
+	local objMainWnd = GetMainWndInst()
+	local l, t, r, b = objMainWnd:GetWindowRect()
+	
+	if IsBrowserFullScrn() then
+		tWindowSize.bFullScreen = true
+	else
+		tWindowSize.bFullScreen = false
+		tWindowSize.nLeft = nLeft or l
+		tWindowSize.nTop = nTop or t
+		tWindowSize.nRight = nRight or r
+		tWindowSize.nBottom = nBottom or b
 	end
-	g_tWindowSize.nLeft = nLeft
-	g_tWindowSize.nTop = nTop
-	g_tWindowSize.nRight = nRight
-	g_tWindowSize.nBottom = nBottom
+	
+	tUserConfig["tWindowSize"] = tWindowSize
+	SaveConfigToFileByKey("tUserConfig")
 end
 
 
 function RecordTrackSize(nTrackWidth, nTrackHeight)
-	if type(g_tWindowSize) ~= "table" then
-		g_tWindowSize={}
-	end
-	g_tWindowSize.nMaxTrackWidth = nTrackWidth
-	g_tWindowSize.nMaxTrackHeight = nTrackHeight
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	local tWindowSize = tUserConfig["tWindowSize"] or {}
+	tWindowSize.nMaxTrackWidth = nTrackWidth
+	tWindowSize.nMaxTrackHeight = nTrackHeight
+	
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["tWindowSize"] = tWindowSize
 end
 
 
@@ -1719,7 +1750,10 @@ function DownLoadNewVersion(tNewVersionInfo, fnCallBack)
 	local strSaveDir = tipUtil:GetSystemTempPath()
 	local strSavePath = tipUtil:PathCombine(strSaveDir, strFileName)
 
-	DownLoadFileWithCheck(strPacketURL, strSavePath, strMD5
+	local strStamp = GetTimeStamp()
+	local strURLFix = strPacketURL..strStamp
+	
+	DownLoadFileWithCheck(strURLFix, strSavePath, strMD5
 	, function(bRet, strRealPath)
 		TipLog("[DownLoadNewVersion] strPacketURL:"..tostring(strPacketURL)
 		        .."  bRet:"..tostring(bRet).."  strRealPath:"..tostring(strRealPath))
@@ -1824,9 +1858,11 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 		return
 	end
 	
+	local strStamp = GetTimeStamp(1)
+	local strURLFix = strConfigURL..strStamp	
 	local nTime = tonumber(nTimeInMs) or 5*1000
 		
-	NewAsynGetHttpFile(strConfigURL, strSavePath, false
+	NewAsynGetHttpFile(strURLFix, strSavePath, false
 	, function(bRet, strRealPath)
 		TipLog("[DownLoadServerConfig] bRet:"..tostring(bRet)
 				.." strRealPath:"..tostring(strRealPath))
@@ -2015,6 +2051,7 @@ obj.AccelerateFlash = AccelerateFlash
 obj.EnableCaptionDrag = EnableCaptionDrag
 obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
 obj.DownLoadFileWithCheck = DownLoadFileWithCheck
+obj.GetTimeStamp = GetTimeStamp
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab

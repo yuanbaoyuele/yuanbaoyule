@@ -83,6 +83,10 @@ function OnSize(self, _type, width, height)
 	local objRootLayout = objTree:GetUIObject("root.layout")
 	local objRootCtrl = objRootLayout:GetObject("CollectWndCtrl")
 	
+	if not objRootCtrl then
+		return
+	end
+	
 	objRootCtrl:SetObjPos(0, 0, width, height)
 	AdjustMainPanelSize(objRootCtrl, width)
 end
@@ -325,10 +329,10 @@ function SetBtnDownStyle(objBtn, bDownStyle)
 	
 	if bDownStyle then
 		l = l + 1
-		t = t + 1
+		t = 11
 	else
 		l = l - 1
-		t = t - 1
+		t = 10
 	end
 	
 	local objRootCtrl = objBtn:GetParent()
@@ -336,7 +340,7 @@ function SetBtnDownStyle(objBtn, bDownStyle)
 	local fw = fr - fl
 	local fh = fb - ft
 	
-	objBtn:SetObjPos2("father.width-"..tostring(fw-l), "father.height-"..tostring(fh-t), w, h)	
+	objBtn:SetObjPos2("father.width-"..tostring(fw-l), t, w, h)	
 end
 
 
