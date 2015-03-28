@@ -39,16 +39,21 @@ function CreateFilterListener(objRootCtrl)
 end
 
 
-
 --快捷键
 local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 local g_tShortKeyFun = {
 	["001_84"] = function() ShortK_AddNewTab() end, --Ctrl+T  
+	["001_75"] = function() ShortK_CopyTab() end, --Ctrl+K
 	["001_78"] = function() ShortK_AddNewWindow() end, --Ctrl+N  
 	["001_79"] = function() ShortK_Open() end, --Ctrl+O  
-	["001_83"] = function() ShortK_SaveAs() end, --Ctrl+S  
 	["001_80"] = function() ShortK_PageSetup() end, --Ctrl+P  
+	["001_83"] = function() ShortK_SaveAs() end, --Ctrl+S  
+	["001_87"] = function() ShortK_CloseTab() end, --Ctrl+W
+	["000_116"] = function() ShortK_Refresh() end, --F5
 	["000_122"] = function() ShortK_FullScreen() end, --F11
+	["100_76"] = function() ShortK_HelpMenu() end, --Ctrl+L
+	["100_77"] = function() ShortK_MainPageMenu() end, --Alt+M
+	["100_82"] = function() ShortK_PrinterMenu() end, --Alt+R
 }
 
 function OnKeyDown(tParam)
@@ -69,6 +74,38 @@ end
 function ShortK_AddNewTab()
 	local strHomePage = tFunHelper.GetDfltNewTabURL()
 	tFunHelper.OpenURLInNewTab(strHomePage)
+end
+
+
+function ShortK_CopyTab()
+	local strURL = tFunHelper.GetCurrentURL()
+	tFunHelper.OpenURLInNewTab(strURL)
+end
+
+function ShortK_CloseTab()
+	local objTabCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
+	objTabCtrl:CloseCurrentTab()
+end
+
+
+function ShortK_Refresh()
+	InitMenuHelper()
+	tIEMenuHelper:ExecuteCMD("Refresh")
+end
+
+
+function ShortK_HelpMenu()
+	OpenToolBarMenu("Layout.Help.Btn", "HelpMenu")
+end
+
+
+function ShortK_MainPageMenu()
+	OpenToolBarMenu("Layout.MainPage.Left", "MainPageMenu")
+end
+
+
+function ShortK_PrinterMenu()
+	OpenToolBarMenu("Layout.Printer.Left", "PrintMenu")
 end
 
 
@@ -100,6 +137,21 @@ function ShortK_FullScreen(self)
 	end
 end
 
+
+--------------------------------------------------
+function OpenToolBarMenu(strBtnName, strMenuName)
+	local objToolBar = tFunHelper.GetHeadCtrlChildObj("head.toolbar.instance")  
+	if not objToolBar then
+		return 
+	end
+	local objHelpBtn = objToolBar:GetControlObject(strBtnName)
+	if not objHelpBtn then
+		return
+	end
+	
+	tFunHelper.TryDestroyOldMenu(objHelpBtn, strMenuName)
+	tFunHelper.CreateAndShowMenu(objHelpBtn, strMenuName, 26, false, true)
+end
 
 function InitMenuHelper()
 	local objActiveTab = tFunHelper.GetActiveTabCtrl()
