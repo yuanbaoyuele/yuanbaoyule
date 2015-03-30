@@ -69,7 +69,6 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "FileDescription", "YBKernel Module"
             VALUE "FileVersion", "1, 0, 0, 5"
             VALUE "InternalName", "YBKernel"
             VALUE "LegalCopyright", "Copyright (C) 2014"
