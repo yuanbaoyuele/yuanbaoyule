@@ -85,7 +85,12 @@ function SendStartupReport(bShowWnd)
 	end
 	
 	tStatInfo.strEV = 1
-	FunctionObj.TipConvStatistic(tStatInfo)
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	timerManager:SetTimer(function(item, id)
+		item:KillTimer(id)
+		FunctionObj.TipConvStatistic(tStatInfo)
+	end, 1000)
+	
 end
 
 
@@ -495,6 +500,7 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
+
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
@@ -559,7 +565,12 @@ function PreTipMain()
 	SendStartupReport(false)
 	TipMain()
 	
-	FunctionObj.DownLoadServerConfig(AnalyzeServerConfig)
+	
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	timerManager:SetTimer(function(item, id)
+		item:KillTimer(id)
+		FunctionObj.DownLoadServerConfig(AnalyzeServerConfig)
+	end, 1000)
 end
 
 PreTipMain()
