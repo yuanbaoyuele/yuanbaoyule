@@ -7,6 +7,8 @@ local gLastMenuName
 function PopMenu(self, name)
 	if not gStatMenuPop or not gLastSelectObj or not gLastMenuName or gLastMenuName == name  then return end
 	gLastSelectObj = self
+	gStatMenuPop = true
+	tFunHelper.TryDestroyOldMenu(gLastSelectObj, gLastMenuName)
 	gLastMenuName = name
 	
 	-- local left1 = gLastSelectObj:GetParent()

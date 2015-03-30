@@ -96,6 +96,7 @@
 								<drawmode>1</drawmode>
 								<antialias>2</antialias>
 								<zorder>999999</zorder>
+								<visible>false</visible>
 							</attr>
 						</obj>  
 

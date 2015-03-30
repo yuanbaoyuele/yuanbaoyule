@@ -1002,6 +1002,7 @@ function TryDestroyOldMenu(objUIElem, strMenuKey)
 	local objHostWnd = uHostWndMgr:GetHostWnd(strHostWndName)
 	if objHostWnd then
 		objHostWnd:UnbindUIObjectTree()
+		objHostWnd:EndMenu()
 		uHostWndMgr:RemoveHostWnd(strHostWndName)
 	end
 	
