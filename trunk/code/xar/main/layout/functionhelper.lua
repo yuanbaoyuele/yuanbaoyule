@@ -67,7 +67,7 @@ function GetCommandStrValue(strKey)
 	if string.find(cmdString, strKey .. " ") then
 		local cmdList = tipUtil:CommandLineToList(cmdString)
 		if cmdList ~= nil then	
-			for i = 1, #cmdList, 1 do
+			for i = 1, #cmdList, 2 do
 				local strTmp = tostring(cmdList[i])
 				if strTmp == strKey 
 					and not string.find(tostring(cmdList[i + 1]), "^/") then		
@@ -182,6 +182,17 @@ function CheckIsNewVersion(strNewVer, strCurVer)
 
 	local a,b,c,d = string.match(strNewVer, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
 	local A,B,C,D = string.match(strCurVer, "(%d+)%.(%d+)%.(%d+)%.(%d+)")
+	
+	a = tonumber(a)
+	b = tonumber(b)
+	c = tonumber(c)
+	d = tonumber(d)
+	
+	A = tonumber(A)
+	B = tonumber(B)
+	C = tonumber(C)
+	D = tonumber(D)
+	
 	return a>A or (a==A and (b>B or (b==B and (c>C or (c==C and d>D)))))
 end
 
@@ -721,7 +732,7 @@ function GetIcoBitmapObj(strIcoName)
 	if not tipUtil:QueryFileExists(strIcoPath) then
 		return nil	
 	end
-	
+
 	local xlgraphic = XLGetObject("Xunlei.XLGraphic.Factory.Object")
 	local objBitmap = xlgraphic:CreateBitmap(strIcoPath,"ARGB32")
 	return objBitmap
