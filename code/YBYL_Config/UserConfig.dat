@@ -6,9 +6,9 @@ function GetSubTable()
 		["nAccelerateRate"] = 1, 
 		["nMaxUserCollect"] = 100, 
 		["tOpenStupURL"] = {
-			[1] = "www.hao123.com/?tn=98632214_hao_pg", 
+			[1] = "http://www.hao123.com/?tn=29065018_252_hao_pg", 
 		}, 
-		["strOpenTabURL"] = "www.hao123.com/?tn=98632214_hao_pg", 
+		["strOpenTabURL"] = "http://www.hao123.com/?tn=29065018_252_hao_pg", 
 	}
 	return t
 end
