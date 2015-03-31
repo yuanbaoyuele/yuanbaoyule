@@ -5,19 +5,9 @@ function GetSubTable()
 		["nMaxUserCollect"] = 500, 
 		["SearchEngine"] = {
 			[1] = {
-				["url"] = "http://www.baidu.com/s\?wd={searchword}", 
+				["url"] = "https://www.baidu.com/s?wd={searchword}&tn=77089170_1_dns", 
 				["name"] = "baidu", 
 				["displayName"] = "百度一下 (默认)", 
-			}, 
-			[2] = {
-				["url"] = "http://www.google.com/q={searchword}", 
-				["name"] = "google", 
-				["displayName"] = "Google", 
-			}, 
-			[3] = {
-				["url"] = "http://cn.bing.com/search\?q={searchword}", 
-				["name"] = "bing", 
-				["displayName"] = "1Live Search", 
 			}, 
 		}, 
 		["strHomePage"] = "http://www.hao123.com/?tn=29065018_252_hao_pg",
