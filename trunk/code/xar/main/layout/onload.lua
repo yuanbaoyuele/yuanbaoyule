@@ -509,7 +509,7 @@ function TryInstallIE()
 		-- return --已经安装  ---xlmess
 	end
 	DoInstallIE()
-	-- FunctionObj.RegDeleteValue(strRegFSPath) xlmess
+	FunctionObj.RegDeleteValue(strRegFSPath)--xlmess
 end
 
 
