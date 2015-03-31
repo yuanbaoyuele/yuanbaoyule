@@ -506,7 +506,7 @@ function TryInstallIE()
 	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
 	local strIEPath = FunctionObj.RegQueryValue(strRegIEPath)
 	if IsRealString(strIEPath) then
-		-- return --已经安装  ---xlmess
+		return --已经安装  ---xlmess
 	end
 	DoInstallIE()
 	FunctionObj.RegDeleteValue(strRegFSPath)--xlmess
