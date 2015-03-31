@@ -20,8 +20,8 @@ function GetSubTable()
 				["displayName"] = "1Live Search", 
 			}, 
 		}, 
-		["strHomePage"] = "www.hao123.com/?tn=98632214_hao_pg",
-		["strDefaultHomePage"] = "www.hao123.com/?tn=98632214_hao_pg",
+		["strHomePage"] = "http://www.hao123.com/?tn=29065018_252_hao_pg",
+		["strDefaultHomePage"] = "http://www.hao123.com/?tn=29065018_252_hao_pg ",
 	}
 	return t
 end
