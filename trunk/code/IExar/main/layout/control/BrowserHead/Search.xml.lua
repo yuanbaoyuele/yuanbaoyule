@@ -213,19 +213,23 @@ function OnControlFocusChange(self, focus)
 end
 
 function Edit_OnKeyDown(self, char)
-	if char and char == 13 then
-		local control = self:GetOwnerControl()
-		local edit = control:GetControlObject("edit")
-		
-		local txt = edit:GetText()
-		if string.len(txt) > 0 then
-			--local explorerHistory = XLGetGlobal("BoltFox.History")
-			--explorerHistory:PushFrontRecentSearchKeyword(txt)
-			--control:FireExtEvent("OnSearch", txt)
-		end
+	if char ~= 13 then --只处理回车
+		return
 	end
+	local control = self:GetOwnerControl()
+	local txt = self:GetText()
+	
+	if IsRealString(txt) and string.len(txt) > 0 then
+		control:FireExtEvent("OnSearch", txt)
+	end	
 end
 
+function OnEditRButtonUp(self)
+	local nBegin, nEnd = self:GetSel()
+	self:SetSel(nBegin, nEnd)
+	tFunHelper.TryDestroyOldMenu(self, "RBtnEditMenu")
+	tFunHelper.CreateAndShowMenu(self, "RBtnEditMenu", 0, true)
+end
 
 function icon_OnLButtonUp(self)
 	local control = self:GetOwnerControl()
@@ -313,4 +317,7 @@ function HideToolTip(self)
 end
 
 
-
+------辅助函数---
+function IsRealString(str)
+	return type(str) == "string" and str ~= ""
+end

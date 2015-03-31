@@ -87,8 +87,7 @@
 								<event name="OnKeyDown" file="Search.xml.lua" func="Edit_OnKeyDown"/>
 								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterEdit" />
 								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
-								<event name="OnRButtonUp" file="AddressBarCtrl.xml.lua" func="OnUrlEditRButtonUp" />
-								<event name="OnKeyDown" file="AddressBarCtrl.xml.lua" func="OnUrlEditKeyDown" />
+								<event name="OnRButtonUp" file="Search.xml.lua" func="OnEditRButtonUp" />
 							</eventlist>
 						</obj>
 					</children>
