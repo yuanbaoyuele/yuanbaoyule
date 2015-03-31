@@ -210,6 +210,8 @@ public:
 
 	static int PinToStartMenu4XP(lua_State* pLuaState);
 	static int RefleshIcon(lua_State* pLuaState);
+	
+	static int UpdateShortCutLinkInfo(lua_State* pLuaState);
 
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];

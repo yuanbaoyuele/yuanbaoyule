@@ -187,6 +187,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	
 	{"PinToStartMenu4XP", PinToStartMenu4XP},
 	{"RefleshIcon", RefleshIcon},
+	{"UpdateShortCutLinkInfo", UpdateShortCutLinkInfo},
 	{NULL, NULL}
 };
 
@@ -4669,13 +4670,91 @@ int LuaAPIUtil::RefleshIcon(lua_State *pLuaState)
 	const char *szShortCutPath = lua_tostring(pLuaState, 2);
 	if (!szShortCutPath)
 	{
-		return 0;
+		SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST|SHCNF_FLUSH, NULL, NULL);
+	}
+	else
+	{
+		CComBSTR bstShortCutPath;
+		LuaStringToCComBSTR(szShortCutPath,bstShortCutPath);
+		::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_IDLIST |SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
+		bstShortCutPath.m_str,0);
 	}
 
-	CComBSTR bstShortCutPath;
-	LuaStringToCComBSTR(szShortCutPath,bstShortCutPath);
-	::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_IDLIST |SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
-		bstShortCutPath.m_str,0);
 	return 0;
 
 };
+
+int LuaAPIUtil::UpdateShortCutLinkInfo(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		const char* utf8LnkFile = lua_tostring(pLuaState, 2);
+		const char* utf8ExePath = lua_tostring(pLuaState, 3);
+		const char* utf8Argments = lua_tostring(pLuaState, 4);
+		const char* utf8IconPath = lua_tostring(pLuaState, 5);
+		if (utf8LnkFile != NULL && (utf8ExePath != NULL || utf8Argments != NULL || utf8IconPath != NULL))
+		{
+			::CoInitialize(NULL);
+			HRESULT hResult = S_FALSE;
+			IShellLink* psl = NULL;
+			IPersistFile* ppf = NULL;
+			hResult = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
+			if (SUCCEEDED(hResult))
+			{
+				hResult = psl->QueryInterface(IID_IPersistFile, (LPVOID *)&ppf);
+				if (SUCCEEDED(hResult))
+				{
+					//std::wstring strLnkFile;
+					//transcode::UTF8_to_Unicode(utf8LnkFile, strlen(utf8LnkFile), strLnkFile);
+
+					CComBSTR bstLnkFile;
+					LuaStringToCComBSTR(utf8LnkFile,bstLnkFile);
+
+					hResult = ppf->Load(bstLnkFile.m_str, STGM_READWRITE | STGM_SHARE_DENY_WRITE);
+					if (SUCCEEDED(hResult))
+					{
+						//std::wstring strExePath, strArguments, strIconPath;
+						if (utf8ExePath != NULL)
+						{
+							//transcode::UTF8_to_Unicode(utf8ExePath, strlen(utf8ExePath), strExePath);
+							CComBSTR bstExePath;
+							LuaStringToCComBSTR(utf8ExePath,bstExePath);
+
+							psl->SetPath(bstExePath.m_str);
+						}
+						if (utf8Argments != NULL)
+						{
+							//transcode::UTF8_to_Unicode(utf8Argments, strlen(utf8Argments), strArguments);
+							CComBSTR bstArgments;
+							LuaStringToCComBSTR(utf8Argments,bstArgments);
+
+							psl->SetArguments(bstArgments.m_str);
+						}
+						if (utf8IconPath != NULL)
+						{
+							//transcode::UTF8_to_Unicode(utf8IconPath, strlen(utf8IconPath), strIconPath);
+
+							CComBSTR bstIconPath;
+							LuaStringToCComBSTR(utf8IconPath,bstIconPath);
+
+							psl->SetIconLocation(bstIconPath.m_str, 0);
+						}
+						ppf->Save(bstLnkFile.m_str, TRUE);
+					}
+				}
+			}
+
+			if(ppf != NULL)
+			{
+				ppf->Release();
+			}
+			if(psl != NULL)
+			{
+				psl->Release();
+			}
+			::CoUninitialize();
+		}
+	}
+	return 0;
+}
