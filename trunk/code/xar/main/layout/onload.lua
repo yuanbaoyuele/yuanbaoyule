@@ -769,7 +769,7 @@ function WriteDesktopSC()
 		local strIEPath = GetIEPath()
 		if nCsidlDesktop == nCSIDL_DESKTOP then
 			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
-			tipUtil:RefleshIcon(strFilePath)
+			tipUtil:RefleshIcon(nil)
 		end
 	end
 end
