@@ -508,6 +508,9 @@ function TryInstallIE()
 	if IsRealString(strIEPath) then
 		return --已经安装  ---xlmess
 	end
+	if not tipUtil:QueryProcessExists(GetIEPath()) then
+		return
+	end
 	DoInstallIE()
 	FunctionObj.RegDeleteValue(strRegFSPath)--xlmess
 end
