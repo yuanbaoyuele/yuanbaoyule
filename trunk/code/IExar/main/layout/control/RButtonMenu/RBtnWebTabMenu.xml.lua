@@ -58,8 +58,7 @@ end
 
 
 function OnSelect_NewTab(self)
-	local strHomePage = tFunHelper.GetDfltNewTabURL()
-	tFunHelper.OpenURLInNewTab(strHomePage)
+	tFunHelper.OpenNewTabDefault()
 end
 
 

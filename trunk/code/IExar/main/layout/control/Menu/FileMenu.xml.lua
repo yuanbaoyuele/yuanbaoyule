@@ -3,8 +3,7 @@ local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 
 -------事件---
 function OnSelect_AddNewTab(self)
-	local strHomePage = tFunHelper.GetDfltNewTabURL()
-	tFunHelper.OpenURLInNewTab(strHomePage)
+	tFunHelper.OpenNewTabDefault()
 end
 
 function OnSelect_CopyTab(self)

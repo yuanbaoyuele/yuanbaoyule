@@ -74,8 +74,7 @@ end
 
 
 function ShortK_AddNewTab()
-	local strHomePage = tFunHelper.GetDfltNewTabURL()
-	tFunHelper.OpenURLInNewTab(strHomePage)
+	tFunHelper.OpenNewTabDefault()
 end
 
 

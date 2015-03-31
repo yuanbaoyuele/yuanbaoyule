@@ -372,6 +372,21 @@ function TipConvStatistic(tStat)
 end
 
 
+function DelayTipConvStatistic(tStat, nDelayInMs)
+	local nRealDelay = nDelayInMs or 5*1000
+	
+	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
+	timeMgr:SetTimer(function(Itm, id)
+	
+			Itm:KillTimer(id)
+			TipConvStatistic(tStat)
+			
+		end, nRealDelay)
+end
+
+
+
+
 function NewAsynGetHttpFile(strUrl, strSavePath, bDelete, funCallback, nTimeoutInMS)
 	local bHasAlreadyCallback = false
 	local timerID = nil
@@ -747,10 +762,7 @@ function OpenURLWhenStup()
 		return
 	end
 	
-	local strURL = GetHomePage()
-	if IsRealString(strURL) then
-		OpenURLInNewTab(strURL)
-	end
+	OpenHomePage(1)	
 end
 
 
@@ -1276,8 +1288,8 @@ function SaveAllConfig()
 end
 
 
-function GetDfltNewTabURL()
-	return GetHomePage()
+function OpenNewTabDefault()
+	OpenHomePage(2)
 end
 
 
@@ -1294,6 +1306,33 @@ function GetHomePage()
 	
 	return "about:blank"
 end
+
+
+--nIndex  
+----1.程序启动首展    2 新开标签
+----3.命令栏主页按钮  4 查看菜单中的主页
+
+function OpenHomePage(nIndex)
+	local strHomepage = GetHomePage()
+	if not IsRealString(strHomepage) then
+		return
+	end
+	
+	OpenURLInNewTab(strHomepage)
+	
+	local tStatInfo = {}
+
+	tStatInfo.strEC = "homepage"
+	tStatInfo.strEA = strHomepage  
+	tStatInfo.strEL = tostring(nIndex)
+	tStatInfo.strEV = 1
+
+	DelayTipConvStatistic(tStatInfo)
+end
+
+
+
+
 
 
 function GetHomePageFromCfg()
@@ -2085,6 +2124,7 @@ obj.TipLog = TipLog
 obj.IsUACOS = IsUACOS
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
+obj.DelayTipConvStatistic = DelayTipConvStatistic
 obj.ExitProcess = ExitProcess
 obj.ReportAndExit = ReportAndExit
 obj.GetCommandStrValue = GetCommandStrValue
@@ -2116,9 +2156,10 @@ obj.FormatURL = FormatURL
 obj.OpenURLInNewWindow = OpenURLInNewWindow
 obj.GetHomePage = GetHomePage
 obj.SetHomePage = SetHomePage
+obj.OpenHomePage = OpenHomePage
 obj.GetZoomFactor = GetZoomFactor
 obj.SetZoomFactor = SetZoomFactor
-obj.GetDfltNewTabURL = GetDfltNewTabURL
+obj.OpenNewTabDefault = OpenNewTabDefault
 obj.GetActiveTabCtrl = GetActiveTabCtrl
 obj.GetMainCtrlChildObj = GetMainCtrlChildObj
 obj.GetHeadCtrlChildObj = GetHeadCtrlChildObj
