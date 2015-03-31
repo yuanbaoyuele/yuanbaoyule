@@ -96,10 +96,7 @@ function OnSelect_Forward(self)
 end
 
 function OnSelect_HomePage(self)
-	local strHomePage = tFunHelper.GetHomePage()
-	if IsRealString(strHomePage) then
-		tFunHelper.OpenURLInCurTab(strHomePage)	
-	end
+	tFunHelper.OpenHomePage(4)	
 end
 
 

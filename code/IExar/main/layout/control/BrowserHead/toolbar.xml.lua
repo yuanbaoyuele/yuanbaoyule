@@ -164,10 +164,7 @@ function OnMainPageLeftButtonClick(self, x, y)
 	if self:GetID() == "Layout.MainPage.Left" then
 		--打开主页
 		--tFunHelper.CreateAndShowMenu(self, "MainPageMenu", 0, true)
-		local strHomePage = tFunHelper.GetHomePage()
-		if strHomePage ~= "" and strHomePage ~= nil then
-			tFunHelper.OpenURLInCurTab(strHomePage)	
-		end
+		tFunHelper.OpenHomePage(3)
 	else
 	end
 end

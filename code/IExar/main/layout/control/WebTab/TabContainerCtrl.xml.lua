@@ -21,6 +21,7 @@ function OpenURL(self, strURL, bInNewTab)
 	SetActiveTab(self, nNewTabID)
 	-- AdjustTabSize(self)
 	tFunHelper.SaveUrlToHistory(strURL)
+	SendURLReport(strURL)
 end
 
 
@@ -157,9 +158,7 @@ end
 
 
 function OnClickAddNewTab(self)
-	local objRootCtrl = self:GetOwnerControl()
-	local strDefURL = tFunHelper.GetDfltNewTabURL()
-	objRootCtrl:OpenURL(strDefURL, true)
+	tFunHelper.OpenNewTabDefault()
 end
 
 function OnMsEnterAddNewTab(self)
@@ -688,6 +687,19 @@ function AdjustFullScrnStyle(objRootCtrl)
 	
 	ShowFullScreenBtn(objRootCtrl, bShowFullScrn)
 end
+
+
+function SendURLReport(strURL)
+	local tStatInfo = {}
+
+	tStatInfo.strEC = "openurl"
+	tStatInfo.strEA = strURL  
+	tStatInfo.strEL = tFunHelper.GetMinorVer() or ""
+	tStatInfo.strEV = 1
+
+	tFunHelper.DelayTipConvStatistic(tStatInfo)
+end
+
 
 
 ------辅助函数---
