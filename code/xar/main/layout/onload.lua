@@ -633,6 +633,7 @@ function WriteStartMenuSC()
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
+				tipUtil:PinToStartMenu4XP(strFilePath, false)
 				local bret = tipUtil:DeletePathFile(strFilePath)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
