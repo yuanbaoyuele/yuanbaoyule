@@ -599,6 +599,28 @@ function WriteIEShortCut()
 	WriteDesktopSC()
 end
 
+function GetIELnkBakDir()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bOk, strBaseDir = FunctionObj.QueryAllUsersDir()
+	if not bOk then
+		return ""
+	end
+	local strIELnkBakDir = tipUtil:PathCombine(strBaseDir, "IECFG\\lnkbak")
+	if not tipUtil:QueryProcessExists(strIELnkBakDir) then
+		tipUtil:CreateDir(strIELnkBakDir)
+	end
+	return strIELnkBakDir
+end
+
+function CopyBackUpLnk(strSourcePath,strNamePreFix)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strIELnkBakDir = GetIELnkBakDir()
+	local strFileName = FunctionObj.GetFileNameFromPath(strSourcePath)
+	local strNameWithPreFix = strNamePreFix .. "_" .. strFileName .. ".lnk"
+	local strTargetPath = tipUtil:PathCombine(strIELnkBakDir, strNameWithPreFix)
+	tipUtil:CopyPathFile(strSourcePath, strTargetPath)
+	tipUtil:DeletePathFile(strSourcePath)
+end
 
 function HideIEIco()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
@@ -638,7 +660,8 @@ function WriteStartMenuSC()
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
 				tipUtil:PinToStartMenu4XP(strCurrent, false)
-				local bret = tipUtil:DeletePathFile(strCurrent)
+				--local bret = tipUtil:DeletePathFile(strCurrent)
+				CopyBackUpLnk(strCurrent,"STARTMENU")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
 			
@@ -646,7 +669,8 @@ function WriteStartMenuSC()
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
 				tipUtil:PinToStartMenu4XP(strCurrent1, false)
-				local bret = tipUtil:DeletePathFile(strCurrent1)
+				--local bret = tipUtil:DeletePathFile(strCurrent1)
+				CopyBackUpLnk(strCurrent1,"STARTMENU")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
 			
@@ -675,13 +699,15 @@ function WriteStartMenuProgramSC()
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				local bret = tipUtil:DeletePathFile(strCurrent)
+				--local bret = tipUtil:DeletePathFile(strCurrent)
+				CopyBackUpLnk(strCurrent,"SMPROGRAMS")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
-				local bret = tipUtil:DeletePathFile(strCurrent1)
+				CopyBackUpLnk(strCurrent1,"SMPROGRAMS")
+				--local bret = tipUtil:DeletePathFile(strCurrent1)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
@@ -704,13 +730,15 @@ function WriteQuickLaunchSC()
 		local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
 		local bIsInDir,strCurrent = CheckIsIELnkInDir(strQueryDir)
 		if bIsInDir then
-			local bret = tipUtil:DeletePathFile(strCurrent)
+			--local bret = tipUtil:DeletePathFile(strCurrent)
+			CopyBackUpLnk(strCurrent,"QUICKLAUNCH")
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
 		end
 		
 		local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strQueryDir)
 		if bIsInDir1 then
-			local bret = tipUtil:DeletePathFile(strCurrent1)
+			--local bret = tipUtil:DeletePathFile(strCurrent1)
+			CopyBackUpLnk(strCurrent1,"QUICKLAUNCH")
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
 		end
 		
