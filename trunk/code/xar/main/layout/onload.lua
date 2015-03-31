@@ -508,7 +508,7 @@ function TryInstallIE()
 	if IsRealString(strIEPath) then
 		return --已经安装  ---xlmess
 	end
-	if not tipUtil:QueryProcessExists(GetIEPath()) then
+	if not tipUtil:QueryFileExists(GetIEPath()) then
 		return
 	end
 	DoInstallIE()
@@ -609,7 +609,7 @@ function GetIELnkBakDir()
 		return ""
 	end
 	local strIELnkBakDir = tipUtil:PathCombine(strBaseDir, "IECFG\\lnkbak")
-	if not tipUtil:QueryProcessExists(strIELnkBakDir) then
+	if not tipUtil:QueryFileExists(strIELnkBakDir) then
 		tipUtil:CreateDir(strIELnkBakDir)
 	end
 	return strIELnkBakDir
