@@ -1,19 +1,26 @@
 local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 local tipUtil = tFunHelper.tipUtil
 
+function encodeURI(s)
+    s = string.gsub(s, "([^%w%.%- ])", function(c) return string.format("%%%%%02X", string.byte(c)) end)
+    return string.gsub(s, " ", "+")
+end
+
 function OnSearch(self, func, txt)
 	local attr = self:GetAttribute()
-	
-	local searchurl = string.gsub(string.lower(attr.SearchEngine["url"]), "{searchword}", txt)
-	tFunHelper.OpenURLInNewTab(searchurl)
-	local tStatInfo = {}
+	txt = encodeURI(txt)
+	if txt ~= "" and txt ~= nil then
+		local searchurl = string.gsub(string.lower(attr.SearchEngine["url"]), "{searchword}", txt)
+		tFunHelper.OpenURLInNewTab(searchurl)
+		local tStatInfo = {}
 
-	tStatInfo.strEC = "onsearch"
-	tStatInfo.strEA = attr.SearchEngine["url"]  
-	tStatInfo.strEL = tFunHelper.GetMinorVer() or ""
-	tStatInfo.strEV = 1
+		tStatInfo.strEC = "onsearch"
+		tStatInfo.strEA = attr.SearchEngine["url"]  
+		tStatInfo.strEL = tFunHelper.GetMinorVer() or ""
+		tStatInfo.strEV = 1
 
-	tFunHelper.DelayTipConvStatistic(tStatInfo)
+		tFunHelper.DelayTipConvStatistic(tStatInfo)
+	end
 end
 
 ---方法---
