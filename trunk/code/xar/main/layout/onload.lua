@@ -508,10 +508,8 @@ function TryInstallIE()
 	if IsRealString(strIEPath) then
 		-- return --已经安装  ---xlmess
 	end
-	XLMessageBox("doinstall")
 	DoInstallIE()
 	-- FunctionObj.RegDeleteValue(strRegFSPath) xlmess
-	XLMessageBox(33)
 end
 
 
