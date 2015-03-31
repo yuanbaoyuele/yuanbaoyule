@@ -57,36 +57,40 @@ void InternetDownload(const std::wstring strUrl)
 {
 	char buffer[100000];//下载文件的缓冲区
 
-	DWORD bytes_read;//下载的字节数
+	DWORD dwBufferRead;//下载的字节数
 
 
 	//打开一个internet连接
 
-	HINTERNET internet=InternetOpen(_T("HTTP Downloader"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);
+	HINTERNET hInternet=InternetOpen(_T("HTTP Downloader"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);
 
-	if(!internet)
-		TSDEBUG4CXX(L"[InternetDownload] InternetOpen error!");
-
+	if(NULL == hInternet)
+	{
+		TSDEBUG4CXX(L"[InternetDownload] InternetOpen error, code = "<<::GetLastError());
+		return;
+	}
 	//打开一个http url地址
+	HINTERNET hFile=InternetOpenUrl(hInternet, strUrl.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
 
-	HINTERNET file_handle=InternetOpenUrl(internet, strUrl.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
+	if(NULL == hFile)
+	{
+		InternetCloseHandle(hInternet);
+		TSDEBUG4CXX(L"[InternetDownload]  InternetOpenUrl error, code = "<<::GetLastError());
+		return;
+	}
 
-	if(!file_handle)
-		TSDEBUG4CXX(L"InternetOpenUrl error! - Maybe you should add Http:// or Ftp://");
-
-	//从url地址中读取文件内容到缓冲区buffer
-
-	BOOL b = InternetReadFile(file_handle, buffer, 100000, &bytes_read);
-	if(!b)
-		TSDEBUG4CXX(L"InternetReadFile error!");
-
-	//buffer[bytes_read] = 0;
-
-	//cout << buffer << endl << endl;
+	BOOL bRead = InternetReadFile(hFile, buffer, 100000, &dwBufferRead);
+	if(!bRead)
+	{
+		InternetCloseHandle(hFile);
+		InternetCloseHandle(hInternet);
+		TSDEBUG4CXX(L"[InternetDownload]  InternetReadFile error, code = "<<::GetLastError());
+		return;
+	}
 
 	//关闭连接
-
-	InternetCloseHandle(internet);
+	InternetCloseHandle(hFile);
+	InternetCloseHandle(hInternet);
 }
 
 void HttpStatData::Work()
