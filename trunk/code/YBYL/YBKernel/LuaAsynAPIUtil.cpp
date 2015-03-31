@@ -12,6 +12,9 @@ extern CYBApp theApp;
 #include <setupapi.h>
 #pragma comment (lib, "setupapi.lib")
 
+#include <wininet.h> 
+#pragma comment(lib, "Wininet.lib")
+
 CAsynMsgWindow g_wndMsg;
 CMsgWindow* g_pWndMsg = &g_wndMsg;
 
@@ -50,12 +53,49 @@ HttpStatData::HttpStatData(const char* pUrl, bool bAsync, lua_State* pState, LON
 	m_strUrl = bstrUrl.m_str;
 }
 
+void InternetDownload(const std::wstring strUrl)
+{
+	char buffer[100000];//下载文件的缓冲区
+
+	DWORD bytes_read;//下载的字节数
+
+
+	//打开一个internet连接
+
+	HINTERNET internet=InternetOpen(_T("HTTP Downloader"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);
+
+	if(!internet)
+		TSDEBUG4CXX(L"[InternetDownload] InternetOpen error!");
+
+	//打开一个http url地址
+
+	HINTERNET file_handle=InternetOpenUrl(internet, strUrl.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
+
+	if(!file_handle)
+		TSDEBUG4CXX(L"InternetOpenUrl error! - Maybe you should add Http:// or Ftp://");
+
+	//从url地址中读取文件内容到缓冲区buffer
+
+	BOOL b = InternetReadFile(file_handle, buffer, 100000, &bytes_read);
+	if(!b)
+		TSDEBUG4CXX(L"InternetReadFile error!");
+
+	//buffer[bytes_read] = 0;
+
+	//cout << buffer << endl << endl;
+
+	//关闭连接
+
+	InternetCloseHandle(internet);
+}
+
 void HttpStatData::Work()
 {
 	//try
 	//{
-		TCHAR szPath[MAX_PATH] = {0};
-		URLDownloadToCacheFile(NULL, m_strUrl.c_str(), szPath, MAX_PATH, 0, NULL);
+		//TCHAR szPath[MAX_PATH] = {0};
+		//URLDownloadToCacheFile(NULL, m_strUrl.c_str(), szPath, MAX_PATH, 0, NULL);
+		InternetDownload(m_strUrl);
 		if (m_bAsync)
 		{
 			g_wndMsg.PostMessage(WM_SENDHTTPSTAT, 0, (LPARAM) this);
