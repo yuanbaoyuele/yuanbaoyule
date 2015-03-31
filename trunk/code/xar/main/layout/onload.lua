@@ -523,6 +523,7 @@ function WriteIERegister()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	
 	local strIEPath = GetIEPath()
+	tipUtil:CreateRegKey("HKEY_CURRENT_USER","SOFTWARE\\iexplorer")
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path", strIEPath)
 	
 	local strPid = FunctionObj.GetPeerID()
