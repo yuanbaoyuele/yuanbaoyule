@@ -33,6 +33,21 @@ function IsUACOS()
 end
 
 
+function GetFileNameFromPath(strFilePath, bWithExt)
+	if not IsRealString(strFilePath) then
+		return ""
+	end
+
+	local npos1, npos2
+	npos1, npos2, strFileName = string.find(strFilePath, "\\([^\\]*)$")
+	if not bWithExt then
+		npos1, npos2, strFileName = string.find(tostring(strFileName), "(.*)%.[^%.]*$")
+	end
+	
+	return strFileName or ""
+end
+
+
 function LoadTableFromFile(strDatFilePath)
 	local tResult = nil
 
@@ -1502,6 +1517,7 @@ obj.tipAsynUtil = tipAsynUtil
 --通用
 obj.TipLog = TipLog
 obj.IsUACOS = IsUACOS
+obj.GetPeerID = GetPeerID
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.ExitProcess = ExitProcess
@@ -1511,6 +1527,7 @@ obj.GetExePath = GetExePath
 obj.LoadTableFromFile = LoadTableFromFile
 obj.CheckIsNewVersion = CheckIsNewVersion
 obj.SendRunTimeReport = SendRunTimeReport
+obj.GetFileNameFromPath = GetFileNameFromPath
 
 obj.NewAsynGetHttpFile = NewAsynGetHttpFile
 obj.GetProgramTempDir = GetProgramTempDir
@@ -1521,6 +1538,7 @@ obj.AccelerateFlash = AccelerateFlash
 obj.EnableCaptionDrag = EnableCaptionDrag
 obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
 obj.DownLoadFileWithCheck = DownLoadFileWithCheck
+obj.QueryAllUsersDir = QueryAllUsersDir
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
@@ -1585,6 +1603,7 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 --注册表
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
+obj.RegSetValue = RegSetValue
 
 
 XLSetGlobal("YBYL.FunctionHelper", obj)
