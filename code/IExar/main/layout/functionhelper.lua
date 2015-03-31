@@ -1222,12 +1222,10 @@ function MergeOldUserCfg(tCurrentCfg, strFileName)
 	if type(tOldCfg) ~= "table" then
 		return false, tCurrentCfg
 	end
-	
-	tCurrentCfg["nAccelerateRate"] = tOldCfg["nAccelerateRate"] or 1
-	tCurrentCfg["bOpenFilter"] = tOldCfg["bOpenFilter"]
+
 	tCurrentCfg["nLastCommonUpdateUTC"] = tOldCfg["nLastCommonUpdateUTC"]
-	tCurrentCfg["nLastToolTipUTC"] = tOldCfg["nLastToolTipUTC"] 
-		
+	tCurrentCfg["tWindowSize"] = tOldCfg["tWindowSize"] or {}
+	
 	tipUtil:DeletePathFile(strOldCfgPath)
 	return true, tCurrentCfg
 end
