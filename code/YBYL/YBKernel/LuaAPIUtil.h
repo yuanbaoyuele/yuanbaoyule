@@ -208,6 +208,8 @@ public:
 	static int FSetKeyboardHook(lua_State* pLuaState);
 	static int FDelKeyboardHook(lua_State* pLuaState);
 
+	static int PinToStartMenu4XP(lua_State* pLuaState);
+
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 };
