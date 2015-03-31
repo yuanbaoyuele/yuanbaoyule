@@ -6,6 +6,14 @@ function OnSearch(self, func, txt)
 	
 	local searchurl = string.gsub(string.lower(attr.SearchEngine["url"]), "{searchword}", txt)
 	tFunHelper.OpenURLInNewTab(searchurl)
+	local tStatInfo = {}
+
+	tStatInfo.strEC = "onsearch"
+	tStatInfo.strEA = attr.SearchEngine["url"]  
+	tStatInfo.strEL = tFunHelper.GetMinorVer() or ""
+	tStatInfo.strEV = 1
+
+	tFunHelper.DelayTipConvStatistic(tStatInfo)
 end
 
 ---方法---
