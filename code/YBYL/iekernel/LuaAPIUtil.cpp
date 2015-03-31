@@ -182,6 +182,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 
 	{"AttachBrowserEvent", AttachBrowserEvent},
 	{"DetachBrowserEvent", DetachBrowserEvent},
+	
+	{"PinToStartMenu4XP", PinToStartMenu4XP},
 	{NULL, NULL}
 };
 
@@ -4443,7 +4445,6 @@ int LuaAPIUtil::AttachBrowserEvent(lua_State *pLuaState)
 
 int LuaAPIUtil::DetachBrowserEvent(lua_State *pLuaState)
 {
-	TSAUTO();
 	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
 	if (ppUtil)
 	{	
@@ -4462,3 +4463,127 @@ int LuaAPIUtil::DetachBrowserEvent(lua_State *pLuaState)
 	}
 	return 0;
 }
+
+#include <COMUTIL.H>
+typedef std::vector<std::wstring> VectorVerbName;
+VectorVerbName*  GetVerbNames(bool bPin)
+{
+	//TSAUTO();
+	static bool bInit = false;
+	static std::vector<std::wstring> vecPinStartMenuNames;
+	static std::vector<std::wstring> vecUnPinStartMenuNames;
+	if (!bInit )
+	{	
+		bInit = true;
+		vecPinStartMenuNames.push_back(_T("锁定到开始菜单"));vecPinStartMenuNames.push_back(_T("附到「开始」菜单"));
+		vecUnPinStartMenuNames.push_back(_T("从「开始」菜单脱离"));vecUnPinStartMenuNames.push_back(_T("(从「开始」菜单解锁"));
+	}
+
+	return bPin? &vecPinStartMenuNames : &vecUnPinStartMenuNames;
+};
+
+bool VerbNameMatch(TCHAR* tszName, bool bPin)
+{
+	//TSAUTO();
+	VectorVerbName *pVec = GetVerbNames(bPin);
+
+	VectorVerbName::iterator iter = pVec->begin();
+	VectorVerbName::iterator iter_end = pVec->end();
+	while(iter!=iter_end)
+	{
+		std::wstring strName= *iter;
+		if ( 0 == _wcsnicmp(tszName,strName.c_str(),strName.length()))
+			return true;
+		iter ++;
+	}
+	return false;
+};
+
+
+#define IF_FAILED_OR_NULL_BREAK(rv,ptr) \
+{if (FAILED(rv) || ptr == NULL) break;}
+
+#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
+int LuaAPIUtil::PinToStartMenu4XP(lua_State *pLuaState)
+{	
+	TSAUTO();
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (!ppUtil)
+	{	
+		return 0;
+	}
+	
+	const char *szShortCutPath = lua_tostring(pLuaState, 2);
+	bool bPin = lua_toboolean(pLuaState, 3);
+	if (!szShortCutPath)
+	{
+		return 0;
+	}
+	
+	CComBSTR bstShortCutPath;
+	LuaStringToCComBSTR(szShortCutPath,bstShortCutPath);
+
+	TCHAR file_dir[MAX_PATH + 1] = {0};
+	TCHAR *file_name;
+
+	wcscpy_s(file_dir,MAX_PATH,bstShortCutPath.m_str);
+	PathRemoveFileSpecW(file_dir);
+	file_name = PathFindFileName(bstShortCutPath.m_str);
+	::CoInitialize(NULL);
+	CComPtr<IShellDispatch> pShellDisp;
+	CComPtr<Folder> folder_ptr;
+	CComPtr<FolderItem> folder_item_ptr;
+	CComPtr<FolderItemVerbs> folder_item_verbs_ptr;
+
+
+	HRESULT rv = CoCreateInstance( CLSID_Shell, NULL, CLSCTX_SERVER,IID_IDispatch, (LPVOID *) &pShellDisp );
+	do 
+	{
+		IF_FAILED_OR_NULL_BREAK(rv,pShellDisp);
+		rv = pShellDisp->NameSpace(_variant_t(file_dir),&folder_ptr);
+		IF_FAILED_OR_NULL_BREAK(rv,folder_ptr);
+		rv = folder_ptr->ParseName(CComBSTR(file_name),&folder_item_ptr);
+		IF_FAILED_OR_NULL_BREAK(rv,folder_item_ptr);
+		rv = folder_item_ptr->Verbs(&folder_item_verbs_ptr);
+		IF_FAILED_OR_NULL_BREAK(rv,folder_item_verbs_ptr);
+		long count = 0;
+		folder_item_verbs_ptr->get_Count(&count);
+		for (long i = 0; i < count ; ++i)
+		{
+			FolderItemVerb* item_verb = NULL;
+			rv = folder_item_verbs_ptr->Item(_variant_t(i),&item_verb);
+			if (SUCCEEDED(rv) && item_verb)
+			{
+				CComBSTR bstrName;
+				item_verb->get_Name(&bstrName);
+
+				if ( VerbNameMatch(bstrName,bPin) )
+				{
+					TSDEBUG4CXX("Find Verb to Pin:"<< bstrName);
+					int i = 0;
+					do
+					{
+						rv = item_verb->DoIt();
+						TSDEBUG4CXX("Try Do Verb. NO." << i+1 << ", return="<<rv);
+						if (SUCCEEDED(rv))
+						{
+							::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_IDLIST |SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
+								bstShortCutPath.m_str,0);
+							Sleep(500);
+							::CoUninitialize();
+							return 0;
+						}else
+						{
+							Sleep(500);
+							rv = item_verb->DoIt();
+						}
+					}while ( i++ < 3);
+
+					break;
+				}
+			}
+		}
+	} while (0);
+	::CoUninitialize();
+	return 0;
+};
