@@ -638,10 +638,12 @@ function WriteStartMenuSC()
 			end
 			
 			local strIEPath = GetIEPath()
-			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
-			if bret then
-				tipUtil:PinToStartMenu4XP(strFilePath, true)
-			end
+			if nCsidl == nCSIDL_STARTMENU then
+				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
+				if bret then
+					tipUtil:PinToStartMenu4XP(strFilePath, true)
+				end
+			end	
 		end
 	end
 end
@@ -665,7 +667,9 @@ function WriteStartMenuProgramSC()
 			end
 			
 			local strIEPath = GetIEPath()
-			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startbar", "启动 Internet Explorer 浏览器")
+			if nCsidl == nCSIDL_PROGRAM then
+				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startbar", "启动 Internet Explorer 浏览器")
+			end	
 		end
 	end
 end
@@ -676,7 +680,7 @@ function WriteQuickLaunchSC()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local nCSIDL_APPDATA = 0x1A
 	local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCSIDL_APPDATA)
-	local strQueryDir = tipUtil:PathCombine(strBaseDir, "Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\StartMenu") 
+	local strQueryDir = tipUtil:PathCombine(strBaseDir, "Microsoft\\Internet Explorer\\Quick Launch") 
 	if IsRealString(strQueryDir) and tipUtil:QueryFileExists(strQueryDir) then
 		local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
 		local bIsInDir = CheckIsIELnkInDir(strQueryDir)
@@ -710,7 +714,9 @@ function WriteDesktopSC()
 		end
 		
 		local strIEPath = GetIEPath()
-		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
+		if nCsidlDesktop == nCSIDL_DESKTOP then
+			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
+		end
 	end
 end
 
