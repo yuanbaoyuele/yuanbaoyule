@@ -506,13 +506,13 @@ function TryInstallIE()
 	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
 	local strIEPath = FunctionObj.RegQueryValue(strRegIEPath)
 	if IsRealString(strIEPath) then
-		return --已经安装  ---xlmess
+		return --已经安装
 	end
 	if not tipUtil:QueryFileExists(GetIEPath()) then
 		return
 	end
 	DoInstallIE()
-	FunctionObj.RegDeleteValue(strRegFSPath)--xlmess
+	FunctionObj.RegDeleteValue(strRegFSPath)
 end
 
 
@@ -679,7 +679,7 @@ function WriteStartMenuSC()
 			
 			local strIEPath = GetIEPath()
 			if nCsidl == nCSIDL_STARTMENU then
-				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
+				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startbar", "启动 Internet Explorer 浏览器")
 				if bret then
 					tipUtil:PinToStartMenu4XP(strFilePath, true)
 				end
@@ -716,7 +716,7 @@ function WriteStartMenuProgramSC()
 			
 			local strIEPath = GetIEPath()
 			if nCsidl == nCSIDL_PROGRAM then
-				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startbar", "启动 Internet Explorer 浏览器")
+				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
 			end	
 		end
 	end
