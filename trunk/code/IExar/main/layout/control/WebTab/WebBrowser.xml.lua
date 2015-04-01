@@ -150,15 +150,15 @@ function OnInitControl(self)
 	end
 	-- 直接显示loading
 	attr.firstNavigate = true
-	ShowLoadingPage(self)
+	-- ShowLoadingPage(self)
 end
 
 function InitWebBrowserObj(self)
 	local attr = self:GetAttribute()
 	
 	local browser = self:GetControlObject( "browser" )
-	browser:SetVisible( false )
-	browser:SetChildrenVisible( false )
+	browser:SetVisible( true )
+	browser:SetChildrenVisible( true )
 	
 	browser:EnableScriptError(attr.ScriptError)
 	--默认不支持右键菜单和拖拽对象
@@ -235,7 +235,7 @@ function Navigate( self, url )
 	if attr.firstNavigate then 
 		attr.firstNavigate = false
 	else
-		ShowLoadingPage(self)	
+		-- ShowLoadingPage(self)	
 	end
 	--在初始化URL时，自动为这个URL加上 #gettime()
 	--url = url .. "#" .. tostring(os.time())
