@@ -17,7 +17,7 @@ function CreateStateListener(objStatusText)
 			
 			local tParam = {...}	
 			if tostring(key) == "OnStatusTextChange" then
-				if IsRealString(tParam[1]) then
+				if tParam[1] ~= nil then
 					objStatusText:SetText(tParam[1])
 				end	
 			end
