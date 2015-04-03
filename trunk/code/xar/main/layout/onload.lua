@@ -790,7 +790,8 @@ function CheckIsIELnkInDir(strDir)
 		local strFilePath = tFileList[i]
 		if IsRealString(strFilePath) and tipUtil:QueryFileExists(strFilePath) then
 			local  strFileName = FunctionObj.GetFileNameFromPath(strFilePath, true)
-			if string.find(tostring(strFileName),"Internet Explorer.lnk") or string.find(tostring(strFileName),"Internet.lnk") then
+			if string.find(tostring(strFileName),"Internet Explorer.lnk") or string.find(tostring(strFileName),"Internet.lnk") 
+				or string.find(tostring(strFileName), "启动 Internet Explorer 浏览器") then
 				return true, strFilePath
 			end
 		end
