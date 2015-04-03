@@ -1,0 +1,25 @@
+<XLUE>
+	<resource>
+		<color id="system.black" red="0" green="0" blue="0" alpha="255" />
+		<color id="system.gray" red="204" green="211" blue="214" alpha="255"/>
+		<color id="system.blue" red="0" green="0" blue="255" alpha="255" />
+		<color id="system.white" red="255" green="255" blue="255" alpha="255" />
+		<color id="system.red" red="255" green="0" blue="0" alpha="255" />
+			
+		<color id="2A2825" value="#2A2825" />
+		<color id="4D4D4D" value="#4D4D4D" />
+		<color id="333333" value="#333333" />
+		<color id="666666" value="#666666" />
+		<color id="404040" value="#404040" />
+		<color id="949494" value="#949494" />
+		<color id="ADACAA" value="#ADACAA" />
+		<color id="DFC285" value="#DFC285" />
+		<color id="255E18" value="#255E18" />
+		
+		<color id="color.tab.normal" red="204" green="211" blue="214" alpha="255" />
+		<color id="color.tab.hover" red="255" green="255" blue="255" alpha="255" />
+		<color id="color.head.caption" value="#999999" />
+		<color id="color.menubar.text" value="#999999" />
+			
+	</resource>
+</XLUE>

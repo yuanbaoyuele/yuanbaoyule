@@ -1,0 +1,120 @@
+<xlue>
+	<control class="TabContainerCtrl">
+		<attr_def>
+			<attr name="nActiveTabID" type="int" />
+			<attr name="nCurMaxTabID" type="int" />
+			<attr name="tTabShowList" />
+			<attr name="nMaxTabWidth" type="int"> <default>196</default> </attr>
+		</attr_def>		
+		<method_def>
+			<OpenURL file="TabContainerCtrl.xml.lua" func="OpenURL"/>
+			<GetActiveTabCtrl file="TabContainerCtrl.xml.lua" func="GetActiveTabCtrl"/>
+		</method_def>	
+
+		<event_def>
+			<OnActiveTabChange>
+				<param>
+					<userdata/>
+				</param>
+			</OnActiveTabChange>
+		</event_def>
+		
+		
+		<objtemplate>
+			<children>
+				<obj id="TabContainerCtrl.Container.Layout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width-110</width>
+						<height>father.height</height>
+					</attr>
+					<children>
+						<obj id="TabContainerCtrl.Container" class="LayoutObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
+						</obj>   	
+
+						<obj id="TabContainerCtrl.AddNewTab" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>father.height-20</top>
+								<width>12</width>
+								<height>12</height>
+								<NormalBkgID>YBYL.Tab.AddNew.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.AddNew.Down</DownBkgID>
+								<HoverBkgID>YBYL.Tab.AddNew.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.AddNew.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickAddNewTab" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj> 
+				
+				<obj id="TabContainerCtrl.CloseBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-21-15</left>
+						<top>3</top>
+						<width>21</width>
+						<height>21</height>
+						<NormalBkgID>YBYL.TabContainer.CloseBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.TabContainer.CloseBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.TabContainer.CloseBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.TabContainer.CloseBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickCloseCurTab" />
+						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterClose" />
+					</eventlist>
+				</obj>
+				
+				<obj id="TabContainerCtrl.FullScrn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-21*2-22</left>
+						<top>3</top>
+						<width>21</width>
+						<height>21</height>
+						<NormalBkgID>YBYL.TabContainer.FullScrn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.TabContainer.FullScrn.Down</DownBkgID>
+						<HoverBkgID>YBYL.TabContainer.FullScrn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.TabContainer.FullScrn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickFullScrn" />
+						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterFullScrn" />
+					</eventlist>
+				</obj>
+				
+				<obj id="TabContainerCtrl.RestoreBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-21*2-22</left>
+						<top>3</top>
+						<width>21</width>
+						<height>21</height>
+						<NormalBkgID>YBYL.TabContainer.RestoreBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.TabContainer.RestoreBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.TabContainer.RestoreBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.TabContainer.RestoreBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickRestore" />
+						<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterRestore" />
+						<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
+					</eventlist>
+				</obj>
+				
+			</children>
+			<eventlist>
+				<event name="OnInitControl" file="TabContainerCtrl.xml.lua" func="OnInitControl" />
+				<event name="OnPosChange" file="TabContainerCtrl.xml.lua" func="OnContainerPosChange" />
+			</eventlist>
+			
+		</objtemplate>
+	</control>
+</xlue>
