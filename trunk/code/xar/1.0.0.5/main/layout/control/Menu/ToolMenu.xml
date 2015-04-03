@@ -1,0 +1,81 @@
+<xlue>
+	<objtemplate id="toolmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="ClearHistory" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>清空历史记录</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearHistory" />
+				</eventlist>
+			</obj>
+			
+			<obj id="ClearCollect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>清空收藏夹</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearCollect" />
+				</eventlist>
+			</obj>
+		
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<!--obj id="Profile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>选项</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_Profile" />
+				</eventlist>
+			</obj-->
+			<obj id="InternetProfile" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>Internet选项</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InternetPro" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="ToolMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>200</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>225</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>200</width>
+						<height>father.height</height>
+						<ContextID>toolmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
