@@ -129,12 +129,14 @@ function gIEMenu:ExecuteCMD(strKey,...)
 		end
 		apiAsynUtil:AsynCreateProcess("", "rundll32.exe shell32.dll,Control_RunDLL inetcpl.cpl,,0", "",32, 1,
 			function (nRet, tProcDetail)
-				fCallback(nRet, tProcDetail) --tProcDetail.hProcess, tProcDetail.hThread, tProcDetail.dwProcessId, tProcDetail.dwThreadId
+				-- fCallback(nRet, tProcDetail) --tProcDetail.hProcess, tProcDetail.hThread, tProcDetail.dwProcessId, tProcDetail.dwThreadId
+				
 				if nRet == 0 and type(funCallBack) == "function" then
 					if tProcDetail.hProcess ~= nil then
 						apiAsynUtil:AsynWaitForSingleObject(tProcDetail.hProcess,nil,
 							function(nRet)
 								if nRet == 0 then
+									funCallBack()
 								end
 							end)
 					end
