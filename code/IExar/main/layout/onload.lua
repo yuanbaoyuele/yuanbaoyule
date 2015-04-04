@@ -65,7 +65,7 @@ function SendStartupReport(bShowWnd)
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "startup"  --进入上报
-		tStatInfo.strEA = FunctionObj.GetMinorVer() or ""
+		tStatInfo.strEA = FunctionObj.GetMinorVerFormat() or ""
 	else
 		tStatInfo.strEC = "showui" 	 --展示上报
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
