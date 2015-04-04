@@ -8,6 +8,7 @@
 #define WM_HTTPFILEGOT WM_USER + 202
 #define WM_SENDHTTPSTAT		WM_USER + 2002
 #define WM_CREATEPROCESSFINISH			WM_USER + 2004
+#define WM_WAITOBJECTFINISH				WM_USER + 2005
 #define WM_NEWASYNGETHTTPFILETASKFINISH		WM_USER + 2010
 #define WM_NEWASYNUNZIPTASKFINISH			WM_USER + 2011
 #define WM_NEWASYNSENDHTTPSTATTASKFINISH	WM_USER + 2013
@@ -16,6 +17,7 @@
 
 #define WM_HTTPFILEGOTPROGRESS		WM_USER + 2023
 #define WM_KILLPROCESS					WM_USER + 2024
+
 
 enum AjaxTaskFlag
 {
@@ -64,6 +66,8 @@ public:
 
 	static int NewAsynGetHttpFileWithProgress(lua_State* pLuaState);
 	static int AsynKillProcess(lua_State* pLuaState);
+
+	static int AsynWaitForSingleObject(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI  s_functionlist[];
 };
@@ -565,6 +569,26 @@ struct KillProcessData
 };
 
 
+class CWaitObjData
+{
+public:
+	CWaitObjData(HANDLE hProcess, DWORD dwTimeout, lua_State* pState, LONG lRefFn);
+	void Work();
+
+	void Notify(int nResult)
+	{
+		lua_State* pLuaState = m_callInfo.GetLuaState();
+		lua_rawgeti(pLuaState, LUA_REGISTRYINDEX, m_callInfo.GetRefFn());
+		lua_pushinteger(pLuaState, nResult);
+		XLLRT_LuaCall(pLuaState, 1, 0, L"CWaitObjData Callback");
+	}
+private:
+	HANDLE	m_hProcess;
+	LuaCallInfo m_callInfo;
+	DWORD	m_dwTimeout;
+};
+
+
 class CAsynMsgWindow : public CMsgWindow
 {
 public:
@@ -618,6 +642,7 @@ public:
 		MESSAGE_HANDLER(WM_CREATEPROCESSFINISH, OnCreateProcessFinish)
 		MESSAGE_HANDLER(WM_HTTPFILEGOTPROGRESS, OnHttpFileGotProgress)
 		MESSAGE_HANDLER(WM_KILLPROCESS, OnKillProcessFinish)
+		MESSAGE_HANDLER(WM_WAITOBJECTFINISH, OnWaitObjectFinish)
 		CHAIN_MSG_MAP(CMsgWindow)
 	END_MSG_MAP()
 
@@ -713,6 +738,14 @@ protected:
 	{
 		KillProcessData* pData = (KillProcessData*)lParam;
 		pData->Notify((int)wParam);
+		delete pData;
+		return 0;
+	}
+
+	LRESULT OnWaitObjectFinish(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
+	{
+		CWaitObjData* pData = (CWaitObjData*) lParam;
+		pData->Notify((int) wParam);
 		delete pData;
 		return 0;
 	}
