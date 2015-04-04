@@ -67,7 +67,6 @@ void SetUserHandle()
 
 DWORD WINAPI SendHttpStatThread(LPVOID pParameter)
 {
-	ResetUserHandle();
 	//TSAUTO();
 	CHAR szUrl[MAX_PATH] = {0};
 	strcpy(szUrl,(LPCSTR)pParameter);
@@ -166,6 +165,35 @@ BOOL FindAndKillProcessByName(LPCTSTR strProcessName)
         return FALSE;
 }
 
+wchar_t* AnsiToUnicode( const char* szStr );
+
+extern "C" __declspec(dllexport) int QueryProcessExist(const char* strProcessName)
+{
+	 if(NULL == strProcessName)
+     {
+        return 0;
+     }
+	wchar_t* wstrName = AnsiToUnicode(strProcessName); 
+	int nRet = 0;
+	HANDLE hSnap = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (hSnap != INVALID_HANDLE_VALUE)
+	{
+		PROCESSENTRY32 pe;
+		pe.dwSize = sizeof(PROCESSENTRY32);
+		BOOL bResult = ::Process32First(hSnap, &pe);
+		while (bResult)
+		{
+			if(_tcsicmp(pe.szExeFile,wstrName) == 0)
+			{
+				nRet = 1;
+			}
+			bResult = ::Process32Next(hSnap, &pe);
+		}
+		::CloseHandle(hSnap);
+	}
+	delete [] wstrName;
+	return nRet;
+}
 
 extern "C" __declspec(dllexport) void SoftExit()
 {
@@ -206,6 +234,7 @@ extern "C" __declspec(dllexport) void SendAnyHttpStat(CHAR *ec,CHAR *ea, CHAR *e
 	}
 	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=UA-57884150-1&cid=%s&t=event&ec=%s&ea=%s%s",szPid,ec,ea,str.c_str());
 
+	ResetUserHandle();
 	DWORD dwThreadId = 0;
 	HANDLE hThread = CreateThread(NULL, 0, SendHttpStatThread, (LPVOID)szURL,0, &dwThreadId);
 	CloseHandle(hThread);
@@ -238,6 +267,7 @@ extern "C" __declspec(dllexport) void SendAnyHttpStatIE(CHAR *ec,CHAR *ea, CHAR 
 	}
 	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid=%s&t=event&ec=%s&ea=%s%s",szPid,ec,ea,str.c_str());
 
+	ResetUserHandle();
 	DWORD dwThreadId = 0;
 	HANDLE hThread = CreateThread(NULL, 0, SendHttpStatThread, (LPVOID)szURL,0, &dwThreadId);
 	CloseHandle(hThread);
@@ -306,7 +336,7 @@ extern "C" __declspec(dllexport) void GetPeerID(CHAR * pszPeerID)
 
 }
 
-extern "C" __declspec(dllexport) void NsisTSLOG(TCHAR* pszInfo)
+extern "C" __declspec(dllexport) void NsisTSLOG(CHAR* pszInfo)
 {
 	if(pszInfo == NULL)
 		return;
@@ -419,8 +449,11 @@ DWORD WINAPI DownLoadWork(LPVOID pParameter)
 		return 0;
 	}
 	char *p = strrchr(szUrl, '/');
+	char *p2 = strrchr(szUrl, '?');
+	char szTemp[128] = {0};
+	strncpy(szTemp, p+1, p2-p-1);
 	if(p != NULL && strlen(p+1) > 0) {
-		::PathCombineA(szBuffer,szBuffer,p+1);
+		::PathCombineA(szBuffer,szBuffer,szTemp);
 	} else {
 		::PathCombineA(szBuffer,szBuffer,"Setup_oemqd50.exe");	
 	}
@@ -735,21 +768,6 @@ extern "C" __declspec(dllexport) int IsOsUac()
 }
 
 HANDLE hThreadINI;
-extern "C" __declspec(dllexport) int WaitINI()
-{
-	int nRet = 0;
-	if (NULL != hThreadINI)
-	{
-		DWORD dwRet = WaitForSingleObject(hThreadINI, 5000);
-		if (dwRet == WAIT_OBJECT_0)
-		{
-			nRet = 1;
-		}
-		CloseHandle(hThreadINI);
-	}
-	return nRet;
-}
-
 void GetFileVersionString(const char* utf8FilePath, char* szRet)
 {
 
@@ -777,13 +795,39 @@ void GetFileVersionString(const char* utf8FilePath, char* szRet)
 	
 }
 
-//返回0：都不安装，1：静默安装，2有界面安装， 3：都安装
-extern "C" __declspec(dllexport) int DownLoadIniConfig()
+
+static CHAR szIniUrl[] = "http://www.91yuanbao.com/cmi/iesetupconfig.js";
+extern "C" __declspec(dllexport) void DownLoadIniConfig()
 {
-	static CHAR szIniUrl[] = "http://www.91yuanbao.com/cmi/iesetupconfig.dat";
+	char szTempPath[MAX_PATH] = {0};
+	GetTempPathA(MAX_PATH, szTempPath);
+	::PathCombineA(szTempPath,szTempPath,"iesetupconfig.js");
+	::DeleteFileA(szTempPath);
 	DWORD dwThreadId = 0;
-	hThreadINI = CreateThread(NULL, 0, DownLoadWork, (LPVOID)szIniUrl,0, &dwThreadId);
-	WaitINI();
+	DWORD dwTime;
+	GetTime(&dwTime);
+	static char szUrl[256] = {0};
+	sprintf(szUrl, "%s?stamp=%d", szIniUrl, dwTime);
+	hThreadINI = CreateThread(NULL, 0, DownLoadWork, (LPVOID)szUrl,0, &dwThreadId);
+}
+
+//返回0：都不安装，1：静默安装，2有界面安装， 3：都安装, 4静默xp下安装
+extern "C" __declspec(dllexport) int WaitINI(int nNotCheck = 0)
+{
+	if (NULL != hThreadINI)
+	{
+		DWORD dwRet = WaitForSingleObject(hThreadINI, 5000);
+		CloseHandle(hThreadINI);
+		if (dwRet != WAIT_OBJECT_0)
+		{
+			return 4;//下载失败
+		}
+		if(nNotCheck == 1){
+			return 3;		
+		}
+	} else {
+		return 4;
+	}
 	int nRet = 0;
 	CHAR szBuffer[MAX_PATH] = {0};
 	DWORD len = GetTempPathA(MAX_PATH, szBuffer);
@@ -821,6 +865,10 @@ extern "C" __declspec(dllexport) int DownLoadIniConfig()
 					TSDEBUG4CXX("DownLoadIniConfig:find hhaveui section");
 					nSubRet2 = 1;
 				}
+			}
+			if(nSubRet1 == 0 && nSubRet2 == 0){//如果都不满足则可以确定结果， 否则还得进一步验证
+				nRet = 0;
+				return nRet;
 			}
 			//判断系统版本
 			OSVERSIONINFOEX osvi;
@@ -865,7 +913,7 @@ extern "C" __declspec(dllexport) int DownLoadIniConfig()
 			char szIEPath[MAX_PATH] = {0};
 			if (::SHGetSpecialFolderPathA(::GetDesktopWindow(),szIEPath,CSIDL_PROGRAM_FILES,FALSE))
 			{
-				strncat(szIEPath, "\\Internet Explorer\\iexplore.exe",64);
+				strcat(szIEPath, "\\Internet Explorer\\iexplore.exe");
 				if(PathFileExistsA(szIEPath)){
 					char strIEVer[256] = {0};
 					GetFileVersionString(szIEPath, strIEVer);
@@ -916,6 +964,7 @@ extern "C" __declspec(dllexport) int DownLoadIniConfig()
 
 		}else{
 			TSDEBUG4CXX("DownLoadIniConfig:ini file not exist");
+			nRet = 4;
 			return nRet;
 		}
 	} else {
