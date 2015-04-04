@@ -1362,6 +1362,16 @@ function OpenHomePage(nIndex)
 	tStatInfo.strEL = tostring(nIndex)
 	tStatInfo.strEV = 1
 
+	if tostring(nIndex) == "1" then
+		tStatInfo.strEL = "startup"
+	elseif tostring(nIndex) == "2" then
+		tStatInfo.strEL = "newtab"
+	elseif tostring(nIndex) == "3" then
+		tStatInfo.strEL = "homebutton"
+	elseif tostring(nIndex) == "4" then
+		tStatInfo.strEL = "menu"
+	end
+	
 	DelayTipConvStatistic(tStatInfo)
 end
 
