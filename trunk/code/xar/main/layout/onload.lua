@@ -78,7 +78,7 @@ function SendStartupReport(bShowWnd)
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "startup"  --进入上报
-		tStatInfo.strEA = FunctionObj.GetMinorVer() or ""
+		tStatInfo.strEA = FunctionObj.GetMinorVerFormat() or ""
 	else
 		tStatInfo.strEC = "showui" 	 --展示上报
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
@@ -500,7 +500,7 @@ function TryInstallIE()
 	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
 	local nValue = FunctionObj.RegQueryValue(strRegFSPath)
 	if IsNilString(nValue) then 
-		return   --不是首次启动  
+		return   --不是首次启动   
 	end
 	
 	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
@@ -532,9 +532,14 @@ function SendInstallIEReport()
 	local strCID = FunctionObj.GetPeerID()
 	local strIEVersion = GetFakeIEVersion() 
 	local strInstallSrc = FunctionObj.GetInstallSrc()
+	local _, _, strMinorVer = string.find(strIEVersion, "%d+%.%d+%.%d+%.(%d+)")
+	
+	nVer = tonumber(strMinorVer) or ""
+	strMinorVer = string.format("%02d", nVer) 
+	strMinorVer = "B"..strMinorVer	
 	
 	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid="..tostring(strCID)
-						.."&t=event&ec=".."startup_registerie".."&ea="..tostring(strIEVersion)
+						.."&t=event&ec=".."startup_registerie".."&ea="..tostring(strMinorVer)
 						.."&el="..tostring(strInstallSrc).."&ev="..tostring(1)
 		
 	tipAsynUtil:AsynSendHttpStat(strUrl, function()	end)
