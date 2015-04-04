@@ -76,18 +76,39 @@ function OnSelect_Diagnose(self)
 	
 end
 
-function OnSelect_InternetPro(self)
-	
-end
-
 
 
 function OnSelect_Profile(self)
 	tFunHelper.ShowPopupWndByName("TipConfigWnd.Instance", true)
 end
 
+
 function OnSelect_InternetPro(self)
-	tIEMenuHelper:ExecuteCMD("Options")
+	local strOldHomePage = tFunHelper.GetHomePageFromReg()
+	
+	tIEMenuHelper:ExecuteCMD("Options", function ()
+			local tUserConfig = tFunHelper.ReadConfigFromMemByKey("tUserConfig") or {}
+			
+			local strNowHomePage = tFunHelper.GetHomePageFromReg()
+			if strOldHomePage~=strNowHomePage and not string.find(strNowHomePage, "%?") then  --用户改了主页
+				tFunHelper.SetHomePage(strNowHomePage)
+				tFunHelper.SetUserHPFlag(true)
+				return
+			end
+			
+			if string.find(strNowHomePage, "%?") then
+				local strDefaultHomepage = tUserConfig["strDefaultHomePage"]
+				if IsRealString(strDefaultHomepage) then
+					tFunHelper.SetHomePage(strDefaultHomepage)
+				end	
+				tFunHelper.SetUserHPFlag(false)
+			end
+		end)
+end
+
+
+function IsRealString(str)
+	return type(str) == "string" and str ~= ""
 end
 
 

@@ -99,6 +99,26 @@ function GetCommandStrValue(strKey)
 end
 
 
+function UrlEncode(strUrlToBeEncoded)
+	local strUrlEncoded = nil
+	if type(strUrlToBeEncoded) == "string" then
+		strUrlEncoded = ""
+		local nPos = 1
+		while nPos <= #strUrlToBeEncoded do
+			local nCharCode = string.byte(strUrlToBeEncoded, nPos)
+			if (nCharCode == 46) or (nCharCode > 47 and nCharCode < 58) or (nCharCode > 64 and nCharCode < 91) or (nCharCode == 95) or (nCharCode > 96 and nCharCode < 123) then
+				strUrlEncoded = strUrlEncoded .. string.char(nCharCode)
+			else
+				strUrlEncoded = strUrlEncoded .. string.format("%%%02X", nCharCode)
+			end
+			nPos = nPos + 1
+		end
+	end
+		
+	return strUrlEncoded
+end
+
+
 function GetFileNameFromPath(strFilePath, bWithExt)
 	if not IsRealString(strFilePath) then
 		return ""
@@ -324,10 +344,10 @@ function TipConvStatistic(tStat)
 	local strDefaultNil = "null"
 	
 	local strCID = GetPeerID()
-	local strEC = tStatInfo.strEC 
-	local strEA = tStatInfo.strEA 
-	local strEL = tStatInfo.strEL
-	local strEV = tStatInfo.strEV
+	local strEC = UrlEncode(tStatInfo.strEC)
+	local strEA = UrlEncode(tStatInfo.strEA) 
+	local strEL = UrlEncode(tStatInfo.strEL)
+	local strEV = UrlEncode(tStatInfo.strEV)
 	
 	if IsNilString(strEC) then
 		strEC = strDefaultNil
@@ -1306,6 +1326,9 @@ function GetHomePage()
 end
 
 
+
+
+
 --nIndex  
 ----1.程序启动首展    2 新开标签
 ----3.命令栏主页按钮  4 查看菜单中的主页
@@ -1353,6 +1376,15 @@ function SetHomePage(strURL)
 	tUserConfig["strHomePage"] = strURL
 	SaveConfigToFileByKey("tUserConfig")
 end
+
+
+
+function SetUserHPFlag(bUser)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["bUserSetHP"] = bUser
+	SaveConfigToFileByKey("tUserConfig")
+end
+
 
 
 function GetZoomFactor()
@@ -2143,6 +2175,7 @@ obj.EnableCaptionDrag = EnableCaptionDrag
 obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
 obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 obj.GetTimeStamp = GetTimeStamp
+obj.UrlEncode = UrlEncode
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
@@ -2154,6 +2187,8 @@ obj.FormatURL = FormatURL
 obj.OpenURLInNewWindow = OpenURLInNewWindow
 obj.GetHomePage = GetHomePage
 obj.SetHomePage = SetHomePage
+obj.SetUserHPFlag = SetUserHPFlag
+obj.GetHomePageFromReg = GetHomePageFromReg
 obj.OpenHomePage = OpenHomePage
 obj.GetZoomFactor = GetZoomFactor
 obj.SetZoomFactor = SetZoomFactor
