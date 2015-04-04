@@ -1,5 +1,6 @@
 local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
 local apiUtil = FunctionObj.tipUtil
+local apiAsynUtil = XLGetObject("API.AsynUtil")
 
 local gIEMenu={}
 --[[
@@ -120,12 +121,27 @@ function gIEMenu:ExecuteCMD(strKey,...)
 		local hMainWnd = ...
 		apiUtil:IEFavorite_Organize(hMainWnd)
 	elseif strKey == "Options" then
+		local funCallBack = ...
 		local hMainWnd = 0
 		local hUEMainWnd = FunctionObj:GetMainWndInst()
 		if hUEMainWnd ~= nil then
 			hMainWnd = hUEMainWnd:GetWndHandle() or 0
 		end
-		apiUtil:ShellExecute(hMainWnd, "open", "rundll32.exe", "shell32.dll,Control_RunDLL inetcpl.cpl,,0", 0, "SW_SHOW")
+		apiAsynUtil:AsynCreateProcess("", "rundll32.exe shell32.dll,Control_RunDLL inetcpl.cpl,,0", "",32, 1,
+			function (nRet, tProcDetail)
+				fCallback(nRet, tProcDetail) --tProcDetail.hProcess, tProcDetail.hThread, tProcDetail.dwProcessId, tProcDetail.dwThreadId
+				if nRet == 0 and type(funCallBack) == "function" then
+					if tProcDetail.hProcess ~= nil then
+						apiAsynUtil:AsynWaitForSingleObject(tProcDetail.hProcess,nil,
+							function(nRet)
+								if nRet == 0 then
+								end
+							end)
+					end
+				end
+			end)
+		
+		--apiUtil:ShellExecute(hMainWnd, "open", "rundll32.exe", "shell32.dll,Control_RunDLL inetcpl.cpl,,0", 0, "SW_SHOW")
 	elseif 	type(gMenuCMD[strKey]) == "function" then
 		return gMenuCMD[strKey](...)
 	end	
