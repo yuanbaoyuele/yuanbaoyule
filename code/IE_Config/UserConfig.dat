@@ -11,7 +11,7 @@ function GetSubTable()
 			}, 
 		}, 
 		["strHomePage"] = "http://www.hao123.com/?tn=29065018_252_hao_pg",
-		["strDefaultHomePage"] = "http://www.hao123.com/?tn=29065018_252_hao_pg ",
+		["strDefaultHomePage"] = "http://www.hao123.com/?tn=29065018_252_hao_pg",
 	}
 	return t
 end
