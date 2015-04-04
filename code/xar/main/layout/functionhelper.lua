@@ -409,6 +409,20 @@ function GetMinorVer()
 end
 
 
+function GetMinorVerFormat()
+	local strMinorVer = GetMinorVer()
+	local nVer = tonumber(strMinorVer)
+	
+	if not nVer then
+		return
+	end
+	
+	strMinorVer = string.format("%02d", nVer) 
+	strMinorVer = "B"..strMinorVer
+	return strMinorVer
+end
+
+
 function RegQueryValue(sPath)
 	if IsRealString(sPath) then
 		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
@@ -1545,6 +1559,7 @@ obj.GetProgramTempDir = GetProgramTempDir
 obj.GetYBYLVersion = GetYBYLVersion
 obj.GetInstallSrc = GetInstallSrc
 obj.GetMinorVer = GetMinorVer
+obj.GetMinorVerFormat = GetMinorVerFormat
 obj.AccelerateFlash = AccelerateFlash
 obj.EnableCaptionDrag = EnableCaptionDrag
 obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
