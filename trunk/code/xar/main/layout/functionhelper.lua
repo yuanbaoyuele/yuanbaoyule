@@ -257,6 +257,17 @@ function CheckTimeIsAnotherDay(LastTime)
 end
 
 
+function GetTimeStamp(nHour)
+	local nRealHour = nHour or 24
+	local strPeerId = GetPeerID()
+	local iFlag = tonumber(string.sub(strPeerId, 12, 12), 16) or 0
+	local iTime = tipUtil:GetCurrentUTCTime()
+	local ss = math.floor((iTime + 8 * 3600  - (iFlag + 1) * 3600)/(nRealHour*3600))
+	local strStamp = "?stamp=" .. tostring(ss)
+	return strStamp 
+end
+
+
 function TipConvStatistic(tStat)
 	local rdRandom = tipUtil:GetCurrentUTCTime()
 	local tStatInfo = tStat or {}
@@ -1539,6 +1550,7 @@ obj.EnableCaptionDrag = EnableCaptionDrag
 obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
 obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 obj.QueryAllUsersDir = QueryAllUsersDir
+obj.GetTimeStamp = GetTimeStamp
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
