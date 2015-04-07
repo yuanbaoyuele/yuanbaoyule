@@ -184,6 +184,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"DetachBrowserEvent", DetachBrowserEvent},
 	
 	{"PinToStartMenu4XP", PinToStartMenu4XP},
+	{"TrackPopUpSysMenu", TrackPopUpSysMenu},
 	{NULL, NULL}
 };
 
@@ -4514,7 +4515,7 @@ int LuaAPIUtil::PinToStartMenu4XP(lua_State *pLuaState)
 	}
 	
 	const char *szShortCutPath = lua_tostring(pLuaState, 2);
-	bool bPin = lua_toboolean(pLuaState, 3);
+	bool bPin = (bool)lua_toboolean(pLuaState, 3);
 	if (!szShortCutPath)
 	{
 		return 0;
@@ -4587,3 +4588,48 @@ int LuaAPIUtil::PinToStartMenu4XP(lua_State *pLuaState)
 	::CoUninitialize();
 	return 0;
 };
+
+
+int LuaAPIUtil::TrackPopUpSysMenu(lua_State *pLuaState)
+{
+	TSAUTO();
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (!ppUtil)
+	{	
+		return 0;
+	}
+	HWND hWnd = (HWND) lua_touserdata(pLuaState, 2);
+	int x = (int) lua_tointeger(pLuaState, 3);
+	int y = (int) lua_tointeger(pLuaState, 4);
+
+	if(x == 0 && y == 0)
+	{
+		POINT pt;
+		::GetCursorPos(&pt);
+		x = pt.x;
+		y = pt.y;
+	}
+	::SetForegroundWindow(hWnd);
+	HMENU hMenu = ::GetSystemMenu(hWnd, FALSE); 
+	int nCount = ::GetMenuItemCount(hMenu);
+	for(int i = 0; i < nCount; i++)
+	{
+		UINT uID = ::GetMenuItemID(hMenu, i);
+		if(uID == 0)
+			continue;
+		if(uID == SC_RESTORE) 
+			EnableMenuItem(hMenu, i, MF_BYPOSITION | (::IsZoomed(hWnd) ? MF_ENABLED : MF_GRAYED));
+		else if(uID == SC_MAXIMIZE || uID == SC_MOVE || uID == SC_SIZE)
+			EnableMenuItem(hMenu,i,MF_BYPOSITION | (::IsZoomed(hWnd) ? MF_GRAYED : MF_ENABLED));
+		else
+			EnableMenuItem(hMenu, i , MF_BYPOSITION | MF_ENABLED);
+	}
+	UINT uCmd = TrackPopupMenuEx(hMenu, 
+		TPM_RETURNCMD | TPM_NONOTIFY,
+		x,
+		y,
+		hWnd,
+		NULL); 
+	::PostMessage(hWnd, WM_SYSCOMMAND, uCmd, 0);
+	return S_OK;
+}
