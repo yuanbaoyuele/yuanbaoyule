@@ -78,10 +78,12 @@ function SendStartupReport(bShowWnd)
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "startup"  --进入上报
-		tStatInfo.strEA = FunctionObj.GetMinorVerFormat() or ""
+		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
+		tStatInfo.strEL = strSource or ""
 	else
 		tStatInfo.strEC = "showui" 	 --展示上报
-		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
+		tStatInfo.strEA = strSource or ""
+		tStatInfo.strEL = FunctionObj.GetMinorVerFormat() or ""
 	end
 	
 	tStatInfo.strEV = 1
@@ -845,7 +847,7 @@ function CreateDesktopShortCut()
 			end
 			
 			local nDTType, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "dttype")
-			if not bRet or tostring(nDTType) ~= "1" then
+			if not bRet or tostring(nDTType) ~= "0" then
 				CreateDesktopReg()
 				return
 			end
