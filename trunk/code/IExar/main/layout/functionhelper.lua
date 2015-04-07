@@ -169,9 +169,12 @@ function ReportAndExit()
 	HideMainWindow()	
 	SendRunTimeReport(0, true)
 	
+	local bRet, strSource = GetCommandStrValue("/sstartfrom")
+	
 	function FinalExit()
 		tStatInfo.strEC = "exit"	
-		tStatInfo.strEA = GetInstallSrc() or ""
+		tStatInfo.strEA = strSource or ""
+		tStatInfo.strEL = GetMinorVerFormat() or ""
 		tStatInfo.Exit = true
 		TipConvStatistic(tStatInfo)
 	end
@@ -347,7 +350,7 @@ function TipConvStatistic(tStat)
 	local strEC = UrlEncode(tStatInfo.strEC)
 	local strEA = UrlEncode(tStatInfo.strEA) 
 	local strEL = UrlEncode(tStatInfo.strEL)
-	local strEV = UrlEncode(tStatInfo.strEV)
+	local strEV = tStatInfo.strEV
 	
 	if IsNilString(strEC) then
 		strEC = strDefaultNil
@@ -573,6 +576,18 @@ function IsBrowserFullScrn()
 end
 
 
+function IsWindowMax()
+	local objMainWnd = GetMainWndInst()
+	local strState = objMainWnd:GetWindowState()
+	
+	if strState == "max" then
+		return true
+	else
+		return false
+	end
+end
+
+
 function EnableCaptionDrag(bEnableCap)
 	local objCaption = GetMainCtrlChildObj("caption.drag")
 	if objCaption then
@@ -677,6 +692,12 @@ function RestoreWndSize()
 		return
 	end
 		
+	local bLastWndMax = tWindowSize.bWindowMax
+	if bLastWndMax then
+		objMainWnd:Max()
+		return
+	end		
+		
 	local nLeft = tWindowSize.nLeft or 0
 	local nTop = tWindowSize.nTop or 0
 	local nRight = tWindowSize.nRight or 1024
@@ -716,10 +737,14 @@ function RecordWndSize(nLeft, nTop, nRight, nBottom)
 	local objMainWnd = GetMainWndInst()
 	local l, t, r, b = objMainWnd:GetWindowRect()
 	
+	tWindowSize.bFullScreen = false
+	tWindowSize.bWindowMax = false
+	
 	if IsBrowserFullScrn() then
 		tWindowSize.bFullScreen = true
+	elseif IsWindowMax() then
+		tWindowSize.bWindowMax = true
 	else
-		tWindowSize.bFullScreen = false
 		tWindowSize.nLeft = nLeft or l
 		tWindowSize.nTop = nTop or t
 		tWindowSize.nRight = nRight or r
