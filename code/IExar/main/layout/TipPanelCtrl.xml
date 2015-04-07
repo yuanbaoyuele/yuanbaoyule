@@ -54,6 +54,9 @@
 									</attr>									
 								</obj>
 							</children>
+							<eventlist>
+								<event name="OnRButtonUp" file="TipPanelCtrl.xml.lua" func="OnTitleRButtonUp" />
+							</eventlist>
 						</obj>
 						
 						<obj id="MainLayout" class="TextureObject">
