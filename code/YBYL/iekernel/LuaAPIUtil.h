@@ -216,6 +216,7 @@ public:
 	static int DetachBrowserEvent(lua_State* pLuaState);
 
 	static int PinToStartMenu4XP(lua_State* pLuaState);
+	static int TrackPopUpSysMenu(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;
