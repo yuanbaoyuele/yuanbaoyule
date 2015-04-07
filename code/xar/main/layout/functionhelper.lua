@@ -118,9 +118,12 @@ function ReportAndExit()
 	HideMainWindow()		
 	SendRunTimeReport(0, true)
 	
+	local bRet, strSource = GetCommandStrValue("/sstartfrom")
+	
 	function FinalExit()
 		tStatInfo.strEC = "exit"	
-		tStatInfo.strEA = GetInstallSrc() or ""
+		tStatInfo.strEA = strSource or ""
+		tStatInfo.strEL = GetMinorVerFormat() or ""
 		tStatInfo.Exit = true
 		TipConvStatistic(tStatInfo)
 	end
