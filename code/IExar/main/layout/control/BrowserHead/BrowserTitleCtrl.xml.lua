@@ -49,7 +49,6 @@ end
 
 ----事件--
 function OnClickCpationClose(self)
-	--tFunHelper.ReportAndExit()	
 	local tLocalUserConfig = tFunHelper.ReadConfigFromMemByKey("tUserConfig") or {}
 	local objTabContainer = tFunHelper.GetHeadCtrlChildObj("MainPanel.TabContainer")
 	local nCurrentNum = objTabContainer:GetTotalShowTabNum()
@@ -59,6 +58,11 @@ function OnClickCpationClose(self)
 		tFunHelper.ShowModalDialog("TipCloseAllTabWnd", "TipCloseAllTabWndInstance", "TipCloseAllTabWndTree", "TipCloseAllTabWndInstance")
 	end
 end
+
+function OnDbClickLogo(self)
+	tFunHelper.ReportAndExit()
+end
+
 
 function OnClickCpationMin(self)
 	local objHostWnd = GetHostWndByUIElem(self)

@@ -65,12 +65,14 @@ function SendStartupReport(bShowWnd)
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "startup"  --进入上报
-		tStatInfo.strEA = FunctionObj.GetMinorVerFormat() or ""
+		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
+		tStatInfo.strEL = strSource or ""
 	else
 		tStatInfo.strEC = "showui" 	 --展示上报
-		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
+		tStatInfo.strEA = strSource or ""
+		tStatInfo.strEL = FunctionObj.GetMinorVerFormat() or ""
 	end
-	
+		
 	tStatInfo.strEV = 1
 	
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")

@@ -18,7 +18,6 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						
 						<texture></texture>
 					</attr>		
 					<children>		
@@ -30,6 +29,9 @@
 								<height>16</height>
 								<image>Title.Logo</image>
 							</attr>
+							<eventlist>
+								<event name="OnLButtonDbClick" file="BrowserTitleCtrl.xml.lua" func="OnDbClickLogo" />
+							</eventlist>
 						</obj>
 					
 						<obj id="BrowserTitleCtrl.Title" class="TextObject" >

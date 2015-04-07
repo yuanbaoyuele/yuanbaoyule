@@ -694,7 +694,7 @@ function SendURLReport(strURL)
 
 	tStatInfo.strEC = "openurl"
 	tStatInfo.strEA = strURL  
-	tStatInfo.strEL = tFunHelper.GetMinorVer() or ""
+	tStatInfo.strEL = tFunHelper.GetInstallSrc() or ""
 	tStatInfo.strEV = 1
 
 	tFunHelper.DelayTipConvStatistic(tStatInfo)
