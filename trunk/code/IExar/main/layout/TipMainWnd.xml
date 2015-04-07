@@ -59,6 +59,7 @@
             <minheight>50</minheight>
 			<sysmenu>1</sysmenu>
 			<appwindow>1</appwindow>
+			<ellipse>5,5</ellipse>
             <fps>30</fps>
 			<blur>1</blur>		
         </attr>
