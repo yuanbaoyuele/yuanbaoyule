@@ -182,6 +182,13 @@ function InitMenuHelper()
 	end
 end
 
+function OnTitleRButtonUp(self)
+	local hUEMainWnd = tFunHelper:GetMainWndInst()
+	if hUEMainWnd ~= nil then
+		hMainWnd = hUEMainWnd:GetWndHandle()
+		tipUtil:TrackPopUpSysMenu(hMainWnd,0,0)
+	end
+end
 
 function IsNilString(AString)
 	if AString == nil or AString == "" then
