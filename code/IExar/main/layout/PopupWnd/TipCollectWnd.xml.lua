@@ -207,6 +207,8 @@ function SetFixStyle(objRootCtrl, bFix)
 	objCloseBtn:SetVisible(bFix)
 	objCloseBtn:SetChildrenVisible(bFix)
 	
+	EnableResizeFrame(objRootCtrl, bFix)
+	
 	local attr = objRootCtrl:GetAttribute()
 	attr.bFix = bFix
 	
@@ -214,6 +216,17 @@ function SetFixStyle(objRootCtrl, bFix)
 	local WndWidth = r - l
 	
 	AdjustMainPanelSize(objRootCtrl, WndWidth)
+end
+
+
+function EnableResizeFrame(objRootCtrl, bFix)
+	local objResizeFrame = objRootCtrl:GetControlObject("ResizeFrame")
+	local objBottom = objResizeFrame:GetControlObject("mainwnd.resize.bottom")
+	local objBottomRight = objResizeFrame:GetControlObject("mainwnd.resize.bottomright")
+	
+	local bEnable = not bFix
+	objBottom:SetEnable(bEnable)
+	objBottomRight:SetEnable(bEnable)
 end
 
 
