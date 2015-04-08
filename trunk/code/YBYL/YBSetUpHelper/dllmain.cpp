@@ -119,7 +119,7 @@ void GetProcessPath(wchar_t* strRet, DWORD dwProcessId)
     }
 }
 
-BOOL FindAndKillProcessByName(LPCTSTR strProcessName)
+BOOL FindAndKillProcessByName(LPCTSTR strProcessName, BOOL bKill = TRUE)
 {
         if(NULL == strProcessName)
         {
@@ -138,26 +138,36 @@ BOOL FindAndKillProcessByName(LPCTSTR strProcessName)
 		wchar_t wszProcessPath[MAX_PATH] = {0}; 
         if(Process32First(handle32Snapshot, &pEntry))
         {
-                BOOL bFound = FALSE;
+				BOOL bFound = FALSE;
 				GetProcessPath(wszProcessPath, pEntry.th32ProcessID);
                 if (!_tcsicmp(wszProcessPath, strProcessName))
                 {
                         bFound = TRUE;
-                  }
-                while((!bFound)&&Process32Next(handle32Snapshot, &pEntry))
-                {
+						if(!bKill)
+						return bFound;
+                }
+				if(bFound && bKill)
+				{
+						//CloseHandle(handle32Snapshot);
+						HANDLE handLe =  OpenProcess(PROCESS_TERMINATE , FALSE, pEntry.th32ProcessID);
+						BOOL bResult = TerminateProcess(handLe,0);
+						TSERROR4CXX("FindAndKillProcessByName, kill result = "<<bResult);
+				}
+                while(Process32Next(handle32Snapshot, &pEntry))
+                {	
+						memset(wszProcessPath, 0, MAX_PATH);
                        GetProcessPath(wszProcessPath, pEntry.th32ProcessID);
 						if (!_tcsicmp(wszProcessPath, strProcessName))
                         {
-                                bFound = TRUE;
+                               TSERROR4CXX("FindAndKillProcessByName, bFound =TRUE ");
+								bFound = TRUE;
+								if(!bKill)
+								return bFound;
+								//CloseHandle(handle32Snapshot);
+								HANDLE handLe =  OpenProcess(PROCESS_TERMINATE , FALSE, pEntry.th32ProcessID);
+								BOOL bResult = TerminateProcess(handLe,0);
+								TSERROR4CXX("FindAndKillProcessByName, kill result = "<<bResult);
                         }
-                }
-                if(bFound)
-                {
-                        CloseHandle(handle32Snapshot);
-                        HANDLE handLe =  OpenProcess(PROCESS_TERMINATE , FALSE, pEntry.th32ProcessID);
-                        BOOL bResult = TerminateProcess(handLe,0);
-                        return bResult;
                 }
         }
  
@@ -437,6 +447,23 @@ extern "C" __declspec(dllexport) void KillMyIExplorer()
 
 }
 
+extern "C" __declspec(dllexport) int QueryMyExplorerExist()
+{
+	char szMain[MAX_PATH] = {0};
+	GetProfileFolder(szMain);
+	if(strcmp(szMain, "") == 0)
+	{
+		return 1;
+	}
+	strcat(szMain, "\\iexplorer\\program\\iexplore.exe");
+	wchar_t* wszPath = AnsiToUnicode(szMain); 
+	BOOL bRet = FindAndKillProcessByName(wszPath, FALSE);
+	delete [] wszPath;
+	return bRet;
+
+}
+
+
 DWORD WINAPI DownLoadWork(LPVOID pParameter)
 {
 	//TSAUTO();
@@ -612,7 +639,7 @@ extern "C" __declspec(dllexport) bool PinToStartMenu4XP(bool bPin, char* szPath)
 				CComBSTR bstrName;
 				item_verb->get_Name(&bstrName);
 
-				if ( VerbNameMatch(bstrName,bPin) )
+				if ( VerbNameMatch(bstrName,bPin))
 				{
 					TSDEBUG4CXX("Find Verb to Pin:"<< bstrName);
 					int i = 0;
@@ -635,7 +662,7 @@ extern "C" __declspec(dllexport) bool PinToStartMenu4XP(bool bPin, char* szPath)
 						}
 					}while ( i++ < 3);
 						
-					break;
+					//break;
 				}
 			}
 		}
