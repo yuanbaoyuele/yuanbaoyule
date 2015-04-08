@@ -703,7 +703,7 @@ function WriteRegStartMenuInternet()
 		if not IsNilString(strValue) then
 			local strFakeIEPath = GetIEPath()
 			FunctionObj.RegSetValue(strCommandPath, "\""..strFakeIEPath.."\"")
-			FunctionObj.RegSetValue(strRootKey.."\\SOFTWARE\\iexplorer\\StartMenuInternet", strValue)
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\StartMenuInternet", strValue)
 		end
 	end
 end
