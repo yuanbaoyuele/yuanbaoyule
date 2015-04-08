@@ -57,6 +57,31 @@ function SetHomePageBySrc()
 	FunctionObj.SetHomePage(strHomePage)
 end
 
+function SetSearchEngine()
+	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["SearchEngine"] = {
+		[1] = {
+			["url"] = "http://www.baidu.com/s\?wd={searchword}", 
+			["name"] = "baidu", 
+			["displayName"] = "2百度一下 (默认)", 
+		}, 
+		[2] = {
+			["url"] = "http://www.google.com/q={searchword}", 
+			["name"] = "google", 
+			["displayName"] = "2Google", 
+		}, 
+		[3] = {
+			["url"] = "http://cn.bing.com/search\?q={searchword}", 
+			["name"] = "bing", 
+			["displayName"] = "2Live Search", 
+		}, 
+	}, 
+	for i, v in ipairs(tUserConfig["SearchEngine"]) do
+		FunctionObj.DownLoadSearchEngineIco(v["url"], function() end)
+	end
+	FunctionObj.SaveConfigToFileByKey("tUserConfig")
+end
+
 ------------------------------------	
 
 function main()
@@ -66,6 +91,7 @@ function main()
 	end
 
 	SetHomePageBySrc()
+	SetSearchEngine()
 end
 
 main()
