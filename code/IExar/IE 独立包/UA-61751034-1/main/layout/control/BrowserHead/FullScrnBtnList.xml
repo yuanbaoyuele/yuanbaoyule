@@ -1,0 +1,78 @@
+<xlue>
+	<control class="FullScrnBtnList">
+		<attr_def>
+
+		</attr_def>		
+		<method_def>
+		
+		</method_def>		
+		
+		<event_def>
+		
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="FullScrnBtnList.Bkg" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+					<children>
+						<obj id="FullScrnBtnList.Min" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>22</width>
+								<height>22</height>
+								<NormalBkgID>YBYL.FullScrn.Min.Normal</NormalBkgID>
+								<DownBkgID>YBYL.FullScrn.Min.Down</DownBkgID>
+								<HoverBkgID>YBYL.FullScrn.Min.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.FullScrn.Min.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="FullScrnBtnList.xml.lua" func="OnClickMin" />
+							</eventlist>
+						</obj>
+						
+						<obj id="FullScrnBtnList.Restore" class="TipAddin.Button">
+							<attr>
+								<left>27</left>
+								<top>0</top>
+								<width>22</width>
+								<height>22</height>
+								<NormalBkgID>YBYL.FullScrn.Restore.Normal</NormalBkgID>
+								<DownBkgID>YBYL.FullScrn.Restore.Down</DownBkgID>
+								<HoverBkgID>YBYL.FullScrn.Restore.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.FullScrn.Restore.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="FullScrnBtnList.xml.lua" func="OnClickRestore" />
+							</eventlist>
+						</obj>
+						
+						<obj id="FullScrnBtnList.Close" class="TipAddin.Button">
+							<attr>
+								<left>27*2</left>
+								<top>0</top>
+								<width>22</width>
+								<height>22</height>
+								<NormalBkgID>YBYL.FullScrn.Close.Normal</NormalBkgID>
+								<DownBkgID>YBYL.FullScrn.Close.Down</DownBkgID>
+								<HoverBkgID>YBYL.FullScrn.Close.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.FullScrn.Close.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="FullScrnBtnList.xml.lua" func="OnClickClose" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>			
+			</children>
+			<eventlist>
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

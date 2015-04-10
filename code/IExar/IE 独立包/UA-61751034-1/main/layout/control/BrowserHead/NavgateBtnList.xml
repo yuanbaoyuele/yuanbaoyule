@@ -1,0 +1,108 @@
+<xlue>
+	<control class="NavgateBtnList">
+		<attr_def>
+			<attr name="objCurrentWebTab" type="userdata" />
+			<attr name="hEvntListener" type="userdata" />
+		</attr_def>		
+		<method_def>
+			<SetCurrentWebTab file="NavgateBtnList.xml.lua" func="SetCurrentWebTab"/>
+		</method_def>		
+		
+		<event_def>
+		
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="NavgateBtnList.Bkg" class="ImageObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>57</width>
+						<height>29</height>
+						<image>NavBtn.Bkg.png</image>
+						<zorder>9999</zorder>
+					</attr>
+					<children>
+						<obj id="NavgateBtnList.GobackBtn" class="TipAddin.Button">
+							<attr>
+								<left>2</left>
+								<top>2</top>
+								<width>25</width>
+								<height>25</height>
+								<NormalBkgID>YBYL.Head.GoBack.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.GoBack.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.GoBack.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.GoBack.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGobackBtn" />
+								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterGoback" />
+								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+						
+						<obj id="NavgateBtnList.GoForwardBtn" class="TipAddin.Button">
+							<attr>
+								<left>5+25</left>
+								<top>1</top>
+								<width>25</width>
+								<height>26</height>
+								<NormalBkgID>YBYL.Head.GoForward.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.GoForward.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.GoForward.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.GoForward.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickGoForwardBtn" />
+								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterGoForward" />
+								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+				
+				
+				<obj id="DropArrow.Bkg" class="TipAddin.Button">
+					<attr>
+						<left>53</left>
+						<top>3</top>
+						<width>21</width>
+						<height>21</height>
+						<NormalBkgID>UrlHistory.Arrow.Normal</NormalBkgID>
+						<DownBkgID>UrlHistory.Arrow.Down</DownBkgID>
+						<HoverBkgID>UrlHistory.Arrow.Hover</HoverBkgID>
+						<DisableBkgID>UrlHistory.Arrow.Normal</DisableBkgID>
+						<zorder>9990</zorder>
+					</attr>
+					<children>
+						<obj id="DropArrow.Disable" class="TextureObject">
+							<attr>
+								<left>7</left>
+								<top>8</top>
+								<width>9</width>
+								<height>6</height>
+								<texture>UrlHistory.Arrow.Disable</texture>
+								<zorder>9999</zorder>
+							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
+								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+					</children>
+					<eventlist>
+						<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
+						<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
+						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickDropArrow" />
+					</eventlist>
+				</obj>
+							
+			</children>
+			<eventlist>
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>
