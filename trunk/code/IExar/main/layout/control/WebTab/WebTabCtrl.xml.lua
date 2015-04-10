@@ -107,13 +107,16 @@ function BindBrowserCtrl(self, objWebBrowser)
 				AsynCall(function()
 					local bDownload = tipUtil:DownloadFileByIE(URL)
 				end)
-				local strBrowserUrl = GetLocalURL(self)
-				if URL ~= nil and (tostring(URL) == tostring(strBrowserUrl)) and (tostring(URL) ~= tostring(lpRedir)) then
-					CloseTab(self)
-				end	
+				self:CloseTab()
 				return true
 			end
 		end)
+		
+	attr.objBrowserCtrl:AttachListener("OnNavigateError", false, 
+		function (objBrowser, strEventName, strURL)
+			SetErrorTabIco(self)
+		end)	
+		
 end
 
 
@@ -422,6 +425,17 @@ function SetTabIco(objRootCtrl, strIcoPath, strIcoName)
 	SetIcoName(objRootCtrl, strIcoName)
 	SaveIcoNameToHistory(objRootCtrl, strIcoName)
 end
+
+
+function SetErrorTabIco(objRootCtrl)
+	local objImage = objRootCtrl:GetControlObject("WebTabCtrl.HeadImg")
+	local strDefResID = tFunHelper.GetDefaultWebTabImgID()
+	objImage:SetResID(strDefResID)
+	
+	SetAddressBarImage(objRootCtrl, "")
+end
+
+
 
 
 function SetAddressBarState(objRootCtrl)
