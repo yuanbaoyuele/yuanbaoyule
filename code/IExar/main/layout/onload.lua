@@ -83,6 +83,27 @@ function SendStartupReport(bShowWnd)
 end
 
 
+function SendUserInfoReport()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tStatBrow = {}
+	
+	local bRet, strSource = FunctionObj.GetInstallSrc()
+	
+	tStatBrow.strEL = strSource or ""
+	tStatBrow.strEV = 1
+	tStatBrow.strEC = "reg_browser"  --默认浏览器
+	tStatBrow.strEA = FunctionObj.GetDefaultBrowser() or ""
+	FunctionObj.DelayTipConvStatistic(tStatBrow)
+	
+	local tStatHP = {}
+	tStatHP.strEL = strSource or ""
+	tStatHP.strEV = 1
+	tStatHP.strEC = "reg_homepage"  --首页
+	tStatHP.strEA = FunctionObj.GetHomePageFromReg() or ""
+	FunctionObj.DelayTipConvStatistic(tStatHP)
+end
+
+
 function CheckForceVersion(tForceVersion)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	if type(tForceVersion) ~= "table" then
@@ -397,6 +418,7 @@ function PreTipMain()
 	FunctionObj.ReadAllConfigInfo()
 	
 	SendStartupReport(false)
+	SendUserInfoReport()
 	TipMain()
 	
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")

@@ -26,6 +26,10 @@ local gIEMenu={}
 
 	  
 function gIEMenu:Init(ctrlBrowser)
+	if not ctrlBrowser then
+		return
+	end
+
 	self.ctrlBrowser = ctrlBrowser
 	self.lpWeb2 = ctrlBrowser:GetRawWebBrowser() 
 	if self.lpWeb2 ~= nil then
