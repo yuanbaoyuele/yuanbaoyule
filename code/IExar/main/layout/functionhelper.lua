@@ -427,7 +427,7 @@ function NewAsynGetHttpFile(strUrl, strSavePath, bDelete, funCallback, nTimeoutI
 			end
 		end)
 	
-	timerID = tipAsynUtil:SetTimer(nTimeoutInMS or 2 * 60 * 1000,
+	timerID = tipAsynUtil:SetTimer(nTimeoutInMS or 5 * 60 * 1000,
 		function (nTimerId)
 			tipAsynUtil:KillTimer(nTimerId)
 			timerID = nil
@@ -1709,6 +1709,10 @@ function DownLoadIco(strURL, fnCallBack)
 	
 	local strDomain = string.match(strURL, "(http://[^/]+)")		
 	if not IsRealString(strDomain) then	
+		strDomain = string.match(strURL, "(https://[^/]+)")		
+	end
+	
+	if not IsRealString(strDomain) then	
 		return
 	end
 	
@@ -2037,7 +2041,7 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 	
 	local strStamp = GetTimeStamp(1)
 	local strURLFix = strConfigURL..strStamp	
-	local nTime = tonumber(nTimeInMs) or 5*1000
+	local nTime = tonumber(nTimeInMs) or 60*1000
 		
 	NewAsynGetHttpFile(strURLFix, strSavePath, false
 	, function(bRet, strRealPath)

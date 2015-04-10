@@ -33,7 +33,8 @@ function SetIcoImage(self, strIcoName)
 	end
 	
 	if not IsRealString(strIcoName) then
-		objImage:SetResID("")
+		local strDefResID = tFunHelper.GetDefaultIcoImgID()
+		objImage:SetResID(strDefResID)
 		return
 	end
 	
