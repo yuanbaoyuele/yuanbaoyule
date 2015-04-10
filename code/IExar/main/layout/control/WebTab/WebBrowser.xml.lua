@@ -275,11 +275,11 @@ function Navigate( self, url )
 									killTimer = true
 								elseif not browser:GetBusy() then
 									self:FireExtEvent( "OnNavigateError", url )
-									browser:SetVisible( false )
-									browser:SetChildrenVisible( false )
+									browser:SetVisible( true )
+									browser:SetChildrenVisible( true )
 									-- self:RemoveChild( browser )
 									ShowErrorPage(self)
-									attr.errorurl = url
+									-- attr.errorurl = url
 									killTimer = true
 								end
 								if killTimer then
