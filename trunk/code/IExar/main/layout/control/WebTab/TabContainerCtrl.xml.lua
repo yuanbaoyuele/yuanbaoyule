@@ -378,7 +378,7 @@ function OpenURLInCurTab(objRootCtrl, strURL)
 	end
 	
 	objActiveTab:SetNewURLState(true)
-	objWebBrowCtrl:Navigate(strURL)
+	objBrowser:Navigate(strURL)
 	objActiveTab:ShowGif()
 end
 

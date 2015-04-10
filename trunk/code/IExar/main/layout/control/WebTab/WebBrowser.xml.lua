@@ -250,7 +250,7 @@ function Navigate( self, url )
 			InitWebBrowserObj(self)
 		end
 	end
-	
+
 	browser:Navigate( url )
 	self:FireExtEvent("OnNavigate", url)
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
@@ -277,7 +277,7 @@ function Navigate( self, url )
 									self:FireExtEvent( "OnNavigateError", url )
 									browser:SetVisible( false )
 									browser:SetChildrenVisible( false )
-									self:RemoveChild( browser )
+									-- self:RemoveChild( browser )
 									ShowErrorPage(self)
 									attr.errorurl = url
 									killTimer = true
@@ -314,19 +314,24 @@ function OnBtnMin(self)
 	local web = self:GetOwnerControl()	
 	web:FireExtEvent("OnErrorMin")
 end
+-- function ShowErrorPage(self)
+	-- local bkg = self:GetControlObject("web.bkg")
+	-- local errorbkg = self:GetControlObject("error.bkg")
+	-- local loadingimg = self:GetControlObject("loading.img")
+	
+	-- bkg:SetVisible(true)
+	-- bkg:SetChildrenVisible(true)
+	-- errorbkg:SetVisible(true)
+	-- errorbkg:SetChildrenVisible(true)
+	-- loadingimg:SetVisible(false)
+	-- loadingimg:SetChildrenVisible(false)
+	
+	-- StopAni(self)
+-- end
+
 function ShowErrorPage(self)
-	local bkg = self:GetControlObject("web.bkg")
-	local errorbkg = self:GetControlObject("error.bkg")
-	local loadingimg = self:GetControlObject("loading.img")
-	
-	bkg:SetVisible(true)
-	bkg:SetChildrenVisible(true)
-	errorbkg:SetVisible(true)
-	errorbkg:SetChildrenVisible(true)
-	loadingimg:SetVisible(false)
-	loadingimg:SetChildrenVisible(false)
-	
-	StopAni(self)
+	local browser = self:GetControlObject("browser")
+	browser:Navigate("res://ieframe.dll/http_303_webOC.htm")
 end
 
 function ShowLoadingPage(self)
