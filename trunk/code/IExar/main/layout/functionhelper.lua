@@ -123,11 +123,13 @@ function GetFileNameFromPath(strFilePath, bWithExt)
 	if not IsRealString(strFilePath) then
 		return ""
 	end
-
-	local npos1, npos2
-	npos1, npos2, strFileName = string.find(strFilePath, "\\([^\\]*)$")
+	
+	local npos1, npos2, strFileName = string.find(strFilePath, "\\([^\\]*)$")
 	if not bWithExt then
-		npos1, npos2, strFileName = string.find(tostring(strFileName), "(.*)%.[^%.]*$")
+		local npos1, npos2, strFileNameWithExt = string.find(tostring(strFileName), "(.*)%.[^%.]*$")
+		if IsRealString(strFileNameWithExt) then
+			strFileName = strFileNameWithExt
+		end		
 	end
 	
 	return strFileName
@@ -1365,9 +1367,6 @@ function GetHomePage()
 end
 
 
-
-
-
 --nIndex  
 ----1.程序启动首展    2 新开标签
 ----3.命令栏主页按钮  4 查看菜单中的主页
@@ -1402,9 +1401,6 @@ end
 
 
 
-
-
-
 function GetHomePageFromCfg()
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	return tUserConfig["strHomePage"]
@@ -1434,6 +1430,16 @@ function SetUserHPFlag(bUser)
 	SaveConfigToFileByKey("tUserConfig")
 end
 
+
+function GetDefaultBrowser()
+	local strBrowserPath = RegQueryValue("HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\")
+	if not IsRealString(strBrowserPath) then
+		return ""
+	end
+
+	local strFileName = GetFileNameFromPath(strBrowserPath)
+	return strFileName
+end
 
 
 function GetZoomFactor()
@@ -2239,6 +2245,7 @@ obj.GetHomePage = GetHomePage
 obj.SetHomePage = SetHomePage
 obj.SetUserHPFlag = SetUserHPFlag
 obj.GetHomePageFromReg = GetHomePageFromReg
+obj.GetDefaultBrowser = GetDefaultBrowser
 obj.OpenHomePage = OpenHomePage
 obj.GetZoomFactor = GetZoomFactor
 obj.SetZoomFactor = SetZoomFactor
