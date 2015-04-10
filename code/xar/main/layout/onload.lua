@@ -959,8 +959,9 @@ function CreateDesktopReg()
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open")
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\", "打开主页(&H)")
 	
+	strCmd = "\"" ..strIEPath.. "\"".." /sstartfrom desktopnamespace"
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command\\", strIEPath)
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command\\", strCmd)
 	
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop")
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\", "属性(&R)")
