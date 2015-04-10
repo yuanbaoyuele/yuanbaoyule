@@ -370,7 +370,7 @@ function TipConvStatistic(tStat)
 		strEV = 1
 	end
 	
-	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-61751034-1&cid="..tostring(strCID)
+	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-61742876-1&cid="..tostring(strCID)
 						.."&t=event&ec="..tostring(strEC).."&ea="..tostring(strEA)
 						.."&el="..tostring(strEL).."&ev="..tostring(strEV)
 	TipLog("TipConvStatistic: " .. tostring(strUrl))
