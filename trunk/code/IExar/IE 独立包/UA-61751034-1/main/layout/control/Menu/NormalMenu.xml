@@ -1,0 +1,210 @@
+<xlue>
+	<control class="NormalMenu">
+		<attr_def>
+			<attr name="ContextID" type="string" desc="菜单的内容obj的id"/>
+			<attr name="ShadeID" type="string" desc="">
+				<!--default>texture.menu.shade</default-->
+			</attr>
+			<attr name="BknID" type="string" desc="菜单的背景obj对应的纹理id" >
+				<!--default>texture.menu.bkg</default-->
+			</attr>
+			<attr name="ShadingID" type="string" desc="菜单的背景底图对应的图片id"/>
+			<attr name="BottomLineID" type="string" desc="下拉菜单底边线"/>
+			<attr name="UpBknID" type="string" desc="上拉菜单时背景id"/>
+			<attr name="SrcColorID" type="string" >
+				<!--default>color.menu.bkg.src</default-->
+			</attr>
+			<attr name="DestColorID" type="string" >
+				<!--default>color.menu.bkg.dest</default-->
+			</attr>
+			<attr name="FillAlpha" type="int" >
+				<default>255</default>
+			</attr>
+			<attr name="DefaultItemTemplate" type="string" />
+			<attr name="DefaultSpliterTemplate" type="string" />
+			<attr name="bHasInit" type="bool" ><default>false</default></attr>
+			<attr name="nLinePerPage" type="int" ><default>0</default></attr>
+			<attr name="nTotalLineCount" type="int" ><default>0</default></attr>
+			<attr name="RelateObject" />
+		</attr_def>
+		
+		<method_def>
+			<AnimateShow/>
+			<AnimateHide/>
+			<!--GetScreenPos/-->
+			<SetPopStatus file="NormalMenu.xml.lua" func="SetPopStatus" />
+			<EndMenu file="NormalMenu.xml.lua" func="EndMenu" />
+			<UpdateSize file="NormalMenu.xml.lua" func="UpdateSize" />
+			<InsertItem file="NormalMenu.xml.lua" func="InsertItem" />
+			<RemoveItem file="NormalMenu.xml.lua" func="RemoveItem" />
+			<GetItemCount file="NormalMenu.xml.lua" func="GetItemCount" />
+			<GetItem file="NormalMenu.xml.lua" func="GetItem" />
+			<GetItembyID file="NormalMenu.xml.lua" func="GetItembyID" />
+			<AddItem file="NormalMenu.xml.lua" func="AddItem" />
+			<MoveNextItem file="NormalMenu.xml.lua" func="MoveNextItem" />
+			<MovePrevItem file="NormalMenu.xml.lua" func="MovePrevItem" />
+			<GetCurItem file="NormalMenu.xml.lua" func="GetCurItem" />
+			<SetMenuBar file="NormalMenu.xml.lua" func="SetMenuBar" />
+			<GetParentItem file="NormalMenu.xml.lua" func="GetParentItem" />
+			<AdjustItemPos file="NormalMenu.xml.lua" func="AdjustItemPos" />
+			<OnInitControl file="NormalMenu.xml.lua" func="OnInitControl" />
+			<BindRelateObject file="NormalMenu.xml.lua" func="BindRelateObject" />
+			<GetRelateObject file="NormalMenu.xml.lua" func="GetRelateObject" />
+		</method_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="menu.frame" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<!--limitchild>0</limitchild-->
+					</attr>	
+					<children>
+						<obj id="menu.shade" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
+						</obj>
+						<!--注 图片有阴影，需调整-->
+						<obj id="menu.bkn" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
+							<children>
+								<obj id="menu.shading" class="ImageObject">
+									<attr>
+										<left>(father.width - 161) / 2</left>
+										<top>father.bottom - 31</top>
+										<width>161</width>
+										<height>28</height>
+										<zorder>-10</zorder>
+										<alpha>127</alpha>
+										<drawmode>1</drawmode>
+										<visible>false</visible>
+									</attr>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnMouseWheel" file="NormalMenu.xml.lua" func="RouteToFather"/>
+							</eventlist>
+						</obj>
+						
+						<obj id="listbox.vscroll" class="TipAddin.ScrollBar">
+							<attr>
+								<Type>1</Type>
+								<ThumbBtn_normal>YBYL.Scroll.Bar.Normal</ThumbBtn_normal>
+								<ThumbBtn_hover>YBYL.Scroll.Bar.Hover</ThumbBtn_hover>
+								<ThumbBtn_down>YBYL.Scroll.Bar.Down</ThumbBtn_down>
+								<LeftBtn_normal>Scroll.UpArrow.Normal</LeftBtn_normal>
+								<LeftBtn_hover>Scroll.UpArrow.Hover</LeftBtn_hover>
+								<LeftBtn_down>Scroll.UpArrow.Down</LeftBtn_down>
+								<RightBtn_normal>Scroll.DownArrow.Normal</RightBtn_normal>
+								<RightBtn_hover>Scroll.DownArrow.Hover</RightBtn_hover>
+								<RightBtn_down>Scroll.DownArrow.Down</RightBtn_down>
+								<NormalDecorateID>Scroll.Decorate</NormalDecorateID>
+								<HoverDecorateID>Scroll.Decorate</HoverDecorateID>
+								<DownDecorateID>Scroll.Decorate</DownDecorateID>
+								<ThumbRightMagrin>1</ThumbRightMagrin>
+								<ThumbBtnWidth>16</ThumbBtnWidth>
+								<ThumbBtnLength>19</ThumbBtnLength>
+								<SideBtnLength>17</SideBtnLength>
+								<left>father.width-17</left>
+								<top>1</top>
+								<width>16</width>
+								<height>father.height-3</height>
+								<zorder>99999</zorder>
+							</attr>
+							<eventlist>
+								<event name="OnScrollBarMouseWheel" file="NormalMenu.xml.lua" func="CLB__OnScrollBarMouseWheel"/>
+								<event name="OnMousePosEvent" file="NormalMenu.xml.lua" func="CLB__OnScrollMousePosEvent"/>
+								<event name="OnVScroll" file="NormalMenu.xml.lua" func="CLB__OnVScroll" />
+							</eventlist>
+						</obj>	
+					</children>
+					<eventlist>
+						<event name="OnMouseWheel" file="NormalMenu.xml.lua" redirect="listbox.vscroll"/>
+					</eventlist>
+				</obj>	<!--end menu.frame-->
+			</children>
+				
+			<eventlist>
+				<!--event name="OnInitControl"/-->
+				<event name="OnKeyDown" file="NormalMenu.xml.lua" func="OnKeyDown" />
+				<event name="OnFocusChange" file="NormalMenu.xml.lua" func="OnFocusChange" />
+			</eventlist>
+		</objtemplate>
+	</control>
+	
+	<objtemplate class="MenuItemObject" id="menu.context.item">
+		<attr>
+			<height>20</height>
+			<width>father.width</width>
+			<TextPos>20</TextPos>
+			<Font>font.menuitem</Font>
+			<FontColorNormal>system.black</FontColorNormal>
+			<FontColorHover>system.white</FontColorHover>
+			<FontColorDisable>ADA999</FontColorDisable>
+			<RightTextColor>system.black</RightTextColor>
+			<RightTextFont>font.menuitem</RightTextFont>
+			<RightTextHAligh>right</RightTextHAligh>
+			<RightTextPos>10</RightTextPos>
+			<KeyFont>font.menuitemkey</KeyFont>
+			<Icon>YBYL.UrlIco.Default</Icon>
+			<IconPos>5</IconPos>
+			<IconVisible>false</IconVisible>
+		</attr>
+	</objtemplate>
+
+    <objtemplate id="menu.main.itemex" class="MenuItemObject">
+        <attr>
+            <height>20</height>
+            <width>20</width>
+			<IconPos>0</IconPos>
+			<TextPos>13</TextPos>
+			<IconWidth>16</IconWidth>
+			<IconHeight>16</IconHeight>
+        </attr>
+    </objtemplate>
+	<objtemplate id="menu.object.template" >
+		<attr>
+			<ItemLeft>0</ItemLeft>
+			<ItemTop>0</ItemTop>
+			<ItemRight>0</ItemRight>
+			<ItemBottom>0</ItemBottom>
+		</attr>
+	</objtemplate>
+	<objtemplate id="menu.splitter" class="MenuItemObject">
+        <attr>
+			<height>8</height>
+			<SeparatorHeight>1</SeparatorHeight>
+			<Type>1</Type>
+			<Icon>YBYL.Menu.Splitter.Bkg</Icon>
+			<IconVisible>false</IconVisible>
+        </attr>
+    </objtemplate>
+	
+	<!-- 通用的空菜单模板 -->
+	<objtemplate id="submenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+		</attr>
+		<children>
+		</children>
+	</objtemplate>
+	
+	<objtemplate id="submenu.template" class="NormalMenu">
+		<attr>
+			<width>180</width>
+			<height>230</height>
+ 			<ContextID>submenu.context</ContextID>
+		</attr>
+	</objtemplate>
+</xlue>

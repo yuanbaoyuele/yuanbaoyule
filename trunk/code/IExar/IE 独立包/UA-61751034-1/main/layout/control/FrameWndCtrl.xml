@@ -1,0 +1,102 @@
+<xlue>
+	<objtemplate id = "caption.failhittest" >
+		<attr>
+		</attr>
+		<eventlist>
+			<event name="OnHitTest" >
+				return 0,true,true
+			</event>
+		</eventlist>
+	</objtemplate>
+	<control class="FrameWndCtrl">
+		<objtemplate>
+			<children>
+				<obj id="mainwnd.resize.right" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<left>father.width-3</left>
+						<width>20</width>
+						<height>father.height</height>
+						<type>right</type>
+						<zorder>100000000</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.bottom" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<top>father.height-3</top>
+						<width>father.width</width>
+						<height>20</height>
+						<type>bottom</type>
+						<zorder>100000000</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.top" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<top>-3</top>
+						<width>father.width</width>
+						<height>10</height>
+						<type>top</type>
+						<zorder>100000000</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.left" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<left>-15</left>
+						<width>20</width>
+						<height>father.height</height>
+						<type>left</type>
+						<zorder>100000000</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.topleft" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<left>-15</left>
+						<top>-15</top>
+						<width>20</width>
+						<height>20</height>
+						<type>topleft</type>
+						<zorder>100000001</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.bottomleft" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<left>-15</left>
+						<top>father.height-5</top>
+						<width>20</width>
+						<height>20</height>
+						<type>bottomleft</type>
+						<zorder>100000001</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.topright" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<left>father.width-15</left>
+						<top>-15</top>
+						<width>20</width>
+						<height>20</height>
+						<type>topright</type>
+						<zorder>100000001</zorder>
+					</attr>
+				</obj>
+				<obj id="mainwnd.resize.bottomright" class="ResizeObject" templateid = "caption.failhittest">
+					<attr>
+						<left>father.width-12</left>
+						<top>father.height-12</top>
+						<width>24</width>
+						<height>24</height>
+						<type>bottomright</type>
+						<zorder>100000001</zorder>
+					</attr>
+				</obj>
+				<!--obj id="mainwnd.caption" class="CaptionObject" templateid = "caption.failhittest">
+					<attr>
+						<left>0</left> 
+						<top>0</top> 
+						<width>father.width</width> 
+						<height>father.height</height> 
+						<zorder>0</zorder>
+					</attr>
+				</obj-->
+			</children>
+		</objtemplate>
+	</control>
+</xlue>

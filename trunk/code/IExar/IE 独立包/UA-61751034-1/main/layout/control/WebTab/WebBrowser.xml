@@ -1,0 +1,283 @@
+<xlue>
+	<control class="SmallErrorPage">
+		<objtemplate>
+			<children>
+				<obj id="center.area" class="LayoutObject">
+					<attr>
+						<left>(father.width-168)/2</left>
+						<top>(father.height-(16+16+16+60+1+4+28))/2</top>
+						<width>168</width>
+						<height>16+16+16+60+1+4+28</height>
+					</attr>
+					<children>
+						<obj id="center.area.bkg" class="TextureObject">
+							<attr>
+								<left>-68</left>
+								<top>-43</top>
+								<width>400</width>
+								<height>130</height>
+								<!--texture>texture.web.erro.bkg</texture-->
+							</attr>
+						</obj>
+						<obj id="warm" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>51</width>
+								<height>39</height>
+								<!--texture>texture.web.warm</texture-->
+							</attr>
+						</obj>
+						<obj id="reason.text.1" class="TextObject">
+							<attr>
+								<left>51+18</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>16</height>
+								<text>对不起，你的网络连接错误</text>
+								<font>default.font</font>
+								<textcolor>system.black</textcolor>
+								<valign>center</valign>
+							</attr>
+						</obj>
+						<obj id="reason.text.2" class="TextObject">
+							<attr>
+								<left>51+18</left>
+								<top>16+10</top>
+								<width>father.width</width>
+								<height>16</height>
+								<text>请检查网络连接后刷新试试</text>
+								<font>default.font</font>
+								<textcolor>system.black</textcolor>
+								<valign>center</valign>
+							</attr>
+						</obj>								
+						<!--obj id="reflesh" class="TextLink">
+							<attr>
+								<left>240</left>
+								<top>19</top>
+								<width>60</width>
+								<height>32</height>
+								<Text>刷新</Text>
+								<HoverFont>font.webbrowser.error.link.text</HoverFont>												
+								<Font>font.webbrowser.error.link.text</Font>
+								<TextColor>color.weberror.link</TextColor>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="WebBrowser.xml.lua" function="OnBtnRefresh"/>
+							</eventlist>
+						</obj-->												
+					</children>
+				</obj>				
+			</children>
+		</objtemplate>
+	</control>
+	
+    <control class="WebBrowser">
+        <attr_def>
+			<!--默认使用自定义的出错页-->
+			<attr name="CustomErrorPage" type="bool"><default>true</default></attr>
+			<attr name="BigErrorPage" type="bool" >	<default>true</default>	</attr>
+			<attr name="Visible" type="bool" > <default>true</default> </attr>
+            <attr name="ErrorUrl" type="string" />
+			<attr name="ScriptError" type="bool"><default>false</default></attr>
+			<attr name="ContextMenu" type="bool"><default>true</default></attr>
+			<attr name="BkgColorResID" type="string" />
+			<attr name="ErrorBkgColorResID" type="string" />
+        </attr_def>
+		
+        <method_def>
+			<GetWeb file="WebBrowser.xml.lua" function="GetWeb" />
+			<SetErrorUrl file="WebBrowser.xml.lua" function="SetErrorUrl" />
+			<Navigate file="WebBrowser.xml.lua" function="Navigate" />
+			<SetExternal file="WebBrowser.xml.lua" function="SetExternal" />
+			<GetBusy file="WebBrowser.xml.lua" function="GetBusy" />
+			<Stop file="WebBrowser.xml.lua" function="Stop" />
+			<Refresh file="WebBrowser.xml.lua" function="Refresh" />
+			<Home file="WebBrowser.xml.lua" function="Home" />
+			<GoBack file="WebBrowser.xml.lua" function="GoBack" />
+			<GoForward file="WebBrowser.xml.lua" function="GoForward" />
+			<EnableContextMenu file="WebBrowser.xml.lua" function="EnableContextMenu" />
+			<RegisterAsDropTarget file="WebBrowser.xml.lua" function="RegisterAsDropTarget" />
+			<GetLocationURL file="WebBrowser.xml.lua" function="GetLocationURL" />
+			<EnableScriptError file="WebBrowser.xml.lua" function="EnableScriptError" />
+			<Show file="WebBrowser.xml.lua" function="Show" />
+			<AddSearchAssistant file="WebBrowser.xml.lua" function="AddSearchAssistant" />
+			<SetRealFocus  file="WebBrowser.xml.lua" function="SetRealFocus"/>
+			<GetRawWebBrowser file="WebBrowser.xml.lua" function="GetRawWebBrowser" />
+			<GetWindowBitmap file="WebBrowser.xml.lua" function="GetWindowBitmap" />
+			<GetWindow file="WebBrowser.xml.lua" function="GetWindow" />
+        </method_def>
+		
+        <event_def>	
+			<OnNavigate>
+				<param>
+					<string/>
+				</param>
+			</OnNavigate>
+			<OnCommandStateChange>
+				<param>
+					<string/>
+					<bool/>
+				</param>
+			</OnCommandStateChange>
+			<OnNavigateError>
+				<param>
+					<string/>
+				</param>
+			</OnNavigateError>
+			<OnNavigateComplete2>
+				<param>
+					<string/>
+				</param>
+			</OnNavigateComplete2>
+			<OnTitleChange>
+				<param>
+					<string/>
+				</param>
+			</OnTitleChange>
+			<OnErrorClose>
+				<param>					
+				</param>
+			</OnErrorClose>
+			<OnErrorMin>
+				<param>					
+				</param>
+			</OnErrorMin>
+			<OnNewWindow3>
+				<param>
+					<int/>
+					<string/>
+					<string/>
+				</param>
+				<return>
+					<bool/>
+				</return>
+			</OnNewWindow3>	
+			<OnDocumentComplete>
+				<param>
+					<string/>
+				</param>
+			</OnDocumentComplete>
+			<OnDownload>
+				<param>
+					<string/>
+					<string/>
+					<string/>
+					<userdata/>
+					<userdata/>
+				</param>
+			</OnDownload>
+			<onTitleChanged>
+				<param>
+					<string/>
+				</param>
+			</onTitleChanged>
+			<OnBeforeNavigate2>
+				<param>
+					<string/>
+				</param>
+			</OnBeforeNavigate2>
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="web.bkg" class="FillObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<filltype>Monochrome</filltype>
+						<blendtype>Source</blendtype>
+						<!--srccolor>color.webbrowser.bkasrccolor</srccolor>
+						<destcolor>color.webbrowser.destcolor</destcolor-->
+						<alpha>255</alpha>
+					</attr>
+					<children>
+						<obj id="error.bkg" class="FillObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<filltype>Monochrome</filltype>
+								<blendtype>Source</blendtype>
+								<!--srccolor>color.webbrowser.error.bkg</srccolor>
+								<destcolor>color.webbrowser.error.bkg</destcolor-->
+								<alpha>255</alpha>
+							</attr>
+							<children>															
+								<!--obj id="close" class="Button">
+									<attr>
+										<left>father.width-56</left>
+										<top>0</top>
+										<width>56</width>
+										<height>56</height>											
+										<visible>1</visible>						
+										<NormalBkgID>texture.webbrowser.button.close.normal</NormalBkgID>													
+										<HoverBkgID>texture.webbrowser.button.close.hover</HoverBkgID>	
+										<DownBkgID>texture.webbrowser.button.close.down</DownBkgID>	
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="WebBrowser.xml.lua" function="OnBtnClose"/>
+									</eventlist>
+								</obj>															
+								<obj id="min" class="Button">
+									<attr>
+										<left>father.width-56-56</left>
+										<top>0</top>
+										<width>56</width>
+										<height>56</height>													
+										<NormalBkgID>texture.webbrowser.button.min.normal</NormalBkgID>								
+										<HoverBkgID>texture.webbrowser.button.min.hover</HoverBkgID>	
+										<DownBkgID>texture.webbrowser.button.min.down</DownBkgID>	
+										<Visible>0</Visible>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="WebBrowser.xml.lua" function="OnBtnMin"/>
+									</eventlist>
+								</obj-->	
+							</children>
+						</obj>
+						<obj id="loading.img" class="ImageObject">
+							<attr>
+								<left>(father.width-72)/2</left>
+								<top>(father.height-142)/2</top>
+								<width>72</width>
+								<height>102</height>
+							</attr>
+							<children>
+								<obj id="loading" class="ImageObject">
+									<attr>
+										<left>10</left>
+										<top>0</top>
+										<width>72</width>
+										<height>72</height>
+										<!--image>bitmap.ball.loading</image-->
+									</attr>
+								</obj>
+								<obj id="loading.text" class="TextObject">
+									<attr>
+										<left>(father.width-100)/2</left>
+										<top>76</top>
+										<width>100</width>
+										<height>30</height>
+										<text>页面加载中…</text>
+										<font>default.font</font>
+										<textcolor>system.black</textcolor>
+										<valign>center</valign>
+										<halign>center</halign>
+									</attr>
+								</obj>
+							</children>
+						</obj>
+					</children>
+				</obj>
+            </children>
+			<eventlist>
+				<event name="OnInitControl" file="WebBrowser.xml.lua" func="OnInitControl" />
+				<event name="OnDestroy" file="WebBrowser.xml.lua" function="OnDestroy" />
+			</eventlist>
+        </objtemplate>
+    </control>
+</xlue>
