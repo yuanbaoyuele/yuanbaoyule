@@ -26,6 +26,7 @@
 			<SetGoBackState file="WebTabCtrl.xml.lua" func="SetGoBackState"/>
 			<GetGoForwardState file="WebTabCtrl.xml.lua" func="GetGoForwardState"/>
 			<SetGoForwardState file="WebTabCtrl.xml.lua" func="SetGoForwardState"/>
+			<SetCloseBtnVisible file="WebTabCtrl.xml.lua" func="SetCloseBtnVisible"/>
 		</method_def>		
 		
 		<event_def>

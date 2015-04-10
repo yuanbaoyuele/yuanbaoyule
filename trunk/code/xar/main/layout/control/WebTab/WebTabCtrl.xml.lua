@@ -140,6 +140,13 @@ function SetGoForwardState(self, bGoForwardState)
 end
 
 
+function SetCloseBtnVisible(self, bVisible)
+	local objCloseBtn = self:GetControlObject("WebTabCtrl.ClostBtn")
+	objCloseBtn:SetVisible(bVisible)
+	objCloseBtn:SetChildrenVisible(bVisible)
+end
+
+
 -----事件----
 function OnInitControl(self)
 	self:SetSelfID(0)
@@ -335,6 +342,10 @@ function DownloadTabIco(objRootCtrl, strURL)
 	end
 	
 	local strDomain = string.match(strURL, "(http://[^/]+)")		
+	if not IsRealString(strDomain) then	
+		strDomain = string.match(strURL, "(https://[^/]+)")	
+	end
+	
 	if not IsRealString(strDomain) then	
 		return
 	end

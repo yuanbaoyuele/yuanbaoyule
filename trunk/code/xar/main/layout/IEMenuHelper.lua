@@ -25,6 +25,10 @@ local gIEMenu={}
 
 	  
 function gIEMenu:Init(ctrlBrowser)
+	if not ctrlBrowser then
+		return
+	end
+
 	self.ctrlBrowser = ctrlBrowser
 	self.lpWeb2 = ctrlBrowser:GetRawWebBrowser() 
 	if self.lpWeb2 ~= nil then
@@ -78,8 +82,11 @@ local gMenuCMD = {
 
 function gIEMenu:ExecuteCMD(strKey,...)
 	if type(gMenuCMD[strKey]) == "table" then
+		if self.ctrlBrowser == nil then
+			return
+		end
+	
 		local hRealWnd = self.ctrlBrowser:GetWindow()
-		
 		if hRealWnd == nil then
 			return
 		end

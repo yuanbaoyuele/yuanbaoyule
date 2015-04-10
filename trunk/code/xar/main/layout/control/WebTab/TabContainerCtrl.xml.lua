@@ -297,6 +297,11 @@ function AdjustTabSize(objRootCtrl)
 		local nLeft = (nIndex-1)*nTabWidth
 		objTabCtrl:SetObjPos(nLeft, 0, nLeft+nTabWidth, "father.height")
 		objTabCtrl:SetZorder(10)
+		objTabCtrl:SetCloseBtnVisible(true)
+		
+		if nTotalNum == 1 then
+			objTabCtrl:SetCloseBtnVisible(false)
+		end		
 	end
 	
 	local nFinalRight = nTotalNum*nTabWidth+nBtnSpan
