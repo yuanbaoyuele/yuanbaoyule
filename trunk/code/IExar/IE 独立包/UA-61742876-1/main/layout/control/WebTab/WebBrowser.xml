@@ -89,6 +89,7 @@
         <method_def>
 			<GetWeb file="WebBrowser.xml.lua" function="GetWeb" />
 			<SetErrorUrl file="WebBrowser.xml.lua" function="SetErrorUrl" />
+			<GetErrorUrl file="WebBrowser.xml.lua" function="GetErrorUrl" />
 			<Navigate file="WebBrowser.xml.lua" function="Navigate" />
 			<SetExternal file="WebBrowser.xml.lua" function="SetExternal" />
 			<GetBusy file="WebBrowser.xml.lua" function="GetBusy" />

@@ -10,6 +10,11 @@ function SetErrorUrl( self, url )
 	attr.ErrorUrl = url
 end
 
+function GetErrorUrl( self, url )
+	local attr = self:GetAttribute()
+	return attr.ErrorUrl
+end
+
 function SetExternal( self, webevent )
 	local attr = self:GetAttribute()
 	attr.External = webevent
@@ -252,6 +257,7 @@ function Navigate( self, url )
 	end
 
 	browser:Navigate( url )
+	SetErrorUrl(self, "")
 	self:FireExtEvent("OnNavigate", url)
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	if attr.timer then
@@ -269,6 +275,7 @@ function Navigate( self, url )
 									end
 								end
 								if #attr.CompleteUrls > 0 or not attr.CustomErrorPage then
+									SetErrorUrl(self, "")
 									browser:SetVisible( true )
 									browser:SetChildrenVisible( true )
 									HideBkgPage(self)
@@ -278,7 +285,7 @@ function Navigate( self, url )
 									browser:SetVisible( true )
 									browser:SetChildrenVisible( true )
 									-- self:RemoveChild( browser )
-									ShowErrorPage(self)
+									ShowErrorPage(self, url)
 									-- attr.errorurl = url
 									killTimer = true
 								end
@@ -329,10 +336,22 @@ end
 	-- StopAni(self)
 -- end
 
-function ShowErrorPage(self)
-	local browser = self:GetControlObject("browser")
-	browser:Navigate("res://ieframe.dll/http_303_webOC.htm")
+local g_ErrorURLTimer = nil
+function ShowErrorPage(self, url)	
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	if g_ErrorURLTimer then
+		timerManager:KillTimer( g_ErrorURLTimer )
+	end
+	
+	g_ErrorURLTimer = timerManager:SetTimer( function ( item, id )
+		local browser = self:GetControlObject("browser")
+		SetErrorUrl(self, url)
+		browser:Navigate("res://ieframe.dll/http_303_webOC.htm")
+		timerManager:KillTimer( g_ErrorURLTimer )
+		g_ErrorURLTimer = nil
+	end)
 end
+
 
 function ShowLoadingPage(self)
 	StartAni(self)
