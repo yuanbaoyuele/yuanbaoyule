@@ -107,7 +107,10 @@ function BindBrowserCtrl(self, objWebBrowser)
 				AsynCall(function()
 					local bDownload = tipUtil:DownloadFileByIE(URL)
 				end)
-				self:CloseTab()
+				local strBrowserUrl = GetLocalURL(self)
+				if URL ~= nil and (tostring(URL) == tostring(strBrowserUrl)) and (tostring(URL) ~= tostring(lpRedir)) then
+					CloseTab(self)
+				end	
 				return true
 			end
 		end)
