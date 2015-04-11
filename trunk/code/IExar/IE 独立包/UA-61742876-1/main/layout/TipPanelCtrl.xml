@@ -87,7 +87,22 @@
 										<width>father.width-2</width>
 										<height>father.height-120-23</height>
 										<zorder>-1</zorder>
-									</attr>		
+									</attr>	
+									<children>
+										<obj id="MainPanel.ErrorPage" class="WebBrowser">
+											<attr>
+												<left>0</left>
+												<top>0</top>
+												<width>father.width</width>
+												<height>father.height</height>
+												<visible>false</visible>
+												<zorder>10</zorder>
+											</attr>	
+											<eventlist>
+												<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitErrorPage" />
+											</eventlist>
+										</obj>
+									</children>
 								</obj>
 								
 								<obj id="StateBar" class="StateBar">

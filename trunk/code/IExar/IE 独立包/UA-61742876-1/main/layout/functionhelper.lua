@@ -1035,6 +1035,20 @@ function ShowHeadWindow(self)
 end
 
 
+function ShowErrorPage(bShow)
+	local objWebContainer = GetMainCtrlChildObj("MainPanel.WebContainer")
+	if not objWebContainer then
+		return
+	end
+
+	local objErrorPage = objWebContainer.GetControlObject("MainPanel.ErrorPage")
+	if not objErrorPage then
+		return
+	end
+	objErrorPage:SetVisible(bShow)
+	objErrorPage:SetChildrenVisible(bShow)
+end
+
 
 function GetIcoBitmapObj(strIcoName)
 	if not IsRealString(strIcoName) then
@@ -1913,7 +1927,6 @@ function FormatURL(strURL)
 end
 
 
-
 ---升级--
 local g_bIsUpdating = false
 
@@ -2263,6 +2276,7 @@ obj.ShowModalDialog = ShowModalDialog
 obj.CreateSubWndByName = CreateSubWndByName
 obj.SetMainWndFocusStyle = SetMainWndFocusStyle
 obj.ShowHeadWindow = ShowHeadWindow
+obj.ShowErrorPage = ShowErrorPage
 
 
 --文件
