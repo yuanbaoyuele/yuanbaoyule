@@ -46,7 +46,6 @@ function Refresh( self  )
 end
 
 
-
 function Home( self )
 	local browser = self:GetControlObject( "browser" )
 	if browser ~= nil then
@@ -57,6 +56,7 @@ end
 function GoBack( self )
 	local browser = self:GetControlObject( "browser" )
 	if browser ~= nil then
+		SetErrorUrl(self, "")
 		browser:GoBack()
 	end
 end
@@ -71,6 +71,7 @@ end
 function GoForward( self )
 	local browser = self:GetControlObject( "browser" )
 	if browser ~= nil then
+		SetErrorUrl(self, "")
 		browser:GoForward()
 	end
 end
@@ -233,6 +234,7 @@ end
 
 
 function Navigate( self, url )
+	tFunHelper.ShowErrorPage(false)
 	local attr = self:GetAttribute()
 	attr.ErrorUrls = {}
 	attr.CompleteUrls = {}
@@ -346,10 +348,10 @@ function ShowErrorPage(self, url)
 	g_ErrorURLTimer = timerManager:SetTimer( function ( item, id )
 		local browser = self:GetControlObject("browser")
 		SetErrorUrl(self, url)
-		browser:Navigate("res://ieframe.dll/http_303_webOC.htm")
+		tFunHelper.ShowErrorPage(true)
 		timerManager:KillTimer( g_ErrorURLTimer )
 		g_ErrorURLTimer = nil
-	end)
+	end, 500)
 end
 
 
