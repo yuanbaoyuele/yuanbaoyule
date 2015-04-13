@@ -605,7 +605,7 @@ function SendInstallIEReport()
 	strMinorVer = "B"..strMinorVer	
 	
 	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid="..tostring(strCID)
-						.."&t=event&ec=".."startup_registerie".."&ea="..tostring(strMinorVer)
+						.."&t=event&ec=".."installiefromYBLaunch".."&ea="..tostring(strMinorVer)
 						.."&el="..tostring(strInstallSrc).."&ev="..tostring(1)
 		
 	tipAsynUtil:AsynSendHttpStat(strUrl, function()	end)
