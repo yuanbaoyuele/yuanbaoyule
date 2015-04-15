@@ -16,7 +16,7 @@ function OnSearch(self, func, txt)
 
 		tStatInfo.strEC = "onsearch"
 		tStatInfo.strEA = attr.SearchEngine["url"]  
-		tStatInfo.strEL = tFunHelper.GetMinorVerFormat() or ""
+		tStatInfo.strEL = "searchbox"
 		tStatInfo.strEV = 1
 
 		tFunHelper.DelayTipConvStatistic(tStatInfo)
