@@ -349,7 +349,7 @@ function GetTID()
 		return strTID
 	end
 
-	strTID = RegQueryValue("HKEY_CURRENT_USER\\Software\\YBYL\\ietid")
+	strTID = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\ietid")
 	if IsRealString(strTID) then
 		RegSetValue("HKEY_CURRENT_USER\\Software\\iexplorer\\ietid", strTID)
 		return strTID
