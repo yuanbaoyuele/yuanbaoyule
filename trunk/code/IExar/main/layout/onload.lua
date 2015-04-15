@@ -93,7 +93,7 @@ function SendUserInfoReport()
 	
 	local tStatBrow = {}
 	
-	local bRet, strSource = FunctionObj.GetInstallSrc()
+	local strSource = FunctionObj.GetInstallSrc()
 	
 	tStatBrow.strEL = strSource or ""
 	tStatBrow.strEV = 1
