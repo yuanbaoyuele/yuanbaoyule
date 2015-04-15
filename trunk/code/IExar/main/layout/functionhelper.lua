@@ -427,8 +427,6 @@ function DelayTipConvStatistic(tStat, nDelayInMs)
 end
 
 
-
-
 function NewAsynGetHttpFile(strUrl, strSavePath, bDelete, funCallback, nTimeoutInMS)
 	local bHasAlreadyCallback = false
 	local timerID = nil
