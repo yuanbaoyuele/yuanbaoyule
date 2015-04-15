@@ -64,7 +64,7 @@ function SendStartupReport(bShowWnd)
 	tStatInfo.strEL = strSource or ""
 	
 	if not bShowWnd then
-		tStatInfo.strEC = "startup"  --进入上报
+		tStatInfo.strEC = "launch"  --进入上报
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
 		tStatInfo.strEL = strSource or ""
 	else
@@ -85,22 +85,52 @@ end
 
 function SendUserInfoReport()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	local bHasSend = CheckHasSendUserInfo()
+	if bHasSend then
+		return
+	end
+	
 	local tStatBrow = {}
 	
 	local bRet, strSource = FunctionObj.GetInstallSrc()
 	
 	tStatBrow.strEL = strSource or ""
 	tStatBrow.strEV = 1
-	tStatBrow.strEC = "reg_browser"  --默认浏览器
+	tStatBrow.strEC = "defaultbrowser"  --默认浏览器
 	tStatBrow.strEA = FunctionObj.GetDefaultBrowser() or ""
 	FunctionObj.DelayTipConvStatistic(tStatBrow)
 	
 	local tStatHP = {}
 	tStatHP.strEL = strSource or ""
 	tStatHP.strEV = 1
-	tStatHP.strEC = "reg_homepage"  --首页
+	tStatHP.strEC = "iehomepage"  --首页
 	tStatHP.strEA = FunctionObj.GetHomePageFromReg() or ""
 	FunctionObj.DelayTipConvStatistic(tStatHP)
+	
+	SaveLastReportBrowser()
+end
+
+
+function CheckHasSendUserInfo()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+	local nLastReportBrowser = tUserConfig["nLastReportBrowser"] or 0
+	
+	if FunctionObj.CheckTimeIsAnotherDay(nLastReportBrowser) then
+		return false
+	else
+		return true
+	end
+end
+
+
+function SaveLastReportBrowser()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+	tUserConfig["nLastReportBrowser"] = tipUtil:GetCurrentUTCTime()
+	
+	FunctionObj.SaveConfigToFileByKey("tUserConfig")
 end
 
 
@@ -258,6 +288,9 @@ end
 
 function StartRunCountTimer()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	FunctionObj.SendRunTimeReport(0, false)
+	
 	local nTimeSpanInSec = 10 * 60 
 	local nTimeSpanInMs = nTimeSpanInSec * 1000
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
@@ -380,7 +413,6 @@ function TryOpenURLWhenStup()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	FunctionObj.OpenURLWhenStup()
 end
-
 
 
 function CreateMainTipWnd()

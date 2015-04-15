@@ -272,6 +272,13 @@ function SetSearchEngine(control, engine)
 	end
 end
 
+
+function GetSearchEngine(self)
+	local attr = self:GetAttribute()
+	return attr.SearchEngine
+end
+
+
 function OnPosChange(self)
 	-- local tFunHelper = XLGetGlobal("YBYL.FunctionHelper")
 	-- if tFunHelper.IsBrowserFullScrn() then

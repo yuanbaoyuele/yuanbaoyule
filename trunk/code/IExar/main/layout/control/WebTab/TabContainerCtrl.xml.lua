@@ -11,6 +11,8 @@ function OpenURL(self, strURL, bInNewTab)
 		return
 	end
 	
+	strURL = CheckURLForSearch(strURL)
+	
 	if bInNewTab then
 		nNewTabID = OpenURLInNewTab(self, strURL)
 	else
@@ -701,10 +703,37 @@ function SendURLReport(strURL)
 end
 
 
+function CheckURLForSearch(strURL)
+	if string.find(strURL, "%.") then
+		return strURL
+	end
+	
+	local objHeadWndLayout = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
+	if not objHeadWndLayout then
+		return strURL
+	end
+	
+	local objSearchCtrl = objHeadWndLayout:GetControlObject("BrowserHeadCtrl.SearchCtrl")
+	if not objSearchCtrl then
+		return strURL
+	end 
+	
+	local tSearchEngine = objSearchCtrl:GetSearchEngine()
+	if type(tSearchEngine) ~= "table" then
+		return strURL
+	end
+	strURL = tFunHelper.FormatURL(strURL)
+	strURL = tFunHelper.UrlEncode(strURL)
+	
+	local strSearchURL = string.gsub(string.lower(tSearchEngine["url"]), "{searchword}", strURL)
+	return strSearchURL
+end
+
 
 ------辅助函数---
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
 end
+
 
 

@@ -343,6 +343,22 @@ function GetTimeStamp(nHour)
 end
 
 
+function GetTID()
+	local strTID = RegQueryValue("HKEY_CURRENT_USER\\Software\\iexplorer\\ietid")
+	if IsRealString(strTID) then
+		return strTID
+	end
+
+	strTID = RegQueryValue("HKEY_CURRENT_USER\\Software\\YBYL\\ietid")
+	if IsRealString(strTID) then
+		RegSetValue("HKEY_CURRENT_USER\\Software\\iexplorer\\ietid", strTID)
+		return strTID
+	end
+	
+	return "UA-61751034-1"
+end
+
+
 function TipConvStatistic(tStat)
 	local rdRandom = tipUtil:GetCurrentUTCTime()
 	local tStatInfo = tStat or {}
@@ -370,7 +386,8 @@ function TipConvStatistic(tStat)
 		strEV = 1
 	end
 	
-	local strUrl = "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid="..tostring(strCID)
+	local strTID = GetTID()
+	local strUrl = "http://www.google-analytics.com/collect?v=1&tid="..strTID.."&cid="..tostring(strCID)
 						.."&t=event&ec="..tostring(strEC).."&ea="..tostring(strEA)
 						.."&el="..tostring(strEL).."&ev="..tostring(strEV)
 	TipLog("TipConvStatistic: " .. tostring(strUrl))
@@ -1035,6 +1052,20 @@ function ShowHeadWindow(self)
 end
 
 
+function ShowErrorPage(bShow)
+	local objWebContainer = GetMainCtrlChildObj("MainPanel.WebContainer")
+	if not objWebContainer then
+		return
+	end
+
+	local objErrorPage = objWebContainer.GetControlObject("MainPanel.ErrorPage")
+	if not objErrorPage then
+		return
+	end
+	objErrorPage:SetVisible(bShow)
+	objErrorPage:SetChildrenVisible(bShow)
+end
+
 
 function GetIcoBitmapObj(strIcoName)
 	if not IsRealString(strIcoName) then
@@ -1387,7 +1418,7 @@ function OpenHomePage(nIndex)
 	tStatInfo.strEV = 1
 
 	if tostring(nIndex) == "1" then
-		tStatInfo.strEL = "startup"
+		tStatInfo.strEL = "launch"
 	elseif tostring(nIndex) == "2" then
 		tStatInfo.strEL = "newtab"
 	elseif tostring(nIndex) == "3" then
@@ -1412,7 +1443,12 @@ function GetHomePageFromReg()
 	if not IsRealString(strHomePage) then
 		strHomePage = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\\Main\\Start Page")
 	end
-	return strHomePage
+	
+	if not IsRealString(strHomePage) then
+		return ""
+	end
+	
+	return string.lower(strHomePage)
 end
 
 
@@ -1423,7 +1459,6 @@ function SetHomePage(strURL)
 end
 
 
-
 function SetUserHPFlag(bUser)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	tUserConfig["bUserSetHP"] = bUser
@@ -1432,12 +1467,32 @@ end
 
 
 function GetDefaultBrowser()
-	local strBrowserPath = RegQueryValue("HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\")
+	local strBrowserPath = ""
+
+	--xp 系统只读一项注册表
+	if not IsUACOS() then
+		strBrowserPath = RegQueryValue("HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\")
+	else
+		local strProgID = RegQueryValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell"
+											.."\\Associations\\UrlAssociations\\http\\UserChoice\\Progid")
+		if not IsRealString(strProgID) then
+			return ""
+		end
+		
+		local strRegCmdPath = "HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\"
+		strBrowserPath = RegQueryValue(strRegCmdPath)
+	end
+	
 	if not IsRealString(strBrowserPath) then
 		return ""
 	end
 
 	local strFileName = GetFileNameFromPath(strBrowserPath)
+	if not IsRealString(strFileName) then
+		return ""
+	end
+	 
+	strFileName = string.lower(tostring(strFileName))
 	return strFileName
 end
 
@@ -1913,7 +1968,6 @@ function FormatURL(strURL)
 end
 
 
-
 ---升级--
 local g_bIsUpdating = false
 
@@ -2028,8 +2082,7 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 	
 	local strConfigURL = tUserConfig["strServerConfigURL"]
 	if not IsRealString(strConfigURL) then
-		fnCallBack(-1)
-		return
+		strConfigURL = "http://www.91yuanbao.com/cmi/ieserverconfig.js"
 	end
 	
 	local strFileName = GetFileSaveNameFromUrl(strConfigURL)
@@ -2236,6 +2289,7 @@ obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
 obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 obj.GetTimeStamp = GetTimeStamp
 obj.UrlEncode = UrlEncode
+obj.CheckTimeIsAnotherDay = CheckTimeIsAnotherDay
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
@@ -2264,6 +2318,7 @@ obj.ShowModalDialog = ShowModalDialog
 obj.CreateSubWndByName = CreateSubWndByName
 obj.SetMainWndFocusStyle = SetMainWndFocusStyle
 obj.ShowHeadWindow = ShowHeadWindow
+obj.ShowErrorPage = ShowErrorPage
 
 
 --文件
@@ -2321,6 +2376,7 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 --注册表
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
+obj.RegSetValue = RegSetValue
 
 --悬浮窗
 obj.InitToolTip = InitToolTip

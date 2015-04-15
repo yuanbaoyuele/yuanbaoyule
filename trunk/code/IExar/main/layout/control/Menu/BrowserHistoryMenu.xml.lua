@@ -17,7 +17,7 @@ function ShowUrlHistory(self)
 		return false
 	end
 
-	local nMaxShowHistory = 6
+	local nMaxShowHistory = 60
 	
 	local nTotalCount = 0
 	for nIndex=1, #tUrlHistory do
