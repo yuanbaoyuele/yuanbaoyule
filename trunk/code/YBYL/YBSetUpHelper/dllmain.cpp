@@ -207,7 +207,7 @@ extern "C" __declspec(dllexport) int QueryProcessExist(const char* strProcessNam
 
 extern "C" __declspec(dllexport) void SoftExit()
 {
-	DWORD ret = WaitForSingleObject(s_ListenHandle, 20000);
+	DWORD ret = WaitForSingleObject(s_ListenHandle, 60*1000);
 	if (ret == WAIT_TIMEOUT){
 	}
 	else if (ret == WAIT_OBJECT_0){	
