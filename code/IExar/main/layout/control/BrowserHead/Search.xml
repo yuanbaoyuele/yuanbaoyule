@@ -6,7 +6,7 @@
 			</attr>
 		</attr_def>
 		<method_def>
-		    
+			<GetSearchEngine file="Search.xml.lua" func="GetSearchEngine"/>
 		</method_def>
 		<event_def> 
 			<OnSearch>

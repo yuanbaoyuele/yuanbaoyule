@@ -16,6 +16,13 @@ function OnInitHeadWnd(self)
 end
 
 
+function OnInitErrorPage(self)
+	self:Navigate("res://ieframe.dll/http_303_webOC.htm")
+	self:SetVisible(false)
+	self:SetChildrenVisible(false)
+end
+
+
 --监听事件
 function CreateFilterListener(objRootCtrl)
 	local objFactory = XLGetObject("APIListen.Factory")

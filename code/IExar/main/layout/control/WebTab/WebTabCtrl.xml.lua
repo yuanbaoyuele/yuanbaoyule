@@ -36,6 +36,22 @@ function GetLocalURL(self)
 	return self:GetUserInputURL()
 end
 
+
+function CheckIsErrorURL(self)
+	local objBrowser = self:GetBindBrowserCtrl()
+	if not objBrowser then
+		return true
+	end
+
+	local strErrorURL = objBrowser:GetErrorUrl()
+	if IsRealString(strErrorURL) then
+		return true
+	else
+		return false
+	end	
+end
+
+
 --用户输入的url
 function SaveUserInputURL(self, strURL)
 	local attr = self:GetAttribute()
@@ -107,7 +123,10 @@ function BindBrowserCtrl(self, objWebBrowser)
 				AsynCall(function()
 					local bDownload = tipUtil:DownloadFileByIE(URL)
 				end)
-				self:CloseTab()
+				local strBrowserUrl = GetLocalURL(self)
+				if URL ~= nil and (tostring(URL) == tostring(strBrowserUrl)) and (tostring(URL) ~= tostring(lpRedir)) then
+					CloseTab(self)
+				end	
 				return true
 			end
 		end)
@@ -455,7 +474,8 @@ function SetAddressBarState(objRootCtrl)
 	end
 	
 	strLocalURL = objRootCtrl:GetLocalURL()
-	if IsRealString(strLocalURL) then
+	bIsErrorURL = CheckIsErrorURL(objRootCtrl)
+	if IsRealString(strLocalURL) and not bIsErrorURL then
 		objAddressBar:SetText(strLocalURL)
 		objAddressBar:AdjustCollectBtnStyle(strLocalURL)
 
