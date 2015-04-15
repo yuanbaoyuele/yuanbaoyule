@@ -723,14 +723,19 @@ function CheckURLForSearch(strURL)
 		return strURL
 	end
 	strURL = tFunHelper.FormatURL(strURL)
-	strURL = tFunHelper.UrlEncode(strURL)
-	
-	local strSearchURL = string.gsub(string.lower(tSearchEngine["url"]), "{searchword}", strURL)
+	strURL = encodeURI(strURL)
+	local strSearchURL = string.gsub(string.lower(tSearchEngine["url"]), "{searchword}", tostring(strURL))
 	return strSearchURL
 end
 
 
 ------辅助函数---
+function encodeURI(s)
+    s = string.gsub(s, "([^%w%.%- ])", function(c) return string.format("%%%%%02X", string.byte(c)) end)
+    return string.gsub(s, " ", "+")
+end
+
+
 function IsRealString(str)
 	return type(str) == "string" and str ~= ""
 end
