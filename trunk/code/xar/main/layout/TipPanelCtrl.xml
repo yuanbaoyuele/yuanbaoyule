@@ -88,7 +88,7 @@
 												<height>father.height-31</height>
 											</attr>		
 											<children>
-												<obj id="TipIntroduce" class="TipIntroduceCtrl">
+												<!--obj id="TipIntroduce" class="TipIntroduceCtrl">
 													<attr>
 														<left>0</left>
 														<top>0</top>
@@ -98,7 +98,7 @@
 													<eventlist>
 														<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitTipIntroduce" />
 													</eventlist>
-												</obj>
+												</obj-->
 											</children>
 										</obj>
 									</children>

@@ -28,17 +28,17 @@ end
 
 --安装后第一次启动展示介绍
 function OnInitTipIntroduce(self)
-	local strRegPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\ShowIntroduce"
-	local strValue = tFunHelper.RegQueryValue(strRegPath)
+	-- local strRegPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\ShowIntroduce"
+	-- local strValue = tFunHelper.RegQueryValue(strRegPath)
 	
-	if not IsNilString(strValue) then
-		self:SetObjPos(0, 0, "father.width", "father.height")
-		self:SetVisible(true)
-		self:SetChildrenVisible(true)
-	else
-		self:SetVisible(false)
-		self:SetChildrenVisible(false)
-	end
+	-- if not IsNilString(strValue) then
+		-- self:SetObjPos(0, 0, "father.width", "father.height")
+		-- self:SetVisible(true)
+		-- self:SetChildrenVisible(true)
+	-- else
+		-- self:SetVisible(false)
+		-- self:SetChildrenVisible(false)
+	-- end
 end
 
 
