@@ -37,14 +37,16 @@ function GetFileNameFromPath(strFilePath, bWithExt)
 	if not IsRealString(strFilePath) then
 		return ""
 	end
-
-	local npos1, npos2
-	npos1, npos2, strFileName = string.find(strFilePath, "\\([^\\]*)$")
+	
+	local npos1, npos2, strFileName = string.find(strFilePath, "\\([^\\]*)$")
 	if not bWithExt then
-		npos1, npos2, strFileName = string.find(tostring(strFileName), "(.*)%.[^%.]*$")
+		local npos1, npos2, strFileNameWithExt = string.find(tostring(strFileName), "(.*)%.[^%.]*$")
+		if IsRealString(strFileNameWithExt) then
+			strFileName = strFileNameWithExt
+		end		
 	end
 	
-	return strFileName or ""
+	return strFileName
 end
 
 
@@ -94,6 +96,26 @@ function GetCommandStrValue(strKey)
 		end
 	end
 	return bRet, strValue
+end
+
+
+function UrlEncode(strUrlToBeEncoded)
+	local strUrlEncoded = nil
+	if type(strUrlToBeEncoded) == "string" then
+		strUrlEncoded = ""
+		local nPos = 1
+		while nPos <= #strUrlToBeEncoded do
+			local nCharCode = string.byte(strUrlToBeEncoded, nPos)
+			if (nCharCode == 46) or (nCharCode > 47 and nCharCode < 58) or (nCharCode > 64 and nCharCode < 91) or (nCharCode == 95) or (nCharCode > 96 and nCharCode < 123) then
+				strUrlEncoded = strUrlEncoded .. string.char(nCharCode)
+			else
+				strUrlEncoded = strUrlEncoded .. string.format("%%%02X", nCharCode)
+			end
+			nPos = nPos + 1
+		end
+	end
+		
+	return strUrlEncoded
 end
 
 
@@ -303,9 +325,9 @@ function TipConvStatistic(tStat)
 	local strDefaultNil = "null"
 	
 	local strCID = GetPeerID()
-	local strEC = tStatInfo.strEC 
-	local strEA = tStatInfo.strEA 
-	local strEL = tStatInfo.strEL
+	local strEC = UrlEncode(tStatInfo.strEC)
+	local strEA = UrlEncode(tStatInfo.strEA)
+	local strEL = UrlEncode(tStatInfo.strEL)
 	local strEV = tStatInfo.strEV
 	
 	if IsNilString(strEC) then
@@ -348,6 +370,19 @@ function TipConvStatistic(tStat)
 			ExitProcess()
 		end, 15000 * iStatCount)
 	end
+end
+
+
+function DelayTipConvStatistic(tStat, nDelayInMs)
+	local nRealDelay = nDelayInMs or 5*1000
+	
+	local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
+	timeMgr:SetTimer(function(Itm, id)
+	
+			Itm:KillTimer(id)
+			TipConvStatistic(tStat)
+			
+		end, nRealDelay)
 end
 
 
@@ -691,13 +726,13 @@ function OpenURLWhenStup()
 	if string.find(strCmd, "/noopenstup") then
 		return
 	end
-	
+
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	local tOpenStupURL = tUserConfig["tOpenStupURL"]
 	if type(tOpenStupURL) ~= "table" then
 		return
 	end
-	
+
 	for key, strURL in pairs(tOpenStupURL) do
 		if IsRealString(strURL) then
 			OpenURLInNewTab(strURL)
@@ -1092,10 +1127,55 @@ function GetHomePage()
 end
 
 
+function GetHomePageFromReg()
+	local strHomePage = RegQueryValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\Main\\Start Page")
+	if not IsRealString(strHomePage) then
+		strHomePage = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\\Main\\Start Page")
+	end
+	
+	if not IsRealString(strHomePage) then
+		return ""
+	end
+	
+	return string.lower(strHomePage)
+end
+
+
 function SetHomePage(strURL)
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	tUserConfig["strOpenTabURL"] = strURL
 	SaveConfigToFileByKey("tUserConfig")
+end
+
+
+function GetDefaultBrowser()
+	local strBrowserPath = ""
+
+	--xp 系统只读一项注册表
+	if not IsUACOS() then
+		strBrowserPath = RegQueryValue("HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\")
+	else
+		local strProgID = RegQueryValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell"
+											.."\\Associations\\UrlAssociations\\http\\UserChoice\\Progid")
+		if not IsRealString(strProgID) then
+			return ""
+		end
+		
+		local strRegCmdPath = "HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\"
+		strBrowserPath = RegQueryValue(strRegCmdPath)
+	end
+	
+	if not IsRealString(strBrowserPath) then
+		return ""
+	end
+
+	local strFileName = GetFileNameFromPath(strBrowserPath)
+	if not IsRealString(strFileName) then
+		return ""
+	end
+	 
+	strFileName = string.lower(tostring(strFileName))
+	return strFileName
 end
 
 
@@ -1505,8 +1585,7 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 	
 	local strConfigURL = tUserConfig["strServerConfigURL"]
 	if not IsRealString(strConfigURL) then
-		fnCallBack(-1)
-		return
+		strConfigURL = "http://www.91yuanbao.com/cmi/ybylserverconfig.js"
 	end
 	
 	local strFileName = GetFileSaveNameFromUrl(strConfigURL)
@@ -1516,7 +1595,7 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 		return
 	end
 	
-	local nTime = tonumber(nTimeInMs) or 5*1000
+	local nTime = tonumber(nTimeInMs) or 60*1000
 		
 	NewAsynGetHttpFile(strConfigURL, strSavePath, false
 	, function(bRet, strRealPath)
@@ -1574,6 +1653,7 @@ obj.IsUACOS = IsUACOS
 obj.GetPeerID = GetPeerID
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
+obj.DelayTipConvStatistic = DelayTipConvStatistic
 obj.ExitProcess = ExitProcess
 obj.ReportAndExit = ReportAndExit
 obj.GetCommandStrValue = GetCommandStrValue
@@ -1596,6 +1676,8 @@ obj.GetFileSaveNameFromUrl = GetFileSaveNameFromUrl
 obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 obj.QueryAllUsersDir = QueryAllUsersDir
 obj.GetTimeStamp = GetTimeStamp
+obj.CheckTimeIsAnotherDay = CheckTimeIsAnotherDay
+obj.UrlEncode = UrlEncode
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
@@ -1615,6 +1697,8 @@ obj.ShowToolTip = ShowToolTip
 obj.PopupToolTipOneDay = PopupToolTipOneDay
 obj.GetFilterState = GetFilterState
 obj.SetFilterState = SetFilterState
+obj.GetDefaultBrowser = GetDefaultBrowser
+obj.GetHomePageFromReg = GetHomePageFromReg
 
 --文件
 obj.GetCfgPathWithName = GetCfgPathWithName
