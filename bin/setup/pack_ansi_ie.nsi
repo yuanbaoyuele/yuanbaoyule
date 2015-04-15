@@ -510,7 +510,8 @@ Function GetDefaultBrowserAndMainPage
 	${Else}
 		${WordFind2X} $R0 "\" ".exe" +1 $R1
 		${StrFilter} "$R1" "-" "" "" $R2
-		StrCpy $str_DefaultBrowser "$R2.exe"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::UrlEncode(t '$R2.exe', t .R3)"
+		StrCpy $str_DefaultBrowser $R3
 	${EndIf}
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'GetDefaultBrowserAndMainPage , str_DefaultBrowser = $str_DefaultBrowser')"
 	StrCpy $R0 ""
@@ -598,7 +599,7 @@ Function InstallIE
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installmethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID') "
 	${Else}
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'update', t '${VERSION_LASTNUMBER_IE}', t '$str_ChannelID', i 1, t '$str_IeTID')"
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t "${VERSION_LASTNUMBER_IE}", t '0', i 1, t '$str_IeTID')"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID')"
 	${EndIf}  
 	;上报默认主页+默认浏览器
 	Call GetDefaultBrowserAndMainPage
