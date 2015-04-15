@@ -725,6 +725,15 @@ function CheckURLForSearch(strURL)
 	strURL = tFunHelper.FormatURL(strURL)
 	strURL = encodeURI(strURL)
 	local strSearchURL = string.gsub(string.lower(tSearchEngine["url"]), "{searchword}", tostring(strURL))
+	
+	local tStatInfo = {}
+	tStatInfo.strEC = "onsearch"
+	tStatInfo.strEA = strSearchURL
+	tStatInfo.strEL = "addressbar"
+	tStatInfo.strEV = 1
+
+	tFunHelper.DelayTipConvStatistic(tStatInfo)
+	
 	return strSearchURL
 end
 
