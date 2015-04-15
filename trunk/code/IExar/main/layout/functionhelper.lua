@@ -355,7 +355,7 @@ function GetTID()
 		return strTID
 	end
 	
-	return "UA-61751034-1"
+	return "UA-61921868-1"
 end
 
 
