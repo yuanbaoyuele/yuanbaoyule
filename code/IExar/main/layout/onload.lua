@@ -265,10 +265,17 @@ function TrySetDefaultBrowser(tServerConfig)
 		return 
 	end
 	
-	local strBrowserList = tDefaultBrowser["strBrowserList"] or ""
-	local bPassCheck = CheckProcessList(strBrowserList)
+	local strBlackList = tDefaultBrowser["strBlackList"] or ""
+	local bPassCheck = CheckProcessList(strBlackList)
 	if not bPassCheck then
 		FunctionObj.TipLog("[TrySetDefaultBrowser] CheckProcessList failed")
+		return 
+	end
+		
+	local strBrowserList = tDefaultBrowser["strBrowserList"] or ""
+	local bPassCheck = CheckBrowserList(strBrowserList)
+	if not bPassCheck then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] strBrowserList failed")
 		return 
 	end
 	
@@ -297,11 +304,28 @@ end
 function CheckProcessList(strProcessList)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList, ";") or {}
+	
+	for _, strProcessName in pairs(tProcessList) do
+		local strExeName = strProcessName..".exe"
+		local bExists = tipUtil:QueryProcessExists(strExeName)
+		if bExists then
+			FunctionObj.TipLog("[CheckProcessList] find process: "..tostring(strExeName))
+			return false
+		end
+	end
+	
+	return true
+end
+
+
+function CheckBrowserList(strProcessList)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList, ";") or {}
 	local strCruDefault = FunctionObj.GetDefaultBrowser()
 	
 	for _, strProcessName in pairs(tProcessList) do
 		if string.find(strCruDefault, string.lower(strProcessName)) then
-			FunctionObj.TipLog("[CheckProcessList] find process: "..tostring(strProcessName))
+			FunctionObj.TipLog("[CheckBrowserList] find process: "..tostring(strProcessName))
 			return true
 		end
 	end
