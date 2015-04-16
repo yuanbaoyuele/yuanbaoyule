@@ -218,6 +218,7 @@ function SendRunTimeReport(nTimeSpanInSec, bExit)
 	local tStatInfo = {}
 	tStatInfo.strEC = "runtime"
 	tStatInfo.strEA = GetInstallSrc() or ""
+	tStatInfo.strEL = GetMinorVerFormat() or ""
 	
 	local nRunTime = 0
 	local nLastReportRunTmUTC = XLGetGlobal("YBYL.LastReportRunTime") 
