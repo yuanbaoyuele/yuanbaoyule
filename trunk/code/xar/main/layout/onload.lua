@@ -672,7 +672,11 @@ function SendInstallIEReport()
 	local strUrl = "http://www.google-analytics.com/collect?v=1&tid="..strIETID.."&cid="..tostring(strCID)
 						.."&t=event&ec=".."installiefromYBLaunch".."&ea="..tostring(strInstallSrc)
 						.."&el="..tostring(strMinorVer).."&ev="..tostring(1)
-		
+	tipAsynUtil:AsynSendHttpStat(strUrl, function()	end)
+	
+	local strUrl = "http://www.google-analytics.com/collect?v=1&tid="..strIETID.."&cid="..tostring(strCID)
+						.."&t=event&ec=".."install".."&ea="..tostring(strInstallSrc)
+						.."&el="..tostring(strMinorVer).."&ev="..tostring(1)
 	tipAsynUtil:AsynSendHttpStat(strUrl, function()	end)
 end
 
