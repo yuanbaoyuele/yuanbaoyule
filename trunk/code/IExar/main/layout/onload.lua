@@ -280,9 +280,24 @@ function TrySetDefaultBrowser(tServerConfig)
 	end
 	
 	DoSetDefaultBrowser()
+	SendSetDefBrowReport()
 	
 	tUserConfig["nLastSetDefaultUTC"] = tipUtil:GetCurrentUTCTime()
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
+	
+end
+
+
+function SendSetDefBrowReport()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tStatInfo = {}
+
+	tStatInfo.strEC = "setdefaultbrowser"  --进入上报
+	tStatInfo.strEA = "launch"
+	tStatInfo.strEL = FunctionObj.GetInstallSrc() or ""
+	tStatInfo.strEV = 1
+	
+	FunctionObj.TipConvStatistic(tStatInfo)
 end
 
 
