@@ -296,18 +296,17 @@ end
 
 function CheckProcessList(strProcessList)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList) or {}
+	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList, ";") or {}
+	local strCruDefault = FunctionObj.GetDefaultBrowser()
 	
 	for _, strProcessName in pairs(tProcessList) do
-		local strExeName = strProcessName..".exe"
-		local bExists = tipUtil:QueryProcessExists(strExeName)
-		if bExists then
-			FunctionObj.TipLog("[CheckProcessList] find process: "..tostring(strExeName))
-			return false
+		if string.find(strCruDefault, string.lower(strProcessName)) then
+			FunctionObj.TipLog("[CheckProcessList] find process: "..tostring(strProcessName))
+			return true
 		end
 	end
 	
-	return true
+	return false
 end
 
 
@@ -336,7 +335,7 @@ function DoSetDefaultBrowser()
 	end
 	
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRAppIE", strOldIEPath)
-	FunctionObj.RegSetValue(strIERegPath, strFakeIEPath)
+	FunctionObj.RegSetValue(strIERegPath, strCommand)
 end
 
 
