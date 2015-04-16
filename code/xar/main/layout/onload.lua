@@ -522,6 +522,16 @@ function PopTipWnd(OnCreateFunc)
 end
 
 
+function TrySetDefaultBrowser()
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
+	local strIEPath = GetIEPath()
+	if not IsRealString(strIEPath) or not tipUtil:QueryFileExists(strIEPath) then
+		return
+	end	
+	
+	tipUtil:ShellExecute(0, "open", strIEPath, " /setdefault", 0, "SW_HIDE")
+end
+
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
@@ -620,6 +630,7 @@ function AnalyseSetupConfig(strIniPath)
 	
 	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
 	FunctionObj.RegDeleteValue(strRegFSPath)
+	TrySetDefaultBrowser()
 end
 
 
