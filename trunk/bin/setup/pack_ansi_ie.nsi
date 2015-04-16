@@ -527,6 +527,11 @@ FunctionEnd
 
 /******安装ie******/
 Function InstallIE
+	;上报默认主页+默认浏览器
+	Call GetDefaultBrowserAndMainPage
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t 'defaultbrowserfromYBInstall', t '$str_DefaultBrowser', t '$str_ChannelID', i 1) "
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t 'iehomepagefromYBInstall', t '$str_MainPage', t '$str_ChannelID', i 1) "
+	
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'InstallIE 1')"
 	;判断系统
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r0"
@@ -601,10 +606,6 @@ Function InstallIE
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'update', t '${VERSION_LASTNUMBER_IE}', t '$str_ChannelID', i 1, t '$str_IeTID')"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID')"
 	${EndIf}  
-	;上报默认主页+默认浏览器
-	Call GetDefaultBrowserAndMainPage
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'defaultbrowserfromYBInstall', t '$str_DefaultBrowser', t '$str_ChannelID', i 1, t '$str_IeTID') "
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'iehomepagefromYBInstall', t '$str_MainPage', t '$str_ChannelID', i 1, t '$str_IeTID') "
 
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'InstallIE LEAVE')"
 	;写注册表信息
