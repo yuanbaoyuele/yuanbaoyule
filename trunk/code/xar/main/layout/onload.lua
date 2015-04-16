@@ -523,7 +523,6 @@ end
 
 
 function TrySetDefaultBrowser()
-	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
 	local strIEPath = GetIEPath()
 	if not IsRealString(strIEPath) or not tipUtil:QueryFileExists(strIEPath) then
 		return
