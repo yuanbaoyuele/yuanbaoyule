@@ -603,12 +603,12 @@ Function un.DeleteIcon
 	StrCpy $strDefaultBrowser2 ""
 	ReadRegStr $strDefaultBrowser1 HKCU "SOFTWARE\iexplorer" "HKCRAppIE"
 	ReadRegStr $strDefaultBrowser2 HKCU "SOFTWARE\iexplorer" "HKCRHttp"
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(strDefaultBrowser1 = $strDefaultBrowser1, strDefaultBrowser2 = $strDefaultBrowser2)"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'strDefaultBrowser1 = $strDefaultBrowser1, strDefaultBrowser2 = $strDefaultBrowser2')"
 	${If} $strDefaultBrowser1 != ""
 		Var /GLOBAL strDefaultOld
 		StrCpy $strDefaultOld ""
 		ReadRegStr $strDefaultOld HKCR "Applications\iexplore.exe\shell\open\command" ""
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(strDefaultOld = $strDefaultOld)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'strDefaultOld = $strDefaultOld')"
 		${If} strDefaultOld != ""
 			${WordReplace} $strDefaultOld  "$0\iexplorer\program\iexplore.exe" "" "+" $R0
 			${If} $R0 != $strDefaultOld
@@ -620,7 +620,7 @@ Function un.DeleteIcon
 		Var /GLOBAL strDefaultOld2
 		StrCpy $strDefaultOld2 ""
 		ReadRegStr $strDefaultOld2 HKCR "http\shell\open\command" ""
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(strDefaultOld2 = $strDefaultOld2)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'strDefaultOld2 = $strDefaultOld2')"
 		${If} strDefaultOld2 != ""
 			${WordReplace} $strDefaultOld2  "$0\iexplorer\program\iexplore.exe" "" "+" $R0
 			${If} $R0 != $strDefaultOld2
