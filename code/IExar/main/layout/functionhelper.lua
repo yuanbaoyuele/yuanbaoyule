@@ -136,6 +136,30 @@ function GetFileNameFromPath(strFilePath, bWithExt)
 end
 
 
+function SplitStringBySeperator(strToSplit, strSeperator)
+	local tResult = {}
+	
+	if type(strToSplit) == "string" and type(strSeperator) == "string" then
+		local nSepStartPos = 0
+		local nSepEndPos = 0
+		local nLastSepStartPos = 0
+		local nLastSepEndPos = 0
+		while true do
+			nLastSepStartPos = nSepStartPos
+			nLastSepEndPos = nSepEndPos
+			nSepStartPos, nSepEndPos = string.find(strToSplit, strSeperator, nLastSepEndPos + 1)
+			if type(nSepStartPos) ~= "number" or type(nSepEndPos) ~= "number" then
+				tResult[#tResult + 1] = string.sub(strToSplit, nLastSepEndPos + 1, -1)
+				break
+			end
+			tResult[#tResult + 1] = string.sub(strToSplit, nLastSepEndPos + 1, nSepStartPos - 1)
+		end
+	end
+
+	return tResult
+end
+
+
 function ExitProcess()
 	SaveAllConfig()
 
@@ -2267,6 +2291,7 @@ obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.DelayTipConvStatistic = DelayTipConvStatistic
 obj.ExitProcess = ExitProcess
+obj.SplitStringBySeperator = SplitStringBySeperator
 obj.ReportAndExit = ReportAndExit
 obj.GetCommandStrValue = GetCommandStrValue
 obj.GetExePath = GetExePath

