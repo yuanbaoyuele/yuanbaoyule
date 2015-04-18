@@ -1,0 +1,335 @@
+<xlue>
+	<objtemplate id="collect.tab.text" class="TextObject" >
+		<attr>
+			<left>0</left>
+			<top>2</top>
+			<width>father.width</width>
+			<height>father.height</height>
+			<valign>center</valign>
+			<halign>center</halign>
+			<textcolor>color.tab.normal</textcolor>
+			<font>font.collectbar.text</font>
+			<zorder>999999</zorder>
+		</attr>
+	</objtemplate>
+	
+	 <control class="CollectWndCtrl">
+        <attr_def>
+            <attr name="Index" type="int" >
+              <default>1</default>
+            </attr>
+			<attr name="bFix" type="bool" >
+              <default>false</default>
+            </attr>
+        </attr_def>
+        <method_def>
+            <ShowTab file="TipCollectWnd.xml.lua" func="ShowTab" />
+            <CloseCollectWnd file="TipCollectWnd.xml.lua" func="CloseCollectWnd" />
+            <SetFixStyle file="TipCollectWnd.xml.lua" func="SetFixStyle" />
+            <EnableSyncWindow file="TipCollectWnd.xml.lua" func="EnableSyncWindow" />
+        </method_def>
+        <objtemplate>
+            <children>
+				<obj id="ResizeFrame" class="TipCollectFrame">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+                    </attr>
+				</obj>
+			
+                <obj id="Layout.main" class="TextureObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+						<texture>Collect.Panel.Bkg</texture>
+                    </attr>
+					<children>
+						<obj id="Collect.HeadBtn" class="TipAddin.Button">
+							<attr>
+								<left>5</left>
+								<top>5</top>
+								<width>132</width>
+								<height>26</height>
+								<LeftTextPos>25</LeftTextPos>
+								<TextFont>font.collectbar.text</TextFont>
+								<Text>添加到收藏夹...</Text>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<DisableBkgID></DisableBkgID>
+							</attr>
+							<children>
+								<obj id="CollectBtn.LeftIco" class="ImageObject">
+									<attr>
+										<left>5</left>
+										<top>6</top>
+										<width>16</width>
+										<height>16</height>
+										<image>Star.Add.Logo</image>
+										<zorder>999999</zorder>
+									</attr>	
+								</obj>
+								
+								<obj id="TipCollectWnd.ThumbArrow" class="TipAddin.Button">
+									<attr>
+										<left>father.width-15</left>
+										<top>0</top>
+										<width>15</width>
+										<height>father.height</height>
+										<NormalBkgID></NormalBkgID>
+										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+										<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+										<DisableBkgID></DisableBkgID>
+										<zorder>999900</zorder>
+									</attr>
+									<children>
+										<obj id="TipCollectWnd.ThumbArrow.Image" class="ImageObject">
+											<attr>
+												<left>5</left>
+												<top>10</top>
+												<width>5</width>
+												<height>3</height>
+												<image>Arrow.Down</image>
+												<zorder>999999</zorder>
+											</attr>
+										</obj>  
+									</children>
+									<eventlist>
+										<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnClickAddArrow" />
+										<event name="OnMouseEnter" file="TipCollectWnd.xml.lua" func="RouteToFather" />
+										<event name="OnMouseLeave" file="TipCollectWnd.xml.lua" func="RouteToFather" />
+									</eventlist>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnClick" file="TipCollectWnd.xml.lua" func="OnClickAddToBar" />
+							</eventlist>
+						</obj>
+						
+						<obj id="TipCollectWnd.FixBtn" class="TextureObject">
+							<attr>
+								<left>father.width-25</left>
+								<top>10</top>
+								<width>17</width>
+								<height>17</height>
+								<texture>CollectPanel.FixBtn</texture>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonDown" file="TipCollectWnd.xml.lua" func="OnDownFixBtn" />
+								<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnUpFixBtn" />
+								<event name="OnMouseLeave" file="TipCollectWnd.xml.lua" func="OnMsLeaveFixBtn" />
+							</eventlist>
+						</obj>
+												
+						<obj id="TipCollectWnd.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-25</left>
+								<top>10</top>
+								<width>16</width>
+								<height>16</height>
+								<NormalBkgID>Collect.Button.Close.Normal</NormalBkgID>
+								<DownBkgID>Collect.Button.Close.Hover</DownBkgID>
+								<HoverBkgID>Collect.Button.Close.Hover</HoverBkgID>
+								<DisableBkgID>Collect.Button.Close.Normal</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonDown" file="TipCollectWnd.xml.lua" func="OnDownCloseBtn" />
+								<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnUpCloseBtn" />
+							</eventlist>
+						</obj>
+												
+						<obj id="TipCollectWnd.TabLayout" class="LayoutObject">
+							<attr>
+								<left>5</left>
+								<top>36</top>
+								<width>father.width-15</width>
+								<height>20</height>
+							</attr>
+							<children>
+								<obj id="TipCollectWnd.Tab.Collect" class="TextureObject">
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>51</width>
+										<height>father.height</height>
+										<texture>Collect.Tab.Bkg.Hover</texture>
+									</attr>
+									<children>
+										<obj id="TipCollectWnd.Tab.Collect.Text" class="TextObject" templateid="collect.tab.text">
+											<attr>
+												<text>收藏夹</text>
+											</attr>
+										</obj>
+									</children>
+									
+									<eventlist>
+										<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnClickTabCollect" />
+									</eventlist>
+								</obj>
+								
+								
+								<obj id="TipCollectWnd.Tab.Source" class="TextureObject">
+									<attr>
+										<left>50</left>
+										<top>2</top>
+										<width>21</width>
+										<height>17</height>
+										<texture>Collect.Tab.Bkg.Normal</texture>
+									</attr>
+									<children>
+										<obj id="TipCollectWnd.Tab.Source.Text" class="TextObject" templateid="collect.tab.text">
+											<attr>
+												<text>源</text>
+											</attr>
+										</obj>
+									</children>
+									<eventlist>
+										<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnClickTabSource" />
+									</eventlist>
+								</obj>
+								
+								
+								<obj id="TipCollectWnd.Tab.History" class="TextureObject">
+									<attr>
+										<left>50+20</left>
+										<top>2</top>
+										<width>58</width>
+										<height>17</height>
+										<texture>Collect.Tab.Bkg.Normal</texture>
+									</attr>
+									<children>
+										<obj id="TipCollectWnd.Tab.History.Text" class="TextObject" templateid="collect.tab.text">
+											<attr>
+												<text>历史记录</text>
+											</attr>
+										</obj>
+									</children>
+									<eventlist>
+										<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnClickTabHistory" />
+									</eventlist>
+								</obj>
+							</children>
+						</obj>
+					
+						<obj id="Container.Bkg" class="TextureObject">
+							<attr>
+								<left>5</left>
+								<top>55</top>
+								<width>father.width-12</width>
+								<height>father.height-55-40</height>
+								<texture>YBYL.Menu.Bkg</texture>
+								<limitchild>1</limitchild>
+							</attr>
+							<children>
+								<obj id="Container" class="ie.collect">
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>father.width</width>
+										<height>father.height</height>
+									</attr>
+								</obj>
+							</children>
+						</obj>	
+						
+						<obj id="Collect.WebSite" class="TipAddin.Button">
+							<attr>
+								<left>5</left>
+								<top>father.height-40+5</top>
+								<width>110</width>
+								<height>26</height>
+								<LeftTextPos>25</LeftTextPos>
+								<TextFont>font.collectbar.text</TextFont>
+								<Text>查看建议网站</Text>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+								<DisableBkgID></DisableBkgID>
+							</attr>
+							<children>
+								<obj id="CollectBtn.LeftIco" class="ImageObject">
+									<attr>
+										<left>5</left>
+										<top>5</top>
+										<width>16</width>
+										<height>16</height>
+										<image>Title.Logo</image>
+										<zorder>999999</zorder>
+									</attr>	
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnLButtonUp" file="TipCollectWnd.xml.lua" func="OnClickWebSite" />
+							</eventlist>
+						</obj>	
+					</children>
+				</obj>
+			 </children>
+			 <eventlist>
+				<event name="OnInitControl" file="TipCollectWnd.xml.lua" func="OnInitControl" />
+			 </eventlist>
+		</objtemplate>
+	</control>
+	
+	
+	<objtreetemplate id="TipCollectTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>230</width>
+			<height>660</height>
+		</attr>
+
+		<obj id="root.layout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>230</width>
+				<height>660</height>
+			</attr>				
+			<children>	
+				<obj id="CollectWndCtrl" class="CollectWndCtrl">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>	
+				</obj>
+			</children>	
+		</obj>
+	</objtreetemplate>
+
+    <hostwndtemplate id="TipCollectWnd" class="FrameHostWnd">
+        <attr>
+            <layered>0</layered>
+            <left>0</left>
+            <top>0</top>
+            <width>230</width>
+            <height>660</height>
+
+            <topmost>0</topmost>
+            <visible>0</visible>
+            <enable>1</enable>
+            <maxbox>0</maxbox>
+            <minbox>1</minbox>
+            <minwidth>145</minwidth>
+            <minheight>125</minheight>
+			<sysmenu>0</sysmenu>
+			<appwindow>0</appwindow>
+            <fps>30</fps>
+			<blur>1</blur>
+        </attr>
+		 <eventlist>
+            <event name="OnCreate" file="TipCollectWnd.xml.lua" func="OnCreate"/>
+            <event name="OnShowWindow" file="TipCollectWnd.xml.lua" func="OnShowWindow"/>
+            <event name="OnFocusChange" file="TipCollectWnd.xml.lua" func="OnFocusChange"/>
+            <event name="OnSize" file="TipCollectWnd.xml.lua" func="OnSize"/>
+        </eventlist>
+    </hostwndtemplate>
+	
+</xlue>

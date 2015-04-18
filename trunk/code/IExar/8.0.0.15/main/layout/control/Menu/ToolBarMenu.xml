@@ -1,0 +1,217 @@
+﻿<xlue>
+	<objtemplate id="toolbar.context.submenu" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>290</height>
+			<ContextID>toolbar.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+	
+	<objtemplate id="toolbar.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="reopenlastwindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>重新打开上次浏览会话(S)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="forbidpopwindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>弹出窗口阻止程序(P)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="mgrloading" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>管理加载项(A)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="worklocal" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>脱机工作(W)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="adapview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>兼容性视图(V)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="adapviewset" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>兼容性视图设置(B)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="fullscreen" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>全屏显示(F)</Text>
+					<AccKey></AccKey>
+					<RightText>F11</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_FullScreen" />
+				</eventlist>
+			</obj>
+			<obj id="toolbar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>工具栏(T)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="browserbar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>浏览器栏(X)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt4" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="codertool" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>开发人员工具(D)</Text>
+					<AccKey></AccKey>
+					<RightText>F12</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt5" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="sugpage" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>建议网站(G)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt6" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="internetset" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>Internet 选项(O)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_InternetPro" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="ToolBarMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>470</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>250</width>
+				<height>470</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>toolbar.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

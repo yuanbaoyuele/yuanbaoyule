@@ -1,0 +1,87 @@
+﻿<xlue>
+	<objtemplate id="print.context.submenu" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>65</height>
+			<ContextID>print.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="print.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="ptint1" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印(P)...</Text>
+					<AccKey>P</AccKey>
+					<RightText>Ctrl+P</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="printview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印预览(V)...</Text>
+					<AccKey>V</AccKey>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="printview2" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>页面设置(U)...</Text>
+					<AccKey>U</AccKey>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="PrintMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>250</width>
+			<height>130</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>250</width>
+				<height>130</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>print.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

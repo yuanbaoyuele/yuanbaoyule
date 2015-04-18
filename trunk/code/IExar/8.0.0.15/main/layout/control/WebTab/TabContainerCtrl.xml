@@ -1,0 +1,160 @@
+<xlue>
+	<control class="TabContainerCtrl">
+		<attr_def>
+			<attr name="nActiveTabID" type="int" />
+			<attr name="nCurMaxTabID" type="int" />
+			<attr name="tTabShowList" />
+			<attr name="nMaxTabWidth" type="int"> <default>196</default> </attr>
+		</attr_def>		
+		<method_def>
+			<OpenURL file="TabContainerCtrl.xml.lua" func="OpenURL"/>
+			<GetActiveTabCtrl file="TabContainerCtrl.xml.lua" func="GetActiveTabCtrl"/>
+			<SetActiveTab file="TabContainerCtrl.xml.lua" func="SetActiveTab"/>
+			<CloseCurrentTab file="TabContainerCtrl.xml.lua" func="CloseCurrentTab"/>
+			<GetTotalShowTabNum file="TabContainerCtrl.xml.lua" func="GetTotalShowTabNum"/>
+			<GetTotalShowTabList file="TabContainerCtrl.xml.lua" func="GetTotalShowTabList"/>
+			<AdjustTabSize file="TabContainerCtrl.xml.lua" func="AdjustTabSize"/>
+		</method_def>	
+
+		<event_def>
+			<OnActiveTabChange>
+				<param>
+					<userdata/>
+				</param>
+			</OnActiveTabChange>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="TabContainerCtrl.ThumbLayout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>36</width>
+						<height>father.height</height>
+					</attr>
+					<children>
+						<obj id="TabContainerCtrl.ThumbBtn" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>2</top>
+								<width>24</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Tab.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.MouseEnter</DownBkgID>
+								<HoverBkgID>YBYL.Tab.MouseEnter</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.Normal</DisableBkgID>
+								<zorder>999990</zorder>
+							</attr>
+							<children>
+								<obj id="TabContainerCtrl.ThumbBtn.Image" class="ImageObject">
+									<attr>
+										<left>4</left>
+										<top>4</top>
+										<width>16</width>
+										<height>16</height>
+										<image>WebTab.ThumbBtn</image>
+										<zorder>999999</zorder>
+									</attr>
+								</obj>  
+							</children>
+							<eventlist>
+								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickThumbBtn" />
+								<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterThumb" />
+								<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+						
+						<obj id="TabContainerCtrl.ThumbArrow" class="TipAddin.Button">
+							<attr>
+								<left>20</left>
+								<top>2</top>
+								<width>16</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Tab.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.MouseEnter</DownBkgID>
+								<HoverBkgID>YBYL.Tab.MouseEnter</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.Normal</DisableBkgID>
+								<zorder>999900</zorder>
+							</attr>
+							<children>
+								<obj id="TabContainerCtrl.ThumbArrow.Image" class="ImageObject">
+									<attr>
+										<left>7</left>
+										<top>10</top>
+										<width>5</width>
+										<height>3</height>
+										<image>Arrow.Down</image>
+										<zorder>999999</zorder>
+									</attr>
+								</obj>  
+							</children>
+							<eventlist>
+								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickThumbArrow" />
+								<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMouseEnterArrow" />
+								<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+			
+			
+				<obj id="TabContainerCtrl.Container.Layout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+					<children>
+						<obj id="TabContainerCtrl.Container" class="LayoutObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
+						</obj>   	
+
+						<obj id="TabContainerCtrl.AddNewTab" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>2</top>
+								<width>30</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Tab.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.MouseEnter</DownBkgID>
+								<HoverBkgID>YBYL.Tab.MouseEnter</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.Normal</DisableBkgID>
+							</attr>
+							<children>
+								<obj id="TabContainerCtrl.AddNewTab.Image" class="ImageObject">
+									<attr>
+										<left>7</left>
+										<top>4</top>
+										<width>16</width>
+										<height>16</height>
+										<image>WebTab.AddTab.Image</image>
+										<visible>false</visible>
+										<zorder>999999</zorder>
+									</attr>
+								</obj>  
+							</children>							
+							<eventlist>
+								<event name="OnLButtonUp" file="TabContainerCtrl.xml.lua" func="OnClickAddNewTab" />
+								<event name="OnMouseEnter" file="TabContainerCtrl.xml.lua" func="OnMsEnterAddNewTab" />
+								<event name="OnMouseLeave" file="TabContainerCtrl.xml.lua" func="OnMsLeaveAddNewTab" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj> 
+				
+			</children>
+			<eventlist>
+				<event name="OnInitControl" file="TabContainerCtrl.xml.lua" func="OnInitControl" />
+				<event name="OnPosChange" file="TabContainerCtrl.xml.lua" func="OnContainerPosChange" />
+			</eventlist>
+			
+		</objtemplate>
+	</control>
+</xlue>

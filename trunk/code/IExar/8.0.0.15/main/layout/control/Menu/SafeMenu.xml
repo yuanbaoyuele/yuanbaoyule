@@ -1,0 +1,173 @@
+﻿<xlue>
+	<objtemplate id="safe.context.submenu" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>350</width>
+			<height>210</height>
+			<ContextID>safe.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="safe.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="deletehistory" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>删除浏览的历史记录(D)...</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+Shift+Del</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_ClearHistory" />
+				</eventlist>
+			</obj>
+			
+			<obj id="InPrivateView" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>InPrivate 浏览(I)</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+Shift+P</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			
+			<obj id="pageprivate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>网页隐私策略(V)...</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="InPrivateSelect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>InPrivate 筛选(F)</Text>
+					<AccKey></AccKey>
+					<RightText>Ctrl+Shift+F</RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="InPrivateSelectSet" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>InPrivate 筛选设置(S)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="safereport" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>安全报告(R)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="interpageaddr" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>国际网站地址(I)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="SmartScreenSelect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>SmartScreen 筛选器(T)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+				</eventlist>
+			</obj>
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			<obj id="WindowsUpdate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>Windows Update(U)</Text>
+					<AccKey></AccKey>
+					<RightText></RightText>
+					<IconVisible>1</IconVisible>
+					<Icon>bitmap.search.baidu</Icon>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ToolMenu.xml.lua" function="OnSelect_WindowsUpdate" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="SafeMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>350</width>
+			<height>470</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>350</width>
+				<height>470</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>safe.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
