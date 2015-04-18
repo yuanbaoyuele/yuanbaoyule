@@ -1,0 +1,107 @@
+<xlue>
+	<control class="BoltFox.Search.Ctrl">
+	    <attr_def>
+			<attr name="SearchEngine" type="userdata">
+				<default>{}</default>
+			</attr>
+		</attr_def>
+		<method_def>
+			<GetSearchEngine file="Search.xml.lua" func="GetSearchEngine"/>
+		</method_def>
+		<event_def> 
+			<OnSearch>
+				<param>
+					<string />
+				</param>
+			</OnSearch>
+		</event_def>
+		<objtemplate>
+			<children>
+				<obj id="border" class="TextureObject">
+					<attr>
+						<width>father.width</width>
+						<height>22</height>
+						<texture>YBYL.AddressBar.UrlSearch.Bkg</texture>
+					</attr>
+					<children>
+						<obj id="image.ctrl" class="TipAddin.Button">
+							<attr>
+								<left>father.width+3</left>
+								<top>0</top>
+								<width>22</width>
+								<height>22</height>
+								<NormalBkgID>bitmap.search.normal</NormalBkgID>
+								<HoverBkgID>bitmap.search.hover</HoverBkgID>
+								<DownBkgID>bitmap.search.down</DownBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="Search.xml.lua" func="OnClick" />
+								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterSearch" />
+								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+						<obj id="image.ctrl2" class="TipAddin.Button">
+							<attr>
+								<left>father.width+3+22</left>
+								<top>0</top>
+								<width>13</width>
+								<height>22</height>
+								<NormalBkgID>SearchBox.DropArrow.Normal</NormalBkgID>
+								<HoverBkgID>SearchBox.DropArrow.Hover</HoverBkgID>
+								<DownBkgID>SearchBox.DropArrow.Down</DownBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="Search.xml.lua" func="OnClick2" />
+								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterArrow" />
+								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+						<obj id="icon" class="ImageObject">
+							<attr>
+								<left>3</left>
+								<top>3</top>
+								<width>16</width>
+								<height>16</height>
+								<valign>center</valign>
+								<image>bitmap.search.baidu</image>
+								<drawmode>1</drawmode>
+								<antialias>2</antialias>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="Search.xml.lua" func="icon_OnLButtonUp" />
+								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterImage" />
+								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+						<obj id="edit" class="EditObject">
+							<attr>
+								<left>16</left>
+								<top>2</top>
+								<width>father.width-19</width>
+								<height>father.height-4</height>
+								<transparent>1</transparent>
+								<textcolor></textcolor>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonDbClick" file="Search.xml.lua" func="OnLButtonDbClick" />
+								<event name="OnKeyDown" file="Search.xml.lua" func="Edit_OnKeyDown"/>
+								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterEdit" />
+								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
+								<event name="OnRButtonUp" file="Search.xml.lua" func="OnEditRButtonUp" />
+							</eventlist>
+						</obj>
+					</children>
+					<eventlist>
+						
+					</eventlist>
+				</obj>
+				
+			</children>
+			<eventlist>
+				<event name="OnControlFocusChange" file="Search.xml.lua" func="OnControlFocusChange" />
+				<event name="OnPosChange" file="Search.xml.lua" func="OnPosChange" />
+				<event name="OnInitControl" file="Search.xml.lua" func="OnInitControl" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>
