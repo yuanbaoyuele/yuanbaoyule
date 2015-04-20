@@ -1141,7 +1141,7 @@ end
 
 --nTopSpan: 离弹出控件的高度差
 --bRBtnPopup：右键弹出菜单
-function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup, brightalign)
+function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup, bRightAlign, bTopAlign)
 	local uTempltMgr = XLGetObject("Xunlei.UIEngine.TemplateManager")
 	local uHostWndMgr = XLGetObject("Xunlei.UIEngine.HostWndManager")
 	local uObjTreeMgr = XLGetObject("Xunlei.UIEngine.TreeManager")
@@ -1166,7 +1166,7 @@ function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup, brightal
 		end
 		if uHostWnd and uObjTree then
 			--函数会阻塞
-			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, brightalign)
+			local bSucc = ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, bRightAlign, bTopAlign)
 			
 			if bSucc and uHostWnd:GetMenuMode() == "manual" then
 				-- uObjTreeMgr:DestroyTree(strObjTreeName)
@@ -1177,7 +1177,7 @@ function CreateAndShowMenu(objUIElem, strMenuKey, nTopSpan, bRBtnPopup, brightal
 end
 
 
-function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, brightalign)
+function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, bRightAlign, bTopAlign)
 	uHostWnd:BindUIObjectTree(uObjTree)
 					
 	local objMainLayout = uObjTree:GetUIObject("Menu.MainLayout")
@@ -1217,9 +1217,14 @@ function ShowMenuHostWnd(objUIElem, uHostWnd, uObjTree, nTopSpan, bRBtnPopup, br
 	if tonumber(nTopSpan) == nil then
 		nTopSpan = nMenuHeight
 	end
-	if brightalign then
+	if bRightAlign then
 		nMenuLeft = nMenuLeft - nMenuContainerWidth+nMenuR-nMenuL
 	end
+	
+	if bTopAlign then
+		nMenuTop = nMenuTop - nMenuContainerHeight - nTopSpan
+	end
+	
 	local nMenuLeft, nMenuTop = AdjustScreenEdge(nMenuLeft, nMenuTop, nMenuContainerWidth, nMenuContainerHeight, nTopSpan)
 	
 	--函数会阻塞
@@ -1534,6 +1539,20 @@ function SetZoomFactor(nFactor)
 
 	local nRealFactor = nFactor*1000
 	RegSetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\Zoom\\ZoomFactor", nRealFactor)
+	
+	SetStateBarZoomText(nFactor)
+end
+
+
+function SetStateBarZoomText(nFactor)
+	local objStateBar = GetMainCtrlChildObj("StateBar")
+	if not objStateBar then
+		return
+	end
+	
+	local objZoomBtn = objStateBar:GetControlObject("StateBar.ZoomText.Button")
+	strText = tostring(nFactor).."%"
+	objZoomBtn:SetText(strText)
 end
 
 

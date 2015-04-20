@@ -575,7 +575,6 @@ function TipMain()
 end
 
 
-
 function DoBackupBussiness()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local cmdString = tipUtil:GetCommandLine()

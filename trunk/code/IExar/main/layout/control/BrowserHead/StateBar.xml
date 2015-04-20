@@ -135,23 +135,69 @@
 												
 						<obj id="Magnifier.Image" class="ImageObject">
 							<attr>
-								<left>father.width-85</left>
+								<left>father.width-82</left>
 								<top>(father.height-13)/2+1</top>
 								<width>13</width>
 								<height>13</height>
 								<image>Magnifier</image>
+								<zorder>9999</zorder>
 							</attr>
 						</obj>
 						
-						<obj id="StateBar.Zoom.Text" class="TextObject" templateid="text.template">
+						<obj id="StateBar.ZoomText.Button" class="TipAddin.Button">
 							<attr>
-								<left>father.width-87</left>
-								<top>2</top>
-								<width>60</width>
-								<height>father.height</height>
-								<text>100%</text>
+								<left>father.width-90</left>
+								<top>3</top>
+								<width>60+14</width>
+								<height>father.height-4</height>
+								<TopTextPos>5</TopTextPos>
+								<LeftTextPos>25</LeftTextPos>
+								<TextFont>font.collectbar.text</TextFont>
+								<Text>100%</Text>
+								<NormalBkgID></NormalBkgID>
+								<DownBkgID>LeftBtn.Bkg.Down</DownBkgID>
+								<HoverBkgID>LeftBtn.Bkg.Hover</HoverBkgID>
+								<DisableBkgID></DisableBkgID>
+								<zorder>10</zorder>
 							</attr>
+								<children>
+									<obj id="StateBar.ZoomArrow.Button" class="TipAddin.Button">
+										<attr>
+											<left>father.width-14</left>
+											<top>0</top>
+											<width>14</width>
+											<height>father.height</height>
+											<NormalBkgID></NormalBkgID>
+											<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+											<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+											<DisableBkgID></DisableBkgID>
+											<zorder>999900</zorder>
+										</attr>
+										<children>
+											<obj id="StateBar.ZoomArrow.Image" class="ImageObject">
+												<attr>
+													<left>5</left>
+													<top>9</top>
+													<width>5</width>
+													<height>3</height>
+													<image>Arrow.Down</image>
+													<zorder>999999</zorder>
+												</attr>
+											</obj>  
+										</children>
+										<eventlist>
+											<event name="OnLButtonUp" file="StateBar.xml.lua" func="OnClickZoomArrow" />
+											<event name="OnMouseEnter" file="StateBar.xml.lua" func="RouteToFather" />
+											<event name="OnMouseLeave" file="StateBar.xml.lua" func="RouteToFather" />
+										</eventlist>
+									</obj>
+								</children>
+							<eventlist>
+								<event name="OnClick" file="StateBar.xml.lua" func="OnClickZoomText" />
+								<event name="OnInitControl" file="StateBar.xml.lua" func="OnInitZoomBtn" />
+							</eventlist>
 						</obj>
+						
 						
 						<obj id="StateBar.RightCorner" class="ImageObject">
 							<attr>
