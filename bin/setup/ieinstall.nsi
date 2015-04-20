@@ -10,8 +10,8 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "iexplorer"
 !define SHORTCUT_NAME "iexplorer"
-!define PRODUCT_VERSION "8.0.0.12"
-!define VERSION_LASTNUMBER 12
+!define PRODUCT_VERSION "8.0.0.15"
+!define VERSION_LASTNUMBER "B15"
 !define NeedSpace 10240
 
 !define EM_BrandingText "${PRODUCT_NAME}${PRODUCT_VERSION}"
@@ -278,7 +278,7 @@ Function CreateDeskIcon
 	;入口3
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r2"
 	${If} $2 == 1 ;win7
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t) i(.r3)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t .r3)"
 		${If} $3 != "" 
 		${AndIf} $3 != 0
 			IfFileExists "$3\TaskBar\Internet Explorer.lnk" 0 +8
@@ -407,8 +407,9 @@ Function un.DeleteIcon
 	;IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +2
 	;	Delete "$SMPROGRAMS\Internet Explorer.lnk"
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r2"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'IsOsUac return $2')"
 	${If} $2 == 1 ;win7
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t) i(.r3)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t .r3)"
 		ExecShell taskbarunpin "$3\TaskBar\Internet Explorer.lnk"
 		StrCpy $R0 "$3\TaskBar\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
@@ -420,12 +421,15 @@ Function un.DeleteIcon
 		StrCpy $R0 "$3\StartMenu\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
 		Sleep 1000
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$3\StartMenu\Internet Explorer.lnk') "
 		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +2
-		Delete "$SMPROGRAMS\Internet Explorer.lnk"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DeleteFileEx(t '$SMPROGRAMS\Internet Explorer.lnk') "
 	${Else}
-		Delete "$QUICKLAUNCH\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b 0, t '$SMPROGRAMS\Internet Explorer.lnk')"
-		Delete "$SMPROGRAMS\Internet Explorer.lnk"
+		IfFileExists "$QUICKLAUNCH\Internet Explorer.lnk" 0 +2
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DeleteFileEx(t '$QUICKLAUNCH\Internet Explorer.lnk') "
+		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +2
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DeleteFileEx(t '$SMPROGRAMS\Internet Explorer.lnk') "
 	${EndIf}
 	;还原
 	ReadRegStr $R4 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\IEXPLORE.EXE" "path"
@@ -446,7 +450,7 @@ Function un.DeleteIcon
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetProfileFolder(t) i(.r0).r3"
 	
 	${If} $2 == 1
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t) i(.r3)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t .r3)"
 		${If} $3 != "" 
 		${AndIf} $3 != 0
 			SetOutPath "$R4"
@@ -673,10 +677,10 @@ Function un.onInit
 	StrCpy $R0 ""
 	ReadRegStr $R0 HKCU "Software\iexplorer" "ietid"
 	${If} $R0 == ""
-		StrCpy $R0 "UA-60726208-1"
+		StrCpy $R0 "UA-61921868-1"
 	${EndIf}
 	;上报
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'uninstall', t '${VERSION_LASTNUMBER}', t '$str_ChannelID', i 1, t '$R0') "
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'uninstall', t '$str_ChannelID', t '${VERSION_LASTNUMBER}', i 1, t '$R0') "
 	;删除自用注册表
 	DeleteRegKey HKCU "SOFTWARE\${PRODUCT_NAME}"
 	;删除通用注册表
