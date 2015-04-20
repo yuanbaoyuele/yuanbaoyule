@@ -67,6 +67,8 @@
 		<bitmap id="History.Logo" path="bitmap\History.Logo.png" />
 		<bitmap id="ArrowLeft" path="bitmap\ArrowLeft.png" />
 		<bitmap id="Scroll.Decorate" path="bitmap\Scroll.Decorate.png" />
+		<bitmap id="White.Flag" path="bitmap\White.Flag.png" />
+		<bitmap id="Black.Flag" path="bitmap\Black.Flag.png" />
 		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.dir.defaluticon.open" path="bitmap\collect.dir.defaluticon.open.png" />
@@ -316,6 +318,13 @@
 			<texture id="Scroll.UpArrow.Hover"  imagelist="Scroll.UpArrow" index="2" />
 			<texture id="Scroll.UpArrow.Down" imagelist="Scroll.UpArrow" index="3" />	
 	
+		<imagelist id="RightBtn.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.RightBtn.Bkg.png"/>
+			<texture id="RightBtn.Bkg.Hover" type="ThreeInOneH" imagelist="RightBtn.Bkg" index="1" />
+			<texture id="RightBtn.Bkg.Down" type="ThreeInOneH" imagelist="RightBtn.Bkg" index="2" />
+			
+		<imagelist id="LeftBtn.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.LeftBtn.Bkg.png"/>
+			<texture id="LeftBtn.Bkg.Hover" type="ThreeInOneH" imagelist="LeftBtn.Bkg" index="1" />
+			<texture id="LeftBtn.Bkg.Down" type="ThreeInOneH" imagelist="LeftBtn.Bkg" index="2" />
 	
 		<gif id="WebTab.Loading" file="bitmap\WebTab.Loading.gif" />
 		
@@ -324,7 +333,6 @@
 			<texture id="checkbox.hover" imagelist="checkbox" index="2" />
 			<texture id="checkbox.check.normal" imagelist="checkbox" index="3" />
 			<texture id="checkbox.check.hover" imagelist="checkbox" index="4" />
-			
 			
 		<texture id="Tool.DelHistroy.Title" image="bitmap\Tool.DelHistroy.Title.png" />
 		<texture id="Tool.DelHistroy.Cookie" image="bitmap\Tool.DelHistroy.Cookie.png" />
@@ -344,14 +352,6 @@
 		
 	</resource>
 </XLUE>
-
-
-
-
-
-
-
-
 
 
 
