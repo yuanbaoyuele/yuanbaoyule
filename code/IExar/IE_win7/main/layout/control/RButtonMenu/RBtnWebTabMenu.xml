@@ -1,0 +1,142 @@
+<xlue>
+	<objtemplate id="rbtn.webtabmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
+		</attr>
+		<children>
+			<obj id="CloseTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>关闭选项卡</Text>
+					<AccKey>C</AccKey>
+					<RightText>Ctrl+W</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_CloseTab" />
+					<event name="OnInit" file="RBtnWebTabMenu.xml.lua" function="OnInit_CloseTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CloseTabGroup" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>关闭此选项卡组</Text>
+					<AccKey>G</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_CloseTabGroup" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CloseOtherTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>关闭其他选项卡</Text>
+					<AccKey>O</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_CloseOtherTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="CancleGroup" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>取消此选项卡分组</Text>
+					<AccKey>U</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_CancleGroup" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Refresh" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>刷新</Text>
+					<AccKey>R</AccKey>
+					<RightText>F5</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_Refresh" />
+				</eventlist>
+			</obj>
+			
+			<obj id="RefreshAll" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>全部刷新</Text>
+					<AccKey>L</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_RefreshAll" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="NewTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建选项卡</Text>
+					<AccKey>N</AccKey>
+					<RightText>Ctrl+T</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_NewTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CopyTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>重复选项卡</Text>
+					<AccKey>D</AccKey>
+					<RightText>Ctrl+K</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="RBtnWebTabMenu.xml.lua" function="OnSelect_CopyTab" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="RBtnWebTabMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>260</width>
+			<height>215</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>260</width>
+				<height>215</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>rbtn.webtabmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

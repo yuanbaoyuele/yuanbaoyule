@@ -1,0 +1,45 @@
+﻿<xlue>
+	<!--点击收藏栏的箭头， 弹出菜单-->
+	<objtemplate id="toolbarmoremenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+		</attr>
+		<children>
+			<!--动态创建-->
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="ToolBarMoreMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>150</width>
+			<height>278</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>150</width>
+				<height>278</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<!--ContextID>toolbarmoremenu.context</ContextID-->
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+					<eventlist>
+						<event name="OnInitControl" file="ToolBarMoreMenu.xml.lua" func="OnInitControl" />
+					</eventlist>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

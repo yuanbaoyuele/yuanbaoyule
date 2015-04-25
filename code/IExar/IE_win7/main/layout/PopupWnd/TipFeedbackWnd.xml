@@ -1,0 +1,231 @@
+<xlue>
+	<objtreetemplate id="TipFeedbackTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>426</width>
+			<height>279</height>
+		</attr>
+
+		<obj id="root.layout" class="CaptionObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>426</width>
+				<height>279</height>
+			</attr>				
+			<children>	
+				<obj id="TipFeedback.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.MainWnd.Bkg</texture>
+						<zorder>1</zorder>
+					</attr>	
+					<children>
+						<obj id="TipFeedback.Bkg.center" class="TextureObject">
+							<attr>
+								<left>4</left>
+								<top>29</top>
+								<width>father.width-8</width>
+								<height>father.height-29-4</height>
+								<texture>YBYL.AddressMenu.Select.Bkg</texture>
+								<zorder>1</zorder>
+							</attr>	
+						</obj>
+						<obj id="TipFeedback.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-5-21</left>
+								<top>5</top>
+								<width>21</width>
+								<height>21</height>
+								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+								<zorder>2</zorder>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickCloseBtn" />
+							</eventlist>
+						</obj>
+						<obj id="TipFeedback.title" class="TextObject">
+							<attr>
+								<left>7</left>
+								<top>10</top>
+								<width>194</width>
+								<height>22</height>
+								<text>客户体验改善计划</text>
+								<font>font.text12.bold</font>
+								<textcolor>system.white</textcolor>
+								<zorder>2</zorder>
+							</attr>
+						</obj>
+						<obj id="TipFeedback.Content" class="TextureObject">
+							<attr>
+								<left>5+10</left>
+								<top>30+15</top>
+								<width>383</width>
+								<height>126</height>
+								<texture>feedback.content</texture>
+								<zorder>2</zorder>
+							</attr>
+						</obj>
+						<obj id="TipFeedback.yes" class="TipAddin.Button">
+							<attr>
+								<left>21</left>
+								<top>196</top>
+								<width>13</width>
+								<height>13</height>
+								<NormalBkgID>radiobox.2</NormalBkgID>
+								<DownBkgID>radiobox.4</DownBkgID>
+								<HoverBkgID>radiobox.4</HoverBkgID>
+								<!--select>true</select-->
+								<zorder>2</zorder>
+							</attr>
+							<children>
+								<obj id="TipFeedback.yes.text" class="TextObject">
+									<attr>
+										<left>20</left>
+										<top>0</top>
+										<width>252</width>
+										<height>18</height>
+										<text>我想帮助改善 Internet Explorer (推荐)(W)</text>
+										<textcolor>system.black</textcolor>
+										<font>font.text12</font>
+									</attr>
+									<eventlist>
+										<event name="OnLButtonDown" file="TipFeedbackWnd.xml.lua" func="OnOnLButtonDownYesText" />
+										<event name="OnLButtonUp" file="TipFeedbackWnd.xml.lua" func="OnLButtonUpYesText" />
+										<event name="OnMouseLeave" file="TipFeedbackWnd.xml.lua" func="OnMouseLeaveYesText" />
+									</eventlist>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClicksure" />
+							</eventlist>
+						</obj>
+						<obj id="TipFeedback.no" class="TipAddin.Button">
+							<attr>
+								<left>21</left>
+								<top>213</top>
+								<width>13</width>
+								<height>13</height>
+								<NormalBkgID>radiobox.1</NormalBkgID>
+								<DownBkgID>radiobox.3</DownBkgID>
+								<HoverBkgID>radiobox.3</HoverBkgID>
+								<zorder>2</zorder>
+							</attr>
+							<children>
+								<obj id="TipFeedback.no.text" class="TextObject">
+									<attr>
+										<left>20</left>
+										<top>0</top>
+										<width>252</width>
+										<height>18</height>
+										<text>我不想立即参与(N)。</text>
+										<textcolor>system.black</textcolor>
+										<font>font.text12</font>
+									</attr>
+									<eventlist>
+										<event name="OnLButtonDown" file="TipFeedbackWnd.xml.lua" func="OnOnLButtonDownYesText" />
+										<event name="OnLButtonUp" file="TipFeedbackWnd.xml.lua" func="OnLButtonUpYesText" />
+										<event name="OnMouseLeave" file="TipFeedbackWnd.xml.lua" func="OnMouseLeaveYesText" />
+									</eventlist>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickRadioNo" />
+							</eventlist>
+						</obj>
+						<obj id="TipFeedback.richinfo" class="TipAddin.Button">
+							<attr>
+								<left>63</left>
+								<top>242</top>
+								<width>110</width>
+								<height>23</height>
+								<LeftTextPos>24</LeftTextPos>
+								<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+								<DownBkgID>about.button.bkg.down</DownBkgID>
+								<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+								<Text>详细信息(M)</Text>
+								<TextFont>font.text12</TextFont>
+								<TextColor>system.black</TextColor>
+								<zorder>2</zorder>
+							</attr>
+							<eventlist>
+								<!--event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickrichinfo" /-->
+							</eventlist>
+						</obj>
+						<obj id="TipFeedback.confirm" class="TipAddin.Button">
+							<attr>
+								<left>192</left>
+								<top>242</top>
+								<width>73</width>
+								<height>23</height>
+								<LeftTextPos>24</LeftTextPos>
+								<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+								<DownBkgID>about.button.bkg.down</DownBkgID>
+								<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+								<Text>确定</Text>
+								<TextFont>font.text12</TextFont>
+								<TextColor>system.black</TextColor>
+								<zorder>2</zorder>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickconfirm" />
+							</eventlist>
+						</obj>
+						<obj id="TipFeedback.cancel" class="TipAddin.Button">
+							<attr>
+								<left>283</left>
+								<top>242</top>
+								<width>73</width>
+								<height>23</height>
+								<LeftTextPos>24</LeftTextPos>
+								<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+								<DownBkgID>about.button.bkg.down</DownBkgID>
+								<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+								<Text>取消</Text>
+								<TextFont>font.text12</TextFont>
+								<TextColor>system.black</TextColor>
+								<zorder>2</zorder>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="TipFeedbackWnd.xml.lua" func="OnClickcancel" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+
+    <hostwndtemplate id="TipFeedbackWnd" class="ModalHostWnd">
+        <attr>
+            <layered>1</layered>
+            <left>0</left>
+            <top>0</top>
+            <width>426</width>
+            <height>279</height>
+
+            <topmost>0</topmost>
+            <visible>0</visible>
+            <enable>1</enable>
+            <maxbox>0</maxbox>
+            <minbox>1</minbox>
+            <minwidth>50</minwidth>
+            <minheight>50</minheight>
+			<sysmenu>0</sysmenu>
+			<appwindow>0</appwindow>
+            <fps>30</fps>
+			<blur>1</blur>
+        </attr>
+		 <eventlist>
+            <event name="OnCreate" file="TipFeedbackWnd.xml.lua" func="OnCreate"/>
+        </eventlist>
+    </hostwndtemplate>
+
+</xlue>

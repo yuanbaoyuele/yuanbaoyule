@@ -1,0 +1,61 @@
+<xlue>
+	 <control class="ie.tabthunmb">
+        <attr_def>
+            <attr name="BitmapHandle" type="int" >
+            </attr>
+        </attr_def>
+        <method_def>
+			<Show file="tabthunmb.xml.lua" func="Show" />
+        </method_def>
+        <objtemplate>
+            <children>
+                <obj id="Layout.main" class="FillObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+						<srccolor>255,255,100,0</srccolor>
+						<destcolor>255,255,100,0</destcolor>
+						<srcpt>0,0</srcpt>
+						<destpt>father.width, father.height</destpt>
+						<filltype>Monochrome</filltype>
+						<blendtype>Source</blendtype>
+                    </attr>
+					<children>
+						 <obj id="Layout.Forground" class="ImageObject">
+							<attr>
+								<left>26</left>
+								<top>26</top>
+								<width>father.width-52</width>
+								<height>father.height-52</height>
+							</attr>
+						 </obj>
+						 <obj id="Layout.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-10-26</left>
+								<top>2</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.CloseBtn.Hover</NormalBkgID>
+								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="tabthunmb.xml.lua" func="OnClickClose" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+			 </children>
+			 <eventlist>
+				<event name="OnControlMouseEnter" file="tabthunmb.xml.lua" func="OnControlMouseEnter" />
+				<event name="OnControlMouseLeave" file="tabthunmb.xml.lua" func="OnControlMouseLeave" />
+				<event name="OnLButtonDown" file="tabthunmb.xml.lua" func="OnLButtonDown" />
+				<event name="OnLButtonUp" file="tabthunmb.xml.lua" func="OnLButtonUp" />
+				<event name="OnInitControl" file="tabthunmb.xml.lua" func="OnInitControl" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

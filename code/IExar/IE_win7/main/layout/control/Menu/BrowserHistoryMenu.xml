@@ -1,0 +1,48 @@
+<xlue>
+	<objtemplate id="browserhistorymenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
+		</attr>
+		<children>
+			<!--动态创建-->
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="BrowserHistoryMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>500</width>
+			<height>500</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>500</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<!--ContextID>urlhistorymenu.context</ContextID-->
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+					<eventlist>
+						<event name="OnInitControl" file="BrowserHistoryMenu.xml.lua" func="OnInitControl" />
+					</eventlist>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

@@ -1,0 +1,188 @@
+<xlue>
+	<objtreetemplate id="TipCloseAllTabWndTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>324</width>
+			<height>151</height>
+		</attr>
+
+		<obj id="root.layout" class="CaptionObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>324</width>
+				<height>151</height>
+			</attr>				
+			<children>	
+				<obj id="TipCloseAllTabWnd.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.MainWnd.Bkg</texture>
+						<zorder>1</zorder>
+					</attr>	
+					<children>
+						<obj id="TipCloseAllTabWnd.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-5-21</left>
+								<top>5</top>
+								<width>21</width>
+								<height>21</height>
+								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+								<zorder>2</zorder>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnClickCloseBtn" />
+							</eventlist>
+						</obj>
+						<obj id="TipCloseAllTabWnd.Title" class="TextureObject">
+							<attr>
+								<left>8</left>
+								<top>11</top>
+								<width>135</width>
+								<height>12</height>
+								<texture>YBYL.CloseAllTab.Title</texture>
+								<zorder>2</zorder>
+							</attr>
+						</obj>
+						<obj id="TipCloseAllTabWnd.Bkg.center" class="TextureObject">
+							<attr>
+								<left>4</left>
+								<top>29</top>
+								<width>father.width-8</width>
+								<height>father.height-29-4</height>
+								<texture>YBYL.AddressMenu.Select.Bkg</texture>
+								<zorder>1</zorder>
+							</attr>
+							<children>
+								<obj id="TipCloseAllTabWnd.Content" class="TextureObject">
+									<attr>
+										<left>11</left>
+										<top>11</top>
+										<width>191</width>
+										<height>28</height>
+										<texture>YBYL.CloseAllTab.Content</texture>
+										<zorder>2</zorder>
+									</attr>
+								</obj>
+								
+								<obj id="TipCloseAllTabWnd.Close.All" class="TipAddin.Button">
+									<attr>
+										<left>71</left>
+										<top>54</top>
+										<width>109</width>
+										<height>23</height>
+										<LeftTextPos>4</LeftTextPos>
+										<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+										<DownBkgID>about.button.bkg.down</DownBkgID>
+										<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+										<Text>关闭所有选项卡(T)</Text>
+										<TextFont>font.text12</TextFont>
+										<TextColor>system.black</TextColor>
+										<zorder>2</zorder>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnCloseAll" />
+									</eventlist>
+								</obj>
+								<obj id="TipCloseAllTabWnd.Close.Current" class="TipAddin.Button">
+									<attr>
+										<left>188</left>
+										<top>54</top>
+										<width>120</width>
+										<height>23</height>
+										<LeftTextPos>4</LeftTextPos>
+										<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+										<DownBkgID>about.button.bkg.down</DownBkgID>
+										<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+										<DisableBkgID>about.button.bkg.disable</DisableBkgID>
+										<Text>关闭当前的选项卡(C)</Text>
+										<TextFont>font.text12</TextFont>
+										<TextColor>system.black</TextColor>
+										<zorder>2</zorder>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnCloseCurrent" />
+									</eventlist>
+								</obj>
+								
+								<obj id="TipCloseAllTabWnd.Split" class="TextureObject">
+									<attr>
+										<left>2</left>
+										<top>84</top>
+										<width>father.width-4</width>
+										<height>2</height>
+										<texture>BrowserHead.Splitter</texture>
+										<zorder>2</zorder>
+									</attr>
+								</obj>
+								
+								<obj id="TipCloseAllTabWnd.CheckBox" class="TipAddin.Button">
+									<attr>
+										<left>11</left>
+										<top>95</top>
+										<width>13</width>
+										<height>13</height>
+										<NormalBkgID>checkbox.normal</NormalBkgID>
+										<HoverBkgID>checkbox.hover</HoverBkgID>
+										<DownBkgID>checkbox.normal</DownBkgID>
+										<zorder>2</zorder>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnClickCheckBox" />
+									</eventlist>
+								</obj>
+								<obj id="TipCloseAllTabWnd.CheckBox.Content" class="TextureObject">
+									<attr>
+										<left>27</left>
+										<top>96</top>
+										<width>124</width>
+										<height>12</height>
+										<texture>YBYL.CloseAllTab.CheckBox.Content</texture>
+										<zorder>2</zorder>
+									</attr>
+									<eventlist>
+										<event name="OnLButtonUp" file="TipCloseAllTabWnd.xml.lua" func="OnClickCheckBox" />
+									</eventlist>
+								</obj>
+										
+							</children>	
+						</obj>
+					</children>	
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+
+    <hostwndtemplate id="TipCloseAllTabWnd" class="ModalHostWnd">
+        <attr>
+            <layered>1</layered>
+            <left>0</left>
+            <top>0</top>
+            <width>324</width>
+            <height>151</height>
+
+            <topmost>0</topmost>
+            <visible>0</visible>
+            <enable>1</enable>
+            <maxbox>0</maxbox>
+            <minbox>1</minbox>
+            <minwidth>50</minwidth>
+            <minheight>50</minheight>
+			<sysmenu>0</sysmenu>
+			<appwindow>0</appwindow>
+            <fps>30</fps>
+			<blur>1</blur>
+        </attr>
+		 <eventlist>
+            <event name="OnCreate" file="TipCloseAllTabWnd.xml.lua" func="OnCreate"/>
+        </eventlist>
+    </hostwndtemplate>
+
+</xlue>
