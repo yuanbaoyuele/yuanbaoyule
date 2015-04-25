@@ -1,0 +1,157 @@
+<xlue>
+	<!--缩放菜单-->
+	<objtemplate id="zoommenu.template" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>140</width>
+			<height>222</height>
+			<ContextID>submenu.zoom.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="submenu.zoom.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+		</attr>
+		<children>
+			<obj id="Enlage" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>放大</Text>
+					<RightText>Ctrl +</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Enlage" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Narrow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>缩小</Text>
+					<RightText>Ctrl -</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Narrow" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+		
+			<obj id="Zoom400" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>400%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom400" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Zoom200" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>200%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom200" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom150" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>150%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom150" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom125" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>125%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom125" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Zoom100" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>100%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom100" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Zoom75" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>75%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom75" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Zoom50" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>50%</Text>
+				</attr>
+				<eventlist>
+					<event name="OnInit" file="ZoomMenu.xml.lua" function="OnInit_Zoom" />
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Zoom50" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Custom" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>自定义...</Text>
+					<Enable>false</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="ZoomMenu.xml.lua" function="OnSelect_Custom" />
+				</eventlist>
+			</obj>
+			
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="ZoomMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>140</width>
+			<height>205</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>140</width>
+				<height>205</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu" templateid="zoommenu.template">
+					<attr>
+						<width>140</width>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

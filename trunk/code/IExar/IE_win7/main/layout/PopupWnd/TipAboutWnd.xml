@@ -1,0 +1,147 @@
+<xlue>
+	<objtreetemplate id="TipAboutTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>406</width>
+			<height>349</height>
+		</attr>
+
+		<obj id="root.layout" class="CaptionObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>406</width>
+				<height>349</height>
+			</attr>				
+			<children>	
+				<obj id="TipAbout.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.MainWnd.Bkg</texture>
+						<zorder>1</zorder>
+					</attr>	
+				</obj>
+				
+				<obj id="TipAbout.CloseBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-5-21</left>
+						<top>5</top>
+						<width>21</width>
+						<height>21</height>
+						<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+						<zorder>2</zorder>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="TipAboutWnd.xml.lua" func="OnClickCloseBtn" />
+					</eventlist>
+				</obj>
+				<obj id="TipAbout.title" class="TextureObject">
+					<attr>
+						<left>8</left>
+						<top>2</top>
+						<width>194</width>
+						<height>22</height>
+						<texture>about.title</texture>
+						<zorder>2</zorder>
+					</attr>
+				</obj>
+				<obj id="TipAbout.Content" class="TextureObject">
+					<attr>
+						<left>5+21</left>
+						<top>30+20</top>
+						<width>320</width>
+						<height>200</height>
+						<texture>about.content</texture>
+						<zorder>2</zorder>
+					</attr>
+				</obj>
+				<obj id="TipAbout.link" class="TipAddin.Button">
+					<attr>
+						<left>5+21</left>
+						<top>325</top>
+						<width>168</width>
+						<height>12</height>
+						<NormalBkgID>about.link.1</NormalBkgID>
+						<DownBkgID>about.link.3</DownBkgID>
+						<HoverBkgID>about.link.1</HoverBkgID>
+						<zorder>2</zorder>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="TipAboutWnd.xml.lua" func="OnClicklink" />
+					</eventlist>
+				</obj>
+				<obj id="TipAbout.sure" class="TipAddin.Button">
+					<attr>
+						<left>5+243</left>
+						<top>285</top>
+						<width>107</width>
+						<height>23</height>
+						<LeftTextPos>40</LeftTextPos>
+						<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+						<DownBkgID>about.button.bkg.down</DownBkgID>
+						<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+						<Text>确定</Text>
+						<TextFont>font.text12</TextFont>
+						<TextColor>system.black</TextColor>
+						<zorder>2</zorder>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="TipAboutWnd.xml.lua" func="OnClicksure" />
+					</eventlist>
+				</obj>
+				<obj id="TipAbout.sysinfo" class="TipAddin.Button">
+					<attr>
+						<left>5+243</left>
+						<top>319</top>
+						<width>107</width>
+						<height>23</height>
+						<LeftTextPos>12</LeftTextPos>
+						<NormalBkgID>about.button.bkg.normal</NormalBkgID>
+						<DownBkgID>about.button.bkg.down</DownBkgID>
+						<HoverBkgID>about.button.bkg.hover</HoverBkgID>
+						<Text>系统信息(S)...</Text>
+						<TextFont>font.text12</TextFont>
+						<TextColor>system.black</TextColor>
+						<zorder>2</zorder>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="TipAboutWnd.xml.lua" func="OnClickSysInfo" />
+					</eventlist>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+
+    <hostwndtemplate id="TipAboutWnd" class="ModalHostWnd">
+        <attr>
+            <layered>1</layered>
+            <left>0</left>
+            <top>0</top>
+            <width>406</width>
+            <height>349</height>
+
+            <topmost>0</topmost>
+            <visible>0</visible>
+            <enable>1</enable>
+            <maxbox>0</maxbox>
+            <minbox>1</minbox>
+            <minwidth>50</minwidth>
+            <minheight>50</minheight>
+			<sysmenu>0</sysmenu>
+			<appwindow>0</appwindow>
+            <fps>30</fps>
+			<blur>1</blur>
+        </attr>
+		 <eventlist>
+            <event name="OnCreate" file="TipAboutWnd.xml.lua" func="OnCreate"/>
+        </eventlist>
+    </hostwndtemplate>
+
+</xlue>

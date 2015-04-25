@@ -1,0 +1,297 @@
+<xlue>
+	<objtemplate id="filemenu.submenu" class="NormalMenu">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>150+10</width>
+			<height>65</height>
+			<ContextID>filemenu.submenu.context</ContextID>
+			<BknID>YBYL.Menu.Bkg</BknID>
+		</attr>
+	</objtemplate>
+
+	<objtemplate id="filemenu.submenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
+		</attr>
+		<children>
+			<obj id="EMailPage" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>电子邮件页面</Text>
+					<AccKey>P</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_EMailPage" />
+				</eventlist>
+			</obj>
+			
+			<obj id="EMailLink" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>电子邮件链接</Text>
+					<AccKey>L</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_EMailLink" />
+				</eventlist>
+			</obj>
+			
+			<obj id="ShortCut" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>桌面快捷方式</Text>
+					<AccKey>S</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_ShortCut" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtemplate id="filemenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+			<ItemRight></ItemRight> 
+			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
+			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ItemBottom>0</ItemBottom> 
+		</attr>
+		<children>
+			<obj id="AddNewTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建选项卡</Text>
+					<AccKey>T</AccKey>
+					<RightText>Ctrl+T</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CopyTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>重复选项卡</Text>
+					<AccKey>B</AccKey>
+					<RightText>Ctrl+K</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_CopyTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="AddNewWindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建窗口</Text>
+					<AccKey>N</AccKey>
+					<RightText>Ctrl+N</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewWindow" />
+				</eventlist>
+			</obj>
+			
+			<obj id="AddNewSession" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建会话</Text>
+					<AccKey>I</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewSession" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打开</Text>
+					<AccKey>O</AccKey>
+					<RightText>Ctrl+O</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Open" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Edit" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>编辑</Text>
+					<AccKey>D</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Edit" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Save" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>保存</Text>
+					<AccKey>S</AccKey>
+					<RightText>Ctrl+S</RightText>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_SaveAs" />
+				</eventlist>
+			</obj>
+			
+			<obj id="SaveAs" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>另存为</Text>
+					<AccKey>A</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_SaveAs" />
+				</eventlist>
+			</obj>
+			
+			<obj id="CloseTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>关闭选项卡</Text>
+					<AccKey>C</AccKey>
+					<RightText>Ctrl+W</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_CloseTab" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="PageSetup" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>页面设置</Text>
+					<AccKey>U</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_PageSetup" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Print" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印</Text>
+					<RightText>Ctrl+P</RightText>
+					<AccKey>P</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Print" />
+				</eventlist>
+			</obj>
+			
+			<obj id="PrintReview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印预览</Text>
+					<AccKey>V</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_PrintReview" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Send" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>发送</Text>
+					<AccKey>E</AccKey>
+					<SubMenuID>filemenu.submenu</SubMenuID>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Send" />
+				</eventlist>
+			</obj>
+			
+			<obj id="ImportAndExport" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>导入和导出</Text>
+					<AccKey>I</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_ImportAndExport" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Properties" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>属性</Text>
+					<AccKey>R</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Properties" />
+				</eventlist>
+			</obj>
+			
+			<obj id="OffLine" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>脱机工作</Text>
+					<AccKey>W</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_OffLine" />
+				</eventlist>
+			</obj>
+			
+			<obj id="exit" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>退出</Text>
+					<AccKey>X</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Exit" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+
+	
+	<objtreetemplate id="FileMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>181+10</width>
+			<height>370</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>181+10</width>
+				<height>370</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>181+10</width>
+						<height>father.height</height>
+						<ContextID>filemenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
