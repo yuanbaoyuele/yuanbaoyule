@@ -69,11 +69,10 @@ BOOL CYBApp::IniEnv()
 	TCHAR szXar[MAX_PATH] = {0};
 	GetModuleFileName((HMODULE)g_hInst, szXar, MAX_PATH);
 	PathRemoveFileSpec(szXar);
-	PathAppend(szXar, _T("..\\xar\\")); 
 	if (!::PathFileExists(szXar) || !::PathIsDirectory(szXar) )
 	{
-		MessageBoxA(NULL,"获取界面皮肤路径失败","错误",MB_OK|MB_ICONERROR);
-		return FALSE;
+		//MessageBoxA(NULL,"获取界面皮肤路径失败","错误",MB_OK|MB_ICONERROR);
+		//return FALSE;
 	}
 	m_strXarPath = szXar;
 	// 1)初始化图形库
@@ -104,21 +103,44 @@ BOOL CYBApp::IniEnv()
 
 void CYBApp::InternalLoadXAR()
 {
-	XLUE_AddXARSearchPath(m_strXarPath.c_str());
-	if (XLUE_XARExist("main"))
+	TCHAR strPath[MAX_PATH] = {0};
+	GetModuleFileName(NULL, strPath, MAX_PATH);
+	std::wstring strExePath = strPath;
+	PathRemoveFileSpec(strPath);
+	PathAppend(strPath, _T("iexar")); 
+	std::wstring strXarDest = strPath;
+	
+	std::wstring strXarRes = L"xar@resource://";
+	strXarRes+=strExePath;
+	strXarRes+=L"|xar_res|1001$";
+	TSDEBUG4CXX(L"InternalLoadXAR, strXarDest = " << strXarDest.c_str()<<L", strXarRes = " <<strXarRes.c_str());
+	long iRet = XLFS_MountDir(strXarDest.c_str(), strXarRes.c_str(), 0, 0);
+	TSDEBUG4CXX(L"XLFS_MountDir iRet = " << iRet);
+	if (0 == iRet)
 	{
-		long iRet = XLUE_LoadXAR("main");	//返回值为0说明加载成功
-		TSDEBUG4CXX(L"XLUE_LoadXAR iret = " << iRet);
-		if(iRet != 0)
-		{
-			TerminateProcess(GetCurrentProcess(), (UINT)-20);
-		}
+		std::string strAnsi;
+		WideStringToAnsiString(strXarDest,strAnsi);
+		iRet = XLUE_LoadXAR(strAnsi.c_str());
 	}
-	else
+	if (iRet != 0)
 	{
-		MessageBoxA(NULL,"无法获取界面皮肤","错误",MB_OK|MB_ICONERROR);
-		TSDEBUG(_T("XLUE_XARExist main) return FALSE"));
-		TerminateProcess(GetCurrentProcess(), (UINT)-30);
+		TSDEBUG4CXX(L"XLFS_MountDir,XLUE_LoadXAR error");
+		XLUE_AddXARSearchPath(m_strXarPath.c_str());
+		if (XLUE_XARExist("main"))
+		{
+			long iRet = XLUE_LoadXAR("main");	//返回值为0说明加载成功
+			TSDEBUG4CXX(L"AddXARSearch,XLUE_LoadXAR iRet = " << iRet);
+			if(iRet != 0)
+			{
+				TerminateProcess(GetCurrentProcess(), (UINT)-20);
+			}
+		}
+		else
+		{
+			MessageBoxA(NULL,"无法获取界面皮肤","错误",MB_OK|MB_ICONERROR);
+			TSDEBUG(_T("XLUE_XARExist main) return FALSE"));
+			TerminateProcess(GetCurrentProcess(), (UINT)-30);
+		}
 	}
 }
 
