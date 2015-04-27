@@ -130,10 +130,10 @@
 <texture id="about.link.3" path="bitmap\about.link.3.png" />
 <texture id="about.link.4" path="bitmap\about.link.4.png" />
 <imagelist id="about.button.bkg" splitter="1" varyblock="1" image="bitmap\about.button.bkg.png" />
-<texture id="about.button.bkg.normal" type="ThreeInOneH" imagelist="about.button.bkg" index="1" />
-<texture id="about.button.bkg.hover" type="ThreeInOneH" imagelist="about.button.bkg" index="2" />
-<texture id="about.button.bkg.down" type="ThreeInOneH" imagelist="about.button.bkg" index="3" />
-<texture id="about.button.bkg.disable" type="ThreeInOneH" imagelist="about.button.bkg" index="5" />
+<texture id="about.button.bkg.normal" type="ThreeInOneH" imagelist="about.button.bkg" index="2" />
+<texture id="about.button.bkg.hover" type="ThreeInOneH" imagelist="about.button.bkg" index="3" />
+<texture id="about.button.bkg.down" type="ThreeInOneH" imagelist="about.button.bkg" index="4" />
+<texture id="about.button.bkg.disable" type="ThreeInOneH" imagelist="about.button.bkg" index="1" />
 
 <texture id="feedback.content" path="bitmap\feedback.content.png" />
 <imagelist id="radiobox" splitter="1" varyblock="1" image="bitmap\radiobox.png" />
@@ -349,7 +349,10 @@
 		<texture id="YBYL.CloseAllTab.Title" image="bitmap\YBYL.CloseAllTab.Title.png" />
 		
 		<texture id="YBYL.CloseAllTab.CheckBox.Content" image="bitmap\YBYL.CloseAllTab.CheckBox.Content.png" />
-		
+		<texture id="popwnd.bkg" type="NineInOne" image="bitmap\popwnd.bkg.png" />
+		<texture id="popwnd.bkg.nofocus" type="NineInOne" image="bitmap\popwnd.bkg.nofocus.png" />
+		<texture id="hui.bkg" type="NineInOne" image="bitmap\hui.bkg.png" />
+		<texture id="popwnd.bkg.mini" type="NineInOne" image="bitmap\popwnd.bkg.mini.png" />
 	</resource>
 </XLUE>
 
