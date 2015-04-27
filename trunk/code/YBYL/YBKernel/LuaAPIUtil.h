@@ -54,6 +54,8 @@ private:
 		const TCHAR* description,
 		const TCHAR* despath);
 
+	static BOOL ElevateOperateHelper(lua_State* luaState, int nIndex,std::vector<std::wstring> &v_AddReg,std::vector<std::wstring> &v_DelReg);
+
 public:
 	static LuaAPIUtil * __stdcall Instance(void *);
 	static void RegisterObj(XL_LRT_ENV_HANDLE hEnv);
@@ -170,6 +172,7 @@ public:
 
 	//功能
 	static int CreateShortCutLinkEx(lua_State* pLuaState);
+	static int UpdateShortCutLinkInfo(lua_State* pLuaState);
 	static int OpenURL(lua_State* pLuaState);
 	static int OpenURLIE(lua_State* pLuaState);	
 	static int ShellExecuteEX(lua_State* pLuaState);
@@ -211,7 +214,10 @@ public:
 	static int PinToStartMenu4XP(lua_State* pLuaState);
 	static int RefleshIcon(lua_State* pLuaState);
 	
-	static int UpdateShortCutLinkInfo(lua_State* pLuaState);
+	//提权注册表
+	static int ElevateOperate(lua_State* pLuaState);
+
+
 
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];

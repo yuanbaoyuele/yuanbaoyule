@@ -21,7 +21,7 @@
 #include <Psapi.h>
 #include <mshtml.h> 
 #include <Exdisp.h>
-
+#include "UACElevate.h"
 extern CYBApp theApp;
 
 #include "YBKernelHelper\CYBMsgWnd.h"
@@ -188,6 +188,10 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"PinToStartMenu4XP", PinToStartMenu4XP},
 	{"RefleshIcon", RefleshIcon},
 	{"UpdateShortCutLinkInfo", UpdateShortCutLinkInfo},
+
+
+	//ÌáÈ¨²Ù×÷
+	{"ElevateOperate", ElevateOperate},
 	{NULL, NULL}
 };
 
@@ -4582,7 +4586,7 @@ int LuaAPIUtil::PinToStartMenu4XP(lua_State *pLuaState)
 	}
 
 	const char *szShortCutPath = lua_tostring(pLuaState, 2);
-	bool bPin = lua_toboolean(pLuaState, 3);
+	BOOL bPin = lua_toboolean(pLuaState, 3);
 	if (!szShortCutPath)
 	{
 		return 0;
@@ -4655,8 +4659,6 @@ int LuaAPIUtil::PinToStartMenu4XP(lua_State *pLuaState)
 	::CoUninitialize();
 	return 0;
 };
-
-
 
 int LuaAPIUtil::RefleshIcon(lua_State *pLuaState)
 {
@@ -4758,3 +4760,103 @@ int LuaAPIUtil::UpdateShortCutLinkInfo(lua_State* pLuaState)
 	}
 	return 0;
 }
+
+BOOL LuaAPIUtil::ElevateOperateHelper(lua_State* luaState, int nIndex,std::vector<std::wstring> &v_AddReg,std::vector<std::wstring> &v_DelReg)
+{
+	BOOL bTable = lua_istable(luaState, nIndex);
+	if (!bTable)
+		return FALSE;
+	lua_pushnil(luaState);
+	while (lua_next(luaState, 2)) 
+	{
+		std::string strKey;
+		if(lua_isstring(luaState, -2))
+		{
+			const char* utf8Key = (const char*)lua_tostring(luaState, -2);
+			std::wstring strKey;
+
+			CComBSTR bstrKey;
+			LuaStringToCComBSTR(utf8Key,bstrKey);
+
+			if (wcscmp(bstrKey.m_str,L"AddReg") == 0 && lua_istable(luaState, -1))
+			{
+				int nIndex = lua_gettop(luaState);
+				lua_pushnil(luaState);
+				while (lua_next(luaState, nIndex))
+				{
+					const char* utf8AddItem = (const char*)lua_tostring(luaState, -1);
+					if (NULL != utf8AddItem)
+					{
+						CComBSTR bstrAddItem;
+						LuaStringToCComBSTR(utf8AddItem,bstrAddItem);
+						v_AddReg.push_back(bstrAddItem.m_str);
+					}
+					lua_pop(luaState, 1);
+				}
+			}
+			else if (wcscmp(bstrKey.m_str,L"DelReg") == 0 && lua_istable(luaState, -1) )
+			{
+				int nIndex = lua_gettop(luaState);
+				lua_pushnil(luaState);
+				while (lua_next(luaState, nIndex))
+				{
+					const char* utf8DelItem = (const char*)lua_tostring(luaState, -1);
+					if (NULL != utf8DelItem)
+					{
+						CComBSTR bstrDelItem;
+						LuaStringToCComBSTR(utf8DelItem,bstrDelItem);
+						v_DelReg.push_back(bstrDelItem.m_str);
+					}
+					lua_pop(luaState, 1);
+				}
+			}
+			lua_pop(luaState, 1);
+		}
+		else
+		{
+			TSDEBUG4CXX(L"ElevateOperateHelper, table key not support string");
+			lua_pop(luaState, 1);
+		}
+	}
+	return TRUE;
+}
+
+int LuaAPIUtil::ElevateOperate(lua_State *pLuaState)
+{
+	TSAUTO();
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (!ppUtil)
+	{	
+		return 0;
+	}
+	UACElevate uac;
+	const char *szInfPath = lua_tostring(pLuaState, 3);
+	if (NULL == szInfPath || !lua_istable(pLuaState, 2))
+	{
+		return 0;
+	}
+	CComBSTR bstInfPath;
+	LuaStringToCComBSTR(szInfPath,bstInfPath);
+	int nWow64 = lua_toboolean(pLuaState, 4);
+	BOOL bWow = (nWow64 == 0) ? FALSE : TRUE;
+	int iErrorCode = ELEVATE_SUCCESS;
+	if (iErrorCode = uac.Init(bstInfPath.m_str,bWow) != ELEVATE_SUCCESS)
+	{
+		lua_pushinteger(pLuaState, iErrorCode);
+		return 1;
+	}
+	std::vector<std::wstring> v_AddReg,v_DelReg;
+	ElevateOperateHelper(pLuaState,2,v_AddReg,v_DelReg);
+	for (std::vector<std::wstring>::const_iterator c_iter = v_AddReg.begin(); c_iter != v_AddReg.end();c_iter++)
+	{
+		uac.AddReg((*c_iter).c_str());
+	}
+	for (std::vector<std::wstring>::const_iterator c_iter = v_DelReg.begin(); c_iter != v_DelReg.end();c_iter++)
+	{
+		uac.DelReg((*c_iter).c_str());
+	}
+	iErrorCode = uac.DoWork();
+	lua_pushinteger(pLuaState, iErrorCode);
+	return 1;
+
+};
