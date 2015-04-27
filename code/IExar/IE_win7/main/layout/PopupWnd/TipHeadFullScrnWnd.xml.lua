@@ -20,16 +20,15 @@ function OnCreate( self )
 	local objRootCtrl = objtree:GetUIObject("root.layout")
 	objRootCtrl:SetObjPos(0, 0, nSelfR-nSelfL, nSelfB-nSelfT)
 	
-	local objMainPanelHead = tFunHelper.GetMainCtrlChildObj("MainPanel.HeadWnd")
 	objMainWnd:AttachListener("OnSize", true, function( self, _type, width, height)	
 	
 		local mainleft, maintop, mainright, mainbottom = objMainWnd:GetWindowRect()
 		objSelfWnd:SetTopMost(false)
 		objSelfWnd:SetMaxTrackSize(width-8, 120)
-		objSelfWnd:Move( mainleft+HeadL, maintop+30, mainright+HeadR, 120)
+		objSelfWnd:Move( mainleft+HeadL, maintop+40, mainright, 120)
 		local objtree = objSelfWnd:GetBindUIObjectTree()
 		local objRootCtrl = objtree:GetUIObject("root.layout")
-		objRootCtrl:SetObjPos(0, 0, width-4*2, 120)
+		objRootCtrl:SetObjPos(0, 0, width-20*2, 120)
 	end)	
 end
 

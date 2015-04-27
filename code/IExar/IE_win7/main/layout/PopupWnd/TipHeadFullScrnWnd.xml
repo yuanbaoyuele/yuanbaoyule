@@ -65,11 +65,11 @@
 						<obj id="MainLayout.Bottom" class="TextureObject">
 							<attr>
 								<left>0</left>
-								<top>114</top>
+								<top>115</top>
 								<width>father.width</width>
 								<height>6</height>
 								<texture>WebTab.BottomBkg.Line</texture>
-								<zorder>200</zorder>
+								<zorder>10</zorder>
 							</attr>		
 						</obj>				
 					</children>
