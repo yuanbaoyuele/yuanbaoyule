@@ -435,6 +435,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UACElevate.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Util.h"
 				>
 			</File>
