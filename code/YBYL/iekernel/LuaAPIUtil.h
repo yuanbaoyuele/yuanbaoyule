@@ -57,7 +57,7 @@ private:
 		const TCHAR* argument, 
 		const TCHAR* description,
 		const TCHAR* despath);
-
+	static BOOL ElevateOperateHelper(lua_State* luaState, int nIndex,std::vector<std::wstring> &v_AddReg,std::vector<std::wstring> &v_DelReg);
 public:
 	static LuaAPIUtil * __stdcall Instance(void *);
 	static void RegisterObj(XL_LRT_ENV_HANDLE hEnv);
@@ -217,6 +217,9 @@ public:
 
 	static int PinToStartMenu4XP(lua_State* pLuaState);
 	static int TrackPopUpSysMenu(lua_State* pLuaState);
+
+	//ÌáÈ¨×¢²á±í
+	static int ElevateOperate(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;
