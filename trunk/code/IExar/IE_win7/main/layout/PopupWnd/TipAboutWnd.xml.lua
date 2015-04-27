@@ -82,7 +82,21 @@ function GetIEVersion()
 
 	return tipUtil:GetFileVersionString(IEPath)
 end
-	
+
+function OnFocusChangeBkg(self, isfocus)
+	local objtree = self:GetBindUIObjectTree()
+	local bkg = objtree:GetUIObject("TipAbout.Bkg")
+	local closebtn = objtree:GetUIObject("TipAbout.CloseBtn")
+	local attr = closebtn:GetAttribute()
+	if isfocus then
+		bkg:SetTextureID("popwnd.bkg")
+		attr.NormalBkgID = "YBYL.Caption.CloseBtn.Normal"
+	else
+		bkg:SetTextureID("popwnd.bkg.nofocus")
+		attr.NormalBkgID = "YBYL.Caption.CloseBtn.Disable"
+	end
+	closebtn:Updata()
+end	
 	
 ---------
 function HideWindow(objUIElem)

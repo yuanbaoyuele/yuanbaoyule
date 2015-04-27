@@ -3,34 +3,44 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>393</width>
-			<height>446</height>
+			<width>393+32</width>
+			<height>446+31</height>
 		</attr>
 
 		<obj id="root.layout" class="CaptionObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>393</width>
-				<height>446</height>
+				<width>393+32</width>
+				<height>446+31</height>
 			</attr>				
 			<children>	
+				<obj id="TipDeleteExplorerHistroyWnd.Bkg.Blur" class="BlurObject">
+					<attr>
+						<left>15</left>
+						<top>12</top>
+						<width>father.width-30</width>
+						<height>father.height-25</height>
+						<transitiononmaximized>true</transitiononmaximized>
+						<zorder>1</zorder>
+					</attr>	
+				</obj>
 				<obj id="TipDeleteExplorerHistroyWnd.Bkg" class="TextureObject">
 					<attr>
 						<left>0</left>
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						<texture>YBYL.MainWnd.Bkg</texture>
+						<texture>popwnd.bkg</texture>
 						<zorder>1</zorder>
 					</attr>	
 					<children>
 						<obj id="TipDeleteExplorerHistroyWnd.CloseBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-5-21</left>
-								<top>5</top>
-								<width>21</width>
-								<height>21</height>
+								<left>father.width-13-65</left>
+								<top>3</top>
+								<width>65</width>
+								<height>36</height>
 								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
 								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
 								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
@@ -41,23 +51,25 @@
 								<event name="OnClick" file="TipDeleteExplorerHistroyWnd.xml.lua" func="OnClickCloseBtn" />
 							</eventlist>
 						</obj>
-						<obj id="TipDeleteExplorerHistroyWnd.title" class="TextureObject">
+						<obj id="TipDeleteExplorerHistroyWnd.title" class="TextObject">
 							<attr>
-								<left>9</left>
-								<top>9</top>
+								<left>22</left>
+								<top>18</top>
 								<width>127</width>
-								<height>13</height>
-								<texture>Tool.DelHistroy.Title</texture>
+								<height>22</height>
+								<text>删除浏览的历史记录</text>
+								<font>font.head.caption</font>
+								<textcolor>system.black</textcolor>
 								<zorder>2</zorder>
 							</attr>
 						</obj>
 						<obj id="TipDeleteExplorerHistroyWnd.Bkg.center" class="TextureObject">
 							<attr>
-								<left>4</left>
-								<top>29</top>
-								<width>father.width-8</width>
-								<height>father.height-29-4</height>
-								<texture>YBYL.AddressMenu.Select.Bkg</texture>
+								<left>19</left>
+								<top>40</top>
+								<width>father.width-31-7</width>
+								<height>father.height-32-40+13</height>
+								<texture>hui.bkg</texture>
 								<zorder>1</zorder>
 							</attr>
 							<children>
@@ -88,8 +100,8 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>336</width>
-												<height>43</height>
+												<width>347</width>
+												<height>48</height>
 												<texture>Tool.DelHistroy.Fav</texture>
 												<zorder>2</zorder>
 											</attr>
@@ -136,8 +148,8 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>248</width>
-												<height>25</height>
+												<width>247</width>
+												<height>27</height>
 												<texture>Tool.DelHistroy.TempFile</texture>
 												<zorder>2</zorder>
 											</attr>
@@ -175,8 +187,8 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>308</width>
-												<height>24</height>
+												<width>311</width>
+												<height>29</height>
 												<texture>Tool.DelHistroy.Cookie</texture>
 												<zorder>2</zorder>
 											</attr>
@@ -214,7 +226,7 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>104</width>
+												<width>117</width>
 												<height>26</height>
 												<texture>Tool.DelHistroy.Histroy</texture>
 												<zorder>2</zorder>
@@ -253,8 +265,8 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>139</width>
-												<height>25</height>
+												<width>142</width>
+												<height>26</height>
 												<texture>Tool.DelHistroy.Form</texture>
 												<zorder>2</zorder>
 											</attr>
@@ -292,8 +304,8 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>259</width>
-												<height>27</height>
+												<width>263</width>
+												<height>29</height>
 												<texture>Tool.DelHistroy.PassWord</texture>
 												<zorder>2</zorder>
 											</attr>
@@ -331,8 +343,8 @@
 											<attr>
 												<left>13+2</left>
 												<top>0</top>
-												<width>339</width>
-												<height>37</height>
+												<width>341</width>
+												<height>39</height>
 												<texture>Tool.DelHistroy.InPrivate</texture>
 												<zorder>2</zorder>
 											</attr>
@@ -363,7 +375,7 @@
 										<left>187</left>
 										<top>377</top>
 										<width>87</width>
-										<height>23</height>
+										<height>22</height>
 										<LeftTextPos>24</LeftTextPos>
 										<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 										<DownBkgID>about.button.bkg.down</DownBkgID>
@@ -382,7 +394,7 @@
 										<left>283</left>
 										<top>377</top>
 										<width>87</width>
-										<height>23</height>
+										<height>22</height>
 										<LeftTextPos>32</LeftTextPos>
 										<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 										<DownBkgID>about.button.bkg.down</DownBkgID>
@@ -409,8 +421,8 @@
             <layered>1</layered>
             <left>0</left>
             <top>0</top>
-            <width>393</width>
-            <height>446</height>
+            <width>425</width>
+            <height>477</height>
 
             <topmost>0</topmost>
             <visible>0</visible>

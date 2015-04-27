@@ -3,72 +3,84 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>324</width>
-			<height>151</height>
+			<width>324+32</width>
+			<height>151+31</height>
 		</attr>
 
 		<obj id="root.layout" class="CaptionObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>324</width>
-				<height>151</height>
+				<width>324+32</width>
+				<height>151+31</height>
 			</attr>				
 			<children>	
+				<obj id="TipCloseAllTabWnd.Bkg.Blur" class="BlurObject">
+					<attr>
+						<left>15</left>
+						<top>12</top>
+						<width>father.width-30</width>
+						<height>father.height-25</height>
+						<transitiononmaximized>true</transitiononmaximized>
+						<zorder>1</zorder>
+					</attr>	
+				</obj>
 				<obj id="TipCloseAllTabWnd.Bkg" class="TextureObject">
 					<attr>
 						<left>0</left>
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						<texture>YBYL.MainWnd.Bkg</texture>
+						<texture>popwnd.bkg.mini</texture>
 						<zorder>1</zorder>
 					</attr>	
 					<children>
 						<obj id="TipCloseAllTabWnd.CloseBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-5-21</left>
-								<top>5</top>
-								<width>21</width>
-								<height>21</height>
+								<left>father.width-13-65</left>
+								<top>3</top>
+								<width>65</width>
+								<height>36</height>
 								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
 								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
 								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
 								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
-								<zorder>2</zorder>
+								<zorder>3</zorder>
 							</attr>
 							<eventlist>
 								<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnClickCloseBtn" />
 							</eventlist>
 						</obj>
-						<obj id="TipCloseAllTabWnd.Title" class="TextureObject">
+						<obj id="TipCloseAllTabWnd.Title" class="TextObject">
 							<attr>
-								<left>8</left>
-								<top>11</top>
+								<left>19</left>
+								<top>14</top>
 								<width>135</width>
-								<height>12</height>
-								<texture>YBYL.CloseAllTab.Title</texture>
-								<zorder>2</zorder>
+								<height>20</height>
+								<font>font.head.caption</font>
+								<textcolor>system.black</textcolor>
+								<text>Internet Explorer</text>
+								<zorder>3</zorder>
 							</attr>
 						</obj>
 						<obj id="TipCloseAllTabWnd.Bkg.center" class="TextureObject">
 							<attr>
-								<left>4</left>
-								<top>29</top>
-								<width>father.width-8</width>
-								<height>father.height-29-4</height>
-								<texture>YBYL.AddressMenu.Select.Bkg</texture>
-								<zorder>1</zorder>
+								<left>19</left>
+								<top>29+6</top>
+								<width>father.width-38</width>
+								<height>father.height-29-4-22</height>
+								<texture>hui.bkg</texture>
+								<zorder>2</zorder>
 							</attr>
 							<children>
 								<obj id="TipCloseAllTabWnd.Content" class="TextureObject">
 									<attr>
 										<left>11</left>
 										<top>11</top>
-										<width>191</width>
-										<height>28</height>
+										<width>194</width>
+										<height>31</height>
 										<texture>YBYL.CloseAllTab.Content</texture>
-										<zorder>2</zorder>
+										<zorder>3</zorder>
 									</attr>
 								</obj>
 								
@@ -77,7 +89,7 @@
 										<left>71</left>
 										<top>54</top>
 										<width>109</width>
-										<height>23</height>
+										<height>22</height>
 										<LeftTextPos>4</LeftTextPos>
 										<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 										<DownBkgID>about.button.bkg.down</DownBkgID>
@@ -85,7 +97,8 @@
 										<Text>关闭所有选项卡(T)</Text>
 										<TextFont>font.text12</TextFont>
 										<TextColor>system.black</TextColor>
-										<zorder>2</zorder>
+										<DisableTextColor>999999</DisableTextColor>
+										<zorder>3</zorder>
 									</attr>
 									<eventlist>
 										<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnCloseAll" />
@@ -96,7 +109,7 @@
 										<left>188</left>
 										<top>54</top>
 										<width>120</width>
-										<height>23</height>
+										<height>22</height>
 										<LeftTextPos>4</LeftTextPos>
 										<NormalBkgID>about.button.bkg.normal</NormalBkgID>
 										<DownBkgID>about.button.bkg.down</DownBkgID>
@@ -105,7 +118,8 @@
 										<Text>关闭当前的选项卡(C)</Text>
 										<TextFont>font.text12</TextFont>
 										<TextColor>system.black</TextColor>
-										<zorder>2</zorder>
+										<DisableTextColor>999999</DisableTextColor>
+										<zorder>3</zorder>
 									</attr>
 									<eventlist>
 										<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnCloseCurrent" />
@@ -119,7 +133,7 @@
 										<width>father.width-4</width>
 										<height>2</height>
 										<texture>BrowserHead.Splitter</texture>
-										<zorder>2</zorder>
+										<zorder>3</zorder>
 									</attr>
 								</obj>
 								
@@ -132,20 +146,22 @@
 										<NormalBkgID>checkbox.normal</NormalBkgID>
 										<HoverBkgID>checkbox.hover</HoverBkgID>
 										<DownBkgID>checkbox.normal</DownBkgID>
-										<zorder>2</zorder>
+										<zorder>3</zorder>
 									</attr>
 									<eventlist>
 										<event name="OnClick" file="TipCloseAllTabWnd.xml.lua" func="OnClickCheckBox" />
 									</eventlist>
 								</obj>
-								<obj id="TipCloseAllTabWnd.CheckBox.Content" class="TextureObject">
+								<obj id="TipCloseAllTabWnd.CheckBox.Content" class="TextObject">
 									<attr>
 										<left>27</left>
 										<top>96</top>
 										<width>124</width>
-										<height>12</height>
-										<texture>YBYL.CloseAllTab.CheckBox.Content</texture>
-										<zorder>2</zorder>
+										<height>22</height>
+										<text>总是关闭所有选项卡(A)</text>
+										<font>font.tab.normal</font>
+										<textcolor>system.black</textcolor>
+										<zorder>3</zorder>
 									</attr>
 									<eventlist>
 										<event name="OnLButtonUp" file="TipCloseAllTabWnd.xml.lua" func="OnClickCheckBox" />
@@ -165,8 +181,8 @@
             <layered>1</layered>
             <left>0</left>
             <top>0</top>
-            <width>324</width>
-            <height>151</height>
+            <width>356</width>
+            <height>182</height>
 
             <topmost>0</topmost>
             <visible>0</visible>
