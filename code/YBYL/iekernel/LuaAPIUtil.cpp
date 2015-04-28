@@ -141,6 +141,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"GetOSVersion", GetOSVersionInfo},
 	{"QueryProcessExists", QueryProcessExists},
 	{"IsWindows8Point1",IsWindows8Point1},
+	{"GetProcessElevation",GetProcessElevation},
 	//¹¦ÄÜ
 	{"CreateShortCutLinkEx", CreateShortCutLinkEx},
 	{"OpenURL", OpenURL},
@@ -1094,6 +1095,67 @@ int LuaAPIUtil::IsWindows8Point1(lua_State* pLuaState)
 
 	}
 	return 0;
+}
+
+int LuaAPIUtil::GetProcessElevation(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		BOOL bResult = FALSE;
+		TOKEN_ELEVATION_TYPE ElevationType;
+		BOOL bIsAdmin = FALSE;
+		HANDLE hToken = NULL;
+		DWORD dwSize;
+		if (OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&hToken))
+		{
+			if (GetTokenInformation(hToken,TokenElevationType,&ElevationType,sizeof(TOKEN_ELEVATION_TYPE),&dwSize))
+			{
+				if (ElevationType == TokenElevationTypeLimited)
+				{
+					BYTE adminSID[SECURITY_MAX_SID_SIZE];
+					dwSize = sizeof(adminSID);
+					::CreateWellKnownSid(WinBuiltinAdministratorsSid,NULL,adminSID,&dwSize);
+
+					HANDLE hUnfilterToken = NULL;
+
+					GetTokenInformation(hToken,TokenLinkedToken,(LPVOID)&hUnfilterToken,sizeof(HANDLE),&dwSize);
+					if (CheckTokenMembership(hUnfilterToken,&adminSID,&bIsAdmin))
+						bResult = TRUE;
+					CloseHandle(hUnfilterToken);
+				}
+				else
+				{
+					bIsAdmin = IsUserAnAdmin();
+					bResult = TRUE;
+				}
+			}
+			else
+			{
+				TSDEBUG4CXX(L"get token elevation type error = " <<::GetLastError());
+			}
+			CloseHandle(hToken);
+		}
+		else
+		{
+			TSDEBUG4CXX(L"open process token error = " <<::GetLastError());
+		}
+		if (bResult)
+		{
+			lua_pushboolean(pLuaState, bResult);
+			lua_pushinteger(pLuaState, (int)ElevationType);
+			lua_pushboolean(pLuaState, bIsAdmin);
+			return 3;
+		}
+		else
+		{
+			lua_pushboolean(pLuaState, bResult);
+			return 1;
+		}
+
+	}
+	lua_pushnil(pLuaState);
+	return 1;
 }
 
 int LuaAPIUtil::PathCombine(lua_State* pLuaState)

@@ -18,6 +18,7 @@ public:
 private:
 	BOOL IniEnv(void);
 	void InternalLoadXAR();
+	BOOL ISUACOS();
 private:
 	CRegisterLuaAPI m_RegisterLuaAPI;
 	std::wstring m_strXarPath;

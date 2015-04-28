@@ -100,6 +100,20 @@ BOOL CYBApp::IniEnv()
 	return TRUE;
 }
 
+BOOL CYBApp::ISUACOS()
+{
+	OSVERSIONINFOEX osvi;
+	ZeroMemory(&osvi,sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	if (GetVersionEx((OSVERSIONINFO*)&osvi))
+	{
+		if (osvi.dwMajorVersion <= 5)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
 
 void CYBApp::InternalLoadXAR()
 {
@@ -112,7 +126,11 @@ void CYBApp::InternalLoadXAR()
 	
 	std::wstring strXarRes = L"xar@resource://";
 	strXarRes+=strExePath;
-	strXarRes+=L"|xar_res|1001$";
+	if (ISUACOS())
+		strXarRes+=L"|xar_res|1002$";
+	else
+		strXarRes+=L"|xar_res|1001$";
+	
 	TSDEBUG4CXX(L"InternalLoadXAR, strXarDest = " << strXarDest.c_str()<<L", strXarRes = " <<strXarRes.c_str());
 	long iRet = XLFS_MountDir(strXarDest.c_str(), strXarRes.c_str(), 0, 0);
 	TSDEBUG4CXX(L"XLFS_MountDir iRet = " << iRet);
