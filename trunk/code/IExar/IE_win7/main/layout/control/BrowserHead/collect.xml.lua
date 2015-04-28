@@ -110,6 +110,90 @@ function CreateHistoryListUI()
 	end
 end
 
+local lasthoverobj = nil
+function AddHoverBkg(obj, isadd, isshowarrow, callback)
+	local bkg = uiOwner:GetControlObject("hoverbkg_collect")
+	local objparent = uiOwner:GetControlObject("Layout.Container")
+	if isadd then
+		if lasthoverobj then
+			local nCount = lasthoverobj:GetChildCount()
+			for i = 0, nCount-1 do
+				local _obj = lasthoverobj:GetChildByIndex(i)
+				if _obj:GetClass() == "TextObject" then
+					_obj:SetTextFontResID("font.menuitem2")
+					_obj:SetTextColorResID("color.tab.normal")
+				end
+			end
+		end
+		lasthoverobj = obj
+		local l, t, r, b = obj:GetObjPos()
+		local _select = objparent:GetObject("nodebkg4select")
+		if _select then
+			local sl, st, sr, sb = _select:GetObjPos()
+			if st == t-3 then
+				_select:SetVisible(false)
+			else
+				_select:SetVisible(true)
+			end
+		end
+		if bkg then
+			objparent:RemoveChild(bkg)
+		end
+		bkg = objFactory:CreateUIObject("hoverbkg_collect", "TextureObject")
+		objparent:AddChild(bkg)
+		
+		bkg:SetZorder(97)
+		bkg:SetVisible(true)
+		bkg:SetChildrenVisible(true)
+		local ownerctrl = uiOwner:GetOwnerControl()
+		local l1, t1, r1, b1 = ownerctrl:GetObjPos()
+		bkg:SetObjPos(0, t-3, r1-l1-20, b+3)
+		bkg:SetTextureID("collect.bkg.hover")
+		if isshowarrow then
+			local btn = uiOwner:GetControlObject("hoverbtn_collect")
+			if not btn then
+				btn = objFactory:CreateUIObject("hoverbtn_collect", "TipAddin.Button")
+				btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
+				local attr = btn:GetAttribute()
+				attr.HoverBkgID = "Collect.Button.Bkg.Hover"
+				attr.DownBkgID = "Collect.Button.Bkg.Down"
+				attr.ForegroundResID = "collect.arrow"
+				attr.ForegroundLeftPos = 4
+				attr.ForegroundWidth = 14
+				attr.ForegroundHeight = 14
+				btn:Updata()
+				bkg:AddChild(btn)
+			end
+			btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
+			local attr = btn:GetAttribute()
+			attr.HoverBkgID = "Collect.Button.Bkg.Hover"
+			attr.DownBkgID = "Collect.Button.Bkg.Down"
+			btn:Updata()
+			btn:SetZorder(106)
+			btn:AttachListener("OnClick", false, 
+				function(self)
+					if type(callback) == "function" then
+						callback()
+					end
+				end)
+			--[[bkg:AttachListener("OnMouseLeave", false, function(self, x, y)
+				local nCount = obj:GetChildCount()
+				for i = 1, nCount do
+					local _obj = obj:GetChildByIndex(i)
+					if _obj:GetClass() == "TextObject" then
+						_obj:SetTextFontResID("font.menuitem2")
+						_obj:SetTextColorResID("color.tab.normal")
+					end
+				end
+				self:RouteToFather()
+			end)]]--
+		end
+	else
+		if bkg then
+			objparent:RemoveChild(bkg)
+		end
+	end
+end
 
 function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	local key = nil
@@ -133,12 +217,14 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	end
 	
 	local objpre = uiOwner:GetControlObject("bkg_listnode"..(nIEListIndex-1))
-	local top = 0
+	local top = 5
 	if objpre then
 		local _, _, _, b = objpre:GetObjPos()
-		top = b+2
+		top = b+5
 	end
-	nodebkg:SetObjPos2(left, top, 140, 16)
+	local ownerctrl = uiOwner:GetOwnerControl()
+	local l, t, r, b  = ownerctrl:GetObjPos()
+	nodebkg:SetObjPos2(left, top, r-l-20, 16)
 	nodebkg:AddChild(imgobj)
 	if listrank == 1 then
 		imgobj:SetObjPos2(0, 0, 16, 16)
@@ -150,7 +236,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	
 	--文本
 	local txtobj = objFactory:CreateUIObject("txt_listnode"..nIEListIndex, "TextObject")
-	txtobj:SetTextFontResID("font.menuitem")
+	txtobj:SetTextFontResID("font.menuitem2")
 	txtobj:SetTextColorResID("color.tab.normal")
 	txtobj:SetEndEllipsis(true)
 	nodebkg:AddChild(txtobj)
@@ -193,11 +279,12 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 		if not _select then
 			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
 			objparent:AddChild(_select)
-			_select:SetTextureID("YBYL.Menu.Select.Bkg")
+			_select:SetTextureID("collect.bkg.select")
 			_select:SetZorder(101)
 		end
-		local l, t, r, b = objparent:GetObjPos()
-		_select:SetObjPos2(0, top, r-l, 16)
+		local ownerctrl = uiOwner:GetOwnerControl()
+		local l, t, r, b  = ownerctrl:GetObjPos()
+		_select:SetObjPos2(0, top-3, r-l-20, 22)
 		_select:SetVisible(true)
 	end
 	--处理事件
@@ -213,19 +300,21 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 			_select:SetTextureID("YBYL.Menu.Select.Bkg")
 		end
 		_select:SetZorder(101)
-		local l, t, r, b = objparent:GetObjPos()
-		_select:SetObjPos2(0, top, r-l, 16)
+		local ownerctrl = uiOwner:GetOwnerControl()
+		local l, t, r, b  = ownerctrl:GetObjPos()
+		_select:SetObjPos2(0, top-3, r-l-20, 22)
 		_select:SetVisible(true)
 	end)
 	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
-		txtobj:SetTextFontResID("font.menuitem")
+		txtobj:SetTextFontResID("font.menuitem2")
 		txtobj:SetTextColorResID("color.tab.normal")
+		AddHoverBkg(nodebkg, false)
 	end)
 	--鼠标划过状态变化
 	nodebkg:AttachListener("OnMouseEnter", false, function(self, x, y)
-		txtobj:SetTextFontResID("font.menuitemkey")
-		txtobj:SetTextColorResID("system.blue")
-		
+		txtobj:SetTextFontResID("font.menuitemkey2")
+		txtobj:SetTextColorResID("3399ff")
+		AddHoverBkg(nodebkg, true)
 	end)
 	nodebkg:AttachListener("OnMouseMove", false, function(self, x, y)
 		self:RouteToFather()
@@ -324,16 +413,18 @@ function CreateNode(v, icon, left, isdir)
 	
 	imgobj:SetResID(icon)
 	local objpre = uiOwner:GetControlObject("bkg_treenode"..(treeNodeIndex-1))
-	local top = 0
+	local top = 5
 	if objpre then
 		local _, _, _, b = objpre:GetObjPos()
-		top = b+2
+		top = b+5
 	end
-	nodebkg:SetObjPos2(left, top, 140, 16)
+	local ownerctrl = uiOwner:GetOwnerControl()
+	local l, t, r  = ownerctrl:GetObjPos()
+	nodebkg:SetObjPos2(left, top, r-l-20, 16)
 	nodebkg:AddChild(imgobj)
 	imgobj:SetObjPos2(0, 0, 16, 16)
 	local txtobj = objFactory:CreateUIObject("txt_treenode"..treeNodeIndex, "TextObject")
-	txtobj:SetTextFontResID("font.menuitem")
+	txtobj:SetTextFontResID("font.menuitem2")
 	txtobj:SetTextColorResID("color.tab.normal")
 	txtobj:SetEndEllipsis(true)
 	nodebkg:AddChild(txtobj)
@@ -373,8 +464,9 @@ function CreateNode(v, icon, left, isdir)
 			_select:SetTextureID("YBYL.Menu.Select.Bkg")
 			_select:SetZorder(101)
 		end
-		local l, t, r, b = objparent:GetObjPos()
-		_select:SetObjPos2(0, top, r-l, 16)
+		local ownerctrl = uiOwner:GetOwnerControl()
+		local l, t, r, b  = ownerctrl:GetObjPos()
+		_select:SetObjPos2(0, top-3, r-l-20, 22)
 		_select:SetVisible(true)
 	end
 	treeNodeAttr[v] = treeNodeAttr[v] or {}
@@ -392,24 +484,39 @@ function CreateNode(v, icon, left, isdir)
 		if not _select then
 			_select = objFactory:CreateUIObject("nodebkg4select", "TextureObject")
 			objparent:AddChild(_select)
-			_select:SetTextureID("YBYL.Menu.Select.Bkg")
+			_select:SetTextureID("collect.bkg.select")
 		end
 		_select:SetZorder(101)
-		local l, t, r, b = objparent:GetObjPos()
-		_select:SetObjPos2(0, top, r-l, 16)
+		local ownerctrl = uiOwner:GetOwnerControl()
+		local l, t, r, b  = ownerctrl:GetObjPos()
+		_select:SetObjPos2(0, top-3, r-l-20, 22)
 		_select:SetVisible(true)
 	end)
 	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
+		local l, t, r, b = self:GetObjPos()
+		if x > 0 and y > 0 and x < r-l and y < b-t then return end
 		treeNodeAttr[v].lbtndown = false
 		treeNodeAttr[v].rbtndown = false
-		txtobj:SetTextFontResID("font.menuitem")
+		txtobj:SetTextFontResID("font.menuitem2")
 		txtobj:SetTextColorResID("color.tab.normal")
+		AddHoverBkg(nodebkg, false)
 	end)
 	--鼠标划过状态变化
 	nodebkg:AttachListener("OnMouseEnter", false, function(self, x, y)
-		txtobj:SetTextFontResID("font.menuitemkey")
-		txtobj:SetTextColorResID("system.blue")
-		
+		txtobj:SetTextFontResID("font.menuitemkey2")
+		txtobj:SetTextColorResID("3399ff")
+		AddHoverBkg(nodebkg, true, true,
+			function(self)
+				if isdir then
+					treeNodeAttr[v].ext = not treeNodeAttr[v].ext 
+					ReBuild()
+				else
+					local strUrl = tipUtil:ReadINI(v, "InternetShortcut", "URL")
+					if IsRealString(strUrl) then
+						tFunHelper.OpenURLInNewTab(strUrl)
+					end
+				end
+			end)
 	end)
 	nodebkg:AttachListener("OnMouseMove", false, function(self, x, y)
 		self:RouteToFather()
@@ -504,7 +611,8 @@ function CreateNode(v, icon, left, isdir)
 		_onlbuttonup(self, x, y)
 		if treeNodeAttr[v].rbtndown then
 			--CreateAndShowMenu(self, "RBtnFavoritMenu", 0, true)
-			PopMenu(self, v)
+			--注释掉右键菜单，因为弹出菜单后界面消失了， 所以注释掉
+			--PopMenu(self, v)
 			--RenamePathName(nodebkg, v)
 		end
 		self:RouteToFather()
@@ -733,7 +841,7 @@ function GetLinePerPage(objRootCtrl)
 end
 
 function GetItemHeight(objRootCtrl)
-	return 18
+	return 24
 end
 
 
