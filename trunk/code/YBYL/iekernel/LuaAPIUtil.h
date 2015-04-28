@@ -171,6 +171,7 @@ public:
 	static int GetOSVersionInfo(lua_State* pLuaState);
 	static int QueryProcessExists(lua_State* pLuaState);
 	static int IsWindows8Point1(lua_State* pLuaState);
+	static int GetProcessElevation(lua_State* pLuaState);
 
 	//¹¦ÄÜ
 	static int CreateShortCutLinkEx(lua_State* pLuaState);
