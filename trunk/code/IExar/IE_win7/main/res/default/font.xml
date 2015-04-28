@@ -1,4 +1,4 @@
-<XLUE>
+﻿<XLUE>
 	<resource>
 		<font id="default.font" height="12" facename="微软雅黑" />
 		
@@ -25,5 +25,8 @@
 		<font id="font.collectbar.text" height="12" facename="宋体" /> 
 		<font id="font.text12.bold" height="12" facename="宋体" weight="bold"/> 
 		<font id="font.text13.bold" height="13" facename="宋体" weight="bold"/> 
+		
+		<font id="font.menuitem2" height="12" facename="微软雅黑" /> 
+		<font id="font.menuitemkey2" height="12" facename="微软雅黑" underline="1" /> 
 	</resource>
 </XLUE>

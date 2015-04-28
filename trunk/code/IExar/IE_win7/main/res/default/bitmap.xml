@@ -353,6 +353,10 @@
 		<texture id="popwnd.bkg.nofocus" type="NineInOne" image="bitmap\popwnd.bkg.nofocus.png" />
 		<texture id="hui.bkg" type="NineInOne" image="bitmap\hui.bkg.png" />
 		<texture id="popwnd.bkg.mini" type="NineInOne" image="bitmap\popwnd.bkg.mini.png" />
+		<imagelist id="collect.bkg.list" splitter="1" varyblock="1" image="bitmap\collect.bkg.png" />
+			<texture id="collect.bkg.select" type="ThreeInOneH" imagelist="collect.bkg.list" index="1" />
+			<texture id="collect.bkg.hover" type="ThreeInOneH" imagelist="collect.bkg.list" index="2" />
+		<texture id="collect.arrow" image="bitmap\collect.arrow.png" />
 	</resource>
 </XLUE>
 
