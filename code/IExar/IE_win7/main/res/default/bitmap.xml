@@ -2,9 +2,13 @@
 	<resource>
 		<texture id="YBYL.MainWnd.Bkg.Disable" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Disable.png" />
 		<texture id="YBYL.MainWnd.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.png" />
+		<texture id="BkgBorder" type="NineInOne" image="bitmap\BkgBorder.png" />
 		<texture id="YBYL.MainWnd.Bkg.nofocus" type="NineInOne" image="bitmap\bkg_1.png" />
 		<texture id="YBYL.MainWnd.Bkg.Shadow" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Shadow.png" />
-		<texture id="YBYL.MainWnd.Head.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Head.Bkg.png" />
+		<texture id="Black.Bkg" image="bitmap\Black.Bkg.png" />
+		
+		<texture id="YBYL.MainWnd.Head.UpBkg" type="ThreeInOneH" image="bitmap\YBYL.MainWnd.Head.UpBkg.png" />
+		<texture id="YBYL.MainWnd.Head.DownBkg" type="ThreeInOneH" image="bitmap\YBYL.MainWnd.Head.DownBkg.png" />
 		<texture id="YBYL.Tab.Active" type="ThreeInOneH" image="bitmap\YBYL.Tab.Active.png" />
 		<texture id="YBYL.Tab.MouseEnter" type="ThreeInOneH" image="bitmap\YBYL.Tab.MouseEnter.png" />
 		<texture id="YBYL.Tab.Normal" type="ThreeInOneH" image="bitmap\YBYL.Tab.Normal.png" />
@@ -12,23 +16,27 @@
 		<texture id="YBYL.Head.Logo.Default" image="bitmap\YBYL.Head.Logo.Default.png" />
 		<texture id="YBYL.Head.RightBkg" image="bitmap\YBYL.Head.RightBkg.png" />
 		<texture id="YBYL.DropMenu.ItemBkg.Normal" type="NineInOne" image="bitmap\YBYL.DropMenu.ItemBkg.Normal.png" />
-		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		<!--texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" /-->
 		<texture id="MenuItem.Active" image="bitmap\MenuItem.Active.png" />
 		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
-		<texture id="YBYL.Menu.Select.Bkg"  image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		<texture id="YBYL.Menu.Select.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		
+		<texture id="AddressBar.Menu.Bkg" type="NineInOne" image="bitmap\AddressBar.Menu.Bkg.png" />
 		<texture id="YBYL.AddressMenu.Select.Bkg"  image="bitmap\YBYL.AddressMenu.Select.Bkg.png" />
+		
 		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
 		<texture id="YBYL.TipAbout.Bkg" image="bitmap\YBYL.TipAbout.Bkg.png" />
-		<texture id="YBYL.ToolTip.Bkg" type="NineInOne" image="bitmap\YBYL.ToolTip.Bkg.png" />
+		<texture id="YBYL.ToolTip.Bkg" type="ThreeInOneH" image="bitmap\YBYL.ToolTip.Bkg.png" />
 		<texture id="YBYL.Menu.Splitter" image="bitmap\YBYL.Menu.Splitter.Bkg.png" />
+		<texture id="YBYL.Menu.Splitter.Vertical" type="ThreeInOneV" image="bitmap\YBYL.Menu.Splitter.Vertical.Bkg.png" />
 		<texture id="YBYL.TitleBar.Bkg" image="bitmap\YBYL.TitleBar.Bkg.png" />
-		<texture id="YBYL.AddressBar.UrlSearch.Bkg" type="ThreeInOneH" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png" />
+		
 		<texture id="WebTab.BottomBkg.Line" type="ThreeInOneH" image="bitmap\WebTab.BottomBkg.Line.png" />
 		
 		<texture id="YBYL.IntroduceWnd.Bkg" type="NineInOne" image="bitmap\YBYL.IntroduceWnd.Bkg.png" />
 		<texture id="YBYL.IntroduceWnd.Panel1"  image="bitmap\YBYL.IntroduceWnd.Panel1.png" />
 		<texture id="YBYL.IntroduceWnd.Panel2"  image="bitmap\YBYL.IntroduceWnd.Panel2.png" />
-		<texture id="YBYL.Menu.Splitter.Vertical"  image="bitmap\YBYL.Menu.Splitter.Vertical.png" />
+		<texture id="YBYL.ToolBar.Splitter.Vertical"  image="bitmap\YBYL.ToolBar.Splitter.Vertical.png" />
 		<texture id="YBYL.CollectList.ShowHide.Normal"  image="bitmap\YBYL.CollectList.ShowHide.Normal.png" />
 		<texture id="CollectPanel.FixBtn"  image="bitmap\CollectPanel.FixBtn.png" />
 		<texture id="Collect.Button.Close.Normal"  image="bitmap\Collect.Button.Close.Normal.png" />
@@ -36,8 +44,16 @@
 		<texture id="Collect.Tab.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Tab.Bkg.Hover.png" />
 		<texture id="Collect.Tab.Bkg.Normal" type="ThreeInOneH" image="bitmap\Collect.Tab.Bkg.Normal.png" />
 		<texture id="StateBar.Bkg" type="ThreeInOneH" image="bitmap\StateBar.Bkg.png" />
+		<texture id="Collect.Container.Bkg" type="NineInOne" image="bitmap\Collect.Container.Bkg.png" />
 		
 		<texture id="Collect.Panel.Bkg" type="NineInOne" image="bitmap\Collect.Panel.Bkg.png" />
+		<texture id="MenuBar.Select.Bkg" image="bitmap\MenuBar.Select.Bkg.png" />
+		
+		<texture id="YBYL.AddressBar.UrlSearch.Bkg.Normal" type="ThreeInOneH" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png" />
+			
+		<imagelist id="Collect.Tab.Bkg" splitter="1" varyblock="1" image="bitmap\Collect.Tab.Bkg.png"/>
+			<texture id="Collect.Tab.Bkg.Normal" type="ThreeInOneH" imagelist="Collect.Tab.Bkg" index="1" />
+			<texture id="Collect.Tab.Bkg.Hover" type="ThreeInOneH" imagelist="Collect.Tab.Bkg" index="2" />
 				
 		<imagelist id="YBYL.IntroduceWnd.LeftBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.LeftBtn.png"/>
 			<texture id="YBYL.IntroduceWnd.LeftBtn.Hover"  imagelist="YBYL.IntroduceWnd.LeftBtn" index="1" />
@@ -70,16 +86,17 @@
 		<bitmap id="White.Flag" path="bitmap\White.Flag.png" />
 		<bitmap id="Black.Flag" path="bitmap\Black.Flag.png" />
 		
+		
 	<bitmap id="collect.dir.defaluticon" path="bitmap\collect.dir.defaluticon.png" />
 	<bitmap id="collect.dir.defaluticon.open" path="bitmap\collect.dir.defaluticon.open.png" />
 	<bitmap id="collect.file.defaluticon" path="bitmap\YBYL.Head.Logo.Default.png" />
+	<bitmap id="Menu.LeftArrow" path="bitmap\Menu.LeftArrow.png" />
 	
-	<texture id="Collect.Button.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Hover.png" />
-	<texture id="Collect.Button.Bkg.Down" type="ThreeInOneH" image="bitmap\Collect.Button.Bkg.Down.png" />
-		
-		<imagelist id="Menu.Check.imagelist" splitter="1" varyblock="1" image="bitmap\Menu.Check.png"/>
-			<bitmap id="Menu.Check.Black" imagelist="Menu.Check.imagelist" index="1"/>
-			<bitmap id="Menu.Check.White" imagelist="Menu.Check.imagelist" index="2"/>		
+		<imagelist id="Collect.Button.Bkg" splitter="1" varyblock="1" image="bitmap\Collect.Button.Bkg.png"/>
+			<texture id="Collect.Button.Bkg.Hover" type="ThreeInOneH" imagelist="Collect.Button.Bkg" index="1"/>
+			<texture id="Collect.Button.Bkg.Down" type="ThreeInOneH" imagelist="Collect.Button.Bkg" index="2"/>		
+			
+		<bitmap id="Menu.Check.Bitmap" path="bitmap\Menu.Check.png"/>
 		
 		<imagelist id="bitmap.search.imagelist" splitter="1" varyblock="1" image="bitmap\Search_button.png"/>
 			<texture id="bitmap.search.normal" imagelist="bitmap.search.imagelist" index="1"/>
@@ -95,14 +112,15 @@
 			<texture id="UrlHistory.Arrow.Normal" imagelist="UrlHistory.Arrow.List" index="1" />
 			<texture id="UrlHistory.Arrow.Hover"  imagelist="UrlHistory.Arrow.List" index="2" />
 			<texture id="UrlHistory.Arrow.Down"  imagelist="UrlHistory.Arrow.List" index="3" />
-		
-		<imagelist id="UrlHistory.Arrow.NoBkg.List" splitter="1" varyblock="1" image="bitmap\UrlHistory.Arrow.NoBkg.png"/>
-			<texture id="UrlHistory.Arrow.Disable" imagelist="UrlHistory.Arrow.NoBkg.List" index="1" />
-		
+			<texture id="UrlHistory.Arrow.Disable" imagelist="UrlHistory.Arrow.List" index="4" />
+			
+			
 <imagelist id="imagelist.search.edit.imagelist" vertical="0" splitter="1" varyblock="1" image="bitmap\imagelist.edit.png"/>
 <texture id="texture.edit.bkg.disable" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="10"/>
 <texture id="texture.edit.bkg.normal" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="11"/>
 <texture id="texture.edit.bkg.hover" type="NineInOne" imagelist="imagelist.search.edit.imagelist" index="12"/>
+
+
 
 <imagelist id="pluginitem.bkg" vertical="0" splitter="1" varyblock="1" image="bitmap\imagelist.pluginitem.bkg.png"/>
 <bitmap id="image.category.item.select" imagelist="pluginitem.bkg" index="2" />
@@ -130,10 +148,10 @@
 <texture id="about.link.3" path="bitmap\about.link.3.png" />
 <texture id="about.link.4" path="bitmap\about.link.4.png" />
 <imagelist id="about.button.bkg" splitter="1" varyblock="1" image="bitmap\about.button.bkg.png" />
-<texture id="about.button.bkg.normal" type="ThreeInOneH" imagelist="about.button.bkg" index="2" />
-<texture id="about.button.bkg.hover" type="ThreeInOneH" imagelist="about.button.bkg" index="3" />
-<texture id="about.button.bkg.down" type="ThreeInOneH" imagelist="about.button.bkg" index="4" />
-<texture id="about.button.bkg.disable" type="ThreeInOneH" imagelist="about.button.bkg" index="1" />
+<texture id="about.button.bkg.normal" type="ThreeInOneH" imagelist="about.button.bkg" index="1" />
+<texture id="about.button.bkg.hover" type="ThreeInOneH" imagelist="about.button.bkg" index="2" />
+<texture id="about.button.bkg.down" type="ThreeInOneH" imagelist="about.button.bkg" index="3" />
+<texture id="about.button.bkg.disable" type="ThreeInOneH" imagelist="about.button.bkg" index="5" />
 
 <texture id="feedback.content" path="bitmap\feedback.content.png" />
 <imagelist id="radiobox" splitter="1" varyblock="1" image="bitmap\radiobox.png" />
@@ -227,13 +245,13 @@
 			<texture id="YBYL.Head.GoBack.Normal" imagelist="YBYL.Head.GoBack" index="1" />
 			<texture id="YBYL.Head.GoBack.Hover"  imagelist="YBYL.Head.GoBack" index="2" />
 			<texture id="YBYL.Head.GoBack.Down"   imagelist="YBYL.Head.GoBack" index="3" />
-			<texture id="YBYL.Head.GoBack.Disable"   imagelist="YBYL.Head.GoBack" index="4" />
+			<texture id="YBYL.Head.GoBack.Disable"  image="bitmap\YBYL.Head.GoBack.Disable.png" />
 			
 		<imagelist id="YBYL.Head.GoForward" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoForward.png"/>
 			<texture id="YBYL.Head.GoForward.Normal" imagelist="YBYL.Head.GoForward" index="1" />
 			<texture id="YBYL.Head.GoForward.Hover"  imagelist="YBYL.Head.GoForward" index="2" />
 			<texture id="YBYL.Head.GoForward.Down"   imagelist="YBYL.Head.GoForward" index="3" />
-			<texture id="YBYL.Head.GoForward.Disable"   imagelist="YBYL.Head.GoForward" index="4" />	
+			<texture id="YBYL.Head.GoForward.Disable"  image="bitmap\YBYL.Head.GoForward.Disable.png" />
 		
 		<imagelist id="YBYL.Head.CompatBtn" splitter="1" varyblock="1" image="bitmap\CompatBtn.png"/>
 			<texture id="YBYL.Head.CompatBtn.Normal" imagelist="YBYL.Head.CompatBtn" index="1" />
