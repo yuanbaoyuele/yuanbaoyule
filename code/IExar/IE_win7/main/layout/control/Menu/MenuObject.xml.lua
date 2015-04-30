@@ -68,7 +68,7 @@ function AdjustItemPos( self )
 	end)
 	
 	local self_left, self_top, self_right, self_bottom = self:GetObjPos()
-	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom+pos_shadowH )
+	self:SetObjPos( self_left, self_top, self_left + max_widthfix + attr.ItemLeft + attr.ItemRight, self_top + pos_y + attr.ItemBottom+pos_shadowH)
 
 	if attr.HoverItem then
 		local itembkn = self:GetControlObject("ItemBkn")
@@ -187,7 +187,7 @@ function OnInitControl(self)
 		bkn:SetVisible( false )
 	end
 	
-	SetItemBknID(self)
+	self:SetItemBknID()
 	
 	local shadingID = attr.ShadingID
 	if shadingID ~= nil then

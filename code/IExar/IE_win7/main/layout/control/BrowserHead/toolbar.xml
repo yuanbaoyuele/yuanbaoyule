@@ -22,7 +22,7 @@
 								<left>0</left>
 								<top>0</top>
 								<width>30</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
@@ -37,7 +37,7 @@
 										<left>29</left>
 										<top>0</top>
 										<width>13</width>
-										<height>26</height>
+										<height>24</height>
 										<zorder>2</zorder>
 										<NormalBkgID></NormalBkgID>
 										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
@@ -94,7 +94,7 @@
 								<left>76+6</left>
 								<top>0</top>
 								<width>30</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
@@ -131,7 +131,7 @@
 										<left>30</left>
 										<top>0</top>
 										<width>13</width>
-										<height>26</height>
+										<height>24</height>
 										<zorder>2</zorder>
 										<NormalBkgID></NormalBkgID>
 										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
@@ -169,7 +169,7 @@
 								<left>153+6</left>
 								<top>0</top>
 								<width>60</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
@@ -192,7 +192,7 @@
 								<left>219+6</left>
 								<top>0</top>
 								<width>60</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
@@ -215,7 +215,7 @@
 								<left>285+6</left>
 								<top>0</top>
 								<width>60</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
@@ -238,7 +238,7 @@
 								<left>351+6</left>
 								<top>0</top>
 								<width>35</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
@@ -271,7 +271,7 @@
 								<left>father.width-13</left>
 								<top>0</top>
 								<width>13</width>
-								<height>26</height>
+								<height>24</height>
 								<NormalBkgID></NormalBkgID>
 								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
 								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>

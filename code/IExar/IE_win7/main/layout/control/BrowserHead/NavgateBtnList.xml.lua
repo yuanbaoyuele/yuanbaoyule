@@ -82,7 +82,6 @@ function AddCurURLIndex(objRootCtrl, nDiff)
 end
 
 
-
 function UnBindLastBrowser(objRootCtrl)
 	local objCurrentBrowser = GetCurrentBrowser(objRootCtrl)
 	if not objCurrentBrowser then
@@ -153,8 +152,11 @@ end
 ------辅助函数---
 function SetDropArrowActive(objRootCtrl, bActive)
 	local objArrowBkg = objRootCtrl:GetControlObject("DropArrow.Bkg")
-	local objArrowDisable = objArrowBkg:GetObject("DropArrow.Disable")
+	local objArrowDisable = objRootCtrl:GetControlObject("DropArrow.Disable")
 	objArrowBkg:SetEnable(bActive)
+	objArrowBkg:SetVisible(bActive)
+	objArrowBkg:SetChildrenVisible(bActive)
+	
 	objArrowDisable:SetVisible(not bActive)
 end
 

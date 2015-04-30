@@ -4,8 +4,8 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>140</width>
-			<height>222</height>
+			<width>170</width>
+			<height>245</height>
 			<ContextID>submenu.zoom.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -15,6 +15,7 @@
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 		</attr>
 		<children>
 			<obj id="Enlage" class="MenuItemObject" templateid="menu.context.item">
@@ -134,21 +135,21 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>140</width>
-			<height>205</height>
+			<width>230</width>
+			<height>210</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>140</width>
-				<height>205</height>
+				<width>230</width>
+				<height>210</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu" templateid="zoommenu.template">
 					<attr>
-						<width>140</width>
+						<width>170</width>
 					</attr>
 				</obj>
 			</children>

@@ -3,6 +3,7 @@
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 		</attr>
 		<children>
 			<obj id="Cut" class="MenuItemObject" templateid="menu.context.item">
@@ -80,7 +81,7 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>210</width>
+			<width>222</width>
 			<height>150</height>
 		</attr>
 		
@@ -88,7 +89,7 @@
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>200</width>
+				<width>222</width>
 				<height>150</height>
 			</attr>
 			<children>
@@ -96,7 +97,7 @@
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>200</width>
+						<width>222</width>
 						<height>father.height</height>
 						<ContextID>editmenu.context</ContextID>
 						<BknID>YBYL.Menu.Bkg</BknID>

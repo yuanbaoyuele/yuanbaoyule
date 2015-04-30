@@ -36,87 +36,115 @@
 								<height>father.height</height>
 							</attr>
 						</obj>
-						
-						<obj id="MainPanel.Title" class="BrowserTitleCtrl">
+											
+						<obj id="WithoutShadow" class="LayoutObject">
 							<attr>
-								<left>0</left>
-								<top>0</top>
-								<width>father.width</width>
-								<height>30</height>
-							</attr>		
+								<left>15</left>
+								<top>10</top>
+								<width>father.width-30</width>
+								<height>father.height-28</height>
+							</attr>
 							<children>
-								<obj id="caption.drag" class="CaptionObject">
+								<obj id="blur" class="BlurObject">
 									<attr>
 										<left>0</left>
 										<top>0</top>
 										<width>father.width</width>
 										<height>father.height</height>
-									</attr>									
+									</attr>
 								</obj>
-							</children>
-							<eventlist>
-								<event name="OnRButtonUp" file="TipPanelCtrl.xml.lua" func="OnTitleRButtonUp" />
-							</eventlist>
-						</obj>
-						
-						<obj id="MainLayout" class="TextureObject">
-							<attr>
-								<left>4</left>
-								<top>29</top>
-								<width>father.width-4*2</width> 
-								<height>father.height-30-4</height>
-								<texture></texture>
-							</attr>		
-							<children>									
-								<obj id="MainPanel.HeadWnd" class="LayoutObject">
+							
+								<obj id="MainPanel.Title" class="BrowserTitleCtrl">
 									<attr>
 										<left>0</left>
 										<top>0</top>
 										<width>father.width</width>
-										<height>120</height>
-									</attr>
-									<eventlist>
-										<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitHeadWnd" />
-									</eventlist>
-								</obj> 
-								
-								<obj id="MainPanel.WebContainer" class="LayoutObject">
-									<attr>
-										<left>1</left>
-										<top>120</top>
-										<width>father.width-2</width>
-										<height>father.height-120-23</height>
-										<zorder>-1</zorder>
-									</attr>	
+										<height>30</height>
+									</attr>		
 									<children>
-										<obj id="MainPanel.ErrorPage" class="WebBrowser">
+										<obj id="title.drag" class="CaptionObject">
 											<attr>
 												<left>0</left>
 												<top>0</top>
 												<width>father.width</width>
-												<height>father.height</height>
-												<visible>false</visible>
-												<zorder>10</zorder>
-											</attr>	
-											<eventlist>
-												<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitErrorPage" />
-											</eventlist>
+												<height>70</height>
+											</attr>									
 										</obj>
 									</children>
+									<eventlist>
+										<event name="OnRButtonUp" file="TipPanelCtrl.xml.lua" func="OnTitleRButtonUp" />
+									</eventlist>
 								</obj>
 								
-								<obj id="StateBar" class="StateBar">
+								<obj id="MainLayout" class="TextureObject">
 									<attr>
-										<left>0</left>
-										<top>father.height-23</top>
-										<width>father.width</width>
-										<height>23</height>
-										<zorder>100</zorder>
+										<left>4</left>
+										<top>29</top>
+										<width>father.width-4*2</width> 
+										<height>father.height-30-4</height>
+										<texture></texture>
 									</attr>		
-								</obj>
+									<children>		
+										<obj id="BkgBorder" class="TextureObject">
+											<attr>
+												<left>-1</left>
+												<top>34</top>
+												<width>father.width+2</width> 
+												<height>father.height-30</height>
+												<texture>BkgBorder</texture>
+											</attr>
+										</obj>
+										
+										<obj id="MainPanel.HeadWnd" class="LayoutObject">
+											<attr>
+												<left>1</left>
+												<top>0</top>
+												<width>father.width</width>
+												<height>120</height>
+											</attr>
+											<eventlist>
+												<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitHeadWnd" />
+											</eventlist>
+										</obj> 
+										
+										<obj id="MainPanel.WebContainer" class="LayoutObject">
+											<attr>
+												<left>1</left>
+												<top>120</top>
+												<width>father.width-2</width>
+												<height>father.height-120-23</height>
+												<zorder>-1</zorder>
+											</attr>	
+											<children>
+												<obj id="MainPanel.ErrorPage" class="WebBrowser">
+													<attr>
+														<left>0</left>
+														<top>0</top>
+														<width>father.width</width>
+														<height>father.height</height>
+														<visible>false</visible>
+														<zorder>10</zorder>
+													</attr>	
+													<eventlist>
+														<event name="OnInitControl" file="TipPanelCtrl.xml.lua" func="OnInitErrorPage" />
+													</eventlist>
+												</obj>
+											</children>
+										</obj>
+										
+										<obj id="StateBar" class="StateBar">
+											<attr>
+												<left>1</left>
+												<top>father.height-23</top>
+												<width>father.width-2</width>
+												<height>23</height>
+												<zorder>100</zorder>
+											</attr>		
+										</obj>
+									</children>
+								</obj><!--MainLayout end-->
 							</children>
-						</obj><!--bkg end-->
-																
+						</obj>											
 					</children>
 					<eventlist>
 					</eventlist>

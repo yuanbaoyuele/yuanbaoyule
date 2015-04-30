@@ -26,7 +26,7 @@ function SetTitleText(objRootCtrl, strText)
 		return
 	end
 	
-	strText = strText.." - Windows Internet Explorer"
+	strText = strText.." - Internet Explorer,optimized for Bing and MSN"
 	objTitle:SetText(strText)
 end
 

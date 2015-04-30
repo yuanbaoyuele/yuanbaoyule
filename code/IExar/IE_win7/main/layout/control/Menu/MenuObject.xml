@@ -44,6 +44,7 @@
 			<GetParentItem file="MenuObject.xml.lua" func="GetParentItem" />
 			<AdjustItemPos file="MenuObject.xml.lua" func="AdjustItemPos" />
 			<GetItemIndex file="MenuObject.xml.lua" func="GetItemIndex" />
+			<SetItemBknID file="MenuObject.xml.lua" func="SetItemBknID" />
 		</method_def>
 		
 		<event_def>

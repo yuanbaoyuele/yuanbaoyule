@@ -5,7 +5,7 @@
 			<top>4</top>
 			<width>1</width>
 			<height>17</height>
-			<texture>YBYL.Menu.Splitter.Vertical</texture>
+			<texture>YBYL.ToolBar.Splitter.Vertical</texture>
 			<zorder>999999</zorder>
 		</attr>
 	</objtemplate>
@@ -149,7 +149,7 @@
 								<left>father.width-90</left>
 								<top>3</top>
 								<width>60+14</width>
-								<height>father.height-4</height>
+								<height>father.height-2</height>
 								<TopTextPos>5</TopTextPos>
 								<LeftTextPos>25</LeftTextPos>
 								<TextFont>font.collectbar.text</TextFont>

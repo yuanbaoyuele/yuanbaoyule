@@ -669,16 +669,56 @@ function GetWindowBorder()
 	return nLDiff, nTDiff, nRDiff, nBDiff
 end
 	
+	
+function SetMainWndDefaultTrackSize()
+	local objHostWnd = GetMainWndInst()
+	if not objHostWnd then
+		return
+	end
+
+	local WithoutShadow = GetMainCtrlChildObj("WithoutShadow")
+	if not WithoutShadow then
+		return
+	end
+	
+	local objRootLayout = GetMainCtrlChildObj("root.layout")
+	if not objRootLayout then
+		return
+	end
+
+	local nBrowserL, nBrowserT, nBrowserR, nBrowserB = WithoutShadow:GetAbsPos()
+	local nRootL, nRootT, nRootR, nRootB = objRootLayout:GetAbsPos()
+
+	local nDiffL = nBrowserL - nRootL - 6
+	local nDiffT = nBrowserT - nRootT - 3
+	local nDiffR = nRootR - nBrowserR
+	local nDiffB = nRootB - nBrowserB
+	
+	local nWidth, nHeight = tipUtil:GetScreenSize()
+	local nNewWidth = nWidth+nDiffL+nDiffR+10
+	local nNewHeight = nHeight-nDiffT
+
+	local objMainWnd = GetMainWndInst()
+	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainWnd:GetWindowRect()
+	objMainWnd:SetBorder(nDiffL, nDiffT, 0, 0)
+	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
+end
+	
 
 function SetWindowMax()
 	local objHostWnd = GetMainWndInst()
-	if objHostWnd then
-		objHostWnd:Max()
+	if not objHostWnd then
+		return
 	end
-
+	
+	SetMainWndDefaultTrackSize()
 	local objHeadCtrl = GetMainCtrlChildObj("MainPanel.Title")
 	objHeadCtrl:SetMaxBtnStyle(false)
 	SetResizeEnable(false)
+	
+	local nNewWidth, nNewHeight = objHostWnd:GetMaxTrackSize()
+	RecordTrackSize(nNewWidth, nNewHeight)
+	objHostWnd:Max()
 end	
 		
 
@@ -706,7 +746,7 @@ function SetBrowserFullScrn()
 	local nWidth, nHeight = tipUtil:GetScreenSize()
 	local nNewWidth = nWidth+nDiffW
 	local nNewHeight = nHeight+nDiffH
-	
+
 	local objMainWnd = GetMainWndInst()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainWnd:GetWindowRect()
 	
@@ -714,7 +754,7 @@ function SetBrowserFullScrn()
 	SetResizeEnable(false)
 	
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
-	objMainWnd:Move(0-nHeadWndL-4, 0-nBrowserT, nNewWidth, nNewHeight)	
+	objMainWnd:Move(0-nDiffW+20, 0-nBrowserT, nNewWidth, nNewHeight)	
 		
 	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	objHeadWindow:Move(0, -119, nNewWidth, 120)
@@ -736,6 +776,7 @@ function RestoreWndSize()
 		
 	local bLastWndMax = tWindowSize.bWindowMax
 	if bLastWndMax then
+		SetMainWndDefaultTrackSize()
 		objMainWnd:Max()
 		return
 	end		
@@ -763,12 +804,7 @@ end
 
 
 function ResetTrackSize(objMainWnd)
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	local tWindowSize = tUserConfig["tWindowSize"] or {}
-	
-	local nTrackWidth = tWindowSize.nMaxTrackWidth or -1
-	local nTrackHeight = tWindowSize.nMaxTrackHeight or -1
-	objMainWnd:SetMaxTrackSize(nTrackWidth, nTrackHeight)
+	SetMainWndDefaultTrackSize()
 end
 
 
@@ -2183,18 +2219,11 @@ end
 function GetResourceDir()
 	local strExePath = tipUtil:GetModuleExeName()
 	local _, _, strProgramDir = string.find(strExePath, "(.*)\\.*$")
-	if not IsRealString(strProgramDir) then
-		return nil
+	if IsRealString(strProgramDir) then
+		return strProgramDir
 	end
-	local _, _, strInstallDir = string.find(strProgramDir, "(.*)\\.*$")
-	if not IsRealString(strInstallDir) then
-		return nil
-	end
-	local strResPath = tipUtil:PathCombine(strInstallDir, "ieres")
-	if IsRealString(strResPath) and tipUtil:QueryFileExists(strResPath) then
-		return strResPath
-	end
-	return nil
+	
+	return ""
 end
 
 --
@@ -2406,6 +2435,7 @@ obj.RecordTrackSize = RecordTrackSize
 obj.RecordWndSize = RecordWndSize
 obj.IsBrowserFullScrn = IsBrowserFullScrn
 obj.SetResizeEnable = SetResizeEnable
+obj.SetMainWndDefaultTrackSize = SetMainWndDefaultTrackSize
 
 --升级
 obj.DownLoadServerConfig = DownLoadServerConfig

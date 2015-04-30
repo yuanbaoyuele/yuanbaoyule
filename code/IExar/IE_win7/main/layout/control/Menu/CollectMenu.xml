@@ -4,6 +4,7 @@
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 		</attr>
 		<children>
 			<obj id="AddToCollectBox" class="MenuItemObject" templateid="menu.context.item">
@@ -177,7 +178,7 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>202+10</width>
+			<width>230</width>
 			<height>250</height>
 		</attr>
 		
@@ -185,7 +186,7 @@
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>202+10</width>
+				<width>230</width>
 				<height>250</height>
 			</attr>
 			<children>

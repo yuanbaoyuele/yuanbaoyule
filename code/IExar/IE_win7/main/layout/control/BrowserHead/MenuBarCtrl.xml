@@ -2,10 +2,10 @@
 	<objtemplate class="ShortCutText" id="menu.item">
 		<attr>
 			<top>0</top>
-			<width>58</width>
-			<height>17</height>
+			<width>55</width>
+			<height>father.height</height>
 			<Font>font.menubar.text</Font>
-			<KeyFont>font.menuitemkey</KeyFont>
+			<KeyFont>font.menubar.text</KeyFont>
 			<Textcolor>color.menubar.text</Textcolor>
 			<Halign>center</Halign>
 		</attr>
@@ -35,7 +35,7 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						<limitchild>1</limitchild>
+						<limitchild>0</limitchild>
 					</attr>
 					<children>
 											
@@ -44,8 +44,8 @@
 								<left>0</left>
 								<top>0</top>
 								<width>26</width>
-								<height>15</height>
-								<texture>YBYL.Head.Collect.Sel.Normal</texture>
+								<height>50</height>
+								<!--texture>MenuBar.Select.Bkg</texture-->
 								<visible>false</visible>
 							</attr>
 						</obj>	
@@ -63,7 +63,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.EditMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>58</left>
+								<left>55</left>
 								<Text>编辑</Text>
 								<Key>E</Key>
 							</attr>
@@ -74,7 +74,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.LookupMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>58*2</left>
+								<left>55*2</left>
 								<Text>查看</Text>
 								<Key>V</Key>
 							</attr>
@@ -85,7 +85,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.CollectMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>58*3</left>
+								<left>55*3</left>
 								<width>69</width>
 								<Text>收藏夹</Text>
 								<Key>A</Key>
@@ -97,7 +97,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.ToolMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>58*4+11</left>
+								<left>55*4+11</left>
 								<Text>工具</Text>
 								<Key>T</Key>
 							</attr>
@@ -108,7 +108,7 @@
 						
 						<obj id="MenuBarCtrl.HideBtn.HelpMenu" class="ShortCutText" templateid="menu.item">
 							<attr>
-								<left>58*5+11</left>
+								<left>55*5+11</left>
 								<Text>帮助</Text>
 								<Key>H</Key>
 							</attr>

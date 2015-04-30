@@ -38,18 +38,34 @@ function SetHeadFullScrnStyle(self, bFullScrn)
 	local objAddressBar = self:GetControlObject("BrowserHeadCtrl.AddressBar")
 	local objRefreshBtnList = self:GetControlObject("BrowserHeadCtrl.RefreshBtnList")
 	local objSearchCtrl = self:GetControlObject("BrowserHeadCtrl.SearchCtrl")
+	local objBlackBkg = self:GetControlObject("Black.Bkg")
 	
 	if bFullScrn then
-		objAddressBar:SetObjPos(85, 5, "father.width-472", 27)
-		objRefreshBtnList:SetObjPos("father.width-467", 5, "father.width-377", 27)
-		objSearchCtrl:SetObjPos("father.width-382", 5, "father.width-127", 27)
+		objAddressBar:SetObjPos(85, 3, "father.width-472", 29)
+		objRefreshBtnList:SetObjPos("father.width-475", 3, "father.width-385", 25)
+		objSearchCtrl:SetObjPos("father.width-382", 3, "father.width-127", 27)
+		objBlackBkg:SetVisible(true)
 	else
-		objAddressBar:SetObjPos(85, 5, "father.width-392", 27)
-		objRefreshBtnList:SetObjPos("father.width-387", 5, "father.width-317", 27)
+		objAddressBar:SetObjPos(85, 3, "father.width-392", 29)
+		objRefreshBtnList:SetObjPos("father.width-397", 3, "father.width-327", 25)
 		objSearchCtrl:SetObjPos("father.width-302", 5, "father.width-47", 27)
+		objBlackBkg:SetVisible(false)
 	end
+	
+	SetEditTransparent(self, bFullScrn)
 end
 
+
+function SetEditTransparent(self, bFullScrn)
+	local objAddressBar = self:GetControlObject("BrowserHeadCtrl.AddressBar")
+	local objAddressEdit = objAddressBar:GetControlObject("AddressBarCtrl.UrlEdit")
+	
+	local objSearchCtrl = self:GetControlObject("BrowserHeadCtrl.SearchCtrl")
+	local objSearchEdit = objSearchCtrl:GetControlObject("edit")
+
+	objAddressEdit:SetTransparent(bFullScrn)
+	objSearchEdit:SetTransparent(bFullScrn)
+end
 
 
 ---------事件--
@@ -73,13 +89,13 @@ function SetAddressBarPos(objRootCtrl)
 	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
 	local fw = fr - fl
 	
-	local AddBarW = fw-477
+	local AddBarW = fw-460
 	if AddBarW < 130 then
 		AddBarW = 130
 	end
 	
 	local objAddressBar = objRootCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")	
-	objAddressBar:SetObjPos2(85, 5, AddBarW, 22)
+	objAddressBar:SetObjPos2(80, 3, AddBarW, 26)
 
 end
 
@@ -87,13 +103,13 @@ function SetRefreshBtnPos(objRootCtrl)
 	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
 	local fw = fr - fl
 	
-	local BtnL = fw-387
+	local BtnL = fw-383
 	if BtnL < 220 then
 		BtnL = 220
 	end
 	
-	local objBtn = objRootCtrl:GetControlObject("BrowserHeadCtrl.RefreshBtnList")	
-	objBtn:SetObjPos2(BtnL, 5, 70, 22)
+	local objRefreshBtnList = objRootCtrl:GetControlObject("BrowserHeadCtrl.RefreshBtnList")	
+	objRefreshBtnList:SetObjPos2(BtnL, 3, 70, 24)
 end
 
 
@@ -101,13 +117,13 @@ function SetSearchCtrlPos(objRootCtrl)
 	local fl, ft, fr, fb = objRootCtrl:GetObjPos()
 	local fw = fr - fl
 	
-	local SearchL = fw-302
+	local SearchL = fw-300
 	if SearchL < 300 then
 		SearchL = 300
 	end
 	
 	local objSearchCtrl = objRootCtrl:GetControlObject("BrowserHeadCtrl.SearchCtrl")	
-	objSearchCtrl:SetObjPos2(SearchL, 5, 255, 22)
+	objSearchCtrl:SetObjPos2(SearchL, 3, 300, 22)
 end
 
 

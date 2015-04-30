@@ -48,53 +48,24 @@ function OnInitControl(self, objMenuContext)
 			bkn:SetResID(attr.UpBknID)
 		end
 	end
-	
-	-- local shadingID = attr.ShadingID
-	-- if shadingID ~= nil then
-		-- local shading = self:GetControlObject("menu.shading")
-		-- if attr.v_status == nil or attr.v_status == 1 then
-			-- shading:SetResID(shadingID)
-			-- shading:SetVisible( true )
-		-- else
-			-- shading:SetVisible( false )
-		-- end
-	-- end
-	
-	-- 设置菜单背景从上到下的渐变
-	-- if attr.SrcColorID ~= nil and attr.DestColorID ~= nil then
-		-- local fill = self:GetControlObject("menu.bkg.fill")
-		-- if fill == nil then
-			-- local uiFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
-			-- local xarManager = XLGetObject("Xunlei.UIEngine.XARManager")
-			-- local bkn = self:GetControlObject("menu.bkn")
-			-- local fill = uiFactory:CreateUIObject("menu.bkg.fill", "FillObject")
-			-- local grf = XLGetObject("Xunlei.XLGraphic.Factory.Object")
-			-- if fill ~= nil then
-				-- fill:SetFillType("Line")
-				-- fill:SetSrcPt(0,0)
-				-- fill:SetDestPt(0,1)
-				-- fill:SetAlpha( attr.FillAlpha )
-				-- fill:SetResProvider( xarManager )
-				-- fill:SetSrcColor( attr.SrcColorID )
-				-- fill:SetDestColor( attr.DestColorID )
-				-- fill:SetBlendType( "Source" )
-				-- bkn:AddChild( fill )
-				-- local left, top, right, bottom = self:GetObjPos()
-				-- fill:SetObjPos( "1", "1", "father.width-1", "father.height-1" )
-				-- fill:AttachListener( "OnAbsPosChange", true, 
-									-- function ( self_obj )
-										-- local left,top,right,bottom = self_obj:GetObjPos()
-										-- self_obj:SetSrcPt(0,0)
-										-- self_obj:SetDestPt(0, bottom-top)
-									-- end )
-			-- end
-		-- end
-	-- end
-	
+		
+	if not attr.bShowVerSpliter then
+		ShowVerSpilter(self, false)
+	end
+		
 	UpdateSize( self )	
 	attr.bHasInit = true
 	return true
 end
+
+
+function ShowVerSpilter(objRootCtrl, bShow)
+	local objVerSpilter = objRootCtrl:GetControlObject("menu.splitter.vertical")
+	if objVerSpilter then
+		objVerSpilter:SetVisible(bShow)
+	end
+end
+
 
 function UpdateSize( self )
 	local attr = self:GetAttribute()
@@ -162,17 +133,6 @@ function SetPopStatus( self, v_status, h_status )
 			bkn:SetResID(attr.UpBknID)
 		end
 	end
-	
-	-- local shadingID = attr.ShadingID
-	-- if shadingID ~= nil then
-		-- local shading = self:GetControlObject("menu.shading")
-		-- if attr.v_status == nil or attr.v_status == 1 then
-			-- shading:SetResID(shadingID)
-			-- shading:SetVisible( true )
-		-- else
-			-- shading:SetVisible( false )
-		-- end
-	-- end
 end
 
 function AnimateShow(self)

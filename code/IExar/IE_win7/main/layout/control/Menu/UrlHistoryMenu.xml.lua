@@ -90,7 +90,7 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	attr.RightTextHAligh = "left"
 	attr.TextRightSpan = 60
 	attr.FontColorNormal = "system.black"
-	attr.FontColorHover = "system.white"
+	attr.FontColorHover = "system.black"
 	attr.TextPos = 30
 	attr.DeleteImgVisible = true
 	

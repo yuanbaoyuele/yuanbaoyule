@@ -65,7 +65,7 @@ function SetShowType( self, type_ )
 				arrow:SetResProvider(xarManager)
 				arrow:SetResID( attr.NormalArrow )
 				self:AddChild( arrow )
-				arrow:SetObjPos( "father.width -4-5", "(father.height-7)/2", "father.width - 5", "(father.height+7)/2" )
+				arrow:SetObjPos( "father.width -4-12", "(father.height-7)/2", "father.width - 12", "(father.height+7)/2" )
 			end
 		end
 		
@@ -84,7 +84,7 @@ function SetShowType( self, type_ )
 				separator:SetResProvider(xarManager)
 				separator:SetDrawMode(1)
 				self:AddChild( separator )						
-				separator:SetObjPos( "2", "(father.height - "..attr.SeparatorHeight..")/2", "father.width-1", "(father.height + "..attr.SeparatorHeight..")/2" )
+				separator:SetObjPos( "30", "(father.height - "..attr.SeparatorHeight..")/2", "father.width-3", "(father.height + "..attr.SeparatorHeight..")/2" )
 			end
 		end
 		if attr.Icon ~= nil then

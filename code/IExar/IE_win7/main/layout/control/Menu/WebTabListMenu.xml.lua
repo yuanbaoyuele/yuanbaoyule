@@ -93,14 +93,15 @@ function CreateMenuItem(tWebTabInfo, nIndex)
 	attr.Text = tWebTabInfo["strTitle"]
 	attr.ExtraData = tWebTabInfo["nWebTabID"]
 	attr.FontColorNormal = "system.black"
-	attr.FontColorHover = "system.white"
-	attr.TextPos = 24
+	attr.FontColorHover = "system.black"
+	attr.TextPos = 33
 	attr.DeleteImgVisible = false
 	
 	attr.IconPos = 5
 	attr.IconWidth = 16
 	attr.IconHeight = 16
 	attr.IconVisible = true
+	attr.IconHover = nil
 	
 	SetIcoImage(objMenuItem, tWebTabInfo)
 	TrySetActiveItem(objMenuItem, tWebTabInfo)
@@ -135,13 +136,13 @@ function TrySetActiveItem(objMenuItem, tWebTabInfo)
 	
 	local attr = objMenuItem:GetAttribute()
 	attr.IconPos = 8
-	attr.IconWidth = 7
-	attr.IconHeight = 7
+	attr.IconWidth = 9
+	attr.IconHeight = 11
 	attr.IconVisible = true
-	attr.Icon = "Menu.Check.Black"
-	attr.IconHover = "Menu.Check.White"
+	attr.Icon = "Menu.Check.Bitmap"
+	attr.IconHover = "Menu.Check.Bitmap"
 	
-	objMenuItem:SetIconID("Menu.Check.Black")
+	objMenuItem:SetIconID("Menu.Check.Bitmap")
 	objMenuItem:SetFont("font.menuitem.bold")
 end
 

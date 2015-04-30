@@ -37,23 +37,25 @@
 						<obj id="BrowserTitleCtrl.Title" class="TextObject" >
 							<attr>
 								<left>28</left>
-								<top>1</top>
+								<top>0</top>
 								<width>father.width-100</width>
 								<height>father.height</height>
 								<valign>center</valign>
 								<halign>left</halign>
-								<font>font.text13.bold</font>
-								<textcolor>system.white</textcolor>
+								<font>font.yahei12</font>
+								<textcolor>system.black</textcolor>
 								<endellipsis>1</endellipsis>
+								<effect>bright</effect>
+								<effectcolor>system.white</effectcolor>
 							</attr>
 						</obj>
 						
 						<obj id="BrowserTitleCtrl.Caption.CloseBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-21-6</left>
-								<top>5</top>
-								<width>21</width>
-								<height>21</height>
+								<left>father.width-62</left>
+								<top>-7</top>
+								<width>64</width>
+								<height>36</height>
 								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
 								<ExtraBkgID>YBYL.Caption.CloseBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
@@ -67,10 +69,10 @@
 						
 						<obj id="BrowserTitleCtrl.Caption.MaxBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-25*2</left>
-								<top>5</top>
-								<width>21</width>
-								<height>21</height>
+								<left>father.width-89</left>
+								<top>-7</top>
+								<width>44</width>
+								<height>36</height>
 								<NormalBkgID>YBYL.Caption.MaxBtn.Normal</NormalBkgID>
 								<ExtraBkgID>YBYL.Caption.MaxBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.MaxBtn.Down</DownBkgID>
@@ -82,13 +84,12 @@
 							</eventlist>
 						</obj>
 						
-						
 						<obj id="BrowserTitleCtrl.Caption.Restore" class="TipAddin.Button">
 							<attr>
-								<left>father.width-25*2</left>
-								<top>5</top>
-								<width>21</width>
-								<height>21</height>
+								<left>father.width-89</left>
+								<top>-7</top>
+								<width>44</width>
+								<height>36</height>
 								<NormalBkgID>YBYL.Caption.RestoreBtn.Normal</NormalBkgID>
 								<ExtraBkgID>YBYL.Caption.RestoreBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.RestoreBtn.Down</DownBkgID>
@@ -100,13 +101,12 @@
 							</eventlist>
 						</obj>
 						
-						
 						<obj id="BrowserTitleCtrl.Caption.MinBtn" class="TipAddin.Button">
 							<attr>
-								<left>father.width-25*3+2</left>
-								<top>5</top>
-								<width>21</width>
-								<height>21</height>
+								<left>father.width-117</left>
+								<top>-7</top>
+								<width>45</width>
+								<height>36</height>
 								<NormalBkgID>YBYL.Caption.MinBtn.Normal</NormalBkgID>
 								<ExtraBkgID>YBYL.Caption.MinBtn.Normal</ExtraBkgID>
 								<DownBkgID>YBYL.Caption.MinBtn.Down</DownBkgID>

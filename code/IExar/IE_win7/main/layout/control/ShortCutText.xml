@@ -53,40 +53,16 @@
 							<attr>
 								<left>0</left>
 								<top>0</top>
-								<width>17</width>
+								<width>20</width>
 								<height>father.height</height>
 							</attr>
-							<children>
-								<obj id="lefttext" class="TextObject">
+							<children>				
+								<obj id="keytext" class="TextObject">
 									<attr>
 										<left>0</left>
 										<top>0</top>
-										<width>6</width>
+										<width>20</width>
 										<height>father.height</height>
-										<text>(</text>
-										<valign>center</valign>
-										<halign>center</halign>
-									</attr>
-								</obj>
-								
-								<obj id="keytext" class="TextObject">
-									<attr>
-										<left>5</left>
-										<top>0</top>
-										<width>9</width>
-										<height>father.height</height>
-										<valign>center</valign>
-										<halign>center</halign>
-									</attr>
-								</obj>
-								
-								<obj id="righttext" class="TextObject">
-									<attr>
-										<left>13</left>
-										<top>0</top>
-										<width>4</width>
-										<height>father.height</height>
-										<text>)</text>
 										<valign>center</valign>
 										<halign>center</halign>
 									</attr>
