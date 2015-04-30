@@ -14,6 +14,7 @@
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> <!--阴影-->
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 		</attr>
 		<children>
 			<obj id="newwindow" class="MenuItemObject" templateid="menu.context.item">
@@ -305,16 +306,16 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>250</width>
-			<height>480</height>
+			<width>280</width>
+			<height>530</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>250</width>
-				<height>480</height>
+				<width>280</width>
+				<height>530</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

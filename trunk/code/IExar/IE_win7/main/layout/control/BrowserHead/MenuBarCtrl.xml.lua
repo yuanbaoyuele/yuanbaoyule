@@ -35,39 +35,40 @@ function OnClickShowBtn(self)
 	SetHideBtnStyle(objRootCtrl, true)
 end
 
+local g_nTopSpan = 24
 
 local g_tShowFileMenu = {bShow=false}
 function OnClickFile(self)
-	PopupMenu(self, 18, "FileMenu", g_tShowFileMenu)
+	PopupMenu(self, g_nTopSpan, "FileMenu", g_tShowFileMenu)
 end
 
 local g_tShowEditMenu = {bShow=false}
 function OnClickEdit(self)
-	PopupMenu(self, 18, "EditMenu", g_tShowEditMenu)
+	PopupMenu(self, g_nTopSpan, "EditMenu", g_tShowEditMenu)
 end
 
 
 local g_tShowLookupMenu = {bShow=false}
 function OnClickLookup(self)
-	PopupMenu(self, 18, "LookupMenu", g_tShowLookupMenu)
+	PopupMenu(self, g_nTopSpan, "LookupMenu", g_tShowLookupMenu)
 end
 
 
 local g_tShowCollectMenu = {bShow=false}
 function OnClickCollect(self)
-	PopupMenu(self, 18, "CollectMenu", g_tShowCollectMenu)
+	PopupMenu(self, g_nTopSpan, "CollectMenu", g_tShowCollectMenu)
 end
 
 
 local g_tShowToolMenu = {bShow=false}
 function OnClickTool(self)
-	PopupMenu(self, 18, "ToolMenu", g_tShowToolMenu)
+	PopupMenu(self, g_nTopSpan, "ToolMenu", g_tShowToolMenu)
 end
 
 
 local g_tShowHelpMenu = {bShow=false}
 function OnClickHelp(self)
-	PopupMenu(self, 18, "HelpMenu", g_tShowHelpMenu)
+	PopupMenu(self, g_nTopSpan, "HelpMenu", g_tShowHelpMenu)
 end
 
 
@@ -82,7 +83,7 @@ function OnMouseEnterMenuItem(self)
 		FocusOnItem(self, true)
 		g_bHasShowMenu = false
 		tFunHelper.TryDestroyOldMenu(g_strLastMenuBtn, g_strCruMenuName)
-		PopupMenu(self, 18, strMenuName)
+		PopupMenu(self, g_nTopSpan, strMenuName)
 	end
 end
 
@@ -196,7 +197,7 @@ function FocusOnItem(objItem, bOnFocus)
 	
 	if bOnFocus then
 		objItem:SetTextColorResID("system.white")
-		ShowMenuItemBkg(objItem, true, "YBYL.Menu.Select.Bkg")
+		ShowMenuItemBkg(objItem, true, "MenuBar.Select.Bkg")
 	else
 		objItem:SetTextColorResID("color.menubar.text")
 		ShowMenuItemBkg(objItem, false, "")

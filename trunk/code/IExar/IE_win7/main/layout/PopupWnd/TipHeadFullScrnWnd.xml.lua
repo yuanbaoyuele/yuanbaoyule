@@ -22,12 +22,12 @@ function OnCreate( self )
 	
 	objMainWnd:AttachListener("OnSize", true, function( self, _type, width, height)	
 	
+		local HeadL, HeadT, HeadR, HeadB = objMainPanelHead:GetAbsPos()
+	
 		local mainleft, maintop, mainright, mainbottom = objMainWnd:GetWindowRect()
 		objSelfWnd:SetTopMost(false)
 		objSelfWnd:SetMaxTrackSize(width-8, 120)
-		objSelfWnd:Move( mainleft+HeadL, maintop+40, mainright, 120)
-		local objtree = objSelfWnd:GetBindUIObjectTree()
-		local objRootCtrl = objtree:GetUIObject("root.layout")
+		objSelfWnd:Move( mainleft+HeadL, maintop+HeadT, mainright, 120)
 		objRootCtrl:SetObjPos(0, 0, width-20*2, 120)
 	end)	
 end

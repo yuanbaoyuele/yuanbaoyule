@@ -5,7 +5,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>150+10</width>
-			<height>115</height>
+			<height>125</height>
 			<ContextID>submenu.toolbar.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -83,8 +83,8 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>188+10</width>
-			<height>65</height>
+			<width>240</width>
+			<height>75</height>
 			<ContextID>submenu.browserbar.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -137,8 +137,8 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>188+10</width>
-			<height>75</height>
+			<width>230</width>
+			<height>82</height>
 			<ContextID>submenu.goto.context</ContextID>
 			<BknID>YBYL.Menu.Bkg</BknID>
 		</attr>
@@ -198,6 +198,7 @@
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft>
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 		</attr>
 		<children>
 			<obj id="ToolBar" class="MenuItemObject" templateid="menu.context.item">
@@ -385,23 +386,23 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>210</width>
-			<height>350</height>
+			<width>230</width>
+			<height>400</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>210</width>
-				<height>350</height>
+				<width>230</width>
+				<height>400</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>210</width>
+						<width>father.width</width>
 						<height>father.height</height>
 						<ContextID>lookupmenu.context</ContextID>
 						<BknID>YBYL.Menu.Bkg</BknID>

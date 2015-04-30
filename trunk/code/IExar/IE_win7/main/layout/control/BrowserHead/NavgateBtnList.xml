@@ -64,42 +64,38 @@
 					</children>
 				</obj>
 				
-				
 				<obj id="DropArrow.Bkg" class="TipAddin.Button">
 					<attr>
-						<left>53</left>
-						<top>3</top>
-						<width>21</width>
+						<left>48</left>
+						<top>4</top>
+						<width>26</width>
 						<height>21</height>
 						<NormalBkgID>UrlHistory.Arrow.Normal</NormalBkgID>
 						<DownBkgID>UrlHistory.Arrow.Down</DownBkgID>
 						<HoverBkgID>UrlHistory.Arrow.Hover</HoverBkgID>
-						<DisableBkgID>UrlHistory.Arrow.Normal</DisableBkgID>
-						<zorder>9990</zorder>
+						<DisableBkgID>UrlHistory.Arrow.Disable</DisableBkgID>
 					</attr>
-					<children>
-						<obj id="DropArrow.Disable" class="TextureObject">
-							<attr>
-								<left>7</left>
-								<top>8</top>
-								<width>9</width>
-								<height>6</height>
-								<texture>UrlHistory.Arrow.Disable</texture>
-								<zorder>9999</zorder>
-							</attr>
-							<eventlist>
-								<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
-								<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
-							</eventlist>
-						</obj>
-					</children>
 					<eventlist>
 						<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
 						<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
 						<event name="OnClick" file="NavgateBtnList.xml.lua" func="OnClickDropArrow" />
 					</eventlist>
 				</obj>
-							
+				
+				<obj id="DropArrow.Disable" class="TextureObject">
+					<attr>
+						<left>48</left>
+						<top>4</top>
+						<width>26</width>
+						<height>21</height>
+						<texture>UrlHistory.Arrow.Disable</texture>
+					</attr>
+					<eventlist>
+						<event name="OnMouseEnter" file="NavgateBtnList.xml.lua" func="OnMouseEnterArrow" />
+						<event name="OnMouseLeave" file="NavgateBtnList.xml.lua" func="HideToolTip" />
+					</eventlist>
+				</obj>
+				
 			</children>
 			<eventlist>
 			</eventlist>

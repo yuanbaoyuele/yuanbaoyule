@@ -14,60 +14,94 @@
 		
 		<objtemplate>
 			<children>
-				<obj id="RefreshBtnList.CompatBtn" class="TipAddin.Button">
+				<obj id="CompatBtn.Bkg" class="TextureObject">
 					<attr>
 						<left>0</left>
 						<top>0</top>
-						<width>22</width>
-						<height>22</height>
-						<NormalBkgID>YBYL.Head.CompatBtn.Normal</NormalBkgID>
-						<DownBkgID>YBYL.Head.CompatBtn.Down</DownBkgID>
-						<HoverBkgID>YBYL.Head.CompatBtn.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.Head.CompatBtn.Disable</DisableBkgID>
-						<Enable>false</Enable>
+						<width>28</width>
+						<height>26</height>
+						<texture>YBYL.AddressBar.UrlSearch.Bkg.Normal</texture>
 					</attr>
-					<eventlist>
-						<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterCompat" />
-						<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
-					</eventlist>
+					<children>
+						<obj id="RefreshBtnList.CompatBtn" class="TipAddin.Button">
+							<attr>
+								<left>2</left>
+								<top>2</top>
+								<width>24</width>
+								<height>22</height>
+								<NormalBkgID>YBYL.Head.CompatBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.CompatBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.CompatBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.CompatBtn.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterCompat" />
+								<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+				
+				
+				<obj id="RefreshBtn.Bkg" class="TextureObject">
+					<attr>
+						<left>25</left>
+						<top>0</top>
+						<width>28</width>
+						<height>26</height>
+						<texture>YBYL.AddressBar.UrlSearch.Bkg.Normal</texture>
+					</attr>
+					<children>
+						<obj id="RefreshBtnList.RefreshBtn" class="TipAddin.Button">
+							<attr>
+								<left>2</left>
+								<top>2</top>
+								<width>24</width>
+								<height>22</height>
+								<NormalBkgID>YBYL.Head.Refresh.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.Refresh.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.Refresh.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.Refresh.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" />
+								<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterRefresh" />
+								<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+					</children>
 				</obj>
 			
-				<obj id="RefreshBtnList.RefreshBtn" class="TipAddin.Button">
+				<obj id="StopBtn.Bkg" class="TextureObject">
 					<attr>
-						<left>27</left>
+						<left>25*2</left>
 						<top>0</top>
-						<width>22</width>
-						<height>22</height>
-						<NormalBkgID>YBYL.Head.Refresh.Normal</NormalBkgID>
-						<DownBkgID>YBYL.Head.Refresh.Down</DownBkgID>
-						<HoverBkgID>YBYL.Head.Refresh.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.Head.Refresh.Disable</DisableBkgID>
-						<Enable>false</Enable>
+						<width>28</width>
+						<height>26</height>
+						<texture>YBYL.AddressBar.UrlSearch.Bkg.Normal</texture>
 					</attr>
-					<eventlist>
-						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickRefreshBtn" />
-						<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterRefresh" />
-						<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
-					</eventlist>
-				</obj>
-			
-				<obj id="RefreshBtnList.StopBtn" class="TipAddin.Button">
-					<attr>
-						<left>27*2</left>
-						<top>0</top>
-						<width>22</width>
-						<height>22</height>
-						<NormalBkgID>YBYL.Head.Stop.Normal</NormalBkgID>
-						<DownBkgID>YBYL.Head.Stop.Down</DownBkgID>
-						<HoverBkgID>YBYL.Head.Stop.Hover</HoverBkgID>
-						<DisableBkgID>YBYL.Head.Stop.Disable</DisableBkgID>
-						<Enable>false</Enable>
-					</attr>
-					<eventlist>
-						<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterStop" />
-						<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
-						<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickStopBtn" />
-					</eventlist>
+					<children>
+						<obj id="RefreshBtnList.StopBtn" class="TipAddin.Button">
+							<attr>
+								<left>2</left>
+								<top>2</top>
+								<width>24</width>
+								<height>22</height>
+								<NormalBkgID>YBYL.Head.Stop.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.Stop.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.Stop.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.Stop.Disable</DisableBkgID>
+								<Enable>false</Enable>
+							</attr>
+							<eventlist>
+								<event name="OnMouseEnter" file="RefreshBtnList.xml.lua" func="OnMouseEnterStop" />
+								<event name="OnMouseLeave" file="RefreshBtnList.xml.lua" func="HideToolTip" />
+								<event name="OnClick" file="RefreshBtnList.xml.lua" func="OnClickStopBtn" />
+							</eventlist>
+						</obj>
+					</children>
 				</obj>
 			</children>
 			<eventlist>

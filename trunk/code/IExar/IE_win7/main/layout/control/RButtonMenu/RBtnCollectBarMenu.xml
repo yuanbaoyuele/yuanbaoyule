@@ -4,8 +4,7 @@
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
 			<ItemRight></ItemRight> 
-			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
-			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 			<ItemBottom>0</ItemBottom> 
 		</attr>
 		<children>
@@ -14,7 +13,7 @@
 					<Text>打开</Text>
 					<AccKey>O</AccKey>
 					<Font>font.menuitem.bold</Font>
-					<KeyFont>font.menuitem.bold.underline</KeyFont>
+					<KeyFont>font.menuitem.bold</KeyFont>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="RBtnCollectBarMenu.xml.lua" function="OnSelect_Open" />
@@ -126,16 +125,16 @@
 		<attr>
 			<left>0</left>
 			<top>0</top>
-			<width>160</width>
-			<height>222</height>
+			<width>190</width>
+			<height>240</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
 			<attr>
 				<left>0</left>
 				<top>0</top>
-				<width>160</width>
-				<height>222</height>
+				<width>190</width>
+				<height>240</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

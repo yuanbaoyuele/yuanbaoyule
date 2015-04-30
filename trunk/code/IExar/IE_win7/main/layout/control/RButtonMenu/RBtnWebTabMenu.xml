@@ -4,8 +4,7 @@
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
 			<ItemRight></ItemRight> 
-			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
-			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 			<ItemBottom>0</ItemBottom> 
 		</attr>
 		<children>

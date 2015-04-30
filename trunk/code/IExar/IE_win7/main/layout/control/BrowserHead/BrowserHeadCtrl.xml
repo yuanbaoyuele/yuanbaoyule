@@ -16,10 +16,19 @@
 						<top>0</top>
 						<width>father.width</width>
 						<height>father.height</height>
-						<texture>YBYL.MainWnd.Head.Bkg</texture>
 						<limitchild>1</limitchild>
 					</attr>		
-					<children>															
+					<children>				
+						<obj id="Black.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>36</height>
+								<texture>Black.Bkg</texture>
+							</attr>	
+						</obj>
+					
 						<obj id="BrowserHeadCtrl.NavgateBtnList" class="NavgateBtnList">
 							<attr>
 								<left>3</left>
@@ -40,16 +49,16 @@
 						
 						<obj id="BrowserHeadCtrl.RefreshBtnList" class="RefreshBtnList">
 							<attr>
-								<left>father.width-387</left>
-								<top>5</top>
+								<left>father.width-397</left>
+								<top>3</top>
 								<width>70</width>
-								<height>22</height>
+								<height>24</height>
 							</attr>	
 						</obj>					
 												
 						<obj id="BrowserHeadCtrl.SearchCtrl" class="BoltFox.Search.Ctrl">
 							<attr>
-								<left>father.width-302</left>
+								<left>father.width-292</left>
 								<top>5</top>
 								<width>255</width>
 								<height>22</height>
@@ -66,87 +75,91 @@
 								<width>70</width>
 								<height>22</height>
 							</attr>	
-						</obj>
-					
-						<obj id="BrowserHeadCtrl.Splitter1" class="TextureObject">
+						</obj>			
+						
+						<obj id="BrowserHeadCtrl.UpBkg" class="TextureObject">
 							<attr>
 								<left>0</left>
-								<top>32</top>
-								<width>father.width</width>
-								<height>2</height>
-								<texture>BrowserHead.Splitter</texture>
-							</attr>	
-						</obj>
-						
-						<obj id="BrowserHeadCtrl.MenuBarCtrl" class="MenuBarCtrl">
-							<attr>
-								<left>5</left>
 								<top>36</top>
-								<width>370</width>
-								<height>20</height>
-							</attr>	
-						</obj>
-						
-						<obj id="BrowserHeadCtrl.Splitter2" class="TextureObject">
-							<attr>
-								<left>0</left>
-								<top>55</top>
 								<width>father.width</width>
-								<height>2</height>
-								<texture>BrowserHead.Splitter</texture>
+								<height>24</height>
+								<texture>YBYL.MainWnd.Head.UpBkg</texture>
 							</attr>	
-						</obj>
-						
-						<obj id="BrowserHeadCtrl.CollectBtn" class="TipAddin.Button">
-							<attr>
-								<left>2</left>
-								<top>59</top>
-								<width>70</width>
-								<height>26</height>
-								<LeftTextPos>25</LeftTextPos>
-								<TextFont>font.collectbar.text</TextFont>
-								<Text>收藏夹</Text>
-								<NormalBkgID></NormalBkgID>
-								<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
-								<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
-								<DisableBkgID></DisableBkgID>
-							</attr>
 							<children>
-								<obj id="CollectBtn.LeftIco" class="ImageObject">
+								<obj id="BrowserHeadCtrl.MenuBarCtrl" class="MenuBarCtrl">
 									<attr>
-										<left>5</left>
-										<top>6</top>
-										<width>16</width>
-										<height>16</height>
-										<image>Star.Logo</image>
-										<zorder>999999</zorder>
+										<left>3</left>
+										<top>0</top>
+										<width>370</width>
+										<height>24</height>
 									</attr>	
 								</obj>
 							</children>
-							<eventlist>
-								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCollect" />
-							</eventlist>
-						</obj>
+						</obj>  <!--BrowserHeadCtrl.UpBkg-->
 						
-						<obj id="BrowserHeadCtrl.Splitter3" class="TextureObject">
+						<obj id="BrowserHeadCtrl.DownBkg" class="TextureObject">
 							<attr>
-								<left>75</left>
-								<top>62</top>
-								<width>1</width>
-								<height>20</height>
-								<texture>YBYL.Menu.Splitter.Vertical</texture>
-							</attr>	
-						</obj>
+								<left>0</left>
+								<top>60</top>
+								<width>father.width</width>
+								<height>59</height>
+								<texture>YBYL.MainWnd.Head.DownBkg</texture>
+							</attr>		
+							<children>
+								<obj id="BrowserHeadCtrl.CollectBtn" class="TipAddin.Button">
+									<attr>
+										<left>2</left>
+										<top>2</top>
+										<width>70</width>
+										<height>24</height>
+										<LeftTextPos>25</LeftTextPos>
+										<TextFont>font.collectbar.text</TextFont>
+										<Text>收藏夹</Text>
+										<NormalBkgID></NormalBkgID>
+										<DownBkgID>Collect.Button.Bkg.Down</DownBkgID>
+										<HoverBkgID>Collect.Button.Bkg.Hover</HoverBkgID>
+										<DisableBkgID></DisableBkgID>
+									</attr>
+									<children>
+										<obj id="CollectBtn.LeftIco" class="ImageObject">
+											<attr>
+												<left>5</left>
+												<top>5</top>
+												<width>16</width>
+												<height>16</height>
+												<image>Star.Logo</image>
+												<zorder>999999</zorder>
+											</attr>	
+										</obj>
+									</children>
+									<eventlist>
+										<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCollect" />
+									</eventlist>
+								</obj>
+												
+								<obj id="splitter" class="TextureObject" >
+									<attr>
+										<left>80</left>
+										<top>2</top>
+										<width>1</width>
+										<height>17</height>
+										<texture>YBYL.ToolBar.Splitter.Vertical</texture>
+										<zorder>999999</zorder>
+									</attr>
+								</obj>
+												
+								<obj id="BrowserHeadCtrl.CollectList" class="CollectList">
+									<attr>
+										<left>80</left>
+										<top>2</top>
+										<width>father.width-80</width>
+										<height>24</height>
+										<limitchild>1</limitchild>
+									</attr>	
+								</obj>
+							</children>
+						</obj>	 <!--BrowserHeadCtrl.DownBkg-->
 						
-						<obj id="BrowserHeadCtrl.CollectList" class="CollectList">
-							<attr>
-								<left>80</left>
-								<top>59</top>
-								<width>father.width-80</width>
-								<height>26</height>
-								<limitchild>1</limitchild>
-							</attr>	
-						</obj>
 					</children>
 				</obj> <!--end root.layout-->
             </children>

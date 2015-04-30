@@ -20,15 +20,15 @@
 				<obj id="border" class="TextureObject">
 					<attr>
 						<width>father.width</width>
-						<height>22</height>
-						<texture>YBYL.AddressBar.UrlSearch.Bkg</texture>
+						<height>26</height>
+						<texture>YBYL.AddressBar.UrlSearch.Bkg.Normal</texture>
 					</attr>
 					<children>
 						<obj id="image.ctrl" class="TipAddin.Button">
 							<attr>
-								<left>father.width+3</left>
-								<top>0</top>
-								<width>22</width>
+								<left>father.width-45</left>
+								<top>2</top>
+								<width>27</width>
 								<height>22</height>
 								<NormalBkgID>bitmap.search.normal</NormalBkgID>
 								<HoverBkgID>bitmap.search.hover</HoverBkgID>
@@ -42,9 +42,9 @@
 						</obj>
 						<obj id="image.ctrl2" class="TipAddin.Button">
 							<attr>
-								<left>father.width+3+22</left>
-								<top>0</top>
-								<width>13</width>
+								<left>father.width-18</left>
+								<top>2</top>
+								<width>17</width>
 								<height>22</height>
 								<NormalBkgID>SearchBox.DropArrow.Normal</NormalBkgID>
 								<HoverBkgID>SearchBox.DropArrow.Hover</HoverBkgID>
@@ -58,8 +58,8 @@
 						</obj>
 						<obj id="icon" class="ImageObject">
 							<attr>
-								<left>3</left>
-								<top>3</top>
+								<left>5</left>
+								<top>5</top>
 								<width>16</width>
 								<height>16</height>
 								<valign>center</valign>
@@ -75,11 +75,11 @@
 						</obj>
 						<obj id="edit" class="EditObject">
 							<attr>
-								<left>16</left>
-								<top>2</top>
-								<width>father.width-19</width>
-								<height>father.height-4</height>
-								<transparent>1</transparent>
+								<left>22</left>
+								<top>5</top>
+								<width>father.width-70</width>
+								<height>father.height-10</height>
+								<transparent>0</transparent>
 								<textcolor></textcolor>
 							</attr>
 							<eventlist>

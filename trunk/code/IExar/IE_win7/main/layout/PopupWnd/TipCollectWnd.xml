@@ -53,7 +53,7 @@
 								<left>5</left>
 								<top>5</top>
 								<width>132</width>
-								<height>26</height>
+								<height>24</height>
 								<LeftTextPos>25</LeftTextPos>
 								<TextFont>font.collectbar.text</TextFont>
 								<Text>添加到收藏夹...</Text>
@@ -221,7 +221,7 @@
 								<top>55</top>
 								<width>father.width-12</width>
 								<height>father.height-55-40</height>
-								<texture>YBYL.Menu.Bkg</texture>
+								<texture>Collect.Container.Bkg</texture>
 								<limitchild>1</limitchild>
 							</attr>
 							<children>
@@ -241,7 +241,7 @@
 								<left>5</left>
 								<top>father.height-40+5</top>
 								<width>110</width>
-								<height>26</height>
+								<height>24</height>
 								<LeftTextPos>25</LeftTextPos>
 								<TextFont>font.collectbar.text</TextFont>
 								<Text>查看建议网站</Text>

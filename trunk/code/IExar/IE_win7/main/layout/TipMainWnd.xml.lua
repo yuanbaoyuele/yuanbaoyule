@@ -13,6 +13,7 @@ function OnShowWindow(self, bShow)
 	if bShow then
 		gTipStartTime = tipUtil:GetCurrentUTCTime()
 		tFunHelper.ShowHeadWindow()
+		tFunHelper.SetMainWndDefaultTrackSize()
 	end
 end
 

@@ -26,6 +26,7 @@
 			<attr name="nLinePerPage" type="int" ><default>0</default></attr>
 			<attr name="nTotalLineCount" type="int" ><default>0</default></attr>
 			<attr name="RelateObject" />
+			<attr name="bShowVerSpliter" type="bool" ><default>true</default></attr>
 		</attr_def>
 		
 		<method_def>
@@ -71,6 +72,18 @@
 								<height>father.height</height>
 							</attr>
 						</obj>
+						
+						<obj id="menu.splitter.vertical" class="TextureObject">
+							<attr>
+								<left>30</left>
+								<top>2</top>
+								<width>2</width>
+								<height>father.height-8</height>
+								<texture>YBYL.Menu.Splitter.Vertical</texture>
+								<zorder>9</zorder>
+							</attr>
+						</obj>
+						
 						<!--注 图片有阴影，需调整-->
 						<obj id="menu.bkn" class="TextureObject">
 							<attr>
@@ -146,18 +159,18 @@
 	
 	<objtemplate class="MenuItemObject" id="menu.context.item">
 		<attr>
-			<height>20</height>
+			<height>22</height>
 			<width>father.width</width>
-			<TextPos>20</TextPos>
+			<TextPos>33</TextPos>
 			<Font>font.menuitem</Font>
 			<FontColorNormal>system.black</FontColorNormal>
-			<FontColorHover>system.white</FontColorHover>
-			<FontColorDisable>ADA999</FontColorDisable>
+			<FontColorHover>system.black</FontColorHover>
+			<FontColorDisable>6D6D6D</FontColorDisable>
 			<RightTextColor>system.black</RightTextColor>
 			<RightTextFont>font.menuitem</RightTextFont>
 			<RightTextHAligh>right</RightTextHAligh>
 			<RightTextPos>10</RightTextPos>
-			<KeyFont>font.menuitemkey</KeyFont>
+			<KeyFont>font.menuitem</KeyFont>
 			<Icon>YBYL.UrlIco.Default</Icon>
 			<IconPos>5</IconPos>
 			<IconVisible>false</IconVisible>
@@ -180,12 +193,14 @@
 			<ItemTop>0</ItemTop>
 			<ItemRight>0</ItemRight>
 			<ItemBottom>0</ItemBottom>
+			<ShadowBkgWidth>9</ShadowBkgWidth>  <!--调整最右侧的空白-->
 		</attr>
 	</objtemplate>
 	<objtemplate id="menu.splitter" class="MenuItemObject">
         <attr>
+			<left>30</left>
 			<height>8</height>
-			<SeparatorHeight>1</SeparatorHeight>
+			<SeparatorHeight>2</SeparatorHeight>
 			<Type>1</Type>
 			<Icon>YBYL.Menu.Splitter.Bkg</Icon>
 			<IconVisible>false</IconVisible>

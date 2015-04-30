@@ -1,19 +1,9 @@
 ﻿<xlue>
-	<objtemplate id="toolbar.context.submenu" class="NormalMenu">
-		<attr>
-			<left>0</left>
-			<top>0</top>
-			<width>250</width>
-			<height>290</height>
-			<ContextID>toolbar.context</ContextID>
-			<BknID>YBYL.Menu.Bkg</BknID>
-		</attr>
-	</objtemplate>
-	
 	<objtemplate id="toolbar.context" class="MenuObject" templateid="menu.object.template">
 		<attr>
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> <!--阴影-->
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 		</attr>
 		<children>
 			<obj id="reopenlastwindow" class="MenuItemObject" templateid="menu.context.item">
@@ -190,7 +180,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>250</width>
-			<height>470</height>
+			<height>480</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -198,7 +188,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>250</width>
-				<height>470</height>
+				<height>480</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

@@ -87,10 +87,6 @@ function SetTextFontResID(self, strFontID)
 	local objText = objRootCtrl:GetControlObject("ShortCutText.Text")	
 	objText:SetTextFontResID(attr.Font)
 	
-	local lefttext = objRootCtrl:GetControlObject("lefttext")
-	local righttext = objRootCtrl:GetControlObject("righttext")
-	lefttext:SetTextFontResID(attr.Font)
-	righttext:SetTextFontResID(attr.Font)
 end
 
 
@@ -105,11 +101,7 @@ function SetTextColorResID(self, strColorID)
 	local objText = objRootCtrl:GetControlObject("ShortCutText.Text")	
 	objText:SetTextColorResID(attr.Textcolor)
 	
-	local lefttext = objRootCtrl:GetControlObject("lefttext")
-	local righttext = objRootCtrl:GetControlObject("righttext")
 	local keytext = objRootCtrl:GetControlObject("keytext")
-	lefttext:SetTextColorResID(attr.Textcolor)
-	righttext:SetTextColorResID(attr.Textcolor)
 	keytext:SetTextColorResID(attr.Textcolor)
 end
 
@@ -171,16 +163,10 @@ function SetKeyTextAttr(objRootCtrl)
 		objKeyLayout:SetChildrenVisible(true)
 	end
 	
-	local lefttext = objRootCtrl:GetControlObject("lefttext")
 	local keytext = objRootCtrl:GetControlObject("keytext")
-	local righttext = objRootCtrl:GetControlObject("righttext")
 	
-	lefttext:SetTextColorResID(attr.Textcolor)
-	lefttext:SetTextFontResID(attr.Font)
-	righttext:SetTextColorResID(attr.Textcolor)
-	righttext:SetTextFontResID(attr.Font)
-	
-	keytext:SetText(attr.Key)
+	local strText = "("..attr.Key..")"
+	keytext:SetText(strText)
 	keytext:SetTextColorResID(attr.Textcolor)
 	keytext:SetTextFontResID(attr.KeyFont)
 end
@@ -206,7 +192,7 @@ function SetKeyLayoutPos(objRootCtrl)
 	local nKeyL, nKeyT, nKeyR, nKeyB = objKeyLayout:GetObjPos()
 	local nKeyWidth = nKeyR - nKeyL
 	local nNewKeyL = nNewTextR
-	objKeyLayout:SetObjPos(nNewKeyL, nKeyT, nNewKeyL+nKeyWidth, nRootB)
+	objKeyLayout:SetObjPos(nNewKeyL-2, nKeyT, nNewKeyL+nKeyWidth, nRootB)
 end
 
 

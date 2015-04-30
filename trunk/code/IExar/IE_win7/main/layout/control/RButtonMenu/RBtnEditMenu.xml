@@ -4,8 +4,7 @@
 			<ItemTop>3</ItemTop>
 			<ItemLeft>3</ItemLeft> 
 			<ItemRight></ItemRight> 
-			<ShadowBkgWidth>6</ShadowBkgWidth>  <!--调整最右侧的空白-->
-			<ShadowBkgHeight>3</ShadowBkgHeight> <!--调整最底侧的空白-->
+			<ShadowBkgHeight>5</ShadowBkgHeight> <!--调整最底侧的空白-->
 			<ItemBottom>0</ItemBottom> 
 		</attr>
 		<children>
@@ -89,7 +88,7 @@
 			<left>0</left>
 			<top>0</top>
 			<width>180</width>
-			<height>145</height>
+			<height>160</height>
 		</attr>
 		
 		<obj id="Menu.MainLayout" class="LayoutObject">
@@ -97,7 +96,7 @@
 				<left>0</left>
 				<top>0</top>
 				<width>180</width>
-				<height>145</height>
+				<height>160</height>
 			</attr>
 			<children>
 				<obj id="Menu.Context" class="NormalMenu">

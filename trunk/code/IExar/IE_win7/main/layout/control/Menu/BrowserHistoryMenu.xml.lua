@@ -66,16 +66,18 @@ function CreateMenuItem(tHistoryInfo, nIndex)
 	attr.Text = tHistoryInfo["strTitle"]
 	attr.ExtraData = tHistoryInfo["strURL"]
 	attr.FontColorNormal = "system.black"
-	attr.FontColorHover = "system.white"
-	attr.TextPos = 24
+	attr.FontColorHover = "system.black"
+	attr.TextPos = 33
 	attr.DeleteImgVisible = false
 	
 	attr.IconPos = 5
-	attr.IconWidth = 10
-	attr.IconHeight = 10
+	attr.IconWidth = 14
+	attr.IconHeight = 14
 	attr.IconVisible = true
+	attr.Icon = ""
+	attr.IconHover = "Menu.LeftArrow"
 	
-	objMenuItem:SetIconID("ArrowLeft")
+	objMenuItem:SetIconID("")
 	TrySetActiveItem(objMenuItem, nIndex)
 	objMenuItem:AttachListener("OnSelect", false, OpenURL)
 	return objMenuItem
@@ -104,14 +106,14 @@ function CreateExtraItem(objMenuContainer)
 	end
 	local attr = objMenuItem:GetAttribute()
 	attr.Text = "历史记录"
-	attr.TextPos = 24
+	attr.TextPos = 33
 	
 	attr.RightText = "Ctrl+Shift+H"
 	attr.RightTextColor = "system.black"
 	attr.RightTextHAligh = "font.text12"
 	attr.TextRightWidth = 40
 	attr.FontColorNormal = "system.black"
-	attr.FontColorHover = "system.white"
+	attr.FontColorHover = "system.black"
 	
 	attr.DeleteImgVisible = false
 	attr.IconPos = 5
@@ -135,15 +137,15 @@ function TrySetActiveItem(objMenuItem, nIndex)
 	
 	local attr = objMenuItem:GetAttribute()
 	attr.IconPos = 8
-	attr.IconWidth = 7
-	attr.IconHeight = 7
+	attr.IconWidth = 9
+	attr.IconHeight = 11
 	attr.IconVisible = true
-	attr.Icon = "Menu.Check.Black"
-	attr.IconHover = "Menu.Check.White"
+	attr.Icon = "Menu.Check.Bitmap"
+	attr.IconHover = "Menu.Check.Bitmap"
 	
-	objMenuItem:SetIconID("Menu.Check.Black")
+	objMenuItem:SetIconID("Menu.Check.Bitmap")
 	objMenuItem:SetFont("font.menuitem.bold")
-	objMenuItem:SetBkgResID("MenuItem.Active")
+	objMenuItem:SetBkgResID("YBYL.Menu.Select.Bkg")
 end
 
 

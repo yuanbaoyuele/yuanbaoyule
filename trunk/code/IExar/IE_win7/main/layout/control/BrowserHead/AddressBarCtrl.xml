@@ -27,13 +27,13 @@
 								<top>0</top>
 								<width>father.width</width>
 								<height>father.height</height>
-								<texture>YBYL.AddressBar.UrlSearch.Bkg</texture>
+								<texture>YBYL.AddressBar.UrlSearch.Bkg.Normal</texture>
 							</attr>
 							<children>	
 								<!--url栏开头的网页图片-->
 								<obj id="AddressBarCtrl.Image" class="ImageObject">
 									<attr>
-										<left>3</left>
+										<left>5</left>
 										<top>(father.height-16)/2</top>
 										<width>16</width>
 										<height>16</height>
@@ -44,12 +44,12 @@
 							
 								<obj id="AddressBarCtrl.UrlEdit" class="EditObject">
 									<attr>
-										<left>16</left>
-										<top>2</top>
+										<left>22</left>
+										<top>5</top>
 										<width>father.width-50</width>
-										<height>father.height-2</height>
-										<transparent>1</transparent>
-										<textcolor>4D4D4D</textcolor>
+										<height>father.height-10</height>
+										<transparent>0</transparent>
+										<textcolor>system.black</textcolor>
 										<autourldetect>0</autourldetect>
 									</attr>
 									<eventlist>
@@ -64,10 +64,10 @@
 								
 								<obj id="AddressBarCtrl.DropArrow" class="TipAddin.Button">
 									<attr>
-										<left>father.width-16</left>
-										<top>2</top>
-										<width>14</width>
-										<height>18</height>
+										<left>father.width-19</left>
+										<top>1</top>
+										<width>17</width>
+										<height>23</height>
 										<NormalBkgID>YBYL.AddressBarCtrl.DropArrow.Normal</NormalBkgID>
 										<DownBkgID>YBYL.AddressBarCtrl.DropArrow.Down</DownBkgID>
 										<HoverBkgID>YBYL.AddressBarCtrl.DropArrow.Hover</HoverBkgID>
