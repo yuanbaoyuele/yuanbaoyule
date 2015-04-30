@@ -3,7 +3,7 @@
 		<texture id="YBYL.MainWnd.Bkg.Disable" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Disable.png" />
 		<texture id="YBYL.MainWnd.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.png" />
 		<texture id="BkgBorder" type="NineInOne" image="bitmap\BkgBorder.png" />
-		<texture id="YBYL.MainWnd.Bkg.nofocus" type="NineInOne" image="bitmap\bkg_1.png" />
+		<texture id="YBYL.MainWnd.Bkg.nofocus" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Disable.png" />
 		<texture id="YBYL.MainWnd.Bkg.Shadow" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Shadow.png" />
 		<texture id="Black.Bkg" image="bitmap\Black.Bkg.png" />
 		
@@ -41,8 +41,6 @@
 		<texture id="CollectPanel.FixBtn"  image="bitmap\CollectPanel.FixBtn.png" />
 		<texture id="Collect.Button.Close.Normal"  image="bitmap\Collect.Button.Close.Normal.png" />
 		<texture id="Collect.Button.Close.Hover"  image="bitmap\Collect.Button.Close.Hover.png" />
-		<texture id="Collect.Tab.Bkg.Hover" type="ThreeInOneH" image="bitmap\Collect.Tab.Bkg.Hover.png" />
-		<texture id="Collect.Tab.Bkg.Normal" type="ThreeInOneH" image="bitmap\Collect.Tab.Bkg.Normal.png" />
 		<texture id="StateBar.Bkg" type="ThreeInOneH" image="bitmap\StateBar.Bkg.png" />
 		<texture id="Collect.Container.Bkg" type="NineInOne" image="bitmap\Collect.Container.Bkg.png" />
 		
