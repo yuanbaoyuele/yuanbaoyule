@@ -25,8 +25,8 @@
 							<attr>
 								<left>0</left>
 								<top>0</top>
-								<width>22</width>
-								<height>22</height>
+								<width>21</width>
+								<height>13</height>
 								<NormalBkgID>YBYL.FullScrn.Min.Normal</NormalBkgID>
 								<DownBkgID>YBYL.FullScrn.Min.Down</DownBkgID>
 								<HoverBkgID>YBYL.FullScrn.Min.Hover</HoverBkgID>
@@ -39,10 +39,10 @@
 						
 						<obj id="FullScrnBtnList.Restore" class="TipAddin.Button">
 							<attr>
-								<left>27</left>
+								<left>25</left>
 								<top>0</top>
-								<width>22</width>
-								<height>22</height>
+								<width>21</width>
+								<height>13</height>
 								<NormalBkgID>YBYL.FullScrn.Restore.Normal</NormalBkgID>
 								<DownBkgID>YBYL.FullScrn.Restore.Down</DownBkgID>
 								<HoverBkgID>YBYL.FullScrn.Restore.Hover</HoverBkgID>
@@ -55,10 +55,10 @@
 						
 						<obj id="FullScrnBtnList.Close" class="TipAddin.Button">
 							<attr>
-								<left>27*2</left>
+								<left>25*2</left>
 								<top>0</top>
-								<width>22</width>
-								<height>22</height>
+								<width>21</width>
+								<height>13</height>
 								<NormalBkgID>YBYL.FullScrn.Close.Normal</NormalBkgID>
 								<DownBkgID>YBYL.FullScrn.Close.Down</DownBkgID>
 								<HoverBkgID>YBYL.FullScrn.Close.Hover</HoverBkgID>

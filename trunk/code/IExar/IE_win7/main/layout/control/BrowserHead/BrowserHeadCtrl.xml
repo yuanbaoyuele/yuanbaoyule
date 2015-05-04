@@ -70,10 +70,10 @@
 					
 						<obj id="BrowserHeadCtrl.FullScrnBtnList" class="FullScrnBtnList">
 							<attr>
-								<left>father.width-80</left>
+								<left>father.width-72</left>
 								<top>5</top>
-								<width>70</width>
-								<height>22</height>
+								<width>75</width>
+								<height>21</height>
 							</attr>	
 						</obj>			
 						
@@ -139,10 +139,10 @@
 												
 								<obj id="splitter" class="TextureObject" >
 									<attr>
-										<left>80</left>
+										<left>78</left>
 										<top>2</top>
 										<width>1</width>
-										<height>17</height>
+										<height>22</height>
 										<texture>YBYL.ToolBar.Splitter.Vertical</texture>
 										<zorder>999999</zorder>
 									</attr>

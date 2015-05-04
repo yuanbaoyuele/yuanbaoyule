@@ -43,7 +43,7 @@ function SetHeadFullScrnStyle(self, bFullScrn)
 	if bFullScrn then
 		objAddressBar:SetObjPos(85, 3, "father.width-472", 29)
 		objRefreshBtnList:SetObjPos("father.width-475", 3, "father.width-385", 25)
-		objSearchCtrl:SetObjPos("father.width-382", 3, "father.width-127", 27)
+		objSearchCtrl:SetObjPos("father.width-382", 3, "father.width-90", 27)
 		objBlackBkg:SetVisible(true)
 	else
 		objAddressBar:SetObjPos(85, 3, "father.width-392", 29)
@@ -96,7 +96,6 @@ function SetAddressBarPos(objRootCtrl)
 	
 	local objAddressBar = objRootCtrl:GetControlObject("BrowserHeadCtrl.AddressBar")	
 	objAddressBar:SetObjPos2(80, 3, AddBarW, 26)
-
 end
 
 function SetRefreshBtnPos(objRootCtrl)

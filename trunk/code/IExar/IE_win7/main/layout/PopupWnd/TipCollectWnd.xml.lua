@@ -102,10 +102,13 @@ function SetWindowFullSize(objWnd)
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
 	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
 	
+	local WithoutShadow = tFunHelper.GetMainCtrlChildObj("WithoutShadow")
+	local nNoShadowL, nNoShadowT, nNoShadowR, nNoShadowB = WithoutShadow:GetAbsPos()
+	
 	local nWndTop = nHeadWndT+BtnB
-	local nWndLeft = nMainWndL+HeadL+4
-	local nWndHeight = nMainWndB-nWndTop-4
-		
+	local nWndLeft = nMainWndL+nNoShadowL+4
+	local nWndHeight = nMainWndB-nWndTop-nNoShadowT-10
+	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
 	
@@ -124,7 +127,6 @@ function SetWindowFullSize(objWnd)
 end
 
 
-
 function SetWindowPos(objWnd)
 	local objHeadWindow = tFunHelper.GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
@@ -135,8 +137,11 @@ function SetWindowPos(objWnd)
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
 	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
 	
+	local WithoutShadow = tFunHelper.GetMainCtrlChildObj("WithoutShadow")
+	local nNoShadowL, nNoShadowT, nNoShadowR, nNoShadowB = WithoutShadow:GetAbsPos()
+	
 	local nWndTop = nHeadWndT+BtnB
-	local nWndLeft = nMainWndL+HeadL+4
+	local nWndLeft = nMainWndL+nNoShadowL+4
 	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
@@ -145,8 +150,8 @@ function SetWindowPos(objWnd)
 		wndheight = 660
 	end
 	
-	if wndheight > nMainWndB-nWndTop-4 then
-		wndheight = nMainWndB-nWndTop-4
+	if wndheight > nMainWndB-nWndTop-nNoShadowT-15 then
+		wndheight = nMainWndB-nWndTop-nNoShadowT-15
 	end
 	
 	objWnd:Move(nWndLeft, nWndTop, wndwidth, wndheight)
@@ -364,7 +369,7 @@ function SetTabActiveStyle(objTab, bActive)
 		objTab:SetObjPos(l, 0, r, "father.height")
 		objTab:SetTextureID("Collect.Tab.Bkg.Hover")	
 	else
-		objTab:SetObjPos(l, 2, r, "father.height-2")
+		objTab:SetObjPos(l, 0, r, "father.height")
 		objTab:SetTextureID("Collect.Tab.Bkg.Normal")
 	end
 end
@@ -375,25 +380,25 @@ function AdjustMainPanelSize(objRootCtrl, width)
 	local webbrowser = tFunHelper.GetMainCtrlChildObj("MainPanel.WebContainer")
 	local l, t, r, b = webbrowser:GetObjPos()
 	if attr.bFix then
-		webbrowser:SetObjPos2(width, t, "father.width-"..tostring(width), "father.height-23-120")
+		webbrowser:SetObjPos2(width, t, "father.width-2-"..tostring(width), "father.height-23-120")
 	else
-		webbrowser:SetObjPos2(0, t, "father.width-2", "father.height-23-120")
+		webbrowser:SetObjPos2(1, t, "father.width-2", "father.height-23-120")
 	end
 	
 	local objResizeLayout = tFunHelper.GetHeadCtrlChildObj("MainPanel.ResizeLayout")
 	local l, t, r, b = objResizeLayout:GetObjPos()
 	if attr.bFix then
-		objResizeLayout:SetObjPos2(width, t, "father.width-"..tostring(width), "father.height")
+		objResizeLayout:SetObjPos2(width, t, "father.width-2-"..tostring(width), "father.height")
 	else
-		objResizeLayout:SetObjPos2(0, t, "father.width-2", "father.height")
+		objResizeLayout:SetObjPos2(1, t, "father.width-2", "father.height")
 	end
 	
 	local objStateBar = tFunHelper.GetMainCtrlChildObj("StateBar")
 	local l, t, r, b = objStateBar:GetObjPos()
 	if attr.bFix then
-		objStateBar:SetObjPos2(width, "father.height-23", "father.width-"..tostring(width), 23)
+		objStateBar:SetObjPos2(width, "father.height-23", "father.width-2-"..tostring(width), 23)
 	else
-		objStateBar:SetObjPos2(0, "father.height-23", "father.width", 23)
+		objStateBar:SetObjPos2(1, "father.height-23", "father.width-2", 23)
 	end
 end
 
