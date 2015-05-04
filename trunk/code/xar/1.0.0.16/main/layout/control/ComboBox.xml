@@ -1,0 +1,430 @@
+<xlue>
+    <control class="TipAddin.ComboBox">
+        <attr_def>
+            <attr name="NormalBkgID" type="string" />
+            <attr name="HoverBkgID" type="string" />
+            <attr name="DisableBkgID" type="string" />
+			<attr name="DisableTextColor" type="string"></attr>
+			<attr name="NormalTextColor" type="string"></attr>
+			<attr name="HoverTextColor" type="string"></attr>
+            <attr name="ItemNormalBkgID" type="string" />
+            <attr name="ItemHoverBkgID" type="string" />
+            <attr name="DesText" type="string" />
+            <attr name="IconResID" type="string" />
+            <attr name="IconVisible" type="bool" />
+            <attr name="DesVisible" type="bool" />
+            <attr name="EnableHScroll" type="bool" />
+            <attr name="EnableVScroll" type="bool" />
+            <attr name="LeftMargin" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="TopMargin" type="int">
+                <default>0</default>
+            </attr>
+			<attr name="EditRightMargin" type="int">
+				<default>0</default>
+			</attr>
+            <attr name="IconWidth" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="DesWidth" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="EnableEdit" type="bool">
+                <default>true</default>
+            </attr>
+            <attr name="NowState" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="ShowList" type="bool">
+                <default>false</default>
+            </attr>
+            <attr name="Enable" type="bool">
+                <default>true</default>
+            </attr>
+			
+			<attr name="CanExpand" type="bool">
+				<default>true</default>
+			</attr>
+			<attr name="HighlightSelected" type="bool">
+				<default>true</default>
+			</attr>
+			
+            <attr name="ListHeight" type="int">
+                <default>150</default>
+            </attr>
+            <attr name="OnlyNumber" type="bool">
+                <default>false</default>
+            </attr>
+            <attr name="MaxLength" type="int" />
+            <attr name="TabID" type="int" />
+            <attr name="HostWndID" type="string">
+                <default>NewTaskDlg.Dialog</default>
+            </attr>
+            <attr name="NoScroll" type="bool">
+                <default>false</default>
+            </attr>
+        </attr_def>
+        <method_def>
+            <AddItem file="ComboBox.xml.lua" func="CB__AddItem" />
+            <InsertItem file="ComboBox.xml.lua" func="CB__InsertItem" />
+            <RemoveItem file="ComboBox.xml.lua" func="CB__RemoveItem" />
+            <SelectItem file="ComboBox.xml.lua" func="CB__SelectItem" />
+            <SelectItemByText file="ComboBox.xml.lua" func="CB__SelectItemByText" />
+            <GetSelectItemName file="ComboBox.xml.lua" func="CB__GetSelectItemName" />
+            <SetEnable file="ComboBox.xml.lua" func="CB__SetEnable" />
+            <GetEnable file="ComboBox.xml.lua" func="CB__GetEnable" />
+            <GetText file="ComboBox.xml.lua" func="CB__GetText" />
+            <SetText file="ComboBox.xml.lua" func="CB__SetText" />
+            <SetState file="ComboBox.xml.lua" func="CB__SetState" />
+            <SetFocus file="ComboBox.xml.lua" func="CB__SetFocus" />
+            <Undo file="ComboBox.xml.lua" func="CB__Undo" />
+            <ExpandList file="ComboBox.xml.lua" func="ExpandList"/>
+            <SetHostWndID file="ComboBox.xml.lua" func="CB__SetHostWndID"/>
+            <GetListHeight file="ComboBox.xml.lua" func="CB__GetListHeight"/>
+            <CBOnFocusChange file="ComboBox.xml.lua" func="CB__OnFocusChange" />
+			<SetEditSel file="ComboBox.xml.lua" func="CB__SetEditSel" />
+        </method_def>
+        <event_def>
+            <BeforeExpand />
+            <OnEditChange>
+                <param>
+                    <string />
+                </param>
+            </OnEditChange>
+            <OnSelectItemChanged>
+                <param>
+                    <int />
+                </param>
+            </OnSelectItemChanged>
+            <OnEditFocusChange>
+                <param>
+                    <bool />
+                </param>
+            </OnEditFocusChange>
+            <OnListExpandChange>
+                <param>
+                    <bool/>
+                    <int/>
+                    <int/>
+                </param>
+            </OnListExpandChange>
+			<OnEnterContent>
+				<param>
+					<string />
+				</param>
+			</OnEnterContent>
+        </event_def>
+        <objtemplate>
+            <children>
+                <obj id="combo.bkg" class="TextureObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+                    </attr>
+                    <children>
+                        <obj id="combo.icon" class="ImageObject">
+                            <attr>
+                                <left>0</left>
+                                <top>0</top>
+                                <width>16</width>
+                                <height>father.height</height>
+                            </attr>
+                        </obj>
+                        <obj id="combo.text" class="TextObject">
+                            <attr>
+                                <left>20</left>
+                                <top>0</top>
+                                <width>50</width>
+                                <height>father.height</height>
+                                <valign>center</valign>
+                                <halign>left</halign>
+                                <font>default.font</font>
+                                <textcolor>system.gray</textcolor>
+                                <zorder>1</zorder>
+                            </attr>
+                        </obj>
+                        <obj id="combo.edit" class="EditObject">
+                            <attr>
+                                <left>66</left>
+                                <top>0</top>
+                                <width>father.width</width>
+                                <height>father.height</height>
+                                <font>default.font</font>
+								<textcolor>system.white</textcolor>
+                                <transparent>1</transparent>
+                                <zorder>1</zorder>
+								<autourldetect>0</autourldetect>
+								<enable>false</enable>
+                            </attr>
+                            <eventlist>
+                                <event name="OnChange" file="ComboBox.xml.lua" func="CB__Edit__OnChange" />
+                                <event name="OnFocusChange" file="ComboBox.xml.lua" func="CB__Edit__OnFocusChange" />
+                                <event name="OnKeyUp" file="ComboBox.xml.lua" func="CB__Edit__OnChar" />
+								<event name="OnKeyDown" file="ComboBox.xml.lua" func="RouteToFather__OnKeyDown" />
+                                <event name="OnMouseWheel" file="ComboBox.xml.lua" func="CB__Edit__OnMouseWheel" />
+                                <event name="OnLButtonDown" file="ComboBox.xml.lua" func="CB__Btn__Down"/>
+                            </eventlist>
+                        </obj>
+						
+						
+						<obj id="combo.btn" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<NormalBkgID>YBYL.Head.FuncBtn.Bkg.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.FuncBtn.Bkg.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.FuncBtn.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.FuncBtn.Bkg.Disable</DisableBkgID>
+							</attr>
+							<children>
+								<obj id="combo.btn.DropArrow" class="TextureObject">
+									<attr>
+										<left>father.width-16</left>
+										<top>12</top>
+										<width>7</width>
+										<height>4</height>
+										<texture>YBYL.AddressBarCtrl.DropArrow.Hover</texture>
+									</attr>
+								</obj>
+							</children>
+							<eventlist>
+								<event name="OnClick" file="ComboBox.xml.lua" func="CB__Btn__OnClick" />
+								<event name="OnFocusChange" file="ComboBox.xml.lua" func="CB__BtnOnFocusChange" />
+								<event name="OnMouseWheel" file="ComboBox.xml.lua" func="CB__Edit__OnMouseWheel" />
+							</eventlist>
+						</obj>
+						
+						<obj id="listbox.layout" class="LayoutObject">
+							<attr>
+								<left>0</left>
+								<top>father.height</top>
+								<width>father.width</width>
+								<height>0</height>
+								<zorder>0</zorder>
+								<limitchild>0</limitchild>
+							</attr>
+						</obj>
+                    </children>
+                    <eventlist>
+                        <event name="OnKeyUp" file="ComboBox.xml.lua" func="RouteToFather__OnChar" />
+						<event name="OnKeyDown" file="ComboBox.xml.lua" func="RouteToFather__OnKeyDown" />
+                    </eventlist>
+                </obj>
+            </children>
+            <eventlist>
+                <event name="OnInitControl" file="ComboBox.xml.lua" func="CB__OnInitControl" />
+                <event name="OnKeyUp" file="ComboBox.xml.lua" func="ComboBox__OnKeyUp" />
+				<event name="OnKeyDown" file="ComboBox.xml.lua" func="ComboBox__OnKeyDown" />
+				<event name="OnFocusChange" file="ComboBox.xml.lua" func="CB_OnFocusChange" />
+            </eventlist>
+        </objtemplate>
+    </control>
+
+    <control class="TipAddin.ComboListBox">
+        <attr_def>
+            <attr name="EnableHScroll" type="bool">
+                <default>false</default>
+            </attr>
+            <attr name="EnableVScroll" type="bool">
+                <default>true</default>
+            </attr>
+            <attr name="AvalibleItemIndex" type="int">
+                <default>0</default>
+            </attr>
+        </attr_def>
+        <method_def>
+            <UpdateItemPos file="ComboBox.xml.lua" func="CLB__UpdateItemPos" />
+            <InsertItem file="ComboBox.xml.lua" func="CLB__InsertItem" />
+            <AddItem file="ComboBox.xml.lua" func="CLB__AddItem" />
+            <DeleteItem file="ComboBox.xml.lua" func="CLB__DeleteItem" />
+            <DeleteAllItem file="ComboBox.xml.lua" func="CLB__DeleteAllItem" />
+            <GetItemCount file="ComboBox.xml.lua" func="CLB__GetItemCount" />
+            <GetItem file="ComboBox.xml.lua" func="CLB__GetItem" />
+            <GetItemIndexByObj file="ComboBox.xml.lua" func="CLB__GetItemIndexByObj" />
+            <AdjustItemPos file="ComboBox.xml.lua" func="CLB__AdjustItemPos" />
+            <GetItemIndexByPoint file="ComboBox.xml.lua" func="CLB__GetItemIndexByPoint" />
+            <MouseWheel file="ComboBox.xml.lua" func="CLB__MouseWheel" />
+            <AdjustAvalibleItemPos file="ComboBox.xml.lua" func="CLB__AdjustAvalibleItemPos" />
+            <CancelAllSelect file="ComboBox.xml.lua" func="CLB__CancelAllSelect" />
+			<GetSize file="ComboBox.xml.lua" func="CLB_GetSize" />
+        </method_def>
+        <event_def>
+            <OnSelect>
+                <param>
+                    <int />
+                </param>
+            </OnSelect>
+        </event_def>
+        <objtemplate>
+            <children>
+                <obj id="listbox.bkg" class="TextureObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>father.height</height>
+                        <limitchild>1</limitchild>
+                        <!--texture>texture.menu.menuitem.normal</texture-->
+                    </attr>
+                    <children>
+						<obj id="item.list" class="LayoutObject" >
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<limitchild>1</limitchild>
+							</attr>
+							<children>
+								<obj id="item.layout" class="LayoutObject" >
+									<attr>
+										<left>0</left>
+										<top>0</top>
+										<width>father.width</width>
+										<height>father.height</height>
+									</attr>
+								</obj>
+							</children>
+						</obj>
+                        <obj id="listbox.vscroll" class="TipAddin.ScrollBar">
+                            <attr>
+                                <Type>1</Type>
+                                <!--NormalBkn>texture.vsb.small.bkg.normal</NormalBkn>
+                                <HoverBkn>texture.vsb.small.bkg.hover</HoverBkn>
+                                <ThumbBtn_normal>texture.vsb.small.thumb.normal</ThumbBtn_normal>
+                                <ThumbBtn_hover>texture.vsb.small.thumb.hover</ThumbBtn_hover>
+                                <ThumbBtn_down>texture.vsb.small.thumb.down</ThumbBtn_down-->
+								<ThumbBtnWidth>12</ThumbBtnWidth>
+                                <SideBtnLength>0</SideBtnLength>
+                                <PageSize>0</PageSize>
+                                <RangeBegin>0</RangeBegin>
+                                <RangeEnd>0</RangeEnd>
+                                <left>father.width - 12</left>
+                                <top>0</top>
+                                <width>12</width>
+                                <height>father.height</height>
+                                <zorder>500</zorder>
+                            </attr>
+                            <eventlist>
+                                <event name="OnVScroll" file="ComboBox.xml.lua" func="CLB__OnVScroll" />
+                                <event name="OnKeyUp" file="ComboBox.xml.lua" func="RouteToFather__OnChar" />
+                                <event name="OnScrollBarFocusChange" file="ComboBox.xml.lua" func="CLB__ScrollBar__OnFocusChange" />
+                                <event name="OnScrollBarMouseWheel" file="ComboBox.xml.lua" func="CLB__OnScrollBarMouseWheel"/>
+                            </eventlist>
+                        </obj>
+                        <obj id="listbox.hscroll" class="TipAddin.ScrollBar">
+                            <attr>
+                                <Type>0</Type>
+                                <!--NormalBkn>texture.hsb.small.bkg.normal</NormalBkn>
+                                <HoverBkn>texture.hsb.small.bkg.hover</HoverBkn>
+                                <ThumbBtn_normal>texture.hsb.small.thumb.normal</ThumbBtn_normal>
+                                <ThumbBtn_hover>texture.hsb.small.thumb.hover</ThumbBtn_hover>
+                                <ThumbBtn_down>texture.hsb.small.thumb.down</ThumbBtn_down-->
+								<ThumbBtnWidth>12</ThumbBtnWidth>
+                                <SideBtnLength>0</SideBtnLength>
+                                <PageSize>0</PageSize>
+                                <RangeBegin>0</RangeBegin>
+                                <RangeEnd>0</RangeEnd>
+                                <left>0</left>
+                                <top>father.height - 12</top>
+                                <width>father.width - 16</width>
+                                <height>12</height>
+                                <zorder>500</zorder>
+                            </attr>
+                            <eventlist>
+                                <event name="OnHScroll" file="ComboBox.xml.lua" func="CLB__OnHScroll" />
+                                <event name="OnKeyUp" file="ComboBox.xml.lua" func="RouteToFather__OnChar" />
+                                <event name="OnScrollBarFocusChange" file="ComboBox.xml.lua" func="CLB__ScrollBar__OnFocusChange" />
+                            </eventlist>
+                        </obj>
+                    </children>
+                    <eventlist>
+                        <event name="OnFocusChange" file="ComboBox.xml.lua" func="CLB__Bkg__OnFocusChange"/>
+                    </eventlist>
+                </obj>
+            </children>
+            <eventlist>
+                <event name="OnPosChange" file="ComboBox.xml.lua" func="CLB__OnPosChange" />
+                <event name="OnInitControl" file="ComboBox.xml.lua" func="CLB_OnInitControl" />
+                <event name="OnKeyUp" file="ComboBox.xml.lua" func="RouteToFather__OnChar" />
+                <event name="OnFocusChange" file="ComboBox.xml.lua" func="CLB__Bkg__OnFocusChange"/>
+            </eventlist>
+        </objtemplate>
+    </control>
+
+    <control class="TipAddin.ComboItem">
+        <attr_def>
+            <attr name="ItemID" type="int" />
+            <attr name="NormalBkgID" type="string" />
+            <attr name="HoverBkgID" type="string" />
+            <attr name="LeftMargin" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="TopMargin" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="IconResID" type="string">
+                <!--default>down.icon</default-->
+            </attr>
+            <attr name="IconWidth" type="int">
+                <default>0</default>
+            </attr>
+            <attr name="ItemText" type="string" />
+            <attr name="NowState" type="int" />
+        </attr_def>
+        <method_def>
+            <GetSize file="ComboBox.xml.lua" func="CI__GetSize" />
+            <SetParentObj file="ComboBox.xml.lua" func="CI__SetParentObj" />
+            <SetVisible file="ComboBox.xml.lua" func="CI__SetVisible" />
+            <GetVisible file="ComboBox.xml.lua" func="CI__GetVisible" />
+            <GetID file="ComboBox.xml.lua" func="CI__GetID" />
+            <SetID file="ComboBox.xml.lua" func="CI__SetID" />
+            <SetState file="ComboBox.xml.lua" func="CI__SetState" />
+            <GetText file="ComboBox.xml.lua" func="CI__GetText" />
+        </method_def>
+        <objtemplate>
+            <children>
+                <obj id="comboitem.bkg" class="TextureObject">
+                    <attr>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>father.width</width>
+                        <height>20</height>
+                    </attr>
+                    <children>
+                        <obj id="comboitem.icon" class="ImageObject">
+                            <attr>
+                                <left>0</left>
+                                <top>0</top>
+                                <width>0</width>
+                                <height>25</height>
+                            </attr>
+                        </obj>
+                        <obj id="comboitem.text" class="TextObject">
+                            <attr>
+                                <left>22</left>
+                                <top>0</top>
+                                <width>father.width</width>
+                                <height>25</height>
+                                <valign>center</valign>
+                                <font>default.font</font>
+                            </attr>
+                        </obj>
+                    </children>
+                </obj>
+            </children>
+            <eventlist>
+                <event name="OnBind" file="ComboBox.xml.lua" func="CI__OnBind" />
+                <event name="OnPosChange" file="ComboBox.xml.lua" func="CI__OnPosChange" />
+                <event name="OnMouseMove" file="ComboBox.xml.lua" func="CI__OnMouseMove" />
+                <event name="OnMouseLeave" file="ComboBox.xml.lua" func="CI__OnMouseLeave" />
+                <event name="OnFocusChange" file="ComboBox.xml.lua" func="CI__OnFocusChange" />
+            </eventlist>
+        </objtemplate>
+    </control>
+</xlue>

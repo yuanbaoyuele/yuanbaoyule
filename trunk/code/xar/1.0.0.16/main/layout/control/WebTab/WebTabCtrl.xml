@@ -1,0 +1,134 @@
+<xlue>
+	<control class="WebTabCtrl">
+		<attr_def>
+			<attr name="bTabActive" type="bool" />
+			<attr name="bTabID" type="int" />
+			<attr name="DragState" type="string" />
+			<attr name="objBrowserCtrl"  />
+			<attr name="strInputURL"  />
+			<attr name="strIcoName"  />
+			<attr name="bGoBackState" type="bool" />
+			<attr name="bGoForwardState" type="bool" />
+			<attr name="strDragState" type="string" />
+		</attr_def>		
+		<method_def>
+			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
+			<SetActiveStyle file="WebTabCtrl.xml.lua" func="SetActiveStyle"/>
+			<SetSelfID file="WebTabCtrl.xml.lua" func="SetSelfID"/>
+			<GetSelfID file="WebTabCtrl.xml.lua" func="GetSelfID"/>
+			<BindBrowserCtrl file="WebTabCtrl.xml.lua" func="BindBrowserCtrl"/>
+			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
+			<GetLocalURL file="WebTabCtrl.xml.lua" func="GetLocalURL"/>
+			<GetIcoName file="WebTabCtrl.xml.lua" func="GetIcoName"/>
+			<SaveUserInputURL file="WebTabCtrl.xml.lua" func="SaveUserInputURL"/>
+			<GetUserInputURL file="WebTabCtrl.xml.lua" func="GetUserInputURL"/>
+			<GetGoBackState file="WebTabCtrl.xml.lua" func="GetGoBackState"/>
+			<SetGoBackState file="WebTabCtrl.xml.lua" func="SetGoBackState"/>
+			<GetGoForwardState file="WebTabCtrl.xml.lua" func="GetGoForwardState"/>
+			<SetGoForwardState file="WebTabCtrl.xml.lua" func="SetGoForwardState"/>
+			<SetCloseBtnVisible file="WebTabCtrl.xml.lua" func="SetCloseBtnVisible"/>
+		</method_def>		
+		
+		<event_def>
+			<OnClickTabItem>
+				<param>
+					<int/>
+				</param>
+			</OnClickTabItem>
+			<OnCloseTabItem>
+				<param>
+					<int/>
+				</param>
+			</OnCloseTabItem>
+			<OnDrag>
+				<param>
+					<string/>
+					<int/>
+					<int/>
+				</param>
+			</OnDrag>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="WebTabCtrl.Active.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+				</obj>  
+				
+				<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+				</obj>  
+				
+				<obj id="WebTabCtrl.HeadImg" class="ImageObject">
+					<attr>
+						<left>15</left>
+						<top>(father.height-16)/2</top>
+						<width>16</width>
+						<height>16</height>
+						<drawmode>1</drawmode>
+						<antialias>2</antialias>
+					</attr>
+				</obj>   	
+
+				<obj id="WebTabCtrl.Text" class="TextObject">
+					<attr>
+						<left>40</left>
+						<top>0</top>
+						<width>father.width-40-35</width>
+						<height>father.height</height>
+						<valign>center</valign>
+						<font>font.tab.normal</font>
+						<textcolor>color.tab.normal</textcolor>
+						<endellipsis>1</endellipsis>
+					</attr>
+				</obj>   	
+
+				<obj id="WebTabCtrl.ClostBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width-19</left>
+						<top>(father.height-9)/2</top>
+						<width>9</width>
+						<height>9</height>
+						<NormalBkgID>YBYL.Tab.CloseBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.Tab.CloseBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.Tab.CloseBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.Tab.CloseBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="WebTabCtrl.xml.lua" func="OnClickCloseTab" />
+					</eventlist>
+				</obj>
+				
+				<!--分割线-->
+				<obj id="WebTabCtrl.Split" class="TextureObject">
+					<attr>
+						<left>father.width-1</left>
+						<top>father.height-25</top>
+						<width>1</width>
+						<height>25</height>
+						<texture>YBYL.Tab.Split</texture>
+					</attr>
+				</obj>   
+				
+			</children>
+			<eventlist>
+				<event name="OnLButtonUp" file="WebTabCtrl.xml.lua" func="OnClickTab" />
+				<event name="OnMouseEnter" file="WebTabCtrl.xml.lua" func="OnMouseEnterTab" />
+				<event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="OnMouseMoveTab" />
+				<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="OnMouseLeaveTab" />
+				<event name="OnInitControl" file="WebTabCtrl.xml.lua" func="OnInitControl" />
+				<event name="OnLButtonDown" file="WebTabCtrl.xml.lua" func="OnLButtonDown" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>
