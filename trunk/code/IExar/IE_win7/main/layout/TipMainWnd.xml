@@ -55,8 +55,8 @@
             <enable>1</enable>
             <maxbox>1</maxbox>
             <minbox>1</minbox>
-            <minwidth>250</minwidth>
-            <minheight>50</minheight>
+            <minwidth>363</minwidth>
+            <minheight>264</minheight>
 			<sysmenu>1</sysmenu>
 			<appwindow>1</appwindow>
 			<ellipse>5,5</ellipse>

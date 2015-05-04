@@ -380,7 +380,7 @@ function GetTID()
 		return strTID
 	end
 	
-	return "UA-61921868-1"
+	return "UA-62561947-1"
 end
 
 
@@ -719,6 +719,7 @@ function SetWindowMax()
 	local nNewWidth, nNewHeight = objHostWnd:GetMaxTrackSize()
 	RecordTrackSize(nNewWidth, nNewHeight)
 	objHostWnd:Max()
+	RecordWndSize()
 end	
 		
 
@@ -727,7 +728,7 @@ function SetBrowserFullScrn()
 	if not objBrowserLayout then
 		return
 	end
-	local objHeadWndLayout = GetHeadCtrlChildObj("MainPanel.Head")
+	local objHeadWndLayout = GetMainCtrlChildObj("MainPanel.HeadWnd")
 	if not objHeadWndLayout then
 		return
 	end
@@ -742,7 +743,6 @@ function SetBrowserFullScrn()
 	
 	local nDiffW = (nHeadWndL-nRootL) + (nRootR-nHeadWndR)
 	local nDiffH = (nBrowserT-nRootT) + (nRootB-nBrowserB)
-	
 	local nWidth, nHeight = tipUtil:GetScreenSize()
 	local nNewWidth = nWidth+nDiffW
 	local nNewHeight = nHeight+nDiffH
@@ -753,9 +753,10 @@ function SetBrowserFullScrn()
 	SetBrowserFullScrnState(true)
 	SetResizeEnable(false)
 	
+	objMainWnd:SetBorder(0, 0, 0, 0)
 	objMainWnd:SetMaxTrackSize(nNewWidth, nNewHeight)
-	objMainWnd:Move(0-nDiffW+20, 0-nBrowserT, nNewWidth, nNewHeight)	
-		
+	objMainWnd:Move((nRootL-nHeadWndL), 0-nBrowserT, nNewWidth, nNewHeight)	
+	
 	local objHeadWindow = GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	objHeadWindow:Move(0, -119, nNewWidth, 120)
 end
@@ -773,7 +774,9 @@ function RestoreWndSize()
 		SetResizeEnable(false)
 		return
 	end
-		
+	
+	SetBrowserFullScrnState(false)
+			
 	local bLastWndMax = tWindowSize.bWindowMax
 	if bLastWndMax then
 		SetMainWndDefaultTrackSize()
@@ -795,9 +798,7 @@ function RestoreWndSize()
 		nHeight = 768
 	end
 		
-	SetBrowserFullScrnState(false)
 	SetResizeEnable(true)
-	
 	ResetTrackSize(objMainWnd)
 	objMainWnd:Move(nLeft, nTop, nWidth, nHeight)
 end
