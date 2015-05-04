@@ -155,6 +155,7 @@ function AddHoverBkg(obj, isadd, isshowarrow, callback)
 				btn = objFactory:CreateUIObject("hoverbtn_collect", "TipAddin.Button")
 				btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
 				local attr = btn:GetAttribute()
+				attr.NormalBkgID = ""
 				attr.HoverBkgID = "Collect.Button.Bkg.Hover"
 				attr.DownBkgID = "Collect.Button.Bkg.Down"
 				attr.ForegroundResID = "collect.arrow"

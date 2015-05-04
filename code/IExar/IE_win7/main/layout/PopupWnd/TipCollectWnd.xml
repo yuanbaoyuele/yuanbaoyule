@@ -145,9 +145,9 @@
 						<obj id="TipCollectWnd.TabLayout" class="LayoutObject">
 							<attr>
 								<left>5</left>
-								<top>36</top>
+								<top>31</top>
 								<width>father.width-15</width>
-								<height>20</height>
+								<height>25</height>
 							</attr>
 							<children>
 								<obj id="TipCollectWnd.Tab.Collect" class="TextureObject">
@@ -176,7 +176,7 @@
 									<attr>
 										<left>50</left>
 										<top>2</top>
-										<width>21</width>
+										<width>28</width>
 										<height>17</height>
 										<texture>Collect.Tab.Bkg.Normal</texture>
 									</attr>
@@ -195,7 +195,7 @@
 								
 								<obj id="TipCollectWnd.Tab.History" class="TextureObject">
 									<attr>
-										<left>50+20</left>
+										<left>50+27</left>
 										<top>2</top>
 										<width>58</width>
 										<height>17</height>

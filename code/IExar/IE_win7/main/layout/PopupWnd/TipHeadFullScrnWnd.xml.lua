@@ -26,9 +26,9 @@ function OnCreate( self )
 	
 		local mainleft, maintop, mainright, mainbottom = objMainWnd:GetWindowRect()
 		objSelfWnd:SetTopMost(false)
-		objSelfWnd:SetMaxTrackSize(width-8, 120)
-		objSelfWnd:Move( mainleft+HeadL, maintop+HeadT, mainright, 120)
-		objRootCtrl:SetObjPos(0, 0, width-20*2, 120)
+		objSelfWnd:SetMaxTrackSize(width+100, 120)
+		objSelfWnd:Move( mainleft+HeadL, maintop+HeadT, width-21*2, 120)
+		objRootCtrl:SetObjPos(0, 0, width-21*2, 120)
 	end)	
 end
 
