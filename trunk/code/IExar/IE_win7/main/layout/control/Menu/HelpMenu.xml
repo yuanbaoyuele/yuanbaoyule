@@ -54,21 +54,6 @@
 				</eventlist>
 			</obj>
 			
-			<obj id="ReportSet" class="MenuItemObject" templateid="menu.context.item">
-				<attr>
-					<Text>客户反馈选项</Text>
-					<AccKey>F</AccKey>
-				</attr>
-				<eventlist>
-					<event name="OnSelect" file="HelpMenu.xml.lua" function="OnSelect_ReportSet" />
-				</eventlist>
-			</obj>
-		
-			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
-				<attr>
-				</attr>
-			</obj>
-			
 			<obj id="About" class="MenuItemObject" templateid="menu.context.item">
 				<attr>
 					<Text>关于 Internet Explorer</Text>
