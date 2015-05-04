@@ -66,7 +66,7 @@ function CreateMenuItem(tCollectInfo, nIndex)
 		attr.Enable = 0
 	end
 	attr.FontColorNormal = "404040"
-	attr.TextPos = 27
+	attr.TextPos = 33
 	attr.DeleteImgVisible = false
 	
 	SetIcoImage(objMenuItem, tCollectInfo)
