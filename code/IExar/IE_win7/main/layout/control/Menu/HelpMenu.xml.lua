@@ -24,10 +24,6 @@ function OnSelect_Support(self)
 	tFunHelper.OpenURLInCurTab(strSupportUrl)
 end
 
-function OnSelect_ReportSet(self)
-	tFunHelper.ShowModalDialog("TipFeedbackWnd", "TipFeedbackWndInstance", "TipFeedbackTree", "TipFeedbackTreeInstance")
-end
-
 function OnSelect_About(self)
 	local objTree = self:GetOwner()
 	local objMenuHostWnd = objTree:GetBindHostWnd()
