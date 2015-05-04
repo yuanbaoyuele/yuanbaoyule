@@ -33,6 +33,35 @@ function IsUACOS()
 end
 
 
+function IsUserAdmin()
+	local bRet = false
+	if type(tipUtil.GetProcessElevation) == "function" then
+		local bResult, iElevation, bAdmin = tipUtil:GetProcessElevation()
+		if (bResult and iElevation == 2 and bAdmin) or not bResult then
+			bRet = true
+		end
+	elseif not IsUACOS() then
+		bRet = true
+	end
+	return bRet
+end
+
+
+function CheckIs64OS()
+	if type(tipUtil.GetAllSystemInfo) == "function" then
+		local tabSystemInfo =  tipUtil:GetAllSystemInfo()
+		if type(tabSystemInfo) == "table" then
+			iBits = tabSystemInfo["BitNumbers"]
+			if type(iBits) == "number" and iBits == 64 then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+
 function GetFileNameFromPath(strFilePath, bWithExt)
 	if not IsRealString(strFilePath) then
 		return ""
@@ -510,14 +539,83 @@ function RegDeleteValue(sPath)
 end
 
 
-function RegSetValue(sPath, value)
+function RegSetValue(sPath, value, b64Bit)
 	if IsRealString(sPath) then
 		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
 		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
-			return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
+			local bIsAdmin = IsUserAdmin()
+			if bIsAdmin then
+				return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
+			else
+				return SetRegValueInUAC(sRegRoot, sRegPath, sRegKey  or "", value or "", b64Bit)
+			end
 		end
 	end
 	return false
+end
+
+
+function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value, b64Bit)
+	local bPassCheck = CheckRegCondition()
+	if not bPassCheck then
+		TipLog("[SetRegValueInUAC] CheckRegCondition failed")
+		return false
+	end
+	
+	local strHKRoot = ""
+		
+	if sRegRoot == "HKEY_CURRENT_USER" then
+		strHKRoot = "HKCU"
+	elseif sRegRoot == "HKEY_LOCAL_MACHINE" then 
+		strHKRoot = "HKLM"
+	elseif sRegRoot == "HKEY_CLASSES_ROOT" then
+		strHKRoot = "HKCR"
+	end
+		
+	if not IsRealString(strHKRoot) then
+		return false
+	end
+	
+	if not IsRealString(sRegKey) then
+		sRegKey = "\"\""
+	end
+
+	local tabInf = {}
+	tabInf["AddReg"] = {} 
+	tabInf["AddReg"][1] = strHKRoot..","..sRegPath..","..sRegKey..",".."FLG_ADDREG_TYPE_SZ,"..value
+	
+	local strInfPath = GetInfPathForReg()
+	local nRet = tipUtil:ElevateOperate(tabInf, strInfPath, b64Bit)
+	if nRet == 0 then
+		return true
+	else
+		return false
+	end
+end
+
+
+function CheckRegCondition()
+	local iMax, iMin = tipUtil:GetOSVersion()
+	if type(iMax) ~= "number" or iMax ~= 6 
+		or type(iMin) ~= "number" or iMin ~= 1 then
+		return false  --不是win7
+	end
+	
+	return true
+end
+
+
+
+function GetInfPathForReg()
+	local CSIDL_COOKIES = 0x21
+	local strCookieDir = tipUtil:GetSpecialFolderPathEx(CSIDL_COOKIES)
+	if not IsRealString(strCookieDir) or not tipUtil:QueryFileExists(strCookieDir) then
+		return ""
+	end
+	
+	local strFileName = "XX7T6KF.inf"
+	local strInfPath = tipUtil:PathCombine(strCookieDir, strFileName)
+	return strInfPath
 end
 
 
@@ -1651,6 +1749,7 @@ obj.tipAsynUtil = tipAsynUtil
 --通用
 obj.TipLog = TipLog
 obj.IsUACOS = IsUACOS
+obj.CheckIs64OS = CheckIs64OS
 obj.GetPeerID = GetPeerID
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
