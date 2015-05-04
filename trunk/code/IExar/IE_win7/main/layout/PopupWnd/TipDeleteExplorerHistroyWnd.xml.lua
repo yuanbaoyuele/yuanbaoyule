@@ -52,9 +52,9 @@ function OnClickCheckBox(obj)
 		return
 	end
 	if attr.NormalBkgID == "checkbox.normal" then
-		attr.NormalBkgID = "checkbox.check.normal"
-		attr.HoverBkgID = "checkbox.check.hover"
-		attr.DownBkgID = "checkbox.check.normal"
+		attr.NormalBkgID = "checkbox.check.hover"
+		attr.HoverBkgID = "checkbox.check.normal"
+		attr.DownBkgID = "checkbox.check.hover"
 		gTableCheck[strKey] = true
 	else
 		attr.NormalBkgID = "checkbox.normal"
