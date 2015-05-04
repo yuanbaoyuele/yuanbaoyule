@@ -759,101 +759,6 @@ bool IsVistaOrLatter()
 	return (osvi.dwMajorVersion >= 6);
 };
 
-void SetRegValue(HKEY hk, char* path, char* key, const char* value)
-{
-	HKEY hKEY;
-	if (ERROR_SUCCESS != ::RegOpenKeyExA(hk, path,0,KEY_SET_VALUE,&hKEY))
-	{
-		
-		if (ERROR_SUCCESS != ::RegCreateKeyA(hk, path, &hKEY))
-		{
-			char szMsg[128] = {0};
-			sprintf(szMsg, "path=%s, key=%s, lasterror=%d", path, key, ::GetLastError());
-			TSDEBUG4CXX("SetRegValue errormsg =  " << szMsg);
-		}
-	}
-	if(ERROR_SUCCESS == ::RegSetValueExA(hKEY, key, 0, REG_SZ, (const BYTE*)value, strlen(value)+1))
-	{
-		::RegCloseKey(hKEY);
-	}
-};
-
-extern "C" __declspec(dllexport) void HideIEIcon(int value)
-{
-	HKEY hKEY;
-	HKEY szHkey[] = {HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
-	for(int i = 0; i < sizeof(szHkey)/sizeof(HKEY); ++i)
-	{
-		LPCSTR data_Set= "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel";
-		if (ERROR_SUCCESS == ::RegOpenKeyExA(szHkey[i],data_Set,0,KEY_SET_VALUE,&hKEY))
-		{
-			DWORD valuedata=value;
-			::RegSetValueExA(hKEY, "{871C5380-42A0-1069-A2EA-08002B30309D}", 0, REG_DWORD, (LPBYTE)&valuedata, sizeof(DWORD));
-			::RegCloseKey(hKEY);
-		}
-		data_Set= "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu";
-		if (ERROR_SUCCESS == ::RegOpenKeyExA(szHkey[i],data_Set,0,KEY_SET_VALUE,&hKEY))
-		{
-			DWORD valuedata=value;
-			::RegSetValueExA(hKEY, "{871C5380-42A0-1069-A2EA-08002B30309D}", 0, REG_DWORD, (BYTE*)&valuedata, sizeof(DWORD));
-			::RegCloseKey(hKEY);
-		}
-	}
-}
-
-extern "C" __declspec(dllexport) void ReplaceIcon(const char* strExePath)
-{
-
-	/*HKEY hKEY;
-	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CLASSES_ROOT, "CLSID\\{871C5380-42A0-1069-A2EA-08002B30309D}\\shell\\NoAddOns\\Command",0,KEY_ALL_ACCESS,&hKEY))
-	{
-		char szValue[256] = {0};
-		DWORD dwSize = sizeof(szValue);
-		DWORD dwType = REG_SZ;
-		if(::RegQueryValueExA(hKEY, "", 0, &dwType, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS && ERROR_SUCCESS == ::RegSetValueExA(hKEY, "", 0, REG_SZ, (const BYTE*)strExePath, strlen(strExePath)+1))
-		{
-			SetRegValue(HKEY_CURRENT_USER, "SOFTWARE\\iexplorer", "HideIEIcon_NoAddOns", szValue);
-			::RegCloseKey(hKEY);
-		}
-	}
-	HKEY hKEY2;
-	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CLASSES_ROOT, "CLSID\\{871C5380-42A0-1069-A2EA-08002B30309D}\\shell\\OpenHomePage\\Command",0,KEY_ALL_ACCESS,&hKEY2))
-	{
-		char szValue[256] = {0};
-		DWORD dwSize = sizeof(szValue);
-		DWORD dwType = REG_SZ;
-		if(::RegQueryValueExA(hKEY2, "", 0, &dwType, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS && ERROR_SUCCESS == ::RegSetValueExA(hKEY2, "", 0, REG_SZ, (const BYTE*)strExePath, strlen(strExePath)+1))
-		{
-			SetRegValue(HKEY_CURRENT_USER, "SOFTWARE\\iexplorer", "HideIEIcon_OpenHomePage", szValue);
-			::RegCloseKey(hKEY2);
-		}
-	}
-	
-	return;//20150409 add TODO:修改ie的注册表*/
-	HKEY hKEY;
-	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}",0,KEY_READ,&hKEY))
-	{
-		//已经存在则不写
-		return;
-	}
-	char strCommand[MAX_PATH] = {0};
-	sprintf(strCommand, "\"%s\" /sstartfrom desktopnamespace", strExePath);
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "InfoTip", "查找并显示 Iternet 上的信息和网站。");
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "LocalizedString", "Internet Explorer");
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon", "", strExePath);
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open", "", "打开主页(&H)");
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command", "", strCommand);
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop", "", "属性(&R)");
-	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command", "", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl");
-	SetRegValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "", "Internet Exploer");
-}
-
-extern "C" __declspec(dllexport) void ReductionIcon()
-{
-	RegDeleteKeyA(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
-	RegDeleteKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
-}
-
 extern "C" __declspec(dllexport) int IsOsUac()
 {
 	if(IsVistaOrLatter()){
@@ -1096,4 +1001,671 @@ extern "C" __declspec(dllexport) void UrlEncode(const char* strSource, char* str
             strOutput[strlen(strOutput)] = ToHex((unsigned char)strSource[i] % 16);
         }
     }
+}
+
+extern "C" __declspec(dllexport) void DeleteFileEx(const char* strPath)
+{
+	::DeleteFileA(strPath);
+	DWORD dwLastError = ::GetLastError();
+	TSDEBUG4CXX("DeleteFileEx "<<strPath<<", lasterror = "<<dwLastError);
+}
+
+extern "C" __declspec(dllexport) void Pin2StartMenuWin7(const char* strPath, bool bPin)
+{
+	if(PathFileExistsA(strPath)){
+		::ShellExecuteA(NULL, "startunpin", strPath, NULL, NULL, SW_HIDE);
+		DWORD dwLastError = ::GetLastError();
+		TSDEBUG4CXX("Pin2StartMenuWin7, startunpin ok, lasterror = "<<dwLastError);
+		Sleep(1000);
+		if(PathFileExistsA(strPath)){
+			DeleteFileEx(strPath);
+		}
+	} else {
+		TSDEBUG4CXX("Pin2StartMenuWin7, strPath is not exist, strPath = "<<strPath);
+	}
+	if(bPin){
+			
+	}
+}
+
+extern "C" __declspec(dllexport) void Pin2TaskbarWin7(const char* strPath, bool bPin)
+{
+	if(PathFileExistsA(strPath)){
+		::ShellExecuteA(NULL, "taskbarunpin", strPath, NULL, NULL, SW_HIDE);
+		DWORD dwLastError = ::GetLastError();
+		TSDEBUG4CXX("Pin2TaskbarWin7, startunpin ok, lasterror = "<<dwLastError);
+		wchar_t* wstrPath = AnsiToUnicode(strPath);
+		::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
+						wstrPath,0);
+		delete [] wstrPath;
+		Sleep(500);
+		if(PathFileExistsA(strPath)){
+			DeleteFileEx(strPath);
+		}
+	} else {
+		TSDEBUG4CXX("Pin2TaskbarWin7, strPath is not exist, strPath = "<<strPath);
+	}
+	if(bPin){
+			
+	}
+}
+
+
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+BOOL IsWow64()
+{
+	BOOL bIsWow64 = FALSE;
+
+	fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(
+		GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+	if (NULL != fnIsWow64Process)
+	{
+		if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+		{
+			// handle error
+		}
+	}
+	return bIsWow64;
+}
+
+bool LuaStringToCComBSTR(const char* src, CComBSTR& bstr)
+{
+	bstr = L"";
+	if(!src)
+		return false;
+	int iLen = (int)strlen(src);
+	if(iLen > 0)
+	{
+		wchar_t* szm = new wchar_t[iLen * 4];
+		ZeroMemory(szm, iLen * 4);
+		int nLen = MultiByteToWideChar(CP_UTF8, 0, src,iLen, szm, iLen*4); 
+		szm [nLen] = '\0';
+		bstr = szm;
+		delete [] szm;
+		return true;
+	}
+	return false;
+}
+
+BOOL GetHKEY(const char* utf8Root, HKEY &hKey)
+{
+	BOOL bRet = TRUE;
+	if(stricmp(utf8Root,"HKEY_CURRENT_USER") == 0)
+	{
+		hKey = HKEY_CURRENT_USER;
+	}
+	else if(stricmp(utf8Root,"HKEY_CLASSES_ROOT") == 0)
+	{
+		hKey = HKEY_CLASSES_ROOT;
+	}
+	else if(stricmp(utf8Root,"HKEY_LOCAL_MACHINE") == 0)
+	{
+		hKey = HKEY_LOCAL_MACHINE;
+	}
+	else if(stricmp(utf8Root,"HKEY_USERS") == 0)
+	{
+		hKey = HKEY_USERS;
+	}
+	else if(stricmp(utf8Root, "HKEY_CURRENT_CONFIG") == 0)
+	{
+		hKey = HKEY_CURRENT_CONFIG;
+	}
+	else
+	{
+		bRet = FALSE;
+		hKey = (HKEY)(ULONG_PTR)((LONG)-1);
+	}
+	return bRet;
+}
+
+bool  BSTRToLuaString( BSTR src, std::string& dest)
+{
+	if(!src)
+		return false;
+	int  iLen = (int)wcslen(src);
+	if(iLen > 0)
+	{
+		char* szdest = new  char[iLen * 4];
+		if(NULL == szdest)
+			return false;
+		ZeroMemory(szdest, iLen * 4);			
+		int nLen = WideCharToMultiByte(CP_UTF8, NULL, src, iLen, szdest, iLen * 4, 0, 0);
+		szdest[nLen] = '\0'; 
+		dest = szdest;
+		delete [] szdest ;
+		return true;
+	}
+	return false;
+}
+
+long QueryRegValueHelper(const char* utf8Root,const char* utf8RegPath,const char* utf8Key, DWORD &dwType, std::string& utf8Result, DWORD &dwValue,BOOL bWow64)
+{
+	//TODO
+	HKEY root;
+	if(utf8Root == NULL || utf8RegPath == NULL || utf8Key == NULL)
+	{
+		return 1;
+	}
+	if (!GetHKEY(utf8Root, root))
+	{
+		return 1;
+	}
+
+	CComBSTR bstrRegPath,bstrKey;
+
+	LuaStringToCComBSTR(utf8RegPath,bstrRegPath);
+	LuaStringToCComBSTR(utf8Key,bstrKey);
+
+	CRegKey regKey;
+	REGSAM samDesired = bWow64?(KEY_WOW64_64KEY|KEY_READ):KEY_READ;
+	if (regKey.Open(root, bstrRegPath.m_str, samDesired) == ERROR_SUCCESS)
+	{
+		ULONG ulBytes = 0;
+		if (ERROR_SUCCESS == regKey.QueryValue(bstrKey.m_str, &dwType, NULL, &ulBytes))
+		{
+			if (dwType == REG_DWORD)
+			{
+				regKey.QueryDWORDValue(bstrKey.m_str, dwValue);
+				return 0;
+			}
+			else if (dwType == REG_SZ || dwType == REG_EXPAND_SZ)
+			{
+				wchar_t* pBuffer = (wchar_t *)new BYTE[ulBytes+2];
+				memset(pBuffer, 0, ulBytes+2);
+				regKey.QueryStringValue(bstrKey.m_str, pBuffer, &ulBytes);
+
+				BSTRToLuaString(pBuffer,utf8Result);
+				TSDEBUG4CXX(L"REG_EXPAND_SZ = " << utf8Result.c_str());
+				delete [] pBuffer;
+				pBuffer = NULL;
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+/*读取64位注册表值*/
+int QueryRegValue64(const char* utf8RootPath, const char* utf8RegPath, const char* utf8Key, void* lpRet)
+{
+	if(utf8RegPath == NULL || utf8RootPath == NULL || utf8Key == NULL)
+	{
+		return 0;
+	}
+
+	std::string result;
+	DWORD dwType;
+	DWORD dwValue;
+	if (0 == QueryRegValueHelper(utf8RootPath,utf8RegPath,utf8Key,dwType, result, dwValue,TRUE))
+	{
+		if (dwType == REG_DWORD)
+		{
+			DWORD* pint = (DWORD*)lpRet;
+			*pint = dwValue;
+			return 1;
+		}
+		else if (dwType == REG_SZ || dwType == REG_EXPAND_SZ)
+		{
+			char* strRet = (char*)lpRet;
+			strcpy(strRet, result.c_str());
+			return 1;
+		}
+	}
+	return 0;
+}
+
+long DeleteRegValueHelper(const char* utf8Root, const char* utf8Key,BOOL bWow64)
+{
+	HKEY root;
+	if(utf8Root == NULL || utf8Key == NULL)
+	{
+		return 0;
+	}
+	if (!GetHKEY(utf8Root, root))
+	{
+		return 0;
+	}
+
+	CComBSTR bstrKey;
+	LuaStringToCComBSTR(utf8Key,bstrKey);
+	
+	std::wstring wstrKey = bstrKey.m_str;
+	std::wstring::size_type index = wstrKey.find_last_of(L"\\");
+	if (index == std::wstring::npos)
+	{
+		return 0;
+	}
+	std::wstring  strsubkey,strvalue;
+	strsubkey = wstrKey.substr(0,index);
+	strvalue =  wstrKey.substr(index+1);
+	
+	REGSAM samDesired = bWow64?(KEY_WOW64_64KEY|KEY_WRITE):KEY_WRITE;
+	HKEY hKey;
+	if(RegOpenKeyEx(root,strsubkey.c_str(),0,samDesired,&hKey) == ERROR_SUCCESS)
+	{
+		RegDeleteValue(hKey, strvalue.c_str());
+		RegCloseKey( hKey );
+	}
+	else
+	{
+		return 0;
+	}
+	return 1;
+}
+
+/*删除64位注册表值*/
+int DeleteRegValue64(const char* utf8Root, const char* utf8Key)
+{
+
+	if(utf8Root == NULL || utf8Key == NULL)
+	{
+		return 0;
+	}
+
+	if(DeleteRegValueHelper(utf8Root, utf8Key,TRUE) == 1)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+typedef LONG (WINAPI*_RegDeleteTree)(HKEY hKey, LPCWSTR lpSubKey);
+typedef LONG (WINAPI*_RegDeleteKeyEx)(HKEY hKey, LPCWSTR lpSubKey,REGSAM samDesired, DWORD);
+
+long DeleteRegKeyHelper(const char* utf8Root, const char* utf8SubKey,BOOL bWow64)
+{
+	HKEY root;
+	if(utf8Root == NULL || utf8SubKey == NULL)
+	{
+		return 0;
+	}
+	if (!GetHKEY(utf8Root, root))
+	{
+		return 0;
+	}
+	CComBSTR bstrKey;
+	LuaStringToCComBSTR(utf8SubKey,bstrKey);
+	if (!bWow64)
+	{
+		if (ERROR_SUCCESS == SHDeleteKey(root, bstrKey.m_str))
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		HMODULE hModule = ::LoadLibrary(_T("Advapi32.dll"));
+		if (NULL == hModule)
+		{
+			return 0;
+		}
+		_RegDeleteTree fnRegDeleteTree = (_RegDeleteTree)GetProcAddress(hModule, "RegDeleteTreeW");
+		if (NULL == fnRegDeleteTree)
+		{
+			FreeLibrary(hModule);
+			return 0;
+		}
+		HKEY hKey;
+		if(RegOpenKeyEx(root,bstrKey.m_str,0, DELETE|KEY_ENUMERATE_SUB_KEYS| KEY_QUERY_VALUE|KEY_SET_VALUE|KEY_WOW64_64KEY,&hKey) == ERROR_SUCCESS)
+		{
+			LONG lRet = fnRegDeleteTree(hKey,NULL);
+			RegCloseKey( hKey );
+			if (ERROR_SUCCESS == lRet)
+			{
+				_RegDeleteKeyEx fnRegDeleteKeyEx = (_RegDeleteKeyEx)GetProcAddress(hModule, "RegDeleteKeyExW");
+				if (NULL != fnRegDeleteKeyEx)
+				{
+					if (ERROR_SUCCESS == fnRegDeleteKeyEx(root,bstrKey.m_str,KEY_WOW64_64KEY,NULL))
+					{
+						FreeLibrary(hModule);
+						return 1;
+					}
+				}
+			}
+		}
+		FreeLibrary(hModule);
+	}
+	return 0;
+}
+
+/*删除64位注册表key*/
+int DeleteRegKey64(const char* utf8Root, const char* utf8Key)
+{
+
+	if(utf8Root == NULL || utf8Key == NULL)
+	{
+		return 0;
+	}
+
+	if(DeleteRegKeyHelper(utf8Root, utf8Key,TRUE) == 1)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+long CreateRegKeyHelper(const char* utf8Root, const char* utf8SubKey,BOOL bWow64)
+{
+	HKEY root;
+	if(utf8Root == NULL || utf8SubKey == NULL)
+	{
+		return 0;
+	}
+	if (!GetHKEY(utf8Root, root))
+	{
+		return 0;
+	}
+	
+	CComBSTR bstrKey;
+	LuaStringToCComBSTR(utf8SubKey,bstrKey);
+	HKEY hCreateKey;
+	LONG lRet;
+	if (!bWow64)
+	{
+		lRet = RegCreateKey(root, bstrKey.m_str, &hCreateKey);
+	}
+	else
+	{
+		lRet = RegCreateKeyEx(root, bstrKey.m_str, NULL,NULL,REG_OPTION_NON_VOLATILE,KEY_WOW64_64KEY|KEY_READ|KEY_WRITE,NULL,&hCreateKey,NULL);
+	}
+	if(lRet == ERROR_SUCCESS)
+	{
+		RegCloseKey(hCreateKey);
+		return 1;
+	}
+
+	return 0;
+}
+
+/*创建64位注册表key*/
+int CreateRegKey64(const char* utf8Root, const char* utf8SubKey)
+{
+	if(utf8Root == NULL || utf8SubKey == NULL)
+	{
+		return 0;
+	}
+
+	if(CreateRegKeyHelper(utf8Root, utf8SubKey,TRUE) == 1)
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
+long SetRegValueHelper(const char* utf8Root, const char* utf8SubKey, const char* utf8ValueName,DWORD dwType, const char* utf8Data, DWORD dwValue,BOOL bWow64)
+{
+	TSDEBUG4CXX("SetRegValueHelper enter, utf8Data = "<<utf8Data);
+	HKEY root;
+	if(utf8Root == NULL || utf8SubKey == NULL || utf8ValueName == NULL)
+	{
+		return 1;
+	}
+	if (!GetHKEY(utf8Root, root))
+	{
+		return 1;
+	}
+
+	CComBSTR bstrSubKey,bstrValueName;
+
+	LuaStringToCComBSTR(utf8SubKey,bstrSubKey);
+	LuaStringToCComBSTR(utf8ValueName,bstrValueName);
+	wchar_t* wstrSubkey = AnsiToUnicode(utf8SubKey);
+	wchar_t* wstrValueName = AnsiToUnicode(utf8ValueName);
+	CRegKey regKey;
+
+	REGSAM samDesired = bWow64?(KEY_WOW64_64KEY|KEY_SET_VALUE):KEY_SET_VALUE;
+	if (regKey.Open(root, wstrSubkey, samDesired) == ERROR_SUCCESS)
+	{
+		// 判断类型
+		if (dwType == REG_DWORD)
+		{
+			if (ERROR_SUCCESS == regKey.SetDWORDValue(wstrValueName, dwValue))
+			{
+				delete []wstrValueName;
+				delete []wstrSubkey;
+				return 0;
+			}
+		}
+		else if (dwType == REG_SZ)
+		{
+			wchar_t* wstrData = AnsiToUnicode(utf8Data);
+			TSDEBUG4CXX("SetRegValueHelper enter, utf8Data = "<<utf8Data<<", wstrData = "<<wstrData);
+			if (ERROR_SUCCESS == regKey.SetStringValue(bstrValueName.m_str, wstrData))
+			{
+				delete []wstrValueName;
+				delete []wstrSubkey;
+				delete []wstrData;
+				return 0;
+			}
+			delete []wstrValueName;
+			delete []wstrSubkey;
+			delete []wstrData;
+		}
+	}
+
+	return 1;
+}
+
+/*写64位注册表*/
+int SetRegValue64(const char* utf8Root, const char* utf8SubKey, const char* utf8ValueName, DWORD dwType, void* lpValue)
+{
+	if(utf8Root == NULL || utf8SubKey == NULL || utf8ValueName == NULL)
+	{
+		return 0;
+	}
+	if (SetRegValueHelper(utf8Root, utf8SubKey, utf8ValueName, dwType, (char*)lpValue, *(DWORD*)lpValue,TRUE) == 0)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+void SetRegValue(HKEY hk, char* path, char* key, const char* value)
+{
+	if(IsWow64() == TRUE){
+		char szRootName[MAX_PATH] = {0};
+		if(HKEY_CLASSES_ROOT == hk){
+			strcpy(szRootName, "HKEY_CLASSES_ROOT");
+		} else if(HKEY_LOCAL_MACHINE == hk){
+			strcpy(szRootName, "HKEY_LOCAL_MACHINE");
+		}
+		CreateRegKey64(szRootName, path);
+		SetRegValue64(szRootName, path, key, REG_SZ, (void*)value);
+	} else {
+		HKEY hKEY;
+		if (ERROR_SUCCESS != ::RegOpenKeyExA(hk, path,0,KEY_SET_VALUE,&hKEY))
+		{
+			
+			if (ERROR_SUCCESS != ::RegCreateKeyA(hk, path, &hKEY))
+			{
+				char szMsg[128] = {0};
+				sprintf(szMsg, "path=%s, key=%s, lasterror=%d", path, key, ::GetLastError());
+				TSDEBUG4CXX("SetRegValue errormsg =  " << szMsg);
+			}
+		}
+		if(ERROR_SUCCESS == ::RegSetValueExA(hKEY, key, 0, REG_SZ, (const BYTE*)value, strlen(value)+1))
+		{
+			::RegCloseKey(hKEY);
+		}
+	}
+};
+
+extern "C" __declspec(dllexport) void HideIEIcon(int value)
+{
+	if(IsWow64() == TRUE){
+		char* szRootNames[] = {"HKEY_CURRENT_USER", "HKEY_LOCAL_MACHINE"};
+		DWORD dwValue = value;
+		for(int i = 0; i < sizeof(szRootNames)/sizeof(char*); ++i){
+			SetRegValue64(szRootNames[i], "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel", "{871C5380-42A0-1069-A2EA-08002B30309D}", REG_DWORD, &dwValue);
+			SetRegValue64(szRootNames[i], "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu", "{871C5380-42A0-1069-A2EA-08002B30309D}", REG_DWORD, &dwValue);
+		}
+	} else {
+		HKEY hKEY;
+		HKEY szHkey[] = {HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
+		for(int i = 0; i < sizeof(szHkey)/sizeof(HKEY); ++i)
+		{
+			LPCSTR data_Set= "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel";
+			if (ERROR_SUCCESS == ::RegOpenKeyExA(szHkey[i],data_Set,0,KEY_SET_VALUE,&hKEY))
+			{
+				DWORD valuedata=value;
+				::RegSetValueExA(hKEY, "{871C5380-42A0-1069-A2EA-08002B30309D}", 0, REG_DWORD, (LPBYTE)&valuedata, sizeof(DWORD));
+				::RegCloseKey(hKEY);
+			}
+			data_Set= "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu";
+			if (ERROR_SUCCESS == ::RegOpenKeyExA(szHkey[i],data_Set,0,KEY_SET_VALUE,&hKEY))
+			{
+				DWORD valuedata=value;
+				::RegSetValueExA(hKEY, "{871C5380-42A0-1069-A2EA-08002B30309D}", 0, REG_DWORD, (BYTE*)&valuedata, sizeof(DWORD));
+				::RegCloseKey(hKEY);
+			}
+		}
+	}
+}
+
+extern "C" __declspec(dllexport) void ReplaceIcon(const char* strExePath)
+{
+
+	/*HKEY hKEY;
+	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CLASSES_ROOT, "CLSID\\{871C5380-42A0-1069-A2EA-08002B30309D}\\shell\\NoAddOns\\Command",0,KEY_ALL_ACCESS,&hKEY))
+	{
+		char szValue[256] = {0};
+		DWORD dwSize = sizeof(szValue);
+		DWORD dwType = REG_SZ;
+		if(::RegQueryValueExA(hKEY, "", 0, &dwType, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS && ERROR_SUCCESS == ::RegSetValueExA(hKEY, "", 0, REG_SZ, (const BYTE*)strExePath, strlen(strExePath)+1))
+		{
+			SetRegValue(HKEY_CURRENT_USER, "SOFTWARE\\iexplorer", "HideIEIcon_NoAddOns", szValue);
+			::RegCloseKey(hKEY);
+		}
+	}
+	HKEY hKEY2;
+	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CLASSES_ROOT, "CLSID\\{871C5380-42A0-1069-A2EA-08002B30309D}\\shell\\OpenHomePage\\Command",0,KEY_ALL_ACCESS,&hKEY2))
+	{
+		char szValue[256] = {0};
+		DWORD dwSize = sizeof(szValue);
+		DWORD dwType = REG_SZ;
+		if(::RegQueryValueExA(hKEY2, "", 0, &dwType, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS && ERROR_SUCCESS == ::RegSetValueExA(hKEY2, "", 0, REG_SZ, (const BYTE*)strExePath, strlen(strExePath)+1))
+		{
+			SetRegValue(HKEY_CURRENT_USER, "SOFTWARE\\iexplorer", "HideIEIcon_OpenHomePage", szValue);
+			::RegCloseKey(hKEY2);
+		}
+	}
+	
+	return;//20150409 add TODO:修改ie的注册表*/
+	if(IsWow64() == TRUE){
+		char szRet[MAX_PATH] = {0};
+		if(1 == QueryRegValue64("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "", szRet)){
+			if(0 != strcmp(szRet, ""))
+			{
+				//已经存在则不写
+				return;
+			}
+		}
+	} else {
+		HKEY hKEY;
+		if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}",0,KEY_READ,&hKEY))
+		{
+			//已经存在则不写
+			return;
+		}
+	}
+	char strCommand[MAX_PATH] = {0};
+	sprintf(strCommand, "\"%s\" /sstartfrom desktopnamespace", strExePath);
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "InfoTip", "查找并显示 Iternet 上的信息和网站。");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "LocalizedString", "Internet Explorer");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon", "", strExePath);
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open", "", "打开主页(&H)");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command", "", strCommand);
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop", "", "属性(&R)");
+	SetRegValue(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command", "", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl");
+	SetRegValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", "", "Internet Explorer");
+}
+
+extern "C" __declspec(dllexport) void ReductionIcon()
+{
+	if(IsWow64() == TRUE){
+		DeleteRegKey64("HKEY_CLASSES_ROOT", "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
+		DeleteRegKey64("HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
+	} else {
+		RegDeleteKeyA(HKEY_CLASSES_ROOT, "CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
+		RegDeleteKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}");
+	}
+}
+
+
+extern "C" __declspec(dllexport) int CheckShortCutLinkTarget(const char* strShortCutPath, const char* strTargetPath)
+{
+	TSDEBUG4CXX("CheckShortCutLinkTarget enter,  strShortCutPath =  " << strShortCutPath<<", strTargetPath = "<<strTargetPath);
+	wchar_t* wstrShortCutPath = AnsiToUnicode(strShortCutPath);
+	if (PathFileExists(wstrShortCutPath))
+	{
+		HRESULT hr = ::CoInitialize(NULL);
+		if (SUCCEEDED(hr))
+		{
+			CComPtr<IShellDispatch> sh = NULL;
+			hr = sh.CoCreateInstance(__uuidof(Shell));
+			if (SUCCEEDED(hr))
+			{
+				CComPtr<Folder> f;
+				CComPtr<FolderItem> itm;
+				wchar_t wstrFileDir[MAX_PATH] = {0};
+				wcscpy_s(wstrFileDir,MAX_PATH,wstrShortCutPath);
+				PathRemoveFileSpecW(wstrFileDir);
+				wchar_t* wstrFileName = PathFindFileName(wstrShortCutPath);
+
+				TSDEBUG4CXX("CheckShortCutLinkTarget 1");
+				hr = sh->NameSpace(CComVariant(wstrFileDir), &f);
+				if (SUCCEEDED(hr))
+				{
+					TSDEBUG4CXX("CheckShortCutLinkTarget 2");
+					hr = f->ParseName(CComBSTR(wstrFileName), &itm);
+					if (SUCCEEDED(hr))
+					{
+						TSDEBUG4CXX("CheckShortCutLinkTarget 3");
+						CComPtr<IDispatch> sp;
+						hr = itm->get_GetLink(&sp);
+						if (SUCCEEDED(hr))
+						{
+							TSDEBUG4CXX("CheckShortCutLinkTarget 4");
+							CComPtr<IShellLinkDual2> spDual;
+							hr = sp->QueryInterface(IID_IShellLinkDual2, (void**)&spDual);
+							if (SUCCEEDED(hr))
+							{
+								TSDEBUG4CXX("CheckShortCutLinkTarget 5");
+								CComPtr<FolderItem> spTarget;
+								hr = spDual->get_Target(&spTarget);
+								if (SUCCEEDED(hr))
+								{
+									TSDEBUG4CXX("CheckShortCutLinkTarget 6");
+									CComBSTR bstrPath;
+									hr = spTarget->get_Path(&bstrPath);
+									if (SUCCEEDED(hr))
+									{
+										TSDEBUG4CXX("CheckShortCutLinkTarget 6");
+										std::wstring wstrPath = bstrPath.m_str;
+										wchar_t* wstrTargetPath = AnsiToUnicode(strTargetPath);
+										if(wstrPath == wstrTargetPath)
+										{
+											delete []wstrTargetPath;
+											delete []wstrShortCutPath;
+											::CoUninitialize();
+											TSDEBUG4CXX("CheckShortCutLinkTarget leave, wstrPath = "<<wstrPath<<", wstrTargetPath = "<<wstrTargetPath);
+											return 1;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		::CoUninitialize();
+	}
+	delete []wstrShortCutPath;
+	TSDEBUG4CXX("CheckShortCutLinkTarget leave");
+	return 0;
 }
