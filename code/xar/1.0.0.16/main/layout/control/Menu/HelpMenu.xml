@@ -1,0 +1,58 @@
+<xlue>
+	<objtemplate id="helpmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>5</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="CheckUpdate" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>检测更新</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="HelpMenu.xml.lua" function="OnSelect_CheckUpdate" />
+				</eventlist>
+			</obj>
+		
+			<obj id="About" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>关于</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="HelpMenu.xml.lua" function="OnSelect_About" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="HelpMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>100</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>100</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>200</width>
+						<height>father.height</height>
+						<ContextID>helpmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

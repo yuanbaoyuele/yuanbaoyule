@@ -1,0 +1,149 @@
+<xlue>
+	<objtemplate id="filemenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>6</ItemTop>
+			<ItemLeft>6</ItemLeft> <!--阴影-->
+			<ItemBottom>-5</ItemBottom> <!--阴影-->
+		</attr>
+		<children>
+			<obj id="AddNewTab" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建选项卡</Text>
+					<RightText>Ctrl+T</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewTab" />
+				</eventlist>
+			</obj>
+			<obj id="AddNewWindow" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>新建窗口</Text>
+					<RightText>Ctrl+N</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_AddNewWindow" />
+				</eventlist>
+			</obj>
+			<obj id="Open" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打开...</Text>
+					<RightText>Ctrl+O</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Open" />
+				</eventlist>
+			</obj>
+			
+			<obj id="SaveAs" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>另存为</Text>
+					<RightText>Ctrl+S</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_SaveAs" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="PageSetup" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>页面设置</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_PageSetup" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Print" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印</Text>
+					<RightText>Ctrl+P</RightText>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Print" />
+				</eventlist>
+			</obj>
+			
+			<obj id="PrintReview" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>打印预览</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_PrintReview" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="CreateShortCut" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>发送到桌面快捷方式</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_ShortCut" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt3" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="Properties" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>属性</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Properties" />
+				</eventlist>
+			</obj>
+			
+			<obj id="exit" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>退出</Text>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="FileMenu.xml.lua" function="OnSelect_Exit" />
+				</eventlist>
+			</obj>
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="FileMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>244+10</width>
+			<height>350</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>244+10</width>
+				<height>350</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>244+10</width>
+						<height>father.height</height>
+						<ContextID>filemenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

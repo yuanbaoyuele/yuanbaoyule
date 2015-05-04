@@ -1,0 +1,203 @@
+<xlue>
+    <control class="BrowserHeadCtrl">
+        <method_def>
+			<ProcessTabChange file="BrowserHeadCtrl.xml.lua" func="ProcessTabChange"/>
+			<SetMaxBtnStyle file="BrowserHeadCtrl.xml.lua" func="SetMaxBtnStyle"/>
+        </method_def>
+		
+        <event_def>
+		
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="root.layout" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.MainWnd.Head.Bkg</texture>
+					</attr>		
+					<children>
+						<obj id="BrowserHeadCtrl.Caption.Logo" class="TipAddin.Button">
+							<attr>
+								<left>10</left>
+								<top>10</top>
+								<width>64</width>
+								<height>64</height>
+								<NormalBkgID>YBYL.Head.Logo.Bkg.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Head.Logo.Bkg.Down</DownBkgID>
+								<HoverBkgID>YBYL.Head.Logo.Bkg.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Head.Logo.Bkg.Disable</DisableBkgID>
+								<zorder>20</zorder>
+							</attr>
+							<children>
+								<obj id="BrowserHeadCtrl.Caption.Logo" class="TextureObject">
+									<attr>
+										<left>7</left>
+										<top>7</top>
+										<width>50</width>
+										<height>50</height>
+										<texture>YBYL.Head.Logo.Default</texture>
+										<zorder>2000</zorder>
+									</attr>
+								</obj>
+							</children>
+							
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickLogo" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Caption.TitleText" class="TextObject">
+							<attr>
+								<left>20+64</left>
+								<top>10</top>
+								<width>100</width>
+								<height>20</height>
+								<text>元宝娱乐浏览器</text>
+								<font>font.head.caption</font>
+								<textcolor>color.head.caption</textcolor>
+							</attr>	
+						</obj>
+					
+						<obj id="BrowserHeadCtrl.NavgateBtnList" class="NavgateBtnList">
+							<attr>
+								<left>20+64</left>
+								<top>31</top>
+								<width>160</width>
+								<height>30</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.MenuBarCtrl" class="MenuBarCtrl">
+							<attr>
+								<left>father.width-125-220</left>
+								<top>0</top>
+								<width>220</width>
+								<height>35</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Caption.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-10-26</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.CloseBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationClose" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.Caption.MaxBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-15-26*2</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.MaxBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.MaxBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.MaxBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.MaxBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationMax" />
+							</eventlist>
+						</obj>
+						
+						
+						<obj id="BrowserHeadCtrl.Caption.Restore" class="TipAddin.Button">
+							<attr>
+								<left>father.width-15-26*2</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.RestoreBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.RestoreBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.RestoreBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.RestoreBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationRestore" />
+							</eventlist>
+						</obj>
+						
+						
+						<obj id="BrowserHeadCtrl.Caption.MinBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-20-26*3</left>
+								<top>5</top>
+								<width>26</width>
+								<height>24</height>
+								<NormalBkgID>YBYL.Caption.MinBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Caption.MinBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Caption.MinBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Caption.MinBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="BrowserHeadCtrl.xml.lua" func="OnClickCpationMin" />
+							</eventlist>
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.AddressBar" class="AddressBarCtrl">
+							<attr>
+								<left>245</left>
+								<top>29</top>
+								<width>father.width-500</width>
+								<height>36</height>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.FuncBtnList" class="FuncBtnList">
+							<attr>
+								<left>father.width-250</left>
+								<top>33</top>
+								<width>300</width>
+								<height>38</height>
+							</attr>	
+						</obj>
+						
+						<!--obj id="BrowserHeadCtrl.CollectList" class="CollectList">
+							<attr>
+								<left>20+64</left>
+								<top>34*2</top>
+								<width>father.width/2</width>
+								<height>24</height>
+							</attr>	
+						</obj-->
+						
+						<obj id="BrowserHeadCtrl.RightBkg" class="TextureObject">
+							<attr>
+								<left>father.width-759</left>
+								<top>0</top>
+								<width>759</width>
+								<height>father.height</height>
+								<texture>YBYL.Head.RightBkg</texture>
+							</attr>	
+						</obj>
+						
+						<obj id="BrowserHeadCtrl.ToolTipCtrl" class="ToolTipCtrl">
+							<attr>
+								<left>father.width-100</left>
+								<top>father.height-48</top>
+								<width>100</width>
+								<height>18</height>
+								<zorder>999999</zorder>
+							</attr>	
+						</obj>
+						
+					</children>
+				</obj> <!--end root.layout-->
+            </children>
+			<eventlist>
+				<event name="OnPosChange" file="BrowserHeadCtrl.xml.lua" func="OnPosChange" />
+			</eventlist>
+        </objtemplate>
+    </control>
+</xlue>
