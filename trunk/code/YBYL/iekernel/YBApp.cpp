@@ -74,6 +74,7 @@ BOOL CYBApp::IniEnv()
 		//MessageBoxA(NULL,"获取界面皮肤路径失败","错误",MB_OK|MB_ICONERROR);
 		//return FALSE;
 	}
+	PathAppend(szXar, _T("..\\xar\\")); 
 	m_strXarPath = szXar;
 	// 1)初始化图形库
 	XLGraphicParam param;
