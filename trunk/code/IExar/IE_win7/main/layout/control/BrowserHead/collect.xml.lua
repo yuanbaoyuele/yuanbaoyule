@@ -156,8 +156,8 @@ function AddHoverBkg(obj, isadd, isshowarrow, callback)
 				btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
 				local attr = btn:GetAttribute()
 				attr.NormalBkgID = ""
-				attr.HoverBkgID = "Collect.Button.Bkg.Hover"
-				attr.DownBkgID = "Collect.Button.Bkg.Down"
+				attr.HoverBkgID = "Collect.Button.Bkg2.Hover"
+				attr.DownBkgID = "Collect.Button.Bkg2.Down"
 				attr.ForegroundResID = "collect.arrow"
 				attr.ForegroundLeftPos = 4
 				attr.ForegroundWidth = 14
@@ -167,8 +167,8 @@ function AddHoverBkg(obj, isadd, isshowarrow, callback)
 			end
 			btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
 			local attr = btn:GetAttribute()
-			attr.HoverBkgID = "Collect.Button.Bkg.Hover"
-			attr.DownBkgID = "Collect.Button.Bkg.Down"
+			attr.HoverBkgID = "Collect.Button.Bkg2.Hover"
+			attr.DownBkgID = "Collect.Button.Bkg2.Down"
 			btn:Updata()
 			btn:SetZorder(106)
 			btn:AttachListener("OnClick", false, 

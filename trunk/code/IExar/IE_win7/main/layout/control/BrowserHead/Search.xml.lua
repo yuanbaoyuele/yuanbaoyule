@@ -196,7 +196,7 @@ function OnControlFocusChange(self, focus)
 				if not lasttext then
 					lasttext = objFactory:CreateUIObject("searchctrltext", "TipAddin.Button")
 					editextctrl:AddChild(lasttext)
-					lasttext:SetObjPos2(r-l-53, 5, 50, 23)
+					lasttext:SetObjPos2(r-l-53, 5, 50, 22)
 					lasttext:SetText("  查找...")
 					lasttext:SetTextFont("font.text12")
 					local attr = lasttext:GetAttribute()
@@ -301,11 +301,17 @@ end
 
 function OnMouseEnterArrow(self)
 	tFunHelper.ShowToolTip(true, "搜索选项")
+	local ctrl1 = self:GetOwnerControl():GetControlObject("image.ctrl")
+	ctrl1:SetState(1)
+	ctrl1:Updata()
 end
 
 
 function OnMouseEnterSearch(self)
 	tFunHelper.ShowToolTip(true, "搜索(按 Alt+Enter 在新选项卡中搜索)")
+	local ctrl2 = self:GetOwnerControl():GetControlObject("image.ctrl2")
+	ctrl2:SetState(1)
+	ctrl2:Updata()
 end
 
 
@@ -321,8 +327,31 @@ end
 
 function HideToolTip(self)
 	tFunHelper.ShowToolTip(false)
+	local ctrl2 = self:GetOwnerControl():GetControlObject("image.ctrl2")
+	ctrl2:SetState(0)
+	ctrl2:Updata()
+	local ctrl1 = self:GetOwnerControl():GetControlObject("image.ctrl")
+	ctrl1:SetState(0)
+	ctrl1:Updata()
 end
 
+function OnLButtonDownBtn(self)
+	local ctrl2 = self:GetOwnerControl():GetControlObject("image.ctrl2")
+	ctrl2:SetState(2)
+	ctrl2:Updata()
+	local ctrl1 = self:GetOwnerControl():GetControlObject("image.ctrl")
+	ctrl1:SetState(2)
+	ctrl1:Updata()
+end
+
+function OnLButtonUpBtn(self)
+	local ctrl2 = self:GetOwnerControl():GetControlObject("image.ctrl2")
+	ctrl2:SetState(0)
+	ctrl2:Updata()
+	local ctrl1 = self:GetOwnerControl():GetControlObject("image.ctrl")
+	ctrl1:SetState(0)
+	ctrl1:Updata()
+end
 
 ------辅助函数---
 function IsRealString(str)
