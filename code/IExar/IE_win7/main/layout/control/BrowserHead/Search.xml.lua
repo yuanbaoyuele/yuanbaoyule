@@ -132,10 +132,49 @@ function OnControlFocusChange(self, focus)
 		if editextctrl then
 			self:RemoveChild(editextctrl)
 		end
+		local editctrl = self:GetControlObject("edit")
+		tFunHelper.TipLog("type editctrl = "..type(editctrl))
+		if editctrl then
+			tFunHelper.TipLog("type editctrl = "..type(editctrl))
+			local attr = self:GetAttribute()
+			if type(attr.SearchEngine) == "table" then
+				tFunHelper.TipLog("type(attr.SearchEngine) = "..type(attr.SearchEngine))
+				local text = attr.SearchEngine["displayName"]
+				if type(text) == "string" and text ~= "" then
+					text = string.gsub(text, "%(默认%)", "")
+					local oldtext = editctrl:GetText()
+					if oldtext == text or oldtext == "" then
+						tFunHelper.TipLog("text = "..text)
+						editctrl:SetText(text)
+						tFunHelper.TipLog("editctrl text ok")
+						editctrl:SetTextColor("#565656FF")
+						tFunHelper.TipLog("editctrl color ok")
+						editctrl:SetFontID("font.yahei12.italic")
+						tFunHelper.TipLog("editctrl font ok")
+					end
+				end
+			end
+		end
 	else
 		local txtobj = self:GetControlObject("edit")
+		tFunHelper.TipLog("type txtobj = "..type(txtobj))
+		txtobj:SetTextColor("#00000000")
+		tFunHelper.TipLog("txtobj color ok ")
+		txtobj:SetFontID("font.yahei12")
+		tFunHelper.TipLog("txtobj font ok ")
 		local strText  = txtobj:GetText()
-		if strText == "" or strText == nil then
+		
+		local text = nil
+		local attr = self:GetAttribute()
+		if type(attr.SearchEngine) == "table" then
+			text = attr.SearchEngine["displayName"]
+			if type(text) == "string" and text ~= "" then
+				text = string.gsub(text, "%(默认%)", "")
+			end
+		end
+		tFunHelper.TipLog("OnControlFocusChange, text = "..tostring(text)..", strText = "..tostring(strText))
+		if strText == "" or strText == nil or text == strText then
+			txtobj:SetText("")
 			local editextctrl = self:GetControlObject("editextctrl_layout") 
 			if not editextctrl then
 				local objFactory = XLGetObject("Xunlei.UIEngine.ObjectFactory")
@@ -190,7 +229,7 @@ function OnControlFocusChange(self, focus)
 					lineobj = objFactory:CreateUIObject("searchctrlline", "TextureObject")
 					editextctrl:AddChild(lineobj)
 					lineobj:SetObjPos2(r-l-62, 5, 1, "father.height-10")
-					lineobj:SetTextureID("YBYL.Menu.Splitter.Vertical")
+					lineobj:SetTextureID("search.line")
 				end
 				local lasttext = self:GetControlObject("searchctrltext")
 				if not lasttext then
@@ -261,6 +300,16 @@ function SetSearchEngine(control, engine)
 				icon:SetResID(strDefResID)
 			end
 			attr.SearchEngine = SearchEngineMap[i]
+			local text = attr.SearchEngine["displayName"]
+			if type(text) == "string" and text ~= "" then
+				text = string.gsub(text, "%(默认%)", "")
+				local editobj = control:GetControlObject("edit")
+				if editobj then
+					editobj:SetText(text)
+					editobj:SetTextColor("#565656FF")
+					editobj:SetFontID("font.yahei12.italic")
+				end
+			end
 			break
 		end
 	end
