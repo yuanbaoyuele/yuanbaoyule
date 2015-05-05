@@ -112,6 +112,12 @@ function ShowPopupWnd(control, left, top, width, bottom, data)
 	end
 end
 
+function OnLButtonDownEdit(self)
+	local owner = self:GetOwnerControl()
+	OnControlFocusChange(owner, false)
+	OnControlFocusChange(owner, true)
+end
+
 function OnControlFocusChange(self, focus)
 	if not focus then
 		AsynCall(function ()
@@ -198,7 +204,7 @@ function OnControlFocusChange(self, focus)
 						btn:SetObjPos2(6+(i-1)*24, 4, 22, 22)
 						btn:AttachListener("OnClick", false, function(_self)
 							--XLMessageBox()
-							SetSearchEngine(self, SearchEngineMap[i]["displayName"])
+							SetSearchEngine(self, SearchEngineMap[i]["displayName"], true)
 						end)
 					end
 					local attr = btn:GetAttribute()
@@ -288,7 +294,7 @@ function icon_OnLButtonUp(self)
 	--ShowPopupWnd(control, x, y + (bottom-top) - 4, right-left, 200, data)
 end
 
-function SetSearchEngine(control, engine)
+function SetSearchEngine(control, engine, notchangetxt)
 	local icon = control:GetControlObject("icon")
 	local attr = control:GetAttribute()
 	for i=1, #SearchEngineMap do
@@ -300,14 +306,16 @@ function SetSearchEngine(control, engine)
 				icon:SetResID(strDefResID)
 			end
 			attr.SearchEngine = SearchEngineMap[i]
-			local text = attr.SearchEngine["displayName"]
-			if type(text) == "string" and text ~= "" then
-				text = string.gsub(text, "%(默认%)", "")
-				local editobj = control:GetControlObject("edit")
-				if editobj then
-					editobj:SetText(text)
-					editobj:SetTextColor("#565656FF")
-					editobj:SetFontID("font.yahei12.italic")
+			if not notchangetxt then
+				local text = attr.SearchEngine["displayName"]
+				if type(text) == "string" and text ~= "" then
+					text = string.gsub(text, "%(默认%)", "")
+					local editobj = control:GetControlObject("edit")
+					if editobj then
+						editobj:SetText(text)
+						editobj:SetTextColor("#565656FF")
+						editobj:SetFontID("font.yahei12.italic")
+					end
 				end
 			end
 			break

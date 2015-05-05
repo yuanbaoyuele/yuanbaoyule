@@ -92,6 +92,7 @@
 								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterEdit" />
 								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
 								<event name="OnRButtonUp" file="Search.xml.lua" func="OnEditRButtonUp" />
+								<event name="OnLButtonDown" file="Search.xml.lua" func="OnLButtonDownEdit" />
 							</eventlist>
 						</obj>
 					</children>
