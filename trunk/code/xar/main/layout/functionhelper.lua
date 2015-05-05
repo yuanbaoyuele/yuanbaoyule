@@ -540,6 +540,8 @@ end
 
 
 function RegSetValue(sPath, value, b64Bit)
+	TipLog("[RegSetValue] sPath: "..tostring(sPath) .. "  value:"..tostring(value))
+
 	if IsRealString(sPath) then
 		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
 		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
