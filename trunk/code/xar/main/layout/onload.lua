@@ -870,6 +870,16 @@ end
 --开始菜单目录
 function WriteStartMenuSC()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	if FunctionObj.IsUACOS() then
+		WriteStartMenuSC4Win7()
+	else
+		WriteStartMenuSC4XP()
+	end
+end
+
+
+function WriteStartMenuSC4XP()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local nCSIDL_STARTMENU = 0xB
 	local nCSIDL_COMMON_STARTMENU = 0x16
 	local tStartMenuClsidl = {nCSIDL_STARTMENU, nCSIDL_COMMON_STARTMENU}
@@ -879,23 +889,48 @@ function WriteStartMenuSC()
 		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
 		
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
-			if bIsInDir then
-				FunctionObj.PinToStartMenu(strCurrent, false)
-				CopyBackUpLnk(strCurrent,"STARTMENU")
-				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+			local bIsInDir,tFilePath = CheckIsIELnkInDir(strBaseDir)
+			if not bIsInDir then
+				return
 			end
 			
-			local strFilePath1 = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
-			if bIsInDir1 then
-				FunctionObj.PinToStartMenu(strCurrent1, false)
-				CopyBackUpLnk(strCurrent1,"STARTMENU")
-				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+			for _, strFilePath in pairs(tFilePath) do
+				FunctionObj.PinToStartMenu(strFilePath, false)
+				CopyBackUpLnk(strFilePath,"STARTMENU")
 			end
+			
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 		end
 	end
 end
+
+
+function WriteStartMenuSC4Win7()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strBaseDir = tipUtil:GetUserPinPath()
+	if not IsRealString(strBaseDir) then
+		return
+	end
+	
+	strBaseDir = tipUtil:PathCombine(strBaseDir, "StartMenu")
+	
+	if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then	
+		local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
+		local bIsInDir,tFilePath = CheckIsIELnkInDir(strBaseDir)
+		if not bIsInDir then
+			return
+		end
+		
+		for _, strFilePath in pairs(tFilePath) do
+			FunctionObj.PinToStartMenu(strFilePath, false)
+			CopyBackUpLnk(strFilePath,"STARTMENU")
+		end
+		
+		FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
+	end
+end
+
+-----
 
 
 --开始菜单\程序  目录
@@ -909,29 +944,24 @@ function WriteStartMenuProgramSC()
 		local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCsidl)
 		if IsRealString(strBaseDir) and tipUtil:QueryFileExists(strBaseDir) then
 		
-			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
-			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
+			local bIsInDir,tFilePath = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				FunctionObj.PinToStartMenu(strCurrent, false)
-				CopyBackUpLnk(strCurrent,"SMPROGRAMS")
+				for _, strFilePath in pairs(tFilePath) do
+					FunctionObj.PinToStartMenu(strFilePath, false)
+					CopyBackUpLnk(strFilePath,"SMPROGRAMS")
+				end
+
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
-			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
-			if bIsInDir1 then
-				FunctionObj.PinToStartMenu(strCurrent1, false)
-				CopyBackUpLnk(strCurrent1,"SMPROGRAMS")
-				--local bret = tipUtil:DeletePathFile(strCurrent1)
-				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
-			end
-			
-			local strIEPath = GetIEPath()
 			if nCsidl == nCSIDL_PROGRAM then
+				local strIEPath = GetIEPath()
 				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
 				if bret then
+					local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 					FunctionObj.PinToStartMenu(strFilePath, true)
 				end
-			end	
+			end
 		end
 	end
 end
@@ -943,31 +973,42 @@ function WriteQuickLaunchSC()
 	local nCSIDL_APPDATA = 0x1A
 	local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCSIDL_APPDATA)
 	local strQueryDir = tipUtil:PathCombine(strBaseDir, "Microsoft\\Internet Explorer\\Quick Launch") 
+	
+	if FunctionObj.IsUACOS() then
+		local strBaseDir = tipUtil:GetUserPinPath()
+		if not IsRealString(strBaseDir) then
+			return
+		end
+		
+		strQueryDir = tipUtil:PathCombine(strBaseDir, "TaskBar")
+	end
+		
 	if IsRealString(strQueryDir) and tipUtil:QueryFileExists(strQueryDir) then
-		local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
-		local bIsInDir,strCurrent = CheckIsIELnkInDir(strQueryDir)
+		
+		local bIsInDir,tFilePath = CheckIsIELnkInDir(strQueryDir)
 		if bIsInDir then
-			--local bret = tipUtil:DeletePathFile(strCurrent)
-			CopyBackUpLnk(strCurrent,"QUICKLAUNCH")
+			for _, strFilePath in pairs(tFilePath) do
+				if FunctionObj.IsUACOS() then
+					tipUtil:ShellExecute(0, "taskbarunpin", strFilePath, "", 0, "SW_HIDE")
+				end
+				CopyBackUpLnk(strFilePath,"QUICKLAUNCH")
+			end
+
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
 		end
 		
-		local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strQueryDir)
-		if bIsInDir1 then
-			if FunctionObj.IsUACOS() then
-				tipUtil:ShellExecute(0, "taskbarunpin", strCurrent1, "", 0, "SW_HIDE")
+		if not FunctionObj.IsUACOS() then
+			local strIEPath = GetIEPath()
+			local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strQueryDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
+		else
+			local strIEPath = GetIEPath()
+			local _, _, strProgramDir = string.find(strIEPath, "(.*)\\[^\\]*$")
+			local strLnkPath = tipUtil:PathCombine(strProgramDir, "Internet Explorer.lnk")
+			if not tipUtil:QueryFileExists(strLnkPath) then
+				tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strProgramDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
 			end
 			
-			CopyBackUpLnk(strCurrent1,"QUICKLAUNCH")
-			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
-		end
-		
-		local strIEPath = GetIEPath()
-		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strQueryDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
-		
-		if FunctionObj.IsUACOS() then
-			local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
-			tipUtil:ShellExecute(0, "taskbarpin", strFilePath, "", 0, "SW_HIDE")
+			tipUtil:ShellExecute(0, "taskbarpin", strLnkPath, "", 0, "SW_HIDE")
 		end
 	end
 end
@@ -1068,7 +1109,7 @@ function CreateDesktopReg()
 end
 
 
---检查IE 快捷方式是否在指定目录
+--检查IE 快捷方式是否在指定目录, 有则返回路径列表
 function CheckIsIELnkInDir(strDir)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tFileList = tipUtil:FindFileList(strDir, "*.*")
@@ -1077,18 +1118,24 @@ function CheckIsIELnkInDir(strDir)
 		return false
 	end
 	
+	local tFilePath = {}
+	
 	for i=1, #tFileList do
 		local strFilePath = tFileList[i]
 		if IsRealString(strFilePath) and tipUtil:QueryFileExists(strFilePath) then
 			local  strFileName = FunctionObj.GetFileNameFromPath(strFilePath, true)
 			if string.find(tostring(strFileName),"Internet Explorer") or string.find(tostring(strFileName),"Internet.lnk") 
 				or string.find(tostring(strFileName), "启动 Internet Explorer 浏览器") then
-				return true, strFilePath
+					tFilePath[#tFilePath+1] = strFilePath
 			end
 		end
 	end
 
-	return false
+	if #tFilePath < 1 then
+		return false
+	end
+	
+	return true, tFilePath
 end
 
 
