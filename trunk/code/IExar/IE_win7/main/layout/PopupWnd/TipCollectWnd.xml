@@ -317,7 +317,7 @@
             <enable>1</enable>
             <maxbox>0</maxbox>
             <minbox>1</minbox>
-            <minwidth>145</minwidth>
+            <minwidth>160</minwidth>
             <minheight>125</minheight>
 			<sysmenu>0</sysmenu>
 			<appwindow>0</appwindow>

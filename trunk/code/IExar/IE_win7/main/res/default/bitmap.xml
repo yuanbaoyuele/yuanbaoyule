@@ -45,6 +45,7 @@
 		<texture id="Collect.Container.Bkg" type="NineInOne" image="bitmap\Collect.Container.Bkg.png" />
 		
 		<texture id="Collect.Panel.Bkg" type="NineInOne" image="bitmap\Collect.Panel.Bkg.png" />
+		<texture id="Collect.Panel.Fix.Bkg" type="NineInOne" image="bitmap\Collect.Panel.Fix.Bkg.png" />
 		<texture id="MenuBar.Select.Bkg" image="bitmap\MenuBar.Select.Bkg.png" />
 		
 		<texture id="YBYL.AddressBar.UrlSearch.Bkg.Normal" type="ThreeInOneH" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png" />
@@ -152,7 +153,7 @@
 <texture id="about.button.bkg.normal" type="ThreeInOneH" imagelist="about.button.bkg" index="1" />
 <texture id="about.button.bkg.hover" type="ThreeInOneH" imagelist="about.button.bkg" index="2" />
 <texture id="about.button.bkg.down" type="ThreeInOneH" imagelist="about.button.bkg" index="3" />
-<texture id="about.button.bkg.disable" type="ThreeInOneH" imagelist="about.button.bkg" index="5" />
+<texture id="about.button.bkg.disable" type="ThreeInOneH" imagelist="about.button.bkg" index="4" />
 
 <imagelist id="radiobox" splitter="1" varyblock="1" image="bitmap\radiobox.png" />
 <texture id="radiobox.1" imagelist="radiobox" index="1" />
