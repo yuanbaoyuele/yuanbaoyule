@@ -1,4 +1,4 @@
-<XLUE>
+﻿<XLUE>
 	<resource>
 		<font id="default.font" height="12" facename="微软雅黑" />
 		
@@ -6,6 +6,7 @@
 		<font id="font.yahei11" height="11" facename="微软雅黑" /> 
 		<font id="font.yahei12" height="12" facename="微软雅黑" /> 
 		<font id="font.yahei13" height="13" facename="微软雅黑" /> 
+		<font id="font.yahei12.italic" height="12" facename="微软雅黑" italic="1" /> 
 		
 		<font id="font.menuitem" height="12" facename="微软雅黑" /> 
 		<font id="font.menuitem.bold" height="12" facename="微软雅黑" weight="bold"/> 
