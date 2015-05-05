@@ -16,6 +16,16 @@
 				<limitchild>1</limitchild>
 			</attr>
 			<children>
+				<obj id="menu.splitter.vertical" class="TextureObject">
+					<attr>
+						<left>30</left>
+						<top>2</top>
+						<width>2</width>
+						<height>father.height-8</height>
+						<texture>YBYL.Menu.Splitter.Vertical</texture>
+						<zorder>9</zorder>
+					</attr>
+				</obj>
 				<obj id="list" class="BoltFox.SearchList.Ctrl">
 					<attr>
 						<width>father.width</width>

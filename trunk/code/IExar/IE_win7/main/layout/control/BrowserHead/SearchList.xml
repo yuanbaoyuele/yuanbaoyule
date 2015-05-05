@@ -50,7 +50,7 @@
 			<children>
 				<obj id="bkg" class="TextureObject">
 					<attr>
-						<width>father.width</width>
+						<width>father.width-3</width>
 						<height>father.height</height>
 						<!-- <texture>pluginitem.all.down</texture> -->
 					</attr>
@@ -69,7 +69,7 @@
 						</obj>
 						<obj id="text" class="TextObject">
 							<attr>
-								<left>7+16+3</left>
+								<left>34</left>
 								<top>0</top>
 								<valign>center</valign>
 								<width>father.width-14</width>
