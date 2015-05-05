@@ -7,8 +7,8 @@ end
 function OnMouseEnter(self)
 	local bkg = self:GetControlObject("bkg")
 	bkg:SetTextureID("YBYL.Menu.Select.Bkg")
-	local txt = self:GetControlObject("text")
-	txt:SetTextColorResID("system.white")
+	--local txt = self:GetControlObject("text")
+	--txt:SetTextColorResID("system.white")
 end
 
 function OnMouseLeave(self)

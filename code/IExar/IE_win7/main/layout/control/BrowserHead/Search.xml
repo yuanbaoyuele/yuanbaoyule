@@ -38,6 +38,8 @@
 								<event name="OnClick" file="Search.xml.lua" func="OnClick" />
 								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterSearch" />
 								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
+								<event name="OnLButtonDown" file="Search.xml.lua" func="OnLButtonDownBtn" />
+								<event name="OnLButtonUp" file="Search.xml.lua" func="OnLButtonUpBtn" />
 							</eventlist>
 						</obj>
 						<obj id="image.ctrl2" class="TipAddin.Button">
@@ -54,6 +56,8 @@
 								<event name="OnClick" file="Search.xml.lua" func="OnClick2" />
 								<event name="OnMouseEnter" file="Search.xml.lua" func="OnMouseEnterArrow" />
 								<event name="OnMouseLeave" file="Search.xml.lua" func="HideToolTip" />
+								<event name="OnLButtonDown" file="Search.xml.lua" func="OnLButtonDownBtn" />
+								<event name="OnLButtonUp" file="Search.xml.lua" func="OnLButtonUpBtn" />
 							</eventlist>
 						</obj>
 						<obj id="icon" class="ImageObject">
