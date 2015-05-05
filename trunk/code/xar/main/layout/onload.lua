@@ -1069,11 +1069,11 @@ end
 
 
 function CreateDesktopSCDefault()
-	local nCSIDL_DESKTOP = 0x10 
-	local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCSIDL_DESKTOP)
-	local strIEPath = GetIEPath()
-	local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
-	tipUtil:RefleshIcon(nil)
+	-- local nCSIDL_DESKTOP = 0x10 
+	-- local strBaseDir = tipUtil:GetSpecialFolderPathEx(nCSIDL_DESKTOP)
+	-- local strIEPath = GetIEPath()
+	-- local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom desktop", "启动 Internet Explorer 浏览器")
+	-- tipUtil:RefleshIcon(nil)
 end
 
 
@@ -1181,7 +1181,6 @@ function PreTipMain()
 	SendUserInfoReport()
 	TipMain()
 	
-		CreateDesktopSCDefault()
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	timerManager:SetTimer(function(item, id)
 		item:KillTimer(id)
