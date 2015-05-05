@@ -2533,6 +2533,7 @@ obj.RestoreWndSize = RestoreWndSize
 obj.RecordTrackSize = RecordTrackSize
 obj.RecordWndSize = RecordWndSize
 obj.IsBrowserFullScrn = IsBrowserFullScrn
+obj.IsWindowMax = IsWindowMax
 obj.SetResizeEnable = SetResizeEnable
 obj.SetMainWndDefaultTrackSize = SetMainWndDefaultTrackSize
 

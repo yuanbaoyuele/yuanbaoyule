@@ -10,14 +10,23 @@ function OnCreate( self )
 	SetCollectWndTrackSize(objCollectWnd, MainWndW, MainWndH)
 	
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
-	objMainHostWnd:AddSyncWnd(objCollectWnd:GetWndHandle(), {"position", "enable"})
+	-- objMainHostWnd:AddSyncWnd(objCollectWnd:GetWndHandle(), {"position", "enable"})
+	
+	local objRootCtrl = GetRootCtrlByWndObj(objCollectWnd)
+	local attr = objRootCtrl:GetAttribute()	
 	
 	objMainHostWnd:AttachListener("OnSize", false, 
 		function(objMainWnd, MainWndW, MainWndH)
 			SetCollectWndTrackSize(objCollectWnd, MainWndW, MainWndH)
-			
-			local objRootCtrl = GetRootCtrlByWndObj(objCollectWnd)
-			local attr = objRootCtrl:GetAttribute()
+			if attr.bFix then
+				SetWindowFullSize(objCollectWnd)
+			end
+		end		
+	)
+	
+	objMainHostWnd:AttachListener("OnMove", false, 
+		function()
+			SetWindowPos(objCollectWnd)
 			if attr.bFix then
 				SetWindowFullSize(objCollectWnd)
 			end
@@ -93,21 +102,24 @@ end
 
 
 function SetWindowFullSize(objWnd)
-	local objHeadWindow = tFunHelper.GetWndInstByName("TipHeadFullScrnWnd.Instance")
 	local objMainHostWnd = tFunHelper.GetMainWndInst()
 	local objHeadCtrl = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
 	local objCollectBtn = objHeadCtrl:GetControlObject("BrowserHeadCtrl.CollectBtn")
 	local HeadL, HeadT, HeadR, HeadB = objHeadCtrl:GetAbsPos()
 	local BtnL, BtnT, BtnR, BtnB = objCollectBtn:GetAbsPos()
 	local nMainWndL, nMainWndT, nMainWndR, nMainWndB = objMainHostWnd:GetWindowRect()
-	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
 	
-	local WithoutShadow = tFunHelper.GetMainCtrlChildObj("WithoutShadow")
-	local nNoShadowL, nNoShadowT, nNoShadowR, nNoShadowB = WithoutShadow:GetAbsPos()
 	
-	local nWndTop = nHeadWndT+BtnB
-	local nWndLeft = nMainWndL+nNoShadowL+5
-	local nWndHeight = nMainWndB-nWndTop-nNoShadowT-12
+	local BkgBorder = tFunHelper.GetMainCtrlChildObj("BkgBorder")
+	local objHeadWnd  = tFunHelper.GetMainCtrlChildObj("MainPanel.HeadWnd")
+	local objMainRoot  = tFunHelper.GetMainCtrlChildObj("root.layout")
+	local nNoShadowL, nNoShadowT, nNoShadowR, nNoShadowB = BkgBorder:GetAbsPos()
+	local nRootL, nRootT, nRootR, nRootB = objMainRoot:GetAbsPos()
+	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWnd:GetAbsPos()
+	
+	local nWndTop = nMainWndT+BtnB+nHeadWndT
+	local nWndLeft = nMainWndL+nNoShadowL+1
+	local nWndHeight = nMainWndB-nWndTop-(nRootB-nNoShadowB)-1
 	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
@@ -115,7 +127,11 @@ function SetWindowFullSize(objWnd)
 	if tFunHelper.IsBrowserFullScrn() then
 		local nWidth, nHeight = tipUtil:GetScreenSize()
 		nWndHeight = nHeight
+		objWnd:SetMaxTrackSize(450, nHeight)
 		objWnd:Move(0, 0, wndwidth, nHeight)
+	elseif tFunHelper.IsWindowMax() then
+		local nBorderL, nBorderT, nBorderR, nBorderB = objMainHostWnd:GetBorder()
+		objWnd:Move(nWndLeft, nWndTop, wndwidth, nWndHeight-nBorderL)
 	else
 		objWnd:Move(nWndLeft, nWndTop, wndwidth, nWndHeight)
 	end	
@@ -148,6 +164,11 @@ function SetWindowPos(objWnd)
 	
 	if wndheight < 660 then
 		wndheight = 660
+	end
+	
+	local nWidth, nHeight = tipUtil:GetScreenSize()
+	if wndheight > nHeight-120 then
+		wndheight = nHeight-120
 	end
 	
 	if wndheight > nMainWndB-nWndTop-nNoShadowT-12 then
