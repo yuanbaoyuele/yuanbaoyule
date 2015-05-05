@@ -38,7 +38,7 @@
 							<attr>
 								<left>28</left>
 								<top>0</top>
-								<width>father.width-100</width>
+								<width>father.width-140</width>
 								<height>father.height</height>
 								<valign>center</valign>
 								<halign>left</halign>

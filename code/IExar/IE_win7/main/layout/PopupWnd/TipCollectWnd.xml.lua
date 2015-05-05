@@ -36,7 +36,7 @@ function SetCollectWndTrackSize(objCollectWnd, MainWndW, MainWndH)
 	local nHeadWndL, nHeadWndT, nHeadWndR, nHeadWndB = objHeadWindow:GetWindowRect()
 	
 	local nWndTop = nHeadWndT+BtnB
-	local nSizeH = nMainWndB-nWndTop-4
+	local nSizeH = nMainWndB-nWndTop-22
 	
 	objCollectWnd:SetMaxTrackSize(450, nSizeH)
 end
@@ -106,8 +106,8 @@ function SetWindowFullSize(objWnd)
 	local nNoShadowL, nNoShadowT, nNoShadowR, nNoShadowB = WithoutShadow:GetAbsPos()
 	
 	local nWndTop = nHeadWndT+BtnB
-	local nWndLeft = nMainWndL+nNoShadowL+4
-	local nWndHeight = nMainWndB-nWndTop-nNoShadowT-10
+	local nWndLeft = nMainWndL+nNoShadowL+5
+	local nWndHeight = nMainWndB-nWndTop-nNoShadowT-12
 	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
@@ -141,7 +141,7 @@ function SetWindowPos(objWnd)
 	local nNoShadowL, nNoShadowT, nNoShadowR, nNoShadowB = WithoutShadow:GetAbsPos()
 	
 	local nWndTop = nHeadWndT+BtnB
-	local nWndLeft = nMainWndL+nNoShadowL+4
+	local nWndLeft = nMainWndL+nNoShadowL+5
 	
 	local selfleft, selftop, selfright, selfbottom = objWnd:GetWindowRect()
 	local wndwidth, wndheight = selfright - selfleft, selfbottom - selftop
@@ -150,8 +150,8 @@ function SetWindowPos(objWnd)
 		wndheight = 660
 	end
 	
-	if wndheight > nMainWndB-nWndTop-nNoShadowT-15 then
-		wndheight = nMainWndB-nWndTop-nNoShadowT-15
+	if wndheight > nMainWndB-nWndTop-nNoShadowT-12 then
+		wndheight = nMainWndB-nWndTop-nNoShadowT-12
 	end
 	
 	objWnd:Move(nWndLeft, nWndTop, wndwidth, wndheight)
@@ -204,6 +204,7 @@ end
 
 
 function SetFixStyle(objRootCtrl, bFix)
+	local objBkg = objRootCtrl:GetControlObject("Layout.main")
 	local objFixBtn = objRootCtrl:GetControlObject("TipCollectWnd.FixBtn")
 	local objCloseBtn = objRootCtrl:GetControlObject("TipCollectWnd.CloseBtn")
 	
@@ -211,8 +212,14 @@ function SetFixStyle(objRootCtrl, bFix)
 	objFixBtn:SetChildrenVisible(not bFix)
 	objCloseBtn:SetVisible(bFix)
 	objCloseBtn:SetChildrenVisible(bFix)
-	
+		
 	EnableResizeFrame(objRootCtrl, bFix)
+	
+	if bFix then
+		objBkg:SetTextureID("Collect.Panel.Fix.Bkg")
+	else
+		objBkg:SetTextureID("Collect.Panel.Bkg")
+	end
 	
 	local attr = objRootCtrl:GetAttribute()
 	attr.bFix = bFix
