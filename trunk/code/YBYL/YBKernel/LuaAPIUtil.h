@@ -125,6 +125,7 @@ public:
 	static int CreateDir(lua_State* pLuaState);
 	static int CopyPathFile(lua_State* pLuaState);
 	static int DeletePathFile(lua_State* pLuaState);
+	static int GetUserPinPath(lua_State* pLuaState);
 	// ReadFileToString 将指定全路径的文件读入到一个string中。
 	// WriteStringToFile 将string全部内容写入到一个文件中。
 	static int ReadFileToString(lua_State* pLuaState);
