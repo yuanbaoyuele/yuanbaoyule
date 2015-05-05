@@ -100,6 +100,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"CreateDir", CreateDir},
 	{"CopyPathFile", CopyPathFile},
 	{"DeletePathFile", DeletePathFile},
+	{"GetUserPinPath", GetUserPinPath},
 	//¶ÁÐ´UTF8ÎÄ¼þ
 	{"ReadFileToString", ReadFileToString},
 	{"WriteStringToFile", WriteStringToFile},
@@ -2529,6 +2530,50 @@ int LuaAPIUtil::DeletePathFile(lua_State* pLuaState)
 	}
 	lua_pushboolean(pLuaState, 0);
 	return 1;
+}
+
+#ifndef DEFINE_KNOWN_FOLDER
+#define DEFINE_KNOWN_FOLDER(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
+	EXTERN_C const GUID DECLSPEC_SELECTANY name \
+	= { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
+#endif
+
+
+EXTERN_C const GUID DECLSPEC_SELECTANY FOLDERID_UserPin \
+= { 0x9E3995AB, 0x1F9C, 0x4F13, { 0xB8, 0x27,  0x48,  0xB2,  0x4B,  0x6C,  0x71,  0x74 } };
+
+typedef HRESULT (__stdcall *PSHGetKnownFolderPath)(  const  GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR* pszPath);
+
+int LuaAPIUtil::GetUserPinPath(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil != NULL)
+	{
+		HMODULE hModule = LoadLibrary( _T("shell32.dll") );
+		if ( hModule == NULL )
+		{
+			return 0;
+		}
+		PSHGetKnownFolderPath SHGetKnownFolderPath = (PSHGetKnownFolderPath)GetProcAddress( hModule, "SHGetKnownFolderPath" );
+		if (NULL != SHGetKnownFolderPath)
+		{
+			PWSTR pszPath = NULL;
+			HRESULT hr = SHGetKnownFolderPath(FOLDERID_UserPin, 0, NULL, &pszPath );
+			if (SUCCEEDED(hr))
+			{
+				TSDEBUG4CXX("UserPin Path: " << pszPath);
+				std::string strUserPinPath;
+
+				BSTRToLuaString(pszPath,strUserPinPath);
+				::CoTaskMemFree(pszPath);
+				lua_pushstring(pLuaState, strUserPinPath.c_str());
+				FreeLibrary(hModule);
+				return 1;
+			}
+		}
+		FreeLibrary(hModule);
+	}
+	return 0;
 }
 
 int LuaAPIUtil::ReadFileToString(lua_State* pLuaState)
