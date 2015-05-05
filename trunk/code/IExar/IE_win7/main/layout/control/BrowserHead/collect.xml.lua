@@ -225,14 +225,14 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	end
 	local ownerctrl = uiOwner:GetOwnerControl()
 	local l, t, r, b  = ownerctrl:GetObjPos()
-	nodebkg:SetObjPos2(left, top, r-l-20, 16)
+	nodebkg:SetObjPos2(0, top, r-l-20, 16)
 	nodebkg:AddChild(imgobj)
 	if listrank == 1 then
-		imgobj:SetObjPos2(0, 0, 16, 16)
+		imgobj:SetObjPos2(left, 0, 16, 16)
 	elseif listrank == 2 then
-		imgobj:SetObjPos2(0, 0, 16, 16)
+		imgobj:SetObjPos2(left, 0, 16, 16)
 	else
-		imgobj:SetObjPos2(0, 0, 16, 16)
+		imgobj:SetObjPos2(left, 0, 16, 16)
 	end
 	
 	--文本
@@ -249,7 +249,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 	else
 		txtobj:SetText(v[3]["pwcsTitle"] or v[3]["pwcsUrl"])
 	end
-	txtobj:SetObjPos2(20, 2, 120, 16)
+	txtobj:SetObjPos2(20+left, 2, 120, 16)
 	--转发文本框事件，让父控件处理
 	txtobj:AttachListener("OnLButtonDown", false, function(self, x, y)
 		self:RouteToFather()
@@ -307,6 +307,8 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 		_select:SetVisible(true)
 	end)
 	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
+		local l, t, r, b = self:GetObjPos()
+		if x > 0 and y > 0 and x < r-l and y < b-t then return end
 		txtobj:SetTextFontResID("font.menuitem2")
 		txtobj:SetTextColorResID("color.tab.normal")
 		AddHoverBkg(nodebkg, false)
@@ -421,9 +423,9 @@ function CreateNode(v, icon, left, isdir)
 	end
 	local ownerctrl = uiOwner:GetOwnerControl()
 	local l, t, r  = ownerctrl:GetObjPos()
-	nodebkg:SetObjPos2(left, top, r-l-20, 16)
+	nodebkg:SetObjPos2(0, top, r-l-20, 16)
 	nodebkg:AddChild(imgobj)
-	imgobj:SetObjPos2(0, 0, 16, 16)
+	imgobj:SetObjPos2(left, 0, 16, 16)
 	local txtobj = objFactory:CreateUIObject("txt_treenode"..treeNodeIndex, "TextObject")
 	txtobj:SetTextFontResID("font.menuitem2")
 	txtobj:SetTextColorResID("color.tab.normal")
@@ -431,7 +433,7 @@ function CreateNode(v, icon, left, isdir)
 	nodebkg:AddChild(txtobj)
 	nodebkg:SetZorder(100)
 	txtobj:SetText(name)
-	txtobj:SetObjPos2(20, 0, 120, 16)
+	txtobj:SetObjPos2(20+left, 0, 120, 16)
 	
 	txtobj:AttachListener("OnLButtonDown", false, function(self, x, y)
 		self:RouteToFather()
