@@ -219,6 +219,7 @@ public:
 
 	static int PinToStartMenu4XP(lua_State* pLuaState);
 	static int TrackPopUpSysMenu(lua_State* pLuaState);
+	static int RefleshIcon(lua_State* pLuaState);
 
 	//ÌáÈ¨×¢²á±í
 	static int ElevateOperate(lua_State* pLuaState);

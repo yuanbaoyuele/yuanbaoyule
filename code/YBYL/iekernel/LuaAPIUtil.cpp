@@ -187,6 +187,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	
 	{"PinToStartMenu4XP", PinToStartMenu4XP},
 	{"TrackPopUpSysMenu", TrackPopUpSysMenu},
+	{"RefleshIcon", RefleshIcon},
 
 	//ÌáÈ¨²Ù×÷
 	{"ElevateOperate", ElevateOperate},
@@ -4696,6 +4697,31 @@ int LuaAPIUtil::PinToStartMenu4XP(lua_State *pLuaState)
 	return 0;
 };
 
+int LuaAPIUtil::RefleshIcon(lua_State *pLuaState)
+{
+	TSAUTO();
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (!ppUtil)
+	{	
+		return 0;
+	}
+
+	const char *szShortCutPath = lua_tostring(pLuaState, 2);
+	if (!szShortCutPath)
+	{
+		SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST|SHCNF_FLUSH, NULL, NULL);
+	}
+	else
+	{
+		CComBSTR bstShortCutPath;
+		LuaStringToCComBSTR(szShortCutPath,bstShortCutPath);
+		::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_IDLIST |SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
+			bstShortCutPath.m_str,0);
+	}
+
+	return 0;
+
+};
 
 int LuaAPIUtil::TrackPopUpSysMenu(lua_State *pLuaState)
 {
