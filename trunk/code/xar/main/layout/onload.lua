@@ -881,8 +881,7 @@ function WriteStartMenuSC()
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				tipUtil:ShellExecute(0, "startunpin", strCurrent, "", 0, "SW_HIDE")
-				-- tipUtil:PinToStartMenu4XP(strCurrent, false)
+				FunctionObj.PinToStartMenu(strCurrent, false)
 				CopyBackUpLnk(strCurrent,"STARTMENU")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
@@ -890,8 +889,7 @@ function WriteStartMenuSC()
 			local strFilePath1 = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
-				-- tipUtil:PinToStartMenu4XP(strCurrent1, false)
-				tipUtil:ShellExecute(0, "startunpin", strCurrent1, "", 0, "SW_HIDE")
+				FunctionObj.PinToStartMenu(strCurrent1, false)
 				CopyBackUpLnk(strCurrent1,"STARTMENU")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\STARTMENU", "1")
 			end
@@ -914,16 +912,14 @@ function WriteStartMenuProgramSC()
 			local strFilePath = tipUtil:PathCombine(strBaseDir, "Internet Explorer.lnk")
 			local bIsInDir,strCurrent = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir then
-				-- tipUtil:PinToStartMenu4XP(strCurrent, false)
-				tipUtil:ShellExecute(0, "startunpin", strCurrent, "", 0, "SW_HIDE")
+				FunctionObj.PinToStartMenu(strCurrent, false)
 				CopyBackUpLnk(strCurrent,"SMPROGRAMS")
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
 			end
 			
 			local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strBaseDir)
 			if bIsInDir1 then
-				-- tipUtil:PinToStartMenu4XP(strCurrent1, false)
-				tipUtil:ShellExecute(0, "startunpin", strCurrent1, "", 0, "SW_HIDE")
+				FunctionObj.PinToStartMenu(strCurrent1, false)
 				CopyBackUpLnk(strCurrent1,"SMPROGRAMS")
 				--local bret = tipUtil:DeletePathFile(strCurrent1)
 				FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\SMPROGRAMS", "1")
@@ -933,8 +929,7 @@ function WriteStartMenuProgramSC()
 			if nCsidl == nCSIDL_PROGRAM then
 				local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strBaseDir, "", "/sstartfrom startmenuprograms", "启动 Internet Explorer 浏览器")
 				if bret then
-					tipUtil:ShellExecute(0, "startpin", strFilePath, "", 0, "SW_HIDE")
-					-- tipUtil:PinToStartMenu4XP(strFilePath, true)
+					FunctionObj.PinToStartMenu(strFilePath, true)
 				end
 			end	
 		end
@@ -959,14 +954,21 @@ function WriteQuickLaunchSC()
 		
 		local bIsInDir1,strCurrent1 = CheckIsIELnkInDir(strQueryDir)
 		if bIsInDir1 then
-			--local bret = tipUtil:DeletePathFile(strCurrent1)
+			if FunctionObj.IsUACOS() then
+				tipUtil:ShellExecute(0, "taskbarunpin", strCurrent1, "", 0, "SW_HIDE")
+			end
+			
 			CopyBackUpLnk(strCurrent1,"QUICKLAUNCH")
 			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\QUICKLAUNCH", "1")
 		end
 		
 		local strIEPath = GetIEPath()
 		local bret = tipUtil:CreateShortCutLinkEx("Internet Explorer", strIEPath, strQueryDir, "", "/sstartfrom toolbar", "启动 Internet Explorer 浏览器")
-		-- tipUtil:ShellExecute(0, "taskbarpin", strFilePath, "", 0, "SW_HIDE")
+		
+		if FunctionObj.IsUACOS() then
+			local strFilePath = tipUtil:PathCombine(strQueryDir, "Internet Explorer.lnk")
+			tipUtil:ShellExecute(0, "taskbarpin", strFilePath, "", 0, "SW_HIDE")
+		end
 	end
 end
 
