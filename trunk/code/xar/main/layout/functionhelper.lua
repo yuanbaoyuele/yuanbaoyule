@@ -540,14 +540,13 @@ function RegDeleteValue(sPath)
 end
 
 
-function RegSetValue(sPath, value, b64Bit)
+function RegSetValue(sPath, value, b64Bit, bInfMode)
 	TipLog("[RegSetValue] sPath: "..tostring(sPath) .. "  value:"..tostring(value))
 
 	if IsRealString(sPath) then
 		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
 		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
-			local bIsAdmin = IsUserAdmin()
-			if bIsAdmin then
+			if not bInfMode then
 				return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
 			else
 				return SetRegValueInUAC(sRegRoot, sRegPath, sRegKey  or "", value or "", b64Bit)
@@ -558,13 +557,10 @@ function RegSetValue(sPath, value, b64Bit)
 end
 
 
+local g_tSetValueInf = {}
+g_tSetValueInf["AddReg"] = {}
+
 function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value, b64Bit)
-	local bPassCheck = CheckRegCondition()
-	if not bPassCheck then
-		TipLog("[SetRegValueInUAC] CheckRegCondition failed")
-		return false
-	end
-	
 	local strHKRoot = ""
 		
 	if sRegRoot == "HKEY_CURRENT_USER" then
@@ -583,12 +579,25 @@ function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value, b64Bit)
 		sRegKey = "\"\""
 	end
 
-	local tabInf = {}
-	tabInf["AddReg"] = {} 
-	tabInf["AddReg"][1] = strHKRoot..","..sRegPath..","..sRegKey..",".."FLG_ADDREG_TYPE_SZ,"..value
+	local nIndex = #g_tSetValueInf["AddReg"]
+	g_tSetValueInf["AddReg"][nIndex+1] = strHKRoot..","..sRegPath..","..sRegKey..",".."FLG_ADDREG_TYPE_SZ,"..value
+	
+	return true
+end
+
+
+function CommitRegOperation()
+	local bPassCheck = CheckRegCondition()
+	if not bPassCheck then
+		TipLog("[CommitRegOperation] CheckRegCondition failed")
+		return false
+	end
 	
 	local strInfPath = GetInfPathForReg()
-	local nRet = tipUtil:ElevateOperate(tabInf, strInfPath, b64Bit)
+	local nRet = tipUtil:ElevateOperate(g_tSetValueInf, strInfPath, b64Bit)
+	
+	g_tSetValueInf["AddReg"] = {}
+	
 	if nRet == 0 then
 		return true
 	else
@@ -598,6 +607,15 @@ end
 
 
 function CheckRegCondition()
+	if type(tipUtil.ElevateOperate) ~= "function" then
+		return false
+	end
+
+	-- local bIsAdmin = IsUserAdmin()
+	-- if bIsAdmin then
+		-- return false
+	-- end
+	
 	local iMax, iMin = tipUtil:GetOSVersion()
 	if type(iMax) ~= "number" or iMax ~= 6 
 		or type(iMin) ~= "number" or iMin ~= 1 then
@@ -621,11 +639,18 @@ function GetInfPathForReg()
 end
 
 
-function PinToStartMenu(strFilePath, bPin)
-	TipLog("[PinToStartMenu] strFilePath: "..tostring(strFilePath) .. " bPin: " .. tostring(bPin))
-
+function PinToStartMenu4XP(strFilePath, bPin)
+	TipLog("[PinToStartMenu4XP] strFilePath: "..tostring(strFilePath) .. " bPin: " .. tostring(bPin))
 	if not IsUACOS() then
 		tipUtil:PinToStartMenu4XP(strFilePath, bPin)
+	end
+end
+
+
+function PinToStartMenu4Win7(strFilePath, bPin)
+	TipLog("[PinToStartMenu4Win7] strFilePath: "..tostring(strFilePath) .. " bPin: " .. tostring(bPin))
+
+	if not IsUACOS() then
 		return
 	end
 
@@ -1864,10 +1889,11 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 obj.RegSetValue = RegSetValue
+obj.CommitRegOperation = CommitRegOperation
 
 
-obj.PinToStartMenu = PinToStartMenu
-
+obj.PinToStartMenu4XP = PinToStartMenu4XP
+obj.PinToStartMenu4Win7 = PinToStartMenu4Win7
 
 
 
