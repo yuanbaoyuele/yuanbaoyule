@@ -140,7 +140,7 @@
 								<obj id="TipCloseAllTabWnd.CheckBox" class="TipAddin.Button">
 									<attr>
 										<left>11</left>
-										<top>95</top>
+										<top>98</top>
 										<width>13</width>
 										<height>13</height>
 										<NormalBkgID>checkbox.normal</NormalBkgID>
