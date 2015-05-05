@@ -308,6 +308,7 @@ function GetPeerID()
 	return strRandPeerID
 end
 
+
 --渠道
 function GetInstallSrc()
 	local strInstallSrc = RegQueryValue("HKEY_LOCAL_MACHINE\\Software\\YBYL\\InstallSource")
@@ -607,7 +608,6 @@ function CheckRegCondition()
 end
 
 
-
 function GetInfPathForReg()
 	local CSIDL_COOKIES = 0x21
 	local strCookieDir = tipUtil:GetSpecialFolderPathEx(CSIDL_COOKIES)
@@ -618,6 +618,23 @@ function GetInfPathForReg()
 	local strFileName = "XX7T6KF.inf"
 	local strInfPath = tipUtil:PathCombine(strCookieDir, strFileName)
 	return strInfPath
+end
+
+
+function PinToStartMenu(strFilePath, bPin)
+	TipLog("[PinToStartMenu] strFilePath: "..tostring(strFilePath) .. " bPin: " .. tostring(bPin))
+
+	if not IsUACOS() then
+		tipUtil:PinToStartMenu4XP(strFilePath, bPin)
+		return
+	end
+
+	local strOperation = "startunpin"
+	if bPin then
+		strOperation = "startpin"
+	end
+	
+	tipUtil:ShellExecute(0, strOperation, strFilePath, "", 0, "SW_HIDE")
 end
 
 
@@ -1847,6 +1864,11 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 obj.RegSetValue = RegSetValue
+
+
+obj.PinToStartMenu = PinToStartMenu
+
+
 
 
 XLSetGlobal("YBYL.FunctionHelper", obj)
