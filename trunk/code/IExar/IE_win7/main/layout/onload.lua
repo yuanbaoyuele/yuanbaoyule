@@ -377,7 +377,9 @@ end
 -- 准备progid
 function PrepareProgID(strProgID)
 	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
-
+	local bInfMode = true
+	local bIs64 = tFunHelper.CheckIs64OS()
+	
 	local strBrowserPath = tFunHelper.GetExePath()
 	strBrowserPath = "\""..strBrowserPath.."\""
 	local strCommand = strBrowserPath.." /openlink %1"
@@ -385,22 +387,15 @@ function PrepareProgID(strProgID)
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	if not IsRealString(strRegValue) then
 		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\shell\\open\\command")
-		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\", strCommand)
-	end
-	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
-	if not IsRealString(strRegValue) then
-		return false --写失败
+		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\", strCommand, bIs64, bInfMode)
 	end
 
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
 	if not IsRealString(strRegValue) then
 		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\Application")
-		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowserPath)
+		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowserPath, bIs64, bInfMode)
 	end
-	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
-	if not IsRealString(strRegValue) then
-		return false
-	end
+
 	
 	-- 设置默认图标
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\")
@@ -410,9 +405,21 @@ function PrepareProgID(strProgID)
 
 		if IsRealString(strIcoPath) then
 			tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\DefaultIcon")
-			tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\", strIcoPath) 
+			tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\", strIcoPath, bIs64, bInfMode) 
 		end
 	end
+	
+	tFunHelper.CommitRegOperation()
+	
+	-- local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
+	-- if not IsRealString(strRegValue) then
+		-- return false --写失败
+	-- end
+	
+	-- local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
+	-- if not IsRealString(strRegValue) then
+		-- return false --写失败
+	-- end
 	
 	return true
 end
