@@ -546,7 +546,7 @@ function RegSetValue(sPath, value, b64Bit, bInfMode)
 	if IsRealString(sPath) then
 		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
 		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
-			if not bInfMode then
+			if not bInfMode or IsUserAdmin() then
 				return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
 			else
 				return SetRegValueInUAC(sRegRoot, sRegPath, sRegKey  or "", value or "", b64Bit)
@@ -586,7 +586,7 @@ function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value, b64Bit)
 end
 
 
-function CommitRegOperation()
+function CommitRegOperation(b64Bit)
 	local bPassCheck = CheckRegCondition()
 	if not bPassCheck then
 		TipLog("[CommitRegOperation] CheckRegCondition failed")

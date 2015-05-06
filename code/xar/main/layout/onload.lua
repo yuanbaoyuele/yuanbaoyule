@@ -653,7 +653,8 @@ function DoInstallIE(strIniPath)
 	WriteIEShortCut(strIniPath)
 	
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	FunctionObj.CommitRegOperation()
+	local bIs64 = FunctionObj.CheckIs64OS()
+	FunctionObj.CommitRegOperation(bIs64)
 	
 	SendInstallIEReport()
 end
