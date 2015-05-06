@@ -1181,7 +1181,7 @@ function CreateDesktopReg()
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\", "属性(&R)", bIs64, bInfMode)
 		
 	FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command", bIs64)
-	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command\\", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl", bIs64, bInfMode)
+	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command\\", "\"Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl\"", bIs64, bInfMode)
 	
 	FunctionObj.CreateRegKey("HKEY_LOCAL_MACHINE","SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", bIs64)
 	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\", "Internet Exploer", bIs64, bInfMode)
