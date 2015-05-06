@@ -540,6 +540,16 @@ function RegDeleteValue(sPath)
 end
 
 
+function CreateRegKey(strRootKey, strPath, b64Bit)
+	if b64Bit then
+		tipUtil:CreateRegKey64(strRootKey,strPath)
+	else
+		tipUtil:CreateRegKey(strRootKey,strPath)
+	end
+end
+
+
+
 function RegSetValue(sPath, value, b64Bit, bInfMode)
 	TipLog("[RegSetValue] sPath: "..tostring(sPath) .. "  value:"..tostring(value))
 
@@ -547,7 +557,11 @@ function RegSetValue(sPath, value, b64Bit, bInfMode)
 		local sRegRoot, sRegPath, sRegKey = string.match(sPath, "^(.-)[\\/](.*)[\\/](.-)$")
 		if IsRealString(sRegRoot) and IsRealString(sRegPath) then
 			if not bInfMode or IsUserAdmin() then
-				return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
+				if b64Bit then
+					return tipUtil:SetRegValue64(sRegRoot, sRegPath, sRegKey or "", value or "")			
+				else
+					return tipUtil:SetRegValue(sRegRoot, sRegPath, sRegKey or "", value or "")
+				end
 			else
 				return SetRegValueInUAC(sRegRoot, sRegPath, sRegKey  or "", value or "", b64Bit)
 			end
@@ -1889,6 +1903,7 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 obj.RegSetValue = RegSetValue
+obj.CreateRegKey = CreateRegKey
 obj.CommitRegOperation = CommitRegOperation
 
 
