@@ -258,7 +258,7 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	end
 
 	if not bIgnoreSpanTime then
-		local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 0
+		local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 24*3600
 		local nLastSetDefaultUTC = tUserConfig["nLastSetDefaultUTC"] or 0
 		local bPassCheck = CheckSpanTime(nLastSetDefaultUTC, nSpanTimeInSec)
 		if not bPassCheck then
