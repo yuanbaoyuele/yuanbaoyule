@@ -409,7 +409,8 @@ function PrepareProgID(strProgID)
 		end
 	end
 	
-	tFunHelper.CommitRegOperation()
+	local bIs64 = tFunHelper.CheckIs64OS()
+	tFunHelper.CommitRegOperation(bIs64)
 	
 	-- local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	-- if not IsRealString(strRegValue) then
