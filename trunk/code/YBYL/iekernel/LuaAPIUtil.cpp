@@ -365,6 +365,7 @@ int LuaAPIUtil::GetCommandLine(lua_State* pLuaState)
 	{	
 		wchar_t szCmd[1024*4] = {0};
 		wcsncpy(szCmd,wstrCommandLine.c_str(),wstrCommandLine.size());
+		szCmd[1024*4-1] = '\0';
 		BSTRToLuaString(szCmd, strUtf8);
 	}
 
