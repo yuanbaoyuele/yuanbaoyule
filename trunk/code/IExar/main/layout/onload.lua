@@ -366,7 +366,7 @@ function DoSetDefaultBrowser()
 
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRHttp", strOldDefBrowPath)
 	
-	local strCommand = "\""..strFakeIEPath.."\" /openlink %1"
+	local strCommand = "\""..strFakeIEPath.."\" /openlink \"%1\""
 	FunctionObj.RegSetValue(strDefBrowRegPath, strCommand)
 	
 	------
