@@ -147,13 +147,13 @@ function AddHoverBkg(obj, isadd, isshowarrow, callback)
 		bkg:SetChildrenVisible(true)
 		local ownerctrl = uiOwner:GetOwnerControl()
 		local l1, t1, r1, b1 = ownerctrl:GetObjPos()
-		bkg:SetObjPos(0, t-3, r1-l1-20, b+3)
+		bkg:SetObjPos(0, t-3, "father.width-3", b+3)
 		bkg:SetTextureID("collect.bkg.hover")
 		if isshowarrow then
 			local btn = uiOwner:GetControlObject("hoverbtn_collect")
 			if not btn then
 				btn = objFactory:CreateUIObject("hoverbtn_collect", "TipAddin.Button")
-				btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
+				btn:SetObjPos("father.width-23", 2, "father.width-1", 20)
 				local attr = btn:GetAttribute()
 				attr.NormalBkgID = ""
 				attr.HoverBkgID = "Collect.Button.Bkg2.Hover"
@@ -165,7 +165,7 @@ function AddHoverBkg(obj, isadd, isshowarrow, callback)
 				btn:Updata()
 				bkg:AddChild(btn)
 			end
-			btn:SetObjPos(r1-l1-20-23, 2, r1-l1-20-1, 20)
+			btn:SetObjPos("father.width-23", 2, "father.width-1", 20)
 			local attr = btn:GetAttribute()
 			attr.HoverBkgID = "Collect.Button.Bkg2.Hover"
 			attr.DownBkgID = "Collect.Button.Bkg2.Down"
@@ -285,7 +285,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 		end
 		local ownerctrl = uiOwner:GetOwnerControl()
 		local l, t, r, b  = ownerctrl:GetObjPos()
-		_select:SetObjPos2(0, top-3, r-l-20, 22)
+		_select:SetObjPos2(0, top-3, "father.width-2", 22)
 		_select:SetVisible(true)
 	end
 	--处理事件
@@ -303,7 +303,7 @@ function CreateIEHistoryNode(v, left, listrank)--创建ie历史节点
 		_select:SetZorder(101)
 		local ownerctrl = uiOwner:GetOwnerControl()
 		local l, t, r, b  = ownerctrl:GetObjPos()
-		_select:SetObjPos2(0, top-3, r-l-20, 22)
+		_select:SetObjPos2(0, top-3, "father.width-2", 22)
 		_select:SetVisible(true)
 	end)
 	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
@@ -469,7 +469,7 @@ function CreateNode(v, icon, left, isdir)
 		end
 		local ownerctrl = uiOwner:GetOwnerControl()
 		local l, t, r, b  = ownerctrl:GetObjPos()
-		_select:SetObjPos2(0, top-3, r-l-20, 22)
+		_select:SetObjPos2(0, top-3, "father.width-2", 22)
 		_select:SetVisible(true)
 	end
 	treeNodeAttr[v] = treeNodeAttr[v] or {}
@@ -492,7 +492,7 @@ function CreateNode(v, icon, left, isdir)
 		_select:SetZorder(101)
 		local ownerctrl = uiOwner:GetOwnerControl()
 		local l, t, r, b  = ownerctrl:GetObjPos()
-		_select:SetObjPos2(0, top-3, r-l-20, 22)
+		_select:SetObjPos2(0, top-3, "father.width-2", 22)
 		_select:SetVisible(true)
 	end)
 	nodebkg:AttachListener("OnMouseLeave", false, function(self, x, y)
@@ -747,13 +747,14 @@ function ResetScrollBar(objRootCtrl)
 		objScrollBar:SetScrollPos(0, true)	
 		objScrollBar:SetVisible(false)
 		objScrollBar:SetChildrenVisible(false)
+		ShowThinPanel(objRootCtrl, false)
 		return true
 	else
 		objScrollBar:SetVisible(true)
 		objScrollBar:SetChildrenVisible(true)
 		objScrollBar:Show(true)
+		ShowThinPanel(objRootCtrl, true)
 	end
-	
 	return true
 end
 
@@ -820,6 +821,26 @@ function MoveItemListPanel(objRootCtrl, nScrollPos)
 	local nNewT = 0-nScrollPos
 	
 	objContainer:SetObjPos(nL, nNewT, nR, nNewT+nHeight)
+end
+
+
+function ShowThinPanel(objRootCtrl, bThin)
+	if not objRootCtrl then
+		return
+	end
+	
+	local objContainer = objRootCtrl:GetControlObject("Layout.Container")
+	if not objContainer then
+		return
+	end
+	
+	local nL, nT, nR, nB = objContainer:GetObjPos()
+	local strWidth = "father.width-"..tostring(nL)
+	if bThin then
+		strWidth = "father.width-16-"..tostring(nL)
+	end
+	
+	objContainer:SetObjPos2(nL, nT, strWidth, "father.height")
 end
 
 

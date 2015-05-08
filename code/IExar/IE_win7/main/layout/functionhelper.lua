@@ -1084,7 +1084,7 @@ function OpenURLInNewWindow(strURL)
 	end
 
 	local strBrowserExePath = GetExePath()
-	strCMD = " /openlink "..tostring(strURL)
+	local strCMD = tostring(strURL)
 	tipUtil:ShellExecute(0, "open", strBrowserExePath, strCMD, 0, "SW_SHOW")
 end
 
