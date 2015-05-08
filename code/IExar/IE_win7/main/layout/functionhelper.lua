@@ -1660,7 +1660,6 @@ function OpenHomePage(nIndex)
 end
 
 
-
 function GetHomePageFromCfg()
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	local strHomePage = tUserConfig["strHomePage"]
@@ -2348,8 +2347,6 @@ function DownLoadConfigByURL(strConfigURL, fnCallBack, nTimeInMs)
 			fnCallBack(bRet)
 		end		
 	end, nTime)
-
-
 end
 
 
@@ -2555,6 +2552,7 @@ obj.GetTimeStamp = GetTimeStamp
 obj.UrlEncode = UrlEncode
 obj.CheckTimeIsAnotherDay = CheckTimeIsAnotherDay
 obj.SimpleCheckIsURL = SimpleCheckIsURL
+obj.IsUserAdmin = IsUserAdmin
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
@@ -2584,7 +2582,6 @@ obj.CreateSubWndByName = CreateSubWndByName
 obj.SetMainWndFocusStyle = SetMainWndFocusStyle
 obj.ShowHeadWindow = ShowHeadWindow
 obj.ShowErrorPage = ShowErrorPage
-
 
 
 --文件
