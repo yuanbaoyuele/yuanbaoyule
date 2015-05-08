@@ -8,6 +8,10 @@ end
 
 function OnSearch(self, func, txt)
 	local attr = self:GetAttribute()
+	local defaulttext = attr.SearchEngine["displayName"]
+	if defaulttext == "" or defaulttext == nil then return end
+	defaulttext = string.gsub(defaulttext, "%(默认%)", "")
+	if defaulttext == txt then return end
 	txt = encodeURI(txt)
 	if txt ~= "" and txt ~= nil then
 		local searchurl = string.gsub(string.lower(attr.SearchEngine["url"]), "{searchword}", txt)
