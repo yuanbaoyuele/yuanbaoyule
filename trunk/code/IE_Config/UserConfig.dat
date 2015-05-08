@@ -1,6 +1,7 @@
 function GetSubTable()
 	local t = {
-		["strServerConfigURL"] = "http://www.91yuanbao.com/cmi/ieserverconfig.js", 
+		["strServerConfigURL"] = "http://www.91yuanbao.com/cmi/ieserverconfig_b21.js", 
+		["strInstallConfigURL"] = "http://www.91yuanbao.com/cmi/ieinstallconfig_b21.js", 
 		["nMaxUrlHistroy"] = 500, 
 		["nMaxUserCollect"] = 500, 
 		["SearchEngine"] = {
