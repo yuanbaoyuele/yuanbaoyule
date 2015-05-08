@@ -529,7 +529,7 @@ function TrySetDefaultBrowser()
 		return
 	end	
 	
-	tipUtil:ShellExecute(0, "open", strIEPath, " /setdefault", 0, "SW_HIDE")
+	tipUtil:ShellExecute(0, "open", strIEPath, " /setdefault ybyl ", 0, "SW_HIDE")
 end
 
 function ProcessCommandLine()
