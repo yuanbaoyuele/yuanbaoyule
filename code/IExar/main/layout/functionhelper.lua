@@ -77,6 +77,24 @@ function FetchValueByPath(obj, path)
 	return cursor
 end
 
+
+function SimpleCheckIsURL(strURL)
+	if not IsRealString(strURL) then
+		return false
+	end
+	
+	if not string.find(strURL, "%.") then
+		return false
+	end
+	
+	if string.find(strURL, "^%-") or string.find(strURL, "^/") then
+		return false
+	end
+
+	return true
+end
+
+
 function GetCommandStrValue(strKey)
 	local bRet, strValue = false, nil
 	local cmdString = tipUtil:GetCommandLine()
@@ -88,6 +106,28 @@ function GetCommandStrValue(strKey)
 				local strTmp = tostring(cmdList[i])
 				if strTmp == strKey 
 					and not string.find(tostring(cmdList[i + 1]), "^/") then		
+					bRet = true
+					strValue = tostring(cmdList[i + 1])
+					break
+				end
+			end
+		end
+	end
+	return bRet, strValue
+end
+
+
+function GetCommandStrValue4IE(strKey)
+	local bRet, strValue = false, nil
+	local cmdString = tipUtil:GetCommandLine()
+	
+	if string.find(cmdString, strKey .. " ") then
+		local cmdList = tipUtil:CommandLineToList(cmdString)
+		if cmdList ~= nil then	
+			for i = 1, #cmdList, 1 do
+				local strTmp = tostring(cmdList[i])
+				if strTmp == strKey 
+					and not string.find(tostring(cmdList[i + 1]), "^%-") then		
 					bRet = true
 					strValue = tostring(cmdList[i + 1])
 					break
@@ -1275,10 +1315,21 @@ end
 function SetMainWndFocusStyle(bFocus)
 	local objBkg = GetMainCtrlChildObj("bkg")
 	local objMainTitle = GetMainCtrlChildObj("MainPanel.Title")
+	local objHeadCtrl = GetHeadCtrlChildObj("MainPanel.Head")
+	if not objHeadCtrl then
+		return
+	end
+	
+	local objMenuBarCtrl = objHeadCtrl:GetControlObject("BrowserHeadCtrl.MenuBarCtrl")
+	if not objMenuBarCtrl then
+		return
+	end	
+	
+	objMainTitle:SetFocusStyle(bFocus)
+	objMenuBarCtrl:SetFocusStyle(bFocus)
 	
 	if bFocus then
 		objBkg:SetTextureID("YBYL.MainWnd.Bkg")	
-		objMainTitle:SetFocusStyle(true)
 	else
 		local nX, nY = tipUtil:GetCursorPos() 	
 		local objMainWndInst = GetMainWndInst()
@@ -1288,7 +1339,6 @@ function SetMainWndFocusStyle(bFocus)
 		end
 		
 		objBkg:SetTextureID("YBYL.MainWnd.Bkg.Disable")	
-		objMainTitle:SetFocusStyle(false)
 	end
 end
 
@@ -1413,7 +1463,7 @@ end
 
 function GetHomePage()
 	local strHomePage = GetHomePageFromCfg()
-	if IsRealString(strHomePage) then
+	if IsRealString(strHomePage) and strHomePage ~= "iehomepage" then
 		return strHomePage
 	end
  
@@ -1459,10 +1509,14 @@ function OpenHomePage(nIndex)
 end
 
 
-
 function GetHomePageFromCfg()
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	return tUserConfig["strHomePage"]
+	local strHomePage = tUserConfig["strHomePage"]
+	if not IsRealString(strHomePage) then
+		strHomePage = "http://www.hao123.com/\?tn=29065018_252_hao_pg"
+	end
+	
+	return strHomePage
 end
 
 
@@ -2119,14 +2173,7 @@ function CheckMD5(strFilePath, strExpectedMD5)
 end
 
 
-function DownLoadServerConfig(fnCallBack, nTimeInMs)
-	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	
-	local strConfigURL = tUserConfig["strServerConfigURL"]
-	if not IsRealString(strConfigURL) then
-		strConfigURL = "http://www.91yuanbao.com/cmi/ieserverconfig.js"
-	end
-	
+function DownLoadConfigByURL(strConfigURL, fnCallBack, nTimeInMs)
 	local strFileName = GetFileSaveNameFromUrl(strConfigURL)
 	local strSavePath = GetCfgPathWithName(strFileName)
 	if not IsRealString(strSavePath) then
@@ -2150,6 +2197,31 @@ function DownLoadServerConfig(fnCallBack, nTimeInMs)
 		end		
 	end, nTime)
 end
+
+
+function DownLoadServerConfig(fnCallBack, nTimeInMs)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	
+	local strConfigURL = tUserConfig["strServerConfigURL"]
+	if not IsRealString(strConfigURL) then
+		strConfigURL = "http://www.91yuanbao.com/cmi/ieserverconfig_b21.js"
+	end
+	
+	DownLoadConfigByURL(strConfigURL, fnCallBack, nTimeInMs)
+end
+
+
+function DownLoadInstallConfig(fnCallBack, nTimeInMs)
+	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
+	
+	local strConfigURL = tUserConfig["strInstallConfigURL"]
+	if not IsRealString(strConfigURL) then
+		strConfigURL = "http://www.91yuanbao.com/cmi/ieinstallconfig_b21.js"
+	end
+	
+	DownLoadConfigByURL(strConfigURL, fnCallBack, nTimeInMs)
+end
+
 
 function DownLoadFileWithCheck(strURL, strSavePath, strCheckMD5, fnCallBack)
 	if type(fnCallBack) ~= "function"  then
@@ -2313,6 +2385,7 @@ obj.ExitProcess = ExitProcess
 obj.SplitStringBySeperator = SplitStringBySeperator
 obj.ReportAndExit = ReportAndExit
 obj.GetCommandStrValue = GetCommandStrValue
+obj.GetCommandStrValue4IE = GetCommandStrValue4IE
 obj.GetExePath = GetExePath
 obj.LoadTableFromFile = LoadTableFromFile
 obj.SaveTableToFile = SaveTableToFile
@@ -2333,6 +2406,7 @@ obj.DownLoadFileWithCheck = DownLoadFileWithCheck
 obj.GetTimeStamp = GetTimeStamp
 obj.UrlEncode = UrlEncode
 obj.CheckTimeIsAnotherDay = CheckTimeIsAnotherDay
+obj.SimpleCheckIsURL = SimpleCheckIsURL
 
 --UI
 obj.OpenURLInNewTab = OpenURLInNewTab
@@ -2409,6 +2483,7 @@ obj.SetResizeEnable = SetResizeEnable
 
 --升级
 obj.DownLoadServerConfig = DownLoadServerConfig
+obj.DownLoadInstallConfig = DownLoadInstallConfig
 obj.DownLoadNewVersion = DownLoadNewVersion
 obj.CheckIsUpdating = CheckIsUpdating
 obj.SetIsUpdating = SetIsUpdating

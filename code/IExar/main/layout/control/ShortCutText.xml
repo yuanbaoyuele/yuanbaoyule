@@ -8,6 +8,7 @@
 			<attr name="Endellipsis" type="bool"><default>false</default></attr>
 			<attr name="Textcolor" type="string"/>
 			<attr name="Halign" type="string"/>
+			<attr name="bItemFocus" type="bool"/>
 		</attr_def>		
 		
 		<method_def>
@@ -20,6 +21,8 @@
 			<GetText file="ShortCutText.xml.lua" func="GetText"/>
 			<GetTextExtent file="ShortCutText.xml.lua" func="GetTextExtent"/>
 			<SetEndellipsis file="ShortCutText.xml.lua" func="SetEndellipsis"/>
+			<SetItemFocus file="ShortCutText.xml.lua" func="SetItemFocus"/>
+			<GetItemFocus file="ShortCutText.xml.lua" func="GetItemFocus"/>
 		</method_def>		
 		
 		<event_def>
