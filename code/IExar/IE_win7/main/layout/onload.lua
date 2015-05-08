@@ -250,10 +250,28 @@ end
 
 --改userconfig中的首页字段
 function TrySetConfigHomePage(tServerConfig)
-
-
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	FunctionObj.TipLog("[TrySetConfigHomePage] begin ")
+	
+	if type(tServerConfig) ~= "table" or type(tServerConfig["tURLMap"]) ~= "table" then
+		FunctionObj.TipLog("[TrySetConfigHomePage] tURLMap not a table ")
+		return false
+	end
+	
+	local tURLMap = tServerConfig["tURLMap"]
+	local strInstallSrc = FunctionObj.GetInstallSrc()
+	
+	for strSource, strURL in pairs(tURLMap) do
+		if string.lower(strSource) == string.lower(strInstallSrc) 
+			and IsRealString(strURL) then
+			FunctionObj.SetHomePage(strURL)
+			FunctionObj.TipLog("[TrySetConfigHomePage] seturl: "..tostring(strURL))
+			return true
+		end
+	end
+	
+	return false
 end
-
 
 
 function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
@@ -677,7 +695,7 @@ function ProcessIECommand()
 	end
 	
 	local strURL = cmdList[1]
-	if FunctionObj.SimpleCheckIsURL(strURL) then
+	if IsRealString(cmdString) and FunctionObj.SimpleCheckIsURL(strURL) then
 		FunctionObj.OpenURLInNewTab(strURL)
 		return bHasOpenLink
 	end
