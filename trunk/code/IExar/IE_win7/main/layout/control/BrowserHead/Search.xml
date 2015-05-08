@@ -70,6 +70,7 @@
 								<image>bitmap.search.baidu</image>
 								<drawmode>1</drawmode>
 								<antialias>2</antialias>
+								<zorder>10000</zorder>
 							</attr>
 							<eventlist>
 								<event name="OnLButtonUp" file="Search.xml.lua" func="icon_OnLButtonUp" />
@@ -79,12 +80,14 @@
 						</obj>
 						<obj id="edit" class="EditObject">
 							<attr>
-								<left>22</left>
+								<left>16</left>
 								<top>5</top>
 								<width>father.width-70</width>
 								<height>father.height-10</height>
 								<transparent>0</transparent>
 								<textcolor></textcolor>
+								<maxlength>128</maxlength>
+								<zorder>9999</zorder>
 							</attr>
 							<eventlist>
 								<event name="OnLButtonDbClick" file="Search.xml.lua" func="OnLButtonDbClick" />
