@@ -205,7 +205,8 @@
 				<attr>
 					<Text>工具栏</Text>
 					<AccKey>T</AccKey>
-					<SubMenuID>lookupmenu.submenu.toolbar</SubMenuID>
+					<!--SubMenuID>lookupmenu.submenu.toolbar</SubMenuID-->
+					<Enable>0</Enable>
 				</attr>
 				<eventlist>
 					<event name="OnSelect" file="LookupMenu.xml.lua" function="OnSelect_ToolBar" />

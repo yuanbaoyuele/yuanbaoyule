@@ -17,6 +17,17 @@ function GetTextExtent(self)
 end
 
 
+function SetItemFocus(self, bItemFocus)
+	local attr = self:GetAttribute()
+	attr.bItemFocus = bItemFocus
+end
+
+function GetItemFocus(self)
+	local attr = self:GetAttribute()
+	return attr.bItemFocus 
+end
+
+
 function SetEndellipsis(self, bEndellipsis)
 	if type(bEndellipsis) ~= "boolean" then
 		return
