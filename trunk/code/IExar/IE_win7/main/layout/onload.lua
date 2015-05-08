@@ -410,7 +410,12 @@ function PrepareProgID(strProgID)
 	local strBrowserPath = tFunHelper.GetExePath()
 	local strBrowPathWithFix = "\""..strBrowserPath.."\""
 	local strCommand = strBrowPathWithFix.." \"%1\""
-
+		
+	if not tFunHelper.IsUserAdmin() then
+		strBrowPathWithFix = "\"\"\""..strBrowserPath.."\"\"\""
+		strCommand = strBrowPathWithFix.." \"\"\"%1\"\"\""
+	end
+	
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	if not IsRealString(strRegValue) then
 		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\shell\\open\\command")

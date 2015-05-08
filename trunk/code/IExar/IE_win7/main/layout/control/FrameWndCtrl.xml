@@ -41,20 +41,20 @@
 				</obj>
 				<obj id="mainwnd.resize.left" class="ResizeObject" templateid = "caption.failhittest">
 					<attr>
-						<left>0</left>
-						<top>5</top>
-						<width>20</width>
-						<height>father.height</height>
+						<left>-5</left>
+						<top>10</top>
+						<width>10</width>
+						<height>father.height-10</height>
 						<type>left</type>
 						<zorder>100000000</zorder>
 					</attr>
 				</obj>
 				<obj id="mainwnd.resize.topleft" class="ResizeObject" templateid = "caption.failhittest">
 					<attr>
-						<left>0</left>
-						<top>0</top>
-						<width>20</width>
-						<height>20</height>
+						<left>-5</left>
+						<top>-5</top>
+						<width>10</width>
+						<height>10</height>
 						<type>topleft</type>
 						<zorder>100000001</zorder>
 					</attr>
