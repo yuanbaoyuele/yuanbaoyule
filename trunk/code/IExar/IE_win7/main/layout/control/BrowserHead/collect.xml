@@ -24,7 +24,7 @@
 					<children>
 						<obj id="Layout.Container" class="TextureObject">
 							<attr>
-								<left>5</left>
+								<left>2</left>
 								<top>2</top>
 								<width>father.width-5</width>
 								<height>father.height</height>
@@ -57,7 +57,7 @@
 						<ThumbBtnWidth>16</ThumbBtnWidth>
 						<ThumbBtnLength>19</ThumbBtnLength>
 						<SideBtnLength>17</SideBtnLength>
-						<left>father.width-17</left>
+						<left>father.width-19</left>
 						<top>1</top>
 						<width>16</width>
 						<height>father.height-3</height>
