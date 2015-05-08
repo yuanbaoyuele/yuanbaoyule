@@ -1614,7 +1614,7 @@ end
 
 function GetHomePage()
 	local strHomePage = GetHomePageFromCfg()
-	if IsRealString(strHomePage) then
+	if IsRealString(strHomePage) and strHomePage ~= "iehomepage" then
 		return strHomePage
 	end
  
@@ -1663,7 +1663,12 @@ end
 
 function GetHomePageFromCfg()
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
-	return tUserConfig["strHomePage"]
+	local strHomePage = tUserConfig["strHomePage"]
+	if not IsRealString(strHomePage) then
+		strHomePage = "http://www.hao123.com/\?tn=29065018_252_hao_pg"
+	end
+	
+	return strHomePage
 end
 
 
