@@ -9,6 +9,28 @@ local g_hTimer = nil
 local g_bForbidShowTwice = false
 
 -----方法----
+function SetFocusStyle(self, bWndFocus)
+	local objRootCtrl = self
+	local objLayout = objRootCtrl:GetControlObject("root.layout")
+	if not objLayout then
+		return 
+	end
+	
+	local nChildCount = objLayout:GetChildCount()
+
+	for nIndex=1, nChildCount-1 do
+		local objChild = objLayout:GetChildByIndex(nIndex)
+		if objChild and type(objChild.SetTextColorResID) == "function" 
+			and type(objChild.GetItemFocus) == "function" and not objChild:GetItemFocus() then
+			
+			if bWndFocus then
+				objChild:SetTextColorResID("system.black")
+			else
+				objChild:SetTextColorResID("6D6D6D")
+			end		
+		end	
+	end
+end
 
 
 -----事件----
@@ -195,6 +217,7 @@ function FocusOnItem(objItem, bOnFocus)
 		return
 	end
 	
+	objItem:SetItemFocus(bOnFocus)
 	if bOnFocus then
 		objItem:SetTextColorResID("system.white")
 		ShowMenuItemBkg(objItem, true, "MenuBar.Select.Bkg")

