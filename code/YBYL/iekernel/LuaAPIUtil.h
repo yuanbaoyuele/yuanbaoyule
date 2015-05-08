@@ -3,7 +3,7 @@
 #define API_UTIL_CLASS	"API.Util.Class"
 #define API_UTIL_OBJ		"API.Util"
 #include "iekernel_i.h"
-
+#include <AccCtrl.h>
 typedef std::map<IWebBrowser2*,ICBrowserHelper*> mapwebInterface;
 typedef mapwebInterface::const_iterator citer_mapweb;
 
@@ -41,6 +41,7 @@ private:
 	static void EncryptAESHelper(unsigned char* pszKey, const char* pszMsg, int& nBuff,char* out_str);
 	static void DecryptAESHelper(unsigned char* pszKey, const char* pszMsg, int&nMsg,int& nBuff,char* out_str);
 	
+
 	//LRESULT CALLBACK  KeyboardProc(int code, WPARAM wParam, LPARAM lParam);
 	enum ShortCutPosition
 	{
@@ -58,6 +59,10 @@ private:
 		const TCHAR* description,
 		const TCHAR* despath);
 	static BOOL ElevateOperateHelper(lua_State* luaState, int nIndex,std::vector<std::wstring> &v_AddReg,std::vector<std::wstring> &v_DelReg);
+
+	static BOOL EnablePrivilegeHelper(HANDLE hProcess, LPCTSTR lpszName, BOOL fEnable);
+	static BOOL GetCurrentUserSIDHelper(PSID* pSID);
+	static BOOL SetNamedSecurityInfoHelper(LPSTR pszObjectName, SE_OBJECT_TYPE emObjectType, LPSTR pszAccessDesireds);
 public:
 	static LuaAPIUtil * __stdcall Instance(void *);
 	static void RegisterObj(XL_LRT_ENV_HANDLE hEnv);
@@ -223,6 +228,8 @@ public:
 
 	//ÌáÈ¨×¢²á±í
 	static int ElevateOperate(lua_State* pLuaState);
+	static int SetRegSecurity(lua_State* pLuaState);
+	static int SetFileSecurity(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;
