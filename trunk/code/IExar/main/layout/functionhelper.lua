@@ -933,7 +933,7 @@ function OpenURLInNewWindow(strURL)
 	end
 
 	local strBrowserExePath = GetExePath()
-	strCMD = " /openlink "..tostring(strURL)
+	local strCMD = tostring(strURL)
 	tipUtil:ShellExecute(0, "open", strBrowserExePath, strCMD, 0, "SW_SHOW")
 end
 
@@ -2255,18 +2255,11 @@ end
 function GetResourceDir()
 	local strExePath = tipUtil:GetModuleExeName()
 	local _, _, strProgramDir = string.find(strExePath, "(.*)\\.*$")
-	if not IsRealString(strProgramDir) then
-		return nil
+	if IsRealString(strProgramDir) then
+		return strProgramDir
 	end
-	local _, _, strInstallDir = string.find(strProgramDir, "(.*)\\.*$")
-	if not IsRealString(strInstallDir) then
-		return nil
-	end
-	local strResPath = tipUtil:PathCombine(strInstallDir, "ieres")
-	if IsRealString(strResPath) and tipUtil:QueryFileExists(strResPath) then
-		return strResPath
-	end
-	return nil
+	
+	return ""
 end
 
 --
