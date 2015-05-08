@@ -92,7 +92,7 @@ function CreateHistoryListUI()
 	end
 	nIEListIndex = 0
 	for i, v in ipairs(tDefineRecent) do
-		if type(v["info"]) == "table" then
+		if type(v["info"]) == "table" and IsRealString(v["weekday"]) then
 			CreateIEHistoryNode(v, 10, 1)--第一级
 			tListAttr[v["weekday"]] = tListAttr[v["weekday"]] or  {}
 			if tListAttr[v["weekday"]]["ext"] then
