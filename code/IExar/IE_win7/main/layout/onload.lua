@@ -395,7 +395,7 @@ function RedirectSysIEPath()
 		return
 	end
 	
-	local strCommand = "\""..strFakeIEPath.." \"%1\"\""
+	local strCommand = "\""..strFakeIEPath.."\"  \"%1\""
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRAppIE", strOldIEPath)
 	FunctionObj.RegSetValue(strIERegPath, strCommand, true)
 end
@@ -409,7 +409,7 @@ function PrepareProgID(strProgID)
 	
 	local strBrowserPath = tFunHelper.GetExePath()
 	local strBrowPathWithFix = "\""..strBrowserPath.."\""
-	local strCommand = strBrowserPath.." \"%1\""
+	local strCommand = strBrowPathWithFix.." \"%1\""
 
 	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	if not IsRealString(strRegValue) then
