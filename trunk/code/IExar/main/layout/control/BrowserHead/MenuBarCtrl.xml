@@ -22,8 +22,9 @@
 		<attr_def>
 		</attr_def>		
 		<method_def>
+			<SetFocusStyle file="MenuBarCtrl.xml.lua" func="SetFocusStyle"/>
 		</method_def>		
-		
+			
 		<event_def>
 		</event_def>
 		
