@@ -10,8 +10,8 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "iexplorer"
 !define SHORTCUT_NAME "iexplorer"
-!define PRODUCT_VERSION "8.0.0.15"
-!define VERSION_LASTNUMBER "B15"
+!define PRODUCT_VERSION "8.0.0.17"
+!define VERSION_LASTNUMBER "B17"
 !define NeedSpace 10240
 
 !define EM_BrandingText "${PRODUCT_NAME}${PRODUCT_VERSION}"

@@ -10,8 +10,8 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "iexplorer"
 !define SHORTCUT_NAME "iexplorer"
-!define PRODUCT_VERSION "8.0.0.15"
-!define VERSION_LASTNUMBER "B15"
+!define PRODUCT_VERSION "8.0.0.28"
+!define VERSION_LASTNUMBER "B28"
 !define NeedSpace 10240
 
 !define EM_BrandingText "${PRODUCT_NAME}${PRODUCT_VERSION}"
@@ -397,6 +397,36 @@ Function un.UpdateChanel
 	${EndIf}
 FunctionEnd
 
+Function un.DeleteGreenIcon
+	Var /GLOBAL bIsGreen
+	Var /GLOBAL strGreenIconName
+	StrCpy $strGreenIconName "ÂÌÉ«IE.lnk"
+	IfFileExists "$DESKTOP\$strGreenIconName" 0 +2
+		StrCpy $bIsGreen 1
+	IfFileExists "$SMPROGRAMS\$strGreenIconName" 0 +2
+		StrCpy $bIsGreen 1
+	IfFileExists "$INSTDIR\program\$strGreenIconName" 0 +2
+		StrCpy $bIsGreen 1
+	${If} $bIsGreen == 1
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t .r3)"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$3\TaskBar\$strGreenIconName', b false) "
+		StrCpy $R0 "$3\TaskBar\$strGreenIconName"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
+		Sleep 1000
+		
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$3\StartMenu\$strGreenIconName', b false) "
+		StrCpy $R0 "$3\StartMenu\$strGreenIconName"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
+		Sleep 1000
+		IfFileExists "$SMPROGRAMS\$strGreenIconName" 0 +2
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DeleteFileEx(t '$SMPROGRAMS\$strGreenIconName') "
+		Delete "$DESKTOP\$strGreenIconName"
+		IfFileExists "$DESKTOP\$strGreenIconName" 0 +2
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DeleteFileEx(t '$DESKTOP\$strGreenIconName') "
+	${EndIf}
+	push $bIsGreen
+FunctionEnd
+
 Function un.DeleteIcon
 	;É¾³ý
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::ReductionIcon()"
@@ -409,6 +439,11 @@ Function un.DeleteIcon
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::IsOsUac() i.r2"
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'IsOsUac return $2')"
 	${If} $2 == 1 ;win7
+		Call un.DeleteGreenIcon
+		pop $1
+		${If} $1 == 1
+			Goto EndDeleteIcon
+		${EndIf}
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t .r3)"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$3\TaskBar\Internet Explorer.lnk', b false) "
 		StrCpy $R0 "$3\TaskBar\Internet Explorer.lnk"
@@ -420,7 +455,6 @@ Function un.DeleteIcon
 		StrCpy $R0 "$3\StartMenu\Internet Explorer.lnk"
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
 		Sleep 1000
-		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$3\StartMenu\Internet Explorer.lnk') "
 		IfFileExists "$SMPROGRAMS\Internet Explorer.lnk" 0 +2
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::DeleteFileEx(t '$SMPROGRAMS\Internet Explorer.lnk') "
 	${Else}
@@ -432,15 +466,16 @@ Function un.DeleteIcon
 	${EndIf}
 	;»¹Ô­
 	ReadRegStr $R4 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\IEXPLORE.EXE" "path"
-	ReadRegStr $R5 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\IEXPLORE.EXE" ""
 	StrCpy $R6 "0"
 	StrCpy $R7 "0"
 	StrCpy $R8 "0"
 	StrCpy $R9 "0"
+	StrCpy $R5 "0"
 	StrCpy $9 "0"
 	ReadRegStr $R6 HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH"
 	ReadRegStr $R7 HKCU "SOFTWARE\iexplorer" "SMPROGRAMS"
 	ReadRegStr $R8 HKCU "SOFTWARE\iexplorer" "STARTMENU"
+	ReadRegStr $R5 HKCU "SOFTWARE\iexplorer" "STARTPIN"
 	ReadRegStr $R9 HKCU "SOFTWARE\iexplorer" "HideIEIcon"
 	ReadRegStr $9 HKCU "SOFTWARE\iexplorer" "DESKTOP"
 	
@@ -456,62 +491,61 @@ Function un.DeleteIcon
 			${If} $R6 == "1" 
 				;CreateShortCut "$R4\Internet Explorer.lnk" "$R5" "" "" "" "" "" "Æô¶¯ Internet Explorer ä¯ÀÀÆ÷"
 				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk" 0 +3
-				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk" "$3\TaskBar\Internet Explorer.lnk"
-				ExecShell taskbarpin "$3\TaskBar\Internet Explorer.lnk"
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk" "$0\IECFG\lnkbak\Internet Explorer.lnk"
+				ExecShell taskbarpin "$0\IECFG\lnkbak\Internet Explorer.lnk"
 				Goto TASKRERSTOREOK
 				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" 0 +3
-				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" "$3\TaskBar\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
-				ExecShell taskbarpin "$3\TaskBar\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
+				ExecShell taskbarpin "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
 				Goto TASKRERSTOREOK
 				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk" 0 +3
-				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk" "$3\TaskBar\Internet.lnk"
-				ExecShell taskbarpin "$3\TaskBar\Internet.lnk"
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet.lnk" "$0\IECFG\lnkbak\Internet.lnk"
+				ExecShell taskbarpin "$0\IECFG\lnkbak\Internet.lnk"
 				TASKRERSTOREOK:
 			${EndIf}
 			${If} $R8 == "1" 
-				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk" 0 +6
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk" "$STARTMENU\Internet Explorer.lnk"
-				StrCpy $R0 "$STARTMENU\Internet Explorer.lnk"
-				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 1000
-				ExecShell startpin "$STARTMENU\Internet Explorer.lnk"
 				Goto StartMenuRestoreOK
-				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet.lnk" 0 +6
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet.lnk" "$STARTMENU\Internet.lnk"
-				StrCpy $R0 "$STARTMENU\Internet Explorer.lnk"
-				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 1000
-				ExecShell startpin "$STARTMENU\Internet Explorer.lnk"
 				Goto StartMenuRestoreOK
-				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" 0 +6
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
-				StrCpy $R0 "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
-				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 1000
-				ExecShell startpin "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
 				StartMenuRestoreOK:
 			${EndIf}
+			${If} $R5 == "1" 
+				IfFileExists "$0\IECFG\lnkbak\STARTPIN_Internet Explorer.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTPIN_Internet Explorer.lnk" "$0\IECFG\lnkbak\Internet Explorer.lnk"
+				StrCpy $R0 "$0\IECFG\lnkbak\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$0\IECFG\lnkbak\Internet Explorer.lnk"
+				Goto STARTPINRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTPIN_Internet.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTPIN_Internet.lnk" "$0\IECFG\lnkbak\Internet.lnk"
+				StrCpy $R0 "$0\IECFG\lnkbak\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$0\IECFG\lnkbak\Internet Explorer.lnk"
+				Goto STARTPINRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTPIN_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTPIN_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
+				StrCpy $R0 "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
+				STARTPINRestoreOK:
+			${EndIf}
 			${If} $R7 == "1" 
-				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk" 0 +6
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer.lnk" "$SMPROGRAMS\Internet Explorer.lnk"
-				StrCpy $R0 "$SMPROGRAMS\Internet Explorer.lnk"
-				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 1000
-				ExecShell startpin "$SMPROGRAMS\Internet Explorer.lnk"
 				Goto SMPROGRAMSRestoreOK
-				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk" 0 +6
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet.lnk" "$SMPROGRAMS\Internet.lnk"
-				StrCpy $R0 "$SMPROGRAMS\Internet Explorer.lnk"
-				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 1000
-				ExecShell startpin "$SMPROGRAMS\Internet Explorer.lnk"
 				Goto SMPROGRAMSRestoreOK
-				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" 0 +6
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" 0 +3
 				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" "$SMPROGRAMS\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
-				StrCpy $R0 "$SMPROGRAMS\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
-				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
-				Sleep 1000
-				ExecShell startpin "$SMPROGRAMS\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
 				SMPROGRAMSRestoreOK:
 			${EndIf}
 		${EndIf}
@@ -564,10 +598,11 @@ Function un.DeleteIcon
 		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::HideIEIcon(i 0)"
 	${EndIf}
 	${If} $9 == "1" 
-		;CreateShortCut "$DESKTOP\Internet Explorer.lnk" "$R5" "" "" "" "" "" "Æô¶¯ Internet Explorer ä¯ÀÀÆ÷"
 		IfFileExists "$0\IECFG\lnkbak\DESKTOP_Internet Explorer.lnk" 0 +2
 		CopyFiles /silent "$0\IECFG\lnkbak\DESKTOP_Internet Explorer.lnk" "$DESKTOP\Internet Explorer.lnk"
 	${EndIf}
+	;»¹Ô­64Î»
+	Call un.RestoreIcon64
 	;»¹Ô­Èë¿Ú5
 	StrCpy $8 ""
 	ReadRegStr $8 HKCU "SOFTWARE\iexplorer" "StartMenuInternet"
@@ -630,6 +665,174 @@ Function un.DeleteIcon
 				WriteRegStr HKCR "http\shell\open\command" "" $strDefaultBrowser2
 			${EndIf}
 		${EndIf}
+	${EndIf}
+	;win7ÏÂÔö¼ÓÅÐ¶Ïprogid
+	DeleteRegKey HKCR "IEHTML"
+	Var /GLOBAL strHttpprogidNow
+	Var /GLOBAL strHttpsprogidNow
+	ReadRegStr $strHttpprogidNow HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" "Progid"
+	ReadRegStr $strHttpsprogidNow HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" "Progid"
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'strHttpprogidNow = $strHttpprogidNow, strHttpsprogidNow = $strHttpsprogidNow')"
+	${If} $strHttpprogidNow == "IEHTML"
+		Var /GLOBAL strBakHttpProgid
+		ReadRegStr $strBakHttpProgid HKCU "SOFTWARE\iexplorer" "HTTPProgid"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'strBakHttpProgid = $strBakHttpProgid')"
+		${If} $strBakHttpProgid != ""
+			WriteRegStr HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" "Progid" $strBakHttpProgid
+		${EndIf}
+	${EndIf}
+	${If} $strHttpsprogidNow == "IEHTML"
+		Var /GLOBAL strBakHttpsProgid
+		ReadRegStr $strBakHttpsProgid HKCU "SOFTWARE\iexplorer" "HTTPSProgid"
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'strBakHttpsProgid = $strBakHttpsProgid')"
+		${If} $strBakHttpsProgid != ""
+			WriteRegStr HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" "Progid" $strBakHttpsProgid
+		${EndIf}
+	${EndIf}
+	EndDeleteIcon:
+FunctionEnd
+
+Function un.RestoreIcon64
+	;»¹Ô­
+	ReadRegStr $R4 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\IEXPLORE.EXE" "path"
+	StrCpy $R6 "0"
+	StrCpy $R7 "0"
+	StrCpy $R8 "0"
+	StrCpy $R9 "0"
+	StrCpy $R5 "0"
+	StrCpy $9 "0"
+	ReadRegStr $R6 HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH"
+	ReadRegStr $R7 HKCU "SOFTWARE\iexplorer" "SMPROGRAMS"
+	ReadRegStr $R5 HKCU "SOFTWARE\iexplorer" "STARTPIN"
+	ReadRegStr $R8 HKCU "SOFTWARE\iexplorer" "STARTMENU"
+	ReadRegStr $R9 HKCU "SOFTWARE\iexplorer" "HideIEIcon"
+	ReadRegStr $9 HKCU "SOFTWARE\iexplorer" "DESKTOP"
+	
+	StrCpy $1 ${NSIS_MAX_STRLEN}
+	StrCpy $0 ""
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetProfileFolder(t) i(.r0).r3"
+	
+	${If} $2 == 1
+		System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetUserPinPath(t .r3)"
+		${If} $3 != "" 
+		${AndIf} $3 != 0
+			SetOutPath "$R4"
+			${If} $R6 == "1" 
+				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer (64-bit).lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer (64-bit).lnk" "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				ExecShell taskbarpin "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				Goto TASKRERSTOREOK
+				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				ExecShell taskbarpin "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				Goto TASKRERSTOREOK
+				IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet (64-bit).lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet (64-bit).lnk" "$0\IECFG\lnkbak\Internet (64-bit).lnk"
+				ExecShell taskbarpin "$0\IECFG\lnkbak\Internet (64-bit).lnk"
+				TASKRERSTOREOK:
+			${EndIf}
+			${If} $R8 == "1" 
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet Explorer (64-bit).lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet Explorer (64-bit).lnk" "$STARTMENU\Internet Explorer (64-bit).lnk"
+				StrCpy $R0 "$STARTMENU\Internet Explorer (64-bit).lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$STARTMENU\Internet Explorer (64-bit).lnk"
+				Goto StartMenuRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet (64-bit).lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet (64-bit).lnk" "$STARTMENU\Internet (64-bit).lnk"
+				StrCpy $R0 "$STARTMENU\Internet Explorer (64-bit).lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$STARTMENU\Internet Explorer (64-bit).lnk"
+				Goto StartMenuRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				StrCpy $R0 "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				StartMenuRestoreOK:
+			${EndIf}
+			${If} $R5 == "1" 
+				IfFileExists "$0\IECFG\lnkbak\STARTPIN_Internet Explorer (64-bit).lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTPIN_Internet Explorer (64-bit).lnk" "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				StrCpy $R0 "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				Goto STARTPINRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTPIN_Internet (64-bit).lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTPIN_Internet (64-bit).lnk" "$0\IECFG\lnkbak\Internet (64-bit).lnk"
+				StrCpy $R0 "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$0\IECFG\lnkbak\Internet Explorer (64-bit).lnk"
+				Goto STARTPINRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\STARTPIN_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +6
+				CopyFiles /silent "$0\IECFG\lnkbak\STARTPIN_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				StrCpy $R0 "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t '$R0')"
+				Sleep 1000
+				ExecShell startpin "$0\IECFG\lnkbak\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				STARTPINRestoreOK:
+			${EndIf}
+			${If} $R7 == "1" 
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer (64-bit).lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer (64-bit).lnk" "$SMPROGRAMS\Internet Explorer (64-bit).lnk"
+				Goto SMPROGRAMSRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet (64-bit).lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet (64-bit).lnk" "$SMPROGRAMS\Internet (64-bit).lnk"
+				Goto SMPROGRAMSRestoreOK
+				IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +3
+				CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$SMPROGRAMS\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+				SMPROGRAMSRestoreOK:
+			${EndIf}
+		${EndIf}
+	${Else}
+		${If} $R6 == "1" 
+			;CreateShortCut "$QUICKLAUNCH\Internet Explorer (64-bit).lnk" "$R5" "" "" "" "" "" "Æô¶¯ Internet Explorer ä¯ÀÀÆ÷" 
+			IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer (64-bit).lnk" 0 +2
+			CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer (64-bit).lnk" "$QUICKLAUNCH\Internet Explorer (64-bit).lnk"
+			IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +2
+			CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$QUICKLAUNCH\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+			IfFileExists "$0\IECFG\lnkbak\QUICKLAUNCH_Internet (64-bit).lnk" 0 +2
+			CopyFiles /silent "$0\IECFG\lnkbak\QUICKLAUNCH_Internet (64-bit).lnk" "$QUICKLAUNCH\Internet (64-bit).lnk"
+		${EndIf}
+		${If} $R7 == "1" 
+			;CreateShortCut "$STARTMENU\Internet Explorer (64-bit).lnk" "$R5" "" "" "" "" "" "Æô¶¯ Internet Explorer ä¯ÀÀÆ÷" 
+			IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer (64-bit).lnk" 0 +3
+			CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet Explorer (64-bit).lnk" "$SMPROGRAMS\Internet Explorer (64-bit).lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$SMPROGRAMS\Internet Explorer (64-bit).lnk')"
+			Goto ReStoreOK
+			IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Internet (64-bit).lnk" 0 +3
+			CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Internet (64-bit).lnk" "$SMPROGRAMS\Internet (64-bit).lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$SMPROGRAMS\Internet (64-bit).lnk')"
+			Goto ReStoreOK
+			IfFileExists "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +3
+			CopyFiles /silent "$0\IECFG\lnkbak\SMPROGRAMS_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$SMPROGRAMS\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$SMPROGRAMS\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk')"
+			ReStoreOK:
+		${EndIf}
+		${If} $R8 == "1" 
+			;CreateShortCut "$STARTMENU\Internet Explorer (64-bit).lnk" "$R5" "" "" "" "" "" "Æô¶¯ Internet Explorer ä¯ÀÀÆ÷" 
+			IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet Explorer (64-bit).lnk" 0 +3
+			CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet Explorer (64-bit).lnk" "$STARTMENU\Internet Explorer (64-bit).lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$STARTMENU\Internet Explorer (64-bit).lnk')"
+			Goto ReStoreOK1
+			IfFileExists "$0\IECFG\lnkbak\STARTMENU_Internet (64-bit).lnk" 0 +3
+			CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Internet (64-bit).lnk" "$STARTMENU\Internet (64-bit).lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$STARTMENU\Internet (64-bit).lnk')"
+			Goto ReStoreOK1
+			IfFileExists "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" 0 +3
+			CopyFiles /silent "$0\IECFG\lnkbak\STARTMENU_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk" "$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::PinToStartMenu4XP(b true, t '$STARTMENU\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷ (64-bit).lnk')"
+			ReStoreOK1:
+		${EndIf}
+	${EndIf}
+	${If} $9 == "1" 
+		IfFileExists "$0\IECFG\lnkbak\DESKTOP_Internet Explorer (64-bit).lnk" 0 +2
+		CopyFiles /silent "$0\IECFG\lnkbak\DESKTOP_Internet Explorer (64-bit).lnk" "$DESKTOP\Internet Explorer (64-bit).lnk"
 	${EndIf}
 FunctionEnd
 
