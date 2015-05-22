@@ -1,0 +1,55 @@
+<xlue>	
+	<objtreetemplate id="WebBrowserWndTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>-200</left>
+			<top>-200</top>
+			<width>2000</width>
+			<height>2000</height>
+		</attr>
+		<obj id="root" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>2000</width>
+				<height>2000</height>
+			</attr>
+			<children>
+				<obj id="WebBrowser" class="WebBrowser">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+
+	<hostwndtemplate id="WebBrowserWnd" class="FrameHostWnd">
+		<attr>
+			<layered>0</layered>
+			<left>0</left>
+			<top>0</top>
+			<width>200</width>
+			<height>200</height>
+			<visible>0</visible>
+			<appwindow>0</appwindow>
+			<topmost>0</topmost>
+			<fps>30</fps>
+			<updateonsize>1</updateonsize>
+		</attr>
+		<eventlist>
+			<event name="OnSize">
+				local self, type_, width, height = ...
+				local objectTree = self:GetBindUIObjectTree()
+				local rootObject = objectTree:GetRootObject()
+				rootObject:SetObjPos(0, 0, width, height)
+				self:UpdateWindow()
+			</event>
+			<event name="OnClose">
+				return 0, true
+			</event>
+		</eventlist>
+	</hostwndtemplate>
+</xlue>

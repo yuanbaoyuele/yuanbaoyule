@@ -1,0 +1,97 @@
+<xlue>
+	<!--sample-->
+	<objtemplate id="collectlist.item" class="LayoutObject">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>father.width</width>
+			<height>father.height</height>
+		</attr>
+		<children>
+			<obj id="CollectItem.Img" class="ImageObject">
+				<attr>
+					<left>0</left>
+					<top>0</top>
+					<width>16</width>
+					<height>16</height>
+				</attr>
+			</obj>
+		
+			<obj id="CollectItem.Text" class="TextObject">
+				<attr>
+					<left>5</left>
+					<top>0</top>
+					<width>father.width</width>
+					<height>father.height</height>
+					<valign>center</valign>
+					<halign>center</halign>
+					<font>font.menubar.text</font>
+					<textcolor>color.menubar.text</textcolor>
+					<endellipsis>1</endellipsis>
+				</attr>
+			</obj>
+			
+			<obj id="CollectItem.URLRecord" class="TextObject">
+				<attr>
+					<left>0</left>
+					<top>0</top>
+					<width>0</width>
+					<height>0</height>
+				</attr>
+			</obj>
+		</children>
+		<eventlist>
+			<event name="OnLButtonUp" file="CollectList.xml.lua" func="OnLButtonUpItem" />
+		</eventlist>
+	</objtemplate>
+	
+
+	<control class="CollectList">
+		<attr_def>
+			<attr name="RightSpan" type="int" desc="每个item之间的间隔"><default>5</default></attr>
+			<attr name="ItemWidth" type="int" ><default>100</default></attr>
+			<attr name="tHideMenuList" /> <!--没能显示出来的url-->
+		</attr_def>		
+		<method_def>
+			<UpdateCollectList file="CollectList.xml.lua" func="UpdateCollectList" />
+			<GetHideMenuList file="CollectList.xml.lua" func="GetHideMenuList" />
+		</method_def>		
+		
+		<event_def>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="CollectList.Container" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<limitchild>0</limitchild>
+					</attr>
+				</obj>
+				
+				<obj id="CollectList.ArrowBtn" class="TipAddin.Button">
+					<attr>
+						<left>father.width</left>
+						<top>(father.height-10)/2</top>
+						<width>6</width>
+						<height>10</height>
+						<NormalBkgID>YBYL.MenuBar.HideBtn.Normal</NormalBkgID>
+						<DownBkgID>YBYL.MenuBar.HideBtn.Down</DownBkgID>
+						<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
+						<DisableBkgID>YBYL.MenuBar.HideBtn.Disable</DisableBkgID>
+					</attr>
+					<eventlist>
+						<event name="OnClick" file="CollectList.xml.lua" func="OnClickArrowBtn" />
+					</eventlist>
+				</obj>
+				
+			</children>
+			<eventlist>
+				<event name="OnInitControl" file="CollectList.xml.lua" func="OnInitControl" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

@@ -1,0 +1,210 @@
+<XLUE>
+	<resource>
+		<texture id="YBYL.MainWnd.Bkg" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.png" />
+		<texture id="YBYL.MainWnd.Bkg.Shadow" type="NineInOne" image="bitmap\YBYL.MainWnd.Bkg.Shadow.png" />
+		<texture id="YBYL.MainWnd.Head.Bkg" type="ThreeInOneH" image="bitmap\YBYL.MainWnd.Head.Bkg.png" />
+		<texture id="YBYL.Tab.Active" image="bitmap\YBYL.Tab.Active.png" />
+		<texture id="YBYL.Tab.MouseEnter" image="bitmap\YBYL.Tab.MouseEnter.png" />
+		<texture id="YBYL.Tab.Split" image="bitmap\YBYL.Tab.Split.png" />
+		<texture id="YBYL.Head.Logo.Default" image="bitmap\YBYL.Head.Logo.Default.png" />
+		<texture id="YBYL.Head.RightBkg" image="bitmap\YBYL.Head.RightBkg.png" />
+		<texture id="YBYL.DropMenu.ItemBkg.Normal" type="NineInOne" image="bitmap\YBYL.DropMenu.ItemBkg.Normal.png" />
+		<texture id="YBYL.DropMenu.ItemBkg.Hover" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		<texture id="YBYL.Menu.Bkg" type="NineInOne" image="bitmap\YBYL.Menu.Bkg.png" />
+		<texture id="YBYL.Menu.Select.Bkg" type="ThreeInOneH" image="bitmap\YBYL.Menu.Select.Bkg.png" />
+		<texture id="YBYL.TipConfig.Bkg" type="NineInOne" image="bitmap\YBYL.TipConfig.Bkg.png" />
+		<texture id="YBYL.TipAbout.Bkg" image="bitmap\YBYL.TipAbout.Bkg.png" />
+		<texture id="YBYL.ToolTip.Bkg" type="ThreeInOneH" image="bitmap\YBYL.ToolTip.Bkg.png" />
+	
+		<texture id="YBYL.IntroduceWnd.Bkg" type="NineInOne" image="bitmap\YBYL.IntroduceWnd.Bkg.png" />
+		<texture id="YBYL.IntroduceWnd.Panel1"  image="bitmap\YBYL.IntroduceWnd.Panel1.png" />
+		<texture id="YBYL.IntroduceWnd.Panel2"  image="bitmap\YBYL.IntroduceWnd.Panel2.png" />
+		
+		<imagelist id="YBYL.IntroduceWnd.LeftBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.LeftBtn.png"/>
+			<texture id="YBYL.IntroduceWnd.LeftBtn.Hover"  imagelist="YBYL.IntroduceWnd.LeftBtn" index="1" />
+			<texture id="YBYL.IntroduceWnd.LeftBtn.Normal"  imagelist="YBYL.IntroduceWnd.LeftBtn" index="2" />
+		
+		<imagelist id="YBYL.IntroduceWnd.RightBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.RightBtn.png"/>
+			<texture id="YBYL.IntroduceWnd.RightBtn.Normal"  imagelist="YBYL.IntroduceWnd.RightBtn" index="1" />
+			<texture id="YBYL.IntroduceWnd.RightBtn.Hover"  imagelist="YBYL.IntroduceWnd.RightBtn" index="2" />
+		
+		<bitmap id="YBYL.Menu.Splitter.Bkg" path="bitmap\YBYL.Menu.Splitter.Bkg.png" />
+		<bitmap id="YBYL.DropList.Splitter.Bkg" path="bitmap\YBYL.DropList.Splitter.png" />
+		<bitmap id="YBYL.UrlIco.Default" path="bitmap\YBYL.Head.Logo.Default.png" />
+		<bitmap id="YBYL.DropMenu.Check" path="bitmap\YBYL.DropMenu.Check.png" />
+	
+		<!-- BufferView -->
+		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
+		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	
+		<bitmap id="bitmap.ball.loading" path="bitmap\bitmap.loading.png" />
+		
+		<imagelist id="YBYL.Caption.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.CloseBtn.png" />
+			<texture id="YBYL.Caption.CloseBtn.Normal" imagelist="YBYL.Caption.CloseBtn" index="1" />
+			<texture id="YBYL.Caption.CloseBtn.Hover"  imagelist="YBYL.Caption.CloseBtn" index="2" />
+			<texture id="YBYL.Caption.CloseBtn.Down"   imagelist="YBYL.Caption.CloseBtn" index="3" />
+			<texture id="YBYL.Caption.CloseBtn.Disable"   imagelist="YBYL.Caption.CloseBtn" index="4" />
+			
+		<imagelist id="YBYL.Caption.MinBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.MinBtn.png"/>
+			<texture id="YBYL.Caption.MinBtn.Normal" imagelist="YBYL.Caption.MinBtn" index="1" />
+			<texture id="YBYL.Caption.MinBtn.Hover"  imagelist="YBYL.Caption.MinBtn" index="2" />
+			<texture id="YBYL.Caption.MinBtn.Down"   imagelist="YBYL.Caption.MinBtn" index="3" />
+			<texture id="YBYL.Caption.MinBtn.Disable"   imagelist="YBYL.Caption.MinBtn" index="4" />
+			
+		<imagelist id="YBYL.Caption.MaxBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.MaxBtn.png"/>
+			<texture id="YBYL.Caption.MaxBtn.Normal" imagelist="YBYL.Caption.MaxBtn" index="1" />
+			<texture id="YBYL.Caption.MaxBtn.Hover"  imagelist="YBYL.Caption.MaxBtn" index="2" />
+			<texture id="YBYL.Caption.MaxBtn.Down"   imagelist="YBYL.Caption.MaxBtn" index="3" />
+			<texture id="YBYL.Caption.MaxBtn.Disable"   imagelist="YBYL.Caption.MaxBtn" index="4" />
+			
+		<imagelist id="YBYL.Caption.RestoreBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Caption.RestoreBtn.png"/>
+			<texture id="YBYL.Caption.RestoreBtn.Normal" imagelist="YBYL.Caption.RestoreBtn" index="1" />
+			<texture id="YBYL.Caption.RestoreBtn.Hover"  imagelist="YBYL.Caption.RestoreBtn" index="2" />
+			<texture id="YBYL.Caption.RestoreBtn.Down"   imagelist="YBYL.Caption.RestoreBtn" index="3" />
+			<texture id="YBYL.Caption.RestoreBtn.Disable"   imagelist="YBYL.Caption.RestoreBtn" index="4" />
+		
+		<imagelist id="YBYL.TabContainer.RestoreBtn" splitter="1" varyblock="1" image="bitmap\YBYL.TabContainer.RestoreBtn.png"/>
+			<texture id="YBYL.TabContainer.RestoreBtn.Normal" imagelist="YBYL.TabContainer.RestoreBtn" index="1" />
+			<texture id="YBYL.TabContainer.RestoreBtn.Hover"  imagelist="YBYL.TabContainer.RestoreBtn" index="2" />
+			<texture id="YBYL.TabContainer.RestoreBtn.Down"   imagelist="YBYL.TabContainer.RestoreBtn" index="3" />
+			<texture id="YBYL.TabContainer.RestoreBtn.Disable"   imagelist="YBYL.TabContainer.RestoreBtn" index="4" />		
+			
+		<imagelist id="YBYL.AddressBarCtrl.DropArrow" splitter="1" varyblock="1" image="bitmap\YBYL.AddressBarCtrl.DropArrow.png"/>
+			<texture id="YBYL.AddressBarCtrl.DropArrow.Normal" imagelist="YBYL.AddressBarCtrl.DropArrow" index="1" />
+			<texture id="YBYL.AddressBarCtrl.DropArrow.Hover"  imagelist="YBYL.AddressBarCtrl.DropArrow" index="2" />
+			<texture id="YBYL.AddressBarCtrl.DropArrow.Down"   imagelist="YBYL.AddressBarCtrl.DropArrow" index="3" />
+			<texture id="YBYL.AddressBarCtrl.DropArrow.Disable"   imagelist="YBYL.AddressBarCtrl.DropArrow" index="4" />
+			
+		<imagelist id="YBYL.Tab.AddNew" splitter="1" varyblock="1" image="bitmap\YBYL.Tab.AddNew.png"/>
+			<texture id="YBYL.Tab.AddNew.Normal" imagelist="YBYL.Tab.AddNew" index="1" />
+			<texture id="YBYL.Tab.AddNew.Hover"  imagelist="YBYL.Tab.AddNew" index="2" />
+			<texture id="YBYL.Tab.AddNew.Down"   imagelist="YBYL.Tab.AddNew" index="3" />
+			<texture id="YBYL.Tab.AddNew.Disable"   imagelist="YBYL.Tab.AddNew" index="4" />
+	
+		<imagelist id="YBYL.Tab.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.Tab.CloseBtn.png"/>
+			<texture id="YBYL.Tab.CloseBtn.Normal" imagelist="YBYL.Tab.CloseBtn" index="1" />
+			<texture id="YBYL.Tab.CloseBtn.Hover"  imagelist="YBYL.Tab.CloseBtn" index="2" />
+			<texture id="YBYL.Tab.CloseBtn.Down"   imagelist="YBYL.Tab.CloseBtn" index="3" />
+			<texture id="YBYL.Tab.CloseBtn.Disable"   imagelist="YBYL.Tab.CloseBtn" index="4" />
+			
+		<imagelist id="YBYL.TabContainer.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.TabContainer.CloseBtn.png"/>
+			<texture id="YBYL.TabContainer.CloseBtn.Normal" imagelist="YBYL.TabContainer.CloseBtn" index="1" />
+			<texture id="YBYL.TabContainer.CloseBtn.Hover"  imagelist="YBYL.TabContainer.CloseBtn" index="2" />
+			<texture id="YBYL.TabContainer.CloseBtn.Down"   imagelist="YBYL.TabContainer.CloseBtn" index="3" />
+			<texture id="YBYL.TabContainer.CloseBtn.Disable"   imagelist="YBYL.TabContainer.CloseBtn" index="4" />
+	
+		<imagelist id="YBYL.TabContainer.FullScrn" splitter="1" varyblock="1" image="bitmap\YBYL.TabContainer.FullScrn.png"/>
+			<texture id="YBYL.TabContainer.FullScrn.Normal" imagelist="YBYL.TabContainer.FullScrn" index="1" />
+			<texture id="YBYL.TabContainer.FullScrn.Hover"  imagelist="YBYL.TabContainer.FullScrn" index="2" />
+			<texture id="YBYL.TabContainer.FullScrn.Down"   imagelist="YBYL.TabContainer.FullScrn" index="3" />
+			<texture id="YBYL.TabContainer.FullScrn.Disable"   imagelist="YBYL.TabContainer.FullScrn" index="4" />
+	
+		<imagelist id="YBYL.AddressBar.UrlSearch.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.AddressBar.UrlSearch.Bkg.png"/>
+			<texture id="YBYL.AddressBar.UrlSearch.Bkg.Normal" type="ThreeInOneH"  imagelist="YBYL.AddressBar.UrlSearch.Bkg" index="1" />
+			<texture id="YBYL.AddressBar.UrlSearch.Bkg.Hover" type="ThreeInOneH" imagelist="YBYL.AddressBar.UrlSearch.Bkg" index="2" />
+		
+		<imagelist id="YBYL.AddressBar.Collect" splitter="1" varyblock="1" image="bitmap\YBYL.AddressBar.Collect.png"/>
+			<texture id="YBYL.AddressBar.Collect.Normal" imagelist="YBYL.AddressBar.Collect" index="1" />
+			<texture id="YBYL.AddressBar.Collect.Hover" imagelist="YBYL.AddressBar.Collect" index="2" />
+		
+		<imagelist id="YBYL.Head.FuncBtn.ImgList" splitter="1" varyblock="1" image="bitmap\YBYL.Head.FuncBtn.ImgList.png"/>
+			<bitmap id="YBYL.Head.FuncBtn.Accelarate.Img" imagelist="YBYL.Head.FuncBtn.ImgList" index="1" />
+			<bitmap id="YBYL.Head.FuncBtn.AdvFilter.Img" imagelist="YBYL.Head.FuncBtn.ImgList" index="2" />
+			
+		<imagelist id="YBYL.Head.Collect.Sel" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Collect.Sel.png"/>
+			<texture id="YBYL.Head.Collect.Sel.Normal" type="NineInOne" imagelist="YBYL.Head.Collect.Sel" index="1" />
+			<texture id="YBYL.Head.Collect.Sel.Hover" type="NineInOne" imagelist="YBYL.Head.Collect.Sel" index="2" />
+		
+		<imagelist id="YBYL.Head.GoBack" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoBack.png"/>
+			<texture id="YBYL.Head.GoBack.Normal" imagelist="YBYL.Head.GoBack" index="1" />
+			<texture id="YBYL.Head.GoBack.Hover"  imagelist="YBYL.Head.GoBack" index="2" />
+			<texture id="YBYL.Head.GoBack.Down"   imagelist="YBYL.Head.GoBack" index="3" />
+			<texture id="YBYL.Head.GoBack.Disable"   imagelist="YBYL.Head.GoBack" index="4" />
+			
+		<imagelist id="YBYL.Head.GoForward" splitter="1" varyblock="1" image="bitmap\YBYL.Head.GoForward.png"/>
+			<texture id="YBYL.Head.GoForward.Normal" imagelist="YBYL.Head.GoForward" index="1" />
+			<texture id="YBYL.Head.GoForward.Hover"  imagelist="YBYL.Head.GoForward" index="2" />
+			<texture id="YBYL.Head.GoForward.Down"   imagelist="YBYL.Head.GoForward" index="3" />
+			<texture id="YBYL.Head.GoForward.Disable"   imagelist="YBYL.Head.GoForward" index="4" />	
+		
+		<imagelist id="YBYL.Head.Refresh" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Refresh.png"/>
+			<texture id="YBYL.Head.Refresh.Normal" imagelist="YBYL.Head.Refresh" index="1" />
+			<texture id="YBYL.Head.Refresh.Hover"  imagelist="YBYL.Head.Refresh" index="2" />
+			<texture id="YBYL.Head.Refresh.Down"   imagelist="YBYL.Head.Refresh" index="3" />
+			<texture id="YBYL.Head.Refresh.Disable"   imagelist="YBYL.Head.Refresh" index="4" />			
+	
+		<imagelist id="YBYL.Head.Stop" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Stop.png"/>
+			<texture id="YBYL.Head.Stop.Normal" imagelist="YBYL.Head.Stop" index="1" />
+			<texture id="YBYL.Head.Stop.Hover"  imagelist="YBYL.Head.Stop" index="2" />
+			<texture id="YBYL.Head.Stop.Down"   imagelist="YBYL.Head.Stop" index="3" />
+			<texture id="YBYL.Head.Stop.Disable"   imagelist="YBYL.Head.Stop" index="4" />	
+			
+		<imagelist id="YBYL.Head.Logo.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.Head.Logo.Bkg.png"/>
+			<texture id="YBYL.Head.Logo.Bkg.Normal" imagelist="YBYL.Head.Logo.Bkg" index="1" />
+			<texture id="YBYL.Head.Logo.Bkg.Hover"  imagelist="YBYL.Head.Logo.Bkg" index="2" />
+			<texture id="YBYL.Head.Logo.Bkg.Down"   imagelist="YBYL.Head.Logo.Bkg" index="3" />
+			<texture id="YBYL.Head.Logo.Bkg.Disable"   imagelist="YBYL.Head.Logo.Bkg" index="4" />		
+			
+		<imagelist id="YBYL.Head.FuncBtn.FiltOpen.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.Head.FuncBtn.FiltOpen.Bkg.png"/>
+			<texture id="YBYL.Head.FuncBtn.FiltOpen.Bkg.Normal" type="ThreeInOneH" imagelist="YBYL.Head.FuncBtn.FiltOpen.Bkg" index="1" />
+			<texture id="YBYL.Head.FuncBtn.FiltOpen.Bkg.Hover" type="ThreeInOneH" imagelist="YBYL.Head.FuncBtn.FiltOpen.Bkg" index="2" />
+			<texture id="YBYL.Head.FuncBtn.FiltOpen.Bkg.Down" type="ThreeInOneH"  imagelist="YBYL.Head.FuncBtn.FiltOpen.Bkg" index="3" />
+			<texture id="YBYL.Head.FuncBtn.FiltOpen.Bkg.Disable" type="ThreeInOneH"  imagelist="YBYL.Head.FuncBtn.FiltOpen.Bkg" index="4" />
+
+		<imagelist id="YBYL.Head.FuncBtn.FiltClose.Bkg" splitter="1" varyblock="1" image="bitmap\YBYL.Head.FuncBtn.FiltClose.Bkg.png"/>
+			<texture id="YBYL.Head.FuncBtn.FiltClose.Bkg.Normal" type="ThreeInOneH" imagelist="YBYL.Head.FuncBtn.FiltClose.Bkg" index="1" />
+			<texture id="YBYL.Head.FuncBtn.FiltClose.Bkg.Hover" type="ThreeInOneH" imagelist="YBYL.Head.FuncBtn.FiltClose.Bkg" index="2" />
+			<texture id="YBYL.Head.FuncBtn.FiltClose.Bkg.Down" type="ThreeInOneH"  imagelist="YBYL.Head.FuncBtn.FiltClose.Bkg" index="3" />
+			<texture id="YBYL.Head.FuncBtn.FiltClose.Bkg.Disable" type="ThreeInOneH"  imagelist="YBYL.Head.FuncBtn.FiltClose.Bkg" index="4" />
+		
+		<imagelist id="YBYL.MenuBar.HideBtn" splitter="1" varyblock="1" image="bitmap\YBYL.MenuBar.HideBtn.png"/>
+			<texture id="YBYL.MenuBar.HideBtn.Normal"  imagelist="YBYL.MenuBar.HideBtn" index="1" />
+			<texture id="YBYL.MenuBar.HideBtn.Hover"  imagelist="YBYL.MenuBar.HideBtn" index="2" />
+			<texture id="YBYL.MenuBar.HideBtn.Down"   imagelist="YBYL.MenuBar.HideBtn" index="3" />
+			<texture id="YBYL.MenuBar.HideBtn.Disable"  imagelist="YBYL.MenuBar.HideBtn" index="4" />		
+		
+		<imagelist id="YBYL.MenuBar.ShowBtn" splitter="1" varyblock="1" image="bitmap\YBYL.MenuBar.ShowBtn.png"/>
+			<texture id="YBYL.MenuBar.ShowBtn.Normal"  imagelist="YBYL.MenuBar.ShowBtn" index="1" />
+			<texture id="YBYL.MenuBar.ShowBtn.Hover"  imagelist="YBYL.MenuBar.ShowBtn" index="2" />
+			<texture id="YBYL.MenuBar.ShowBtn.Down"   imagelist="YBYL.MenuBar.ShowBtn" index="3" />
+			<texture id="YBYL.MenuBar.ShowBtn.Disable"  imagelist="YBYL.MenuBar.ShowBtn" index="4" />	
+			
+		<imagelist id="YBYL.Scroll.Bar" splitter="1" varyblock="1" image="bitmap\YBYL.Scroll.Bar.png"/>
+			<texture id="YBYL.Scroll.Bar.Normal" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="1" />
+			<texture id="YBYL.Scroll.Bar.Hover" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="2" />
+			<texture id="YBYL.Scroll.Bar.Down" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="3" />
+			<texture id="YBYL.Scroll.Bar.Disable" type="ThreeInOneV" imagelist="YBYL.Scroll.Bar" index="4" />	
+		
+		<imagelist id="YBYL.ToolTip.Close" splitter="1" varyblock="1" image="bitmap\YBYL.ToolTip.Close.png"/>
+			<texture id="YBYL.ToolTip.Close.Normal"  imagelist="YBYL.ToolTip.Close" index="1" />
+			<texture id="YBYL.ToolTip.Close.Hover"  imagelist="YBYL.ToolTip.Close" index="2" />
+			<texture id="YBYL.ToolTip.Close.Down"  imagelist="YBYL.ToolTip.Close" index="3" />
+			<texture id="YBYL.ToolTip.Close.Disable"  imagelist="YBYL.ToolTip.Close" index="4" />	
+		
+		<imagelist id="YBYL.IntroduceWnd.CloseBtn" splitter="1" varyblock="1" image="bitmap\YBYL.IntroduceWnd.Close.png"/>
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Normal"  imagelist="YBYL.IntroduceWnd.CloseBtn" index="1" />
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Hover"  imagelist="YBYL.IntroduceWnd.CloseBtn" index="2" />
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Down" imagelist="YBYL.IntroduceWnd.CloseBtn" index="3" />
+			<texture id="YBYL.IntroduceWnd.CloseBtn.Disable" imagelist="YBYL.IntroduceWnd.CloseBtn" index="4" />	
+		
+		<imagelist id="YBYL.Menu.DeleteItem" splitter="1" varyblock="1" image="bitmap\YBYL.Menu.DeleteItem.png"/>
+			<texture id="YBYL.Menu.DeleteItem.Normal"  imagelist="YBYL.Menu.DeleteItem" index="1" />
+			<texture id="YBYL.Menu.DeleteItem.Hover"  imagelist="YBYL.Menu.DeleteItem" index="2" />
+			<texture id="YBYL.Menu.DeleteItem.Down" imagelist="YBYL.Menu.DeleteItem" index="3" />
+			<texture id="YBYL.Menu.DeleteItem.Disable" imagelist="YBYL.Menu.DeleteItem" index="3" />
+			
+	</resource>
+</XLUE>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
