@@ -1,0 +1,62 @@
+<xlue>
+	<control class="ToolTipCtrl">
+		<attr_def>
+
+		</attr_def>		
+		<method_def>
+			<SetToolTipText file="ToolTipCtrl.xml.lua" func="SetToolTipText"/>
+			<ShowToolTip file="ToolTipCtrl.xml.lua" func="ShowToolTip"/>
+		</method_def>		
+		
+		<event_def>
+		
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="ToolTipCtrl.Bkg" class="TextureObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<texture>YBYL.ToolTip.Bkg</texture>
+					</attr>
+					<children>
+						<obj id="ToolTipCtrl.Text" class="TextObject">
+							<attr>
+								<left>20</left>
+								<top>0</top>
+								<width>father.width-30</width>
+								<height>father.height</height>
+								<font>font.yahei13</font>
+								<textcolor>255E18</textcolor>
+								<valign>center</valign>
+								<halign>left</halign>
+							</attr>
+						</obj>
+					
+						<obj id="ToolTipCtrl.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-5-10</left>
+								<top>(father.height-9)/2</top>
+								<width>9</width>
+								<height>9</height>
+								<NormalBkgID>YBYL.ToolTip.Close.Normal</NormalBkgID>
+								<DownBkgID>YBYL.ToolTip.Close.Down</DownBkgID>
+								<HoverBkgID>YBYL.ToolTip.Close.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.ToolTip.Close.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="ToolTipCtrl.xml.lua" func="OnClickCloseBtn" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+			</children>
+			<eventlist>
+				<event name="OnInitControl" file="ToolTipCtrl.xml.lua" func="OnInitControl" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

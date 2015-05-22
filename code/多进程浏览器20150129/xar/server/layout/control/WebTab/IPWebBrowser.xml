@@ -1,0 +1,92 @@
+<xlue>
+    <control class="IPWebBrowser">
+        <attr_def>
+			<attr name="Visible" type="bool" > <default>true</default> </attr>
+			<attr name="ScriptError" type="bool" > <default>false</default> </attr>
+        </attr_def>		
+        <method_def>	
+			<Navigate file="IPWebBrowser.xml.lua" function="Navigate" />
+			<GetBusy file="IPWebBrowser.xml.lua" function="GetBusy" />
+			<Stop file="IPWebBrowser.xml.lua" function="Stop" />
+			<Refresh file="IPWebBrowser.xml.lua" function="Refresh" />
+			<GoBack file="IPWebBrowser.xml.lua" function="GoBack" />
+			<GoForward file="IPWebBrowser.xml.lua" function="GoForward" />
+			<Show 	file="IPWebBrowser.xml.lua" function="Show" />
+			<SetRealFocus 	file="IPWebBrowser.xml.lua" function="SetRealFocus" />
+			<SetURL 	file="IPWebBrowser.xml.lua" function="SetURL" />
+			<GetLocationURL 	file="IPWebBrowser.xml.lua" function="GetLocationURL" />
+			<CloseWebBrowser 	file="IPWebBrowser.xml.lua" function="CloseWebBrowser" />
+			<SnapshotWindowBitmap 	file="IPWebBrowser.xml.lua" function="SnapshotWindowBitmap" />
+			<GetRawWebBrowser 	file="IPWebBrowser.xml.lua" function="GetRawWebBrowser" />
+			<GetWindow 	file="IPWebBrowser.xml.lua" function="GetWindow" />
+			
+        </method_def>		
+        <event_def>		
+			<OnHotKey2>
+				<param>
+					<string/>
+				</param>
+			</OnHotKey2>
+			<OnAddNewTab>
+				<param>
+					<string/>
+				</param>
+			</OnAddNewTab>
+			<OnCommandStateChange>
+				<param>
+					<string/>
+					<bool/>
+				</param>
+			</OnCommandStateChange>		
+			<OnTitleChange>
+				<param>
+					<string/>
+				</param>
+			</OnTitleChange>		
+			<OnNewWindow3>
+				<param>
+					<int/>
+					<string/>
+					<string/>
+				</param>
+				<return>
+					<bool/>
+				</return>
+			</OnNewWindow3>	
+			<OnNavigateComplete2>
+				<param>
+					<string/>
+				</param>
+			</OnNavigateComplete2>
+			<OnProgressChange>
+				<param>
+					<int/>
+					<int/>
+				</param>
+			</OnProgressChange>
+			<OnJsCommand>
+				<param>
+					<string/>
+					<table/>
+					<table/>
+				</param>
+			</OnJsCommand>
+        </event_def>
+        <objtemplate>
+            <children>
+				<obj id="RealObject" class="RealObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<visible>true</visible>
+					</attr>					
+				</obj>
+            </children>
+			<eventlist>
+				<event name="OnInitControl" file="IPWebBrowser.xml.lua" func="OnInitControl" />
+			</eventlist>
+        </objtemplate>
+    </control>
+</xlue>

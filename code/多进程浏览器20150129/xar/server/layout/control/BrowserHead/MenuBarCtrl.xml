@@ -1,0 +1,142 @@
+<xlue>
+	<objtemplate class="TextObject" id="menu.item">
+		<attr>
+			<top>7</top>
+			<width>45</width>
+			<height>father.height-14</height>
+			<valign>center</valign>
+			<halign>center</halign>
+			<font>font.menubar.text</font>
+			<textcolor>color.menubar.text</textcolor>
+			<cursor>IDC_HAND</cursor>
+		</attr>
+		<eventlist>
+			<event name="OnMouseEnter" file="MenuBarCtrl.xml.lua" func="OnMouseEnterMenuItem" />
+			<event name="OnLButtonDown" file="MenuBarCtrl.xml.lua" func="OnLButtonDownMenuItem" />
+			<event name="OnMouseLeave" file="MenuBarCtrl.xml.lua" func="OnMouseLeaveMenuItem" />
+		</eventlist>
+	</objtemplate>
+
+
+	<control class="MenuBarCtrl">
+		<attr_def>
+		</attr_def>		
+		<method_def>
+		</method_def>		
+		
+		<event_def>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="root.layout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<limitchild>1</limitchild>
+					</attr>
+					<children>
+						<obj id="MenuBarCtrl.HideBtn" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>(father.height-10)/2+1</top>
+								<width>6</width>
+								<height>10</height>
+								<NormalBkgID>YBYL.MenuBar.HideBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.MenuBar.HideBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.MenuBar.HideBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.MenuBar.HideBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="MenuBarCtrl.xml.lua" func="OnClickHideBtn" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.ShowBtn" class="TipAddin.Button">
+							<attr>
+								<left>0</left>
+								<top>(father.height-10)/2+1</top>
+								<width>6</width>
+								<height>10</height>
+								<NormalBkgID>YBYL.MenuBar.ShowBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.MenuBar.ShowBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.MenuBar.ShowBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.MenuBar.ShowBtn.Disable</DisableBkgID>
+								<Visible>false</Visible>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="MenuBarCtrl.xml.lua" func="OnClickShowBtn" />
+							</eventlist>
+						</obj>
+							
+						<obj id="MenuBarCtrl.MenuItem.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>26</width>
+								<height>23</height>
+								<texture>YBYL.Head.Collect.Sel.Normal</texture>
+								<visible>false</visible>
+							</attr>
+						</obj>	
+							
+							
+						<obj id="MenuBarCtrl.HideBtn.File" class="TextObject" templateid="menu.item">
+							<attr>
+								<left>15</left>
+								<text>文件</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickFile" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Lookup" class="TextObject" templateid="menu.item">
+							<attr>
+								<left>15+40</left>
+								<text>查看</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickLookup" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Collect" class="TextObject" templateid="menu.item">
+							<attr>
+								<left>15+40*2</left>
+								<text>收藏</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickCollect" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Tool" class="TextObject" templateid="menu.item">
+							<attr>
+								<left>15+40*3</left>
+								<text>工具</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickTool" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.Help" class="TextObject" templateid="menu.item">
+							<attr>
+								<left>15+40*4</left>
+								<text>帮助</text>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickHelp" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj> <!--end root.layout-->
+			</children>
+			<eventlist>
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

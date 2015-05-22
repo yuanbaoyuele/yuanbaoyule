@@ -1,0 +1,21 @@
+<XLUE>
+	<resource>
+		<imagelist id="imagelist.loading" splitter="1" vertical="0" varyblock="0" blocksize="39" image="bitmap\imagelist.loading.png"/>
+		<imageseq id="ball.loading" imagelist="imagelist.loading"/>	
+		<bitmap id="bitmap.ball.loading" path="bitmap\bitmap.loading.png" />			
+	</resource>
+</XLUE>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
