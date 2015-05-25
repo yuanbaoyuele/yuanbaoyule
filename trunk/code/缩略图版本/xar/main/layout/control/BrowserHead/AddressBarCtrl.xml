@@ -1,0 +1,89 @@
+<xlue>
+	<control class="AddressBarCtrl">
+		<attr_def>
+		</attr_def>		
+		<method_def>
+			<ProcessTabChange file="AddressBarCtrl.xml.lua" func="ProcessTabChange"/>
+			<SetText file="AddressBarCtrl.xml.lua" func="SetText"/>
+			<GetText file="AddressBarCtrl.xml.lua" func="GetText"/>
+			<SetIcoImage file="AddressBarCtrl.xml.lua" func="SetIcoImage"/>
+			<AdjustCollectBtnStyle file="AddressBarCtrl.xml.lua" func="AdjustCollectBtnStyle"/>
+			<SetCollectBtnStyle file="AddressBarCtrl.xml.lua" func="SetCollectBtnStyle"/>
+		</method_def>		
+		
+		<objtemplate>
+			<children>
+				<obj id="root" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+					<children>		
+						<obj id="AddressBarCtrl.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<texture>YBYL.AddressBar.UrlSearch.Bkg</texture>
+							</attr>
+							<children>	
+								<!--url栏开头的网页图片-->
+								<obj id="AddressBarCtrl.Image" class="ImageObject">
+									<attr>
+										<left>3</left>
+										<top>(father.height-16)/2</top>
+										<width>16</width>
+										<height>16</height>
+										<drawmode>1</drawmode>
+										<antialias>2</antialias>
+									</attr>
+								</obj>
+							
+								<obj id="AddressBarCtrl.UrlEdit" class="EditObject">
+									<attr>
+										<left>16</left>
+										<top>2</top>
+										<width>father.width-50</width>
+										<height>father.height-2</height>
+										<transparent>1</transparent>
+										<textcolor>4D4D4D</textcolor>
+										<autourldetect>0</autourldetect>
+									</attr>
+									<eventlist>
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="RouteToFather" />
+										<event name="OnKeyDown" file="AddressBarCtrl.xml.lua" func="OnUrlEditKeyDown" />
+										<event name="OnRButtonUp" file="AddressBarCtrl.xml.lua" func="OnUrlEditRButtonUp" />
+										<event name="OnLButtonUp" file="AddressBarCtrl.xml.lua" func="OnUrlEditLButtonUp" />
+										<event name="OnFocusChange" file="AddressBarCtrl.xml.lua" func="OnUrlEditFocus" />
+									</eventlist>
+								</obj>
+								
+								<obj id="AddressBarCtrl.DropArrow" class="TipAddin.Button">
+									<attr>
+										<left>father.width-16</left>
+										<top>2</top>
+										<width>14</width>
+										<height>18</height>
+										<NormalBkgID>YBYL.AddressBarCtrl.DropArrow.Normal</NormalBkgID>
+										<DownBkgID>YBYL.AddressBarCtrl.DropArrow.Down</DownBkgID>
+										<HoverBkgID>YBYL.AddressBarCtrl.DropArrow.Hover</HoverBkgID>
+										<DisableBkgID>YBYL.AddressBarCtrl.DropArrow.Disable</DisableBkgID>
+									</attr>
+									<eventlist>
+										<event name="OnClick" file="AddressBarCtrl.xml.lua" func="OnClickDropArrow" />
+										<event name="OnMouseEnter" file="AddressBarCtrl.xml.lua" func="OnMouseEnterArrow" />
+										<event name="OnMouseLeave" file="AddressBarCtrl.xml.lua" func="HideToolTip" />
+									</eventlist>
+								</obj>
+							</children>
+						</obj> 
+					</children>
+				</obj>   					
+			</children>
+		</objtemplate>
+	</control>
+</xlue>

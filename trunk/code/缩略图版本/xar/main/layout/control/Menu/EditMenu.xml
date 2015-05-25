@@ -1,0 +1,108 @@
+<xlue>
+	<objtemplate id="editmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+		</attr>
+		<children>
+			<obj id="Cut" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>剪切</Text>
+					<RightText>Ctrl+X</RightText>
+					<AccKey>T</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Cut" />
+				</eventlist>
+			</obj>
+		
+			<obj id="Copy" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>复制</Text>
+					<RightText>Ctrl+C</RightText>
+					<AccKey>C</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Copy" />
+				</eventlist>
+			</obj>
+			
+			<obj id="Paste" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>粘贴</Text>
+					<RightText>Ctrl+V</RightText>
+					<AccKey>P</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Paste" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="SelectAll" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>全选</Text>
+					<RightText>Ctrl+A</RightText>
+					<AccKey>A</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_SelectAll" />
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+	
+				</attr>
+			</obj>
+			
+			<obj id="Find" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>在此页面上查找</Text>
+					<RightText>Ctrl+F</RightText>
+					<AccKey>F</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="EditMenu.xml.lua" function="OnSelect_Find" />
+				</eventlist>
+			</obj>
+			
+		</children>
+	</objtemplate>
+	
+	<objtreetemplate id="EditMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>210</width>
+			<height>150</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>200</width>
+				<height>150</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>200</width>
+						<height>father.height</height>
+						<ContextID>editmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>
