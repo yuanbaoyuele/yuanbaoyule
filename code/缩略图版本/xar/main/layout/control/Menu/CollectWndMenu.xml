@@ -1,0 +1,98 @@
+<xlue>
+	<!--点击收藏栏的箭头， 弹出菜单-->
+	<objtemplate id="collectwndmenu.context" class="MenuObject" templateid="menu.object.template">
+		<attr>
+			<ItemTop>3</ItemTop>
+			<ItemLeft>3</ItemLeft> 
+		</attr>
+		<children>	
+			<obj id="AddToCollectBar" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>添加到收藏夹栏</Text>
+					<AccKey>B</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="CollectWndMenu.xml.lua" function="OnSelect_AddToCollectBar" />
+				</eventlist>
+			</obj>
+			
+			<obj id="AddCurTabToCollect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>将当前选项卡添加到收藏夹</Text>
+					<AccKey>T</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="CollectWndMenu.xml.lua" function="OnSelect_AddCurTabToCollect" />
+				</eventlist>
+			</obj>
+			
+			
+			<obj id="spilt1" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="ImportAndOutput" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>导入和导出</Text>
+					<AccKey>I</AccKey>
+					<Enable>0</Enable>
+				</attr>
+				<eventlist>
+					<!--event name="OnSelect" file="CollectWndMenu.xml.lua" function="OnSelect_AddCurTabToCollect" /-->
+				</eventlist>
+			</obj>
+			
+			<obj id="spilt2" class="MenuItemObject" templateid="menu.splitter">
+				<attr>
+				</attr>
+			</obj>
+			
+			<obj id="ManageCollect" class="MenuItemObject" templateid="menu.context.item">
+				<attr>
+					<Text>整理收藏夹</Text>
+					<AccKey>O</AccKey>
+				</attr>
+				<eventlist>
+					<event name="OnSelect" file="CollectWndMenu.xml.lua" function="OnSelect_ManageCollect" />
+				</eventlist>
+			</obj>
+			
+		</children>
+	</objtemplate>
+	
+	
+	<objtreetemplate id="CollectWndMenuTree" class="ObjectTreeTemplate">
+		<attr>
+			<left>0</left>
+			<top>0</top>
+			<width>300</width>
+			<height>110</height>
+		</attr>
+		
+		<obj id="Menu.MainLayout" class="LayoutObject">
+			<attr>
+				<left>0</left>
+				<top>0</top>
+				<width>300</width>
+				<height>110</height>
+			</attr>
+			<children>
+				<obj id="Menu.Context" class="NormalMenu">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<ContextID>collectwndmenu.context</ContextID>
+						<BknID>YBYL.Menu.Bkg</BknID>
+					</attr>
+					<eventlist>
+						<event name="OnInitControl" file="CollectWndMenu.xml.lua" func="OnInitControl" />
+					</eventlist>
+				</obj>
+			</children>
+		</obj>
+	</objtreetemplate>
+</xlue>

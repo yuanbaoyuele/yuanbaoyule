@@ -1,0 +1,126 @@
+<xlue>
+	<objtemplate class="ShortCutText" id="menu.item">
+		<attr>
+			<top>0</top>
+			<width>58</width>
+			<height>17</height>
+			<Font>font.menubar.text</Font>
+			<KeyFont>font.menuitemkey</KeyFont>
+			<Textcolor>color.menubar.text</Textcolor>
+			<Halign>center</Halign>
+		</attr>
+		<eventlist>
+			<event name="OnMouseEnter" file="MenuBarCtrl.xml.lua" func="OnMouseEnterMenuItem" />
+			<event name="OnLButtonDown" file="MenuBarCtrl.xml.lua" func="OnLButtonDownMenuItem" />
+			<event name="OnMouseLeave" file="MenuBarCtrl.xml.lua" func="OnMouseLeaveMenuItem" />
+			<event name="OnFocusChange" file="MenuBarCtrl.xml.lua" func="OnFocusMenuItem" />
+		</eventlist>
+	</objtemplate>
+
+
+	<control class="MenuBarCtrl">
+		<attr_def>
+		</attr_def>		
+		<method_def>
+		</method_def>		
+		
+		<event_def>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="root.layout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+						<limitchild>1</limitchild>
+					</attr>
+					<children>
+											
+						<obj id="MenuBarCtrl.MenuItem.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>26</width>
+								<height>15</height>
+								<texture>YBYL.Head.Collect.Sel.Normal</texture>
+								<visible>false</visible>
+							</attr>
+						</obj>	
+							
+						<obj id="MenuBarCtrl.HideBtn.FileMenu" class="ShortCutText" templateid="menu.item">
+							<attr>
+								<left>0</left>
+								<Text>文件</Text>
+								<Key>F</Key>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickFile" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.EditMenu" class="ShortCutText" templateid="menu.item">
+							<attr>
+								<left>58</left>
+								<Text>编辑</Text>
+								<Key>E</Key>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickEdit" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.LookupMenu" class="ShortCutText" templateid="menu.item">
+							<attr>
+								<left>58*2</left>
+								<Text>查看</Text>
+								<Key>V</Key>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickLookup" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.CollectMenu" class="ShortCutText" templateid="menu.item">
+							<attr>
+								<left>58*3</left>
+								<width>69</width>
+								<Text>收藏夹</Text>
+								<Key>A</Key>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickCollect" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.ToolMenu" class="ShortCutText" templateid="menu.item">
+							<attr>
+								<left>58*4+11</left>
+								<Text>工具</Text>
+								<Key>T</Key>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickTool" />
+							</eventlist>
+						</obj>
+						
+						<obj id="MenuBarCtrl.HideBtn.HelpMenu" class="ShortCutText" templateid="menu.item">
+							<attr>
+								<left>58*5+11</left>
+								<Text>帮助</Text>
+								<Key>H</Key>
+							</attr>
+							<eventlist>
+								<event name="OnLButtonUp" file="MenuBarCtrl.xml.lua" func="OnClickHelp" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj> <!--end root.layout-->
+			</children>
+			<eventlist>
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>

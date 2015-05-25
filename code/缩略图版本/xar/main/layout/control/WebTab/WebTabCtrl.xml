@@ -1,0 +1,168 @@
+<xlue>
+	<control class="WebTabCtrl">
+		<attr_def>
+			<attr name="bTabActive" type="bool" />
+			<attr name="bTabID" type="int" />
+			<attr name="DragState" type="string" />
+			<attr name="objBrowserCtrl"  />
+			<attr name="strInputURL"  />
+			<attr name="strIcoName"  />
+			<attr name="bGoBackState" type="bool" />
+			<attr name="bGoForwardState" type="bool" />
+			<attr name="strDragState" type="string" />
+			<attr name="tCurURLList" type="string" />
+			<attr name="nCurURLIndex" type="string" />
+			<attr name="bNewURLState" type="bool" ><default>false</default></attr>
+			<attr name="hWindowBitmap" type="userdata" />
+		</attr_def>		
+		<method_def>
+			<SetTabText file="WebTabCtrl.xml.lua" func="SetTabText"/>
+			<GetTabText file="WebTabCtrl.xml.lua" func="GetTabText"/>
+			<SetActiveStyle file="WebTabCtrl.xml.lua" func="SetActiveStyle"/>
+			<SetSelfID file="WebTabCtrl.xml.lua" func="SetSelfID"/>
+			<GetSelfID file="WebTabCtrl.xml.lua" func="GetSelfID"/>
+			<BindBrowserCtrl file="WebTabCtrl.xml.lua" func="BindBrowserCtrl"/>
+			<GetBindBrowserCtrl file="WebTabCtrl.xml.lua" func="GetBindBrowserCtrl"/>
+			<GetLocalURL file="WebTabCtrl.xml.lua" func="GetLocalURL"/>
+			<GetIcoName file="WebTabCtrl.xml.lua" func="GetIcoName"/>
+			<SaveUserInputURL file="WebTabCtrl.xml.lua" func="SaveUserInputURL"/>
+			<GetUserInputURL file="WebTabCtrl.xml.lua" func="GetUserInputURL"/>
+			<GetGoBackState file="WebTabCtrl.xml.lua" func="GetGoBackState"/>
+			<SetGoBackState file="WebTabCtrl.xml.lua" func="SetGoBackState"/>
+			<GetGoForwardState file="WebTabCtrl.xml.lua" func="GetGoForwardState"/>
+			<SetGoForwardState file="WebTabCtrl.xml.lua" func="SetGoForwardState"/>
+			<GetNewURLState file="WebTabCtrl.xml.lua" func="GetNewURLState"/>
+			<SetNewURLState file="WebTabCtrl.xml.lua" func="SetNewURLState"/>
+			<AddCurURLIndex file="WebTabCtrl.xml.lua" func="AddCurURLIndex"/>
+			<SetCloseBtnVisible file="WebTabCtrl.xml.lua" func="SetCloseBtnVisible"/>
+			<CloseTab file="WebTabCtrl.xml.lua" func="CloseTab"/>
+			<ShowGif file="WebTabCtrl.xml.lua" func="ShowGif"/>
+			<GetWindowBitmap file="WebTabCtrl.xml.lua" func="GetWindowBitmap"/>
+			<SetWindowBitmap file="WebTabCtrl.xml.lua" func="SetWindowBitmap"/>
+		</method_def>		
+		
+		<event_def>
+			<OnClickTabItem>
+				<param>
+					<int/>
+				</param>
+			</OnClickTabItem>
+			<OnCloseTabItem>
+				<param>
+					<int/>
+				</param>
+			</OnCloseTabItem>
+			<OnDrag>
+				<param>
+					<string/>
+					<int/>
+					<int/>
+				</param>
+			</OnDrag>
+		</event_def>
+		
+		<objtemplate>
+			<children>
+				<obj id="WebTabCtrl.Layout" class="LayoutObject">
+					<attr>
+						<left>0</left>
+						<top>0</top>
+						<width>father.width</width>
+						<height>father.height</height>
+					</attr>
+					<children>
+						<obj id="WebTabCtrl.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+							</attr>
+						</obj>  
+						
+						<obj id="WebTabCtrl.MouseEnter.Bkg" class="TextureObject">
+							<attr>
+								<left>0</left>
+								<top>0</top>
+								<width>father.width</width>
+								<height>father.height</height>
+								<texture>YBYL.Tab.MouseEnter</texture>
+							</attr>
+						</obj>  
+						
+						<obj id="WebTabCtrl.HeadImg" class="ImageObject">
+							<attr>
+								<left>8</left>
+								<top>(father.height-16)/2+1</top>
+								<width>16</width>
+								<height>16</height>
+								<drawmode>1</drawmode>
+								<antialias>2</antialias>
+								<zorder>999999</zorder>
+								<visible>false</visible>
+							</attr>
+						</obj>  
+
+						<obj id="WebTabCtrl.Loading" class="SeqImageObject">
+							<attr>
+								<left>8</left>
+								<top>(father.height-16)/2+1</top>
+								<width>16</width>
+								<height>16</height>
+								<drawmode>1</drawmode>
+								<antialias>2</antialias>
+								<zorder>999999</zorder>
+								<gif>WebTab.Loading</gif>
+								<loop>1</loop>
+								<reverse>0</reverse>
+								<interval>32</interval>
+							</attr>
+						</obj>	
+						
+						<obj id="WebTabCtrl.Text" class="TextObject">
+							<attr>
+								<left>30</left>
+								<top>2</top>
+								<width>father.width-30-35</width>
+								<height>father.height</height>
+								<valign>center</valign>
+								<font>font.tab.normal</font>
+								<textcolor>color.tab.normal</textcolor>
+								<endellipsis>1</endellipsis>
+								<zorder>999999</zorder>
+							</attr>
+						</obj>   	
+
+						<obj id="WebTabCtrl.CloseBtn" class="TipAddin.Button">
+							<attr>
+								<left>father.width-19</left>
+								<top>(father.height-9)/2</top>
+								<width>9</width>
+								<height>9</height>
+								<NormalBkgID>YBYL.Tab.CloseBtn.Normal</NormalBkgID>
+								<DownBkgID>YBYL.Tab.CloseBtn.Down</DownBkgID>
+								<HoverBkgID>YBYL.Tab.CloseBtn.Hover</HoverBkgID>
+								<DisableBkgID>YBYL.Tab.CloseBtn.Disable</DisableBkgID>
+							</attr>
+							<eventlist>
+								<event name="OnClick" file="WebTabCtrl.xml.lua" func="OnClickCloseTab" />
+								<event name="OnMouseEnter" file="WebTabCtrl.xml.lua" func="OnMouseEnterClose" />
+								<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="HideToolTip" />
+							</eventlist>
+						</obj>
+					</children>
+				</obj>
+			</children>
+			<eventlist>
+				<event name="OnLButtonUp" file="WebTabCtrl.xml.lua" func="OnClickTab" />
+				<event name="OnMouseEnter" file="WebTabCtrl.xml.lua" func="OnMouseEnterTab" />
+				<event name="OnMouseMove" file="WebTabCtrl.xml.lua" func="OnMouseMoveTab" />
+				<event name="OnMouseLeave" file="WebTabCtrl.xml.lua" func="OnMouseLeaveTab" />
+				<event name="OnInitControl" file="WebTabCtrl.xml.lua" func="OnInitControl" />
+				<event name="OnLButtonDown" file="WebTabCtrl.xml.lua" func="OnLButtonDown" />
+				<event name="OnMButtonUp" file="WebTabCtrl.xml.lua" func="OnMButtonUp" />
+				<event name="OnRButtonUp" file="WebTabCtrl.xml.lua" func="OnRButtonUpItem" />
+			</eventlist>
+		</objtemplate>
+	</control>
+</xlue>
