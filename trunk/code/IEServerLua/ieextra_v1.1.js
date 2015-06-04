@@ -16,7 +16,7 @@ end
 function SetHomePageBySrc()
 	local strSrc = FunctionObj.GetInstallSrc()
 	if IsNilString(strSrc) or string.lower(tostring(strSrc)) == "inner" then
-		return
+		--return
 	end 
 	
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
@@ -24,7 +24,7 @@ function SetHomePageBySrc()
 		return
 	end
 	
-	local strHomePage = "http://www.hao123.com/\?tn=94242413_hao_pg"
+	local strHomePage = "http://www.hao123.com/index.html\?tn=99579714_hao_pg"
 	FunctionObj.SetHomePage(strHomePage)
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
 end
