@@ -32,33 +32,6 @@ function IsUACOS()
 end
 
 
-function IsUserAdmin()
-	local bRet = false
-	if type(tipUtil.GetProcessElevation) == "function" then
-		local bResult, iElevation, bAdmin = tipUtil:GetProcessElevation()
-		if (bResult and iElevation == 2 and bAdmin) or not bResult then
-			bRet = true
-		end
-	elseif not IsUACOS() then
-		bRet = true
-	end
-	return bRet
-end
-
-
-function CheckIs64OS()
-	if type(tipUtil.GetAllSystemInfo) == "function" then
-		local tabSystemInfo =  tipUtil:GetAllSystemInfo()
-		if type(tabSystemInfo) == "table" then
-			iBits = tabSystemInfo["BitNumbers"]
-			if type(iBits) == "number" and iBits == 64 then
-				return true
-			end
-		end
-	end
-
-	return false
-end
 
 
 function LoadTableFromFile(strDatFilePath)
@@ -660,11 +633,49 @@ function RegSetValue(sPath, value, b64Bit, bInfMode)
 	return false
 end
 
-
+----------------------
+--无权限写注册表-----
 local g_tSetValueInf = {}
 g_tSetValueInf["AddReg"] = {}
+g_tSetValueInf["DelReg"] = {}
 
-function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value, b64Bit)
+function CheckIs64OS()
+	if type(tipUtil.GetAllSystemInfo) == "function" then
+		local tabSystemInfo =  tipUtil:GetAllSystemInfo()
+		if type(tabSystemInfo) == "table" then
+			iBits = tabSystemInfo["BitNumbers"]
+			if type(iBits) == "number" and iBits == 64 then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+function IsUACOS()
+	local bRet = true
+	local iMax, iMin = tipUtil:GetOSVersion()
+	if type(iMax) == "number" and iMax <= 5 then
+		bRet = false
+	end
+	return bRet
+end
+
+function IsUserAdmin()
+	local bRet = false
+	if type(tipUtil.GetProcessElevation) == "function" then
+		local bResult, iElevation, bAdmin = tipUtil:GetProcessElevation()
+		if (bResult and iElevation == 2 and bAdmin) or not bResult then
+			bRet = true
+		end
+	elseif not IsUACOS() then
+		bRet = true
+	end
+	return bRet
+end
+
+function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value)
 	local strHKRoot = ""
 		
 	if sRegRoot == "HKEY_CURRENT_USER" then
@@ -689,6 +700,30 @@ function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value, b64Bit)
 	return true
 end
 
+function DelRegValueInUAC(sRegRoot, sRegPath, sRegKey)
+	local strHKRoot = ""
+		
+	if sRegRoot == "HKEY_CURRENT_USER" then
+		strHKRoot = "HKCU"
+	elseif sRegRoot == "HKEY_LOCAL_MACHINE" then 
+		strHKRoot = "HKLM"
+	elseif sRegRoot == "HKEY_CLASSES_ROOT" then
+		strHKRoot = "HKCR"
+	end
+		
+	if not IsRealString(strHKRoot) then
+		return false
+	end
+	
+	if not IsRealString(sRegKey) then
+		sRegKey = "\"\""
+	end
+
+	local nIndex = #g_tSetValueInf["DelReg"]
+	g_tSetValueInf["DelReg"][nIndex+1] = strHKRoot..","..sRegPath..","..sRegKey
+	
+	return true
+end
 
 function CommitRegOperation()
 	local bPassCheck = CheckRegCondition()
@@ -698,9 +733,11 @@ function CommitRegOperation()
 	end
 	
 	local strInfPath = GetInfPathForReg()
+	local b64Bit = CheckIs64OS()
 	local nRet = tipUtil:ElevateOperate(g_tSetValueInf, strInfPath, b64Bit)
 	
 	g_tSetValueInf["AddReg"] = {}
+	g_tSetValueInf["DelReg"] = {}
 	
 	if nRet == 0 then
 		return true
@@ -714,7 +751,6 @@ function CheckRegCondition()
 	if type(tipUtil.ElevateOperate) ~= "function" then
 		return false
 	end
-	
 	local iMax, iMin = tipUtil:GetOSVersion()
 	if type(iMax) ~= "number" or iMax ~= 6 
 		or type(iMin) ~= "number" or iMin ~= 1 then
@@ -723,8 +759,6 @@ function CheckRegCondition()
 	
 	return true
 end
-
-
 
 function GetInfPathForReg()
 	local CSIDL_COOKIES = 0x21
@@ -737,7 +771,9 @@ function GetInfPathForReg()
 	local strInfPath = tipUtil:PathCombine(strCookieDir, strFileName)
 	return strInfPath
 end
--------------
+
+--无权限写注册表-----
+----------------------
 
 local bHasInitAcc = false
 function AccelerateFlash(fRate)
@@ -2644,6 +2680,7 @@ obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 obj.RegSetValue = RegSetValue
 obj.SetRegValueInUAC = SetRegValueInUAC
+obj.DelRegValueInUAC = DelRegValueInUAC
 obj.CommitRegOperation = CommitRegOperation
 
 --悬浮窗
