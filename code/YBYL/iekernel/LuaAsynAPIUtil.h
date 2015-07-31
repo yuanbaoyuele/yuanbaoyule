@@ -18,6 +18,7 @@
 #define WM_HTTPFILEGOTPROGRESS		WM_USER + 2023
 #define WM_KILLPROCESS					WM_USER + 2024
 
+#define WM_POSTWNDMSG					WM_USER + 2025
 
 enum AjaxTaskFlag
 {
@@ -68,6 +69,8 @@ public:
 	static int AsynKillProcess(lua_State* pLuaState);
 
 	static int AsynWaitForSingleObject(lua_State* pLuaState);
+
+	static int AsynPostWndMsg(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI  s_functionlist[];
 };
@@ -586,6 +589,30 @@ private:
 	HANDLE	m_hProcess;
 	LuaCallInfo m_callInfo;
 	DWORD	m_dwTimeout;
+};
+
+
+class CPostMsgData
+{
+public:
+	CPostMsgData(const char* pClassName, const char* pTitle, UINT uMsg, WPARAM wParam, LPARAM lParam, lua_State* pState, LONG lRefFn = LUA_REFNIL);
+	void Work();
+
+	void Notify(int nResult)
+	{
+		lua_State* pLuaState = m_callInfo.GetLuaState();
+		lua_rawgeti(pLuaState, LUA_REGISTRYINDEX, m_callInfo.GetRefFn());
+		lua_pushinteger(pLuaState, nResult);
+		XLLRT_LuaCall(pLuaState, 1, 0, L"CPostMsgData Callback");
+	}
+private:
+	std::wstring m_strClassName;
+	std::wstring m_strTitle;
+	UINT		m_uMsg;
+	WPARAM     m_wParam;
+	LPARAM     m_lParam;
+	LuaCallInfo m_callInfo;
+	LONG		m_lRef;
 };
 
 

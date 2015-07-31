@@ -4,6 +4,10 @@
 
 #define WM_FILTERRESULT WM_USER + 201
 
+#define WM_FILTERVIDEO WM_USER + 302
+
+#define WM_KILLSELF WM_USER + 401
+
 #include <XLLuaRuntime.h>
 typedef void (*funResultCallBack) (DWORD userdata1,DWORD userdata2, const char* pszKey,  DISPPARAMS* pParams);
 
@@ -56,10 +60,17 @@ public:
 		}; 
 		return wc; 
 	}
+
+	static LPCTSTR GetWndCaption()
+	{
+		return _T("{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie");
+	}
+
 	BEGIN_MSG_MAP(CYBMsgWindow)
 		MESSAGE_HANDLER(WM_COPYDATA, OnCopyData)
 		MESSAGE_HANDLER(WM_FILTERRESULT, HandleFilterResult)
-
+		MESSAGE_HANDLER(WM_FILTERVIDEO, HandleFilterVideo)
+		MESSAGE_HANDLER(WM_KILLSELF, OnKillSelf)
 	END_MSG_MAP()
 private:
 	CYBMsgWindow(void);
@@ -83,7 +94,8 @@ private:
 public:
 	LRESULT OnCopyData(UINT , WPARAM , LPARAM , BOOL& );
 	LRESULT HandleFilterResult(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
-
+	LRESULT HandleFilterVideo(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
+	LRESULT OnKillSelf(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
 public:
 	void SetKeyboardHook(void);
 	void DelKeyboardHook(void);
