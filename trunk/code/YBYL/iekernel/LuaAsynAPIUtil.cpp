@@ -41,6 +41,8 @@ XLLRTGlobalAPI  LuaAsynUtil::s_functionlist[] =
 	{"AsynKillProcess", AsynKillProcess},
 	
 	{"AsynWaitForSingleObject", AsynWaitForSingleObject},
+	
+	{"AsynPostWndMsg", AsynPostWndMsg},
 
 	{NULL, NULL}
 };
@@ -838,6 +840,62 @@ int LuaAsynUtil::AsynWaitForSingleObject(lua_State* pLuaState)
 	return 0;
 }
 
+
+//
+
+CPostMsgData::CPostMsgData(const char* pClassName, const char* pTitle, UINT uMsg, WPARAM wParam, LPARAM lParam, lua_State* pState, LONG lRefFn) : m_callInfo(pState, lRefFn)
+{
+	if (pClassName != NULL)
+	{
+		CComBSTR bstrClassName;
+		LuaStringToCComBSTR(pClassName,bstrClassName);
+		m_strClassName = bstrClassName.m_str;
+	}
+	if (pTitle != NULL)
+	{
+		CComBSTR bstrTitle;
+		LuaStringToCComBSTR(pTitle,bstrTitle);
+		m_strTitle = bstrTitle.m_str;
+	}
+	m_uMsg = uMsg;
+	m_wParam = wParam;
+	m_lParam = lParam;
+}
+
+void CPostMsgData::Work()
+{
+	HWND hWnd = FindWindow(m_strClassName.c_str(), m_strTitle.c_str());
+	while (hWnd != NULL)
+	{
+		PostMessage(hWnd, m_uMsg, m_wParam, m_lParam);
+		hWnd = FindWindowEx(NULL, hWnd, m_strClassName.c_str(), m_strTitle.c_str());
+	}
+}
+
+UINT WINAPI PostMsgProc(PVOID pArg)
+{
+	CPostMsgData* pData = (CPostMsgData*) pArg;
+	pData->Work();
+	return 0;
+}
+
+int LuaAsynUtil::AsynPostWndMsg(lua_State* pLuaState)
+{
+	TSTRACEAUTO();
+
+	const char* pClassName = lua_tostring(pLuaState, 2);
+	const char* pTitle = lua_tostring(pLuaState, 3);
+
+	UINT uMsg = (UINT)lua_tonumber(pLuaState, 4);
+	WPARAM wParam = (WPARAM)lua_tonumber(pLuaState, 5);
+	LPARAM lParam = (LPARAM)lua_tonumber(pLuaState, 6);
+	if (lua_isfunction(pLuaState, 7))
+	{
+		CPostMsgData* pData = new CPostMsgData(pClassName, pTitle, uMsg,wParam,lParam,pLuaState, luaL_ref(pLuaState, LUA_REGISTRYINDEX));
+		_beginthreadex(NULL, 0, PostMsgProc, pData, 0, NULL);
+	}
+	return 0;
+}
 
 void* __stdcall LuaAsynUtil::GetInstance( void* )
 {

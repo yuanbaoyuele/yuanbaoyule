@@ -70,8 +70,8 @@ public:
 public:
 	//static int RegisterFilterWnd(lua_State* pLuaState);
 	static int MsgBox(lua_State* pLuaState);
-	//static int LoadVideoRules(lua_State* pLuaState);
-	//static int FYBFilter(lua_State* pLuaState);
+	static int LoadVideoRules(lua_State* pLuaState);
+	static int FYBFilter(lua_State* pLuaState);
 	//static int FYbSetWebRoot(lua_State* pLuaState);
 
 	static int Exit(lua_State* pLuaState);
@@ -230,6 +230,10 @@ public:
 	static int ElevateOperate(lua_State* pLuaState);
 	static int SetRegSecurity(lua_State* pLuaState);
 	static int SetFileSecurity(lua_State* pLuaState);
+
+
+	//
+	static int WebBrowserExecuteScript(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;

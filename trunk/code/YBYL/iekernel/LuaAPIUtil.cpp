@@ -44,7 +44,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	//{"RegisterFilterWnd", RegisterFilterWnd},	
 	//主要函数
 	{"MsgBox",MsgBox},
-
+	{"LoadVideoRules",LoadVideoRules},
+	{"FYBFilter",FYBFilter},
 	{"Exit", Exit},	
 	{"GetPeerId", GetPeerId},
 	{"Log", Log},
@@ -192,6 +193,9 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 
 	//提权操作
 	{"ElevateOperate", ElevateOperate},
+	
+	//webbrowser对象执行一段js代码
+	{"WebBrowserExecuteScript", WebBrowserExecuteScript},
 	{NULL, NULL}
 };
 
@@ -219,6 +223,100 @@ int LuaAPIUtil::MsgBox(lua_State* pLuaState)
 		uType = (int)lua_tointeger( pLuaState, 4);
 	}
 	MessageBox(NULL,bstrText.m_str,bstrTitle.m_str,uType);
+	return 1;
+}
+
+typedef BOOL (* PYbGetVideoRules)(const std::wstring& filename);
+int LuaAPIUtil::LoadVideoRules(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	if (!lua_isstring(pLuaState,2))
+	{
+		return 0;
+	}
+	HMODULE hNetFilter = ::LoadLibrary(_T("ienetaddin.dll"));
+	if (NULL == hNetFilter)
+	{
+		return 0;
+	}
+	PYbGetVideoRules pYbGetVideoRules = (PYbGetVideoRules)GetProcAddress(hNetFilter, "YbGetVideoRules");
+	if (!pYbGetVideoRules)
+	{
+		return 0;
+	}
+	BOOL bRet = FALSE;
+	const char* utf8CfgPath = luaL_checkstring(pLuaState, 2);
+	CComBSTR bstrPath;
+	LuaStringToCComBSTR(utf8CfgPath,bstrPath);
+	if (::PathFileExists(bstrPath.m_str))
+	{
+		if (pYbGetVideoRules(bstrPath.m_str))
+		{
+			bRet = TRUE;
+		}
+	}
+	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+typedef BOOL (* PYbEnable)(BOOL bEnable, USHORT listen_port);
+typedef HANDLE (* PYbStartProxy)(USHORT* listen_port);
+typedef BOOL (* PYbSetHook)();
+int LuaAPIUtil::FYBFilter(lua_State* pLuaState)
+{
+	LuaAPIUtil** ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil == NULL)
+	{
+		return 0;
+	}
+	HMODULE hNetFilter = ::LoadLibrary(_T("ienetaddin.dll"));
+	if (NULL == hNetFilter)
+	{
+		return 0;
+	}
+	PYbEnable pYbEnable = (PYbEnable)GetProcAddress(hNetFilter, "YbEnable");
+	PYbStartProxy pYbStartProxy = (PYbStartProxy)GetProcAddress(hNetFilter, "YbStartProxy");
+	PYbSetHook pYbSetHook = (PYbSetHook)GetProcAddress(hNetFilter, "YbSetHook");
+	if (!pYbEnable || !pYbStartProxy || !pYbSetHook)
+	{
+		return 0;
+	}
+
+	BOOL bRet = FALSE;
+	int nFilter = lua_toboolean(pLuaState, 2);
+	BOOL bFilter = (nFilter == 0) ? FALSE : TRUE;
+	if (bFilter)
+	{
+		static BOOL bOnce  = FALSE;
+		static USHORT listen_port = 0;
+
+		if (!bOnce)
+		{	
+			if (pYbSetHook())
+			{
+				HANDLE hThread = pYbStartProxy(&listen_port);
+
+				if (NULL != hThread)
+				{
+					bRet = pYbEnable(TRUE, listen_port);
+					bOnce = TRUE;
+				}
+			}
+		}
+		else
+		{
+			bRet = pYbEnable(TRUE, listen_port);
+		}
+	}
+	else
+	{
+		bRet = pYbEnable(FALSE, 0);
+	}
+	lua_pushboolean(pLuaState, bRet);
 	return 1;
 }
 
@@ -5180,5 +5278,60 @@ int LuaAPIUtil::SetRegSecurity(lua_State* pLuaState)
 	}
 
 	lua_pushboolean(pLuaState, false);
+	return 1;
+}
+
+
+int LuaAPIUtil::WebBrowserExecuteScript(lua_State *pLuaState)
+{
+	TSTRACEAUTO();
+	BOOL bRet = FALSE;
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil)
+	{	
+		IWebBrowser2 **lpWeb2 = (IWebBrowser2**)lua_touserdata(pLuaState, 2);
+		const char* utf8Code = luaL_checkstring(pLuaState,3);
+		const char* utf8Language = luaL_checkstring(pLuaState,4);
+		if (lpWeb2 && utf8Code && utf8Language)
+		{	
+
+			CComBSTR bstrCode;
+			LuaStringToCComBSTR(utf8Code,bstrCode);
+
+			CComBSTR bstrLanguage;
+			LuaStringToCComBSTR(utf8Language,bstrLanguage);
+
+			TSERROR4CXX(_T("WebBrowserExecuteScript ,bstrCode=" << bstrCode.m_str));	
+			TSERROR4CXX(_T("WebBrowserExecuteScript ,bstrLanguage=" << bstrLanguage.m_str));
+			::CoInitialize(NULL);
+			CComPtr<IDispatch> spDispDoc;
+			HRESULT hr = (*lpWeb2)->get_Document(&spDispDoc);
+			TSERROR4CXX(_T("IDispatch ,hr=" << hr));
+			if (SUCCEEDED(hr))
+			{
+				CComQIPtr<IHTMLDocument2> spHtmlDoc2 = spDispDoc;
+				if (spHtmlDoc2)
+				{
+					CComPtr<IHTMLWindow2> spHtmlWnd2;
+					hr = spHtmlDoc2->get_parentWindow(&spHtmlWnd2);
+					TSERROR4CXX(_T("IHTMLWindow2 ,hr=" << hr));
+					if (SUCCEEDED(hr))
+					{
+						VARIANT  ret; 
+						ret.vt = VT_EMPTY; 
+						hr = spHtmlWnd2->execScript(bstrCode,bstrLanguage, &ret);
+						TSERROR4CXX(_T("execScript ,hr=" << hr));
+						if (SUCCEEDED(hr))
+						{
+							bRet = TRUE;
+						}
+
+					}
+				}
+			}
+			CoUninitialize();
+		}
+	}
+	lua_pushboolean(pLuaState, bRet);
 	return 1;
 }

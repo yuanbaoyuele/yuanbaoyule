@@ -141,6 +141,13 @@ LRESULT CYBMsgWindow::OnCopyData(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam
 	return 0;
 }
 
+LRESULT CYBMsgWindow::OnKillSelf(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+{
+	DISPPARAMS params = { NULL, NULL, 0, 0 };
+	Fire_LuaEvent("OnKillSelf", &params);
+	return 0;
+}
+
 LRESULT CYBMsgWindow::HandleFilterResult(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
 	LPSTR pUrl = (LPSTR)lParam;
@@ -250,4 +257,19 @@ LRESULT CALLBACK CYBMsgWindow::KeyboardProc(int code, WPARAM wParam, LPARAM lPar
 	{
 		return CallNextHookEx (CYBMsgWindow::Instance()->m_hKeyboardHook, code, wParam, lParam);
 	}
+}
+
+LRESULT CYBMsgWindow::HandleFilterVideo(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
+{
+	LPSTR pUrl = (LPSTR)lParam;
+	std::wstring wstrUrl;
+	AnsiStringToWideString(pUrl,wstrUrl);
+	delete pUrl;
+	CComVariant vParam[2];
+	vParam[0] = (int)wParam;
+	vParam[1] = (LPWSTR)wstrUrl.c_str();
+
+	DISPPARAMS params = { vParam, NULL, 2, 0 };
+	Fire_LuaEvent("OnFilterVideo", &params);
+	return 0;
 }
