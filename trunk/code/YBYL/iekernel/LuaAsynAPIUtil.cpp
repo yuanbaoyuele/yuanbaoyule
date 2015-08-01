@@ -862,13 +862,21 @@ CPostMsgData::CPostMsgData(const char* pClassName, const char* pTitle, UINT uMsg
 	m_lParam = lParam;
 }
 
+
 void CPostMsgData::Work()
 {
-	HWND hWnd = FindWindow(m_strClassName.c_str(), m_strTitle.c_str());
+	std::vector<HWND> vhWnd;
+	HWND hWnd = FindWindow(NULL,L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie");
+	UINT uCnt = 0;
 	while (hWnd != NULL)
 	{
-		PostMessage(hWnd, m_uMsg, m_wParam, m_lParam);
-		hWnd = FindWindowEx(NULL, hWnd, m_strClassName.c_str(), m_strTitle.c_str());
+		uCnt++;
+		::PostMessage(hWnd,m_uMsg,m_wParam,m_lParam);
+		hWnd = FindWindowEx(HWND_MESSAGE, hWnd, NULL,L"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie");
+	}
+	if (m_lRef != LUA_REFNIL)
+	{
+		g_wndMsg.PostMessage(WM_POSTWNDMSG, uCnt, (LPARAM) this);
 	}
 }
 
