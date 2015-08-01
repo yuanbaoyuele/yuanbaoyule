@@ -1001,6 +1001,13 @@ end
 
 --全屏不记录大小只记录状态
 function RecordWndSize(nLeft, nTop, nRight, nBottom)
+	--窗口故意隐藏时，不用记录
+	local bHideFakeIE = XLGetGlobal("bHideFakeIE")
+	if bHideFakeIE then
+		TipLog("bHideFakeIE when RecordWndSize")
+		return
+	end
+	
 	local tUserConfig = ReadConfigFromMemByKey("tUserConfig") or {}
 	local tWindowSize = tUserConfig["tWindowSize"] or {}
 	local objMainWnd = GetMainWndInst()
@@ -2664,6 +2671,7 @@ obj.IsBrowserFullScrn = IsBrowserFullScrn
 obj.IsWindowMax = IsWindowMax
 obj.SetResizeEnable = SetResizeEnable
 obj.SetMainWndDefaultTrackSize = SetMainWndDefaultTrackSize
+obj.QueryAllUsersDir = QueryAllUsersDir
 
 --升级
 obj.DownLoadServerConfig = DownLoadServerConfig
