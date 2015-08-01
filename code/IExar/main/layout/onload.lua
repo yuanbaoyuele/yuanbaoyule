@@ -439,11 +439,7 @@ function FixUserConfig(tServerConfig)
 		tLocalUserConfig["tOpenStupURL"] = tUserConfigInServer["tOpenStupURL"]
 	end
 	
-	--下载下一次的启动首页
-	if IsRealString(tUserConfigInServer["strHomePage"]) then
-		tLocalUserConfig["strHomePage"] = tUserConfigInServer["strHomePage"]
-	end
-	--下载下一次的自杀延时配置
+	--下一次的自杀延时配置
 	if type(tUserConfigInServer["nKillSelfDelay"]) == "number" and #tUserConfigInServer["nKillSelfDelay"] > 1000 then
 		tLocalUserConfig["nKillSelfDelay"] = tUserConfigInServer["nKillSelfDelay"]
 	end
