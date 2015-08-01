@@ -605,7 +605,7 @@ public:
 		lua_pushinteger(pLuaState, nResult);
 		XLLRT_LuaCall(pLuaState, 1, 0, L"CPostMsgData Callback");
 	}
-private:
+public:
 	std::wstring m_strClassName;
 	std::wstring m_strTitle;
 	UINT		m_uMsg;
@@ -670,6 +670,7 @@ public:
 		MESSAGE_HANDLER(WM_HTTPFILEGOTPROGRESS, OnHttpFileGotProgress)
 		MESSAGE_HANDLER(WM_KILLPROCESS, OnKillProcessFinish)
 		MESSAGE_HANDLER(WM_WAITOBJECTFINISH, OnWaitObjectFinish)
+		MESSAGE_HANDLER(WM_POSTWNDMSG, OnPostWndMsgFinish)
 		CHAIN_MSG_MAP(CMsgWindow)
 	END_MSG_MAP()
 
@@ -776,11 +777,17 @@ protected:
 		delete pData;
 		return 0;
 	}
-
+	
+	LRESULT OnPostWndMsgFinish(UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
+	{
+		CPostMsgData* pData = (CPostMsgData*) lParam;
+		pData->Notify((int) wParam);
+		delete pData;
+		return 0;
+	}
 private:
 	typedef std::map<UINT_PTR, CTimerCallBackProcMgr*> TimerIDCallbackMap;
 	typedef TimerIDCallbackMap::iterator TimerIDCallbackMapIte;
 	TimerIDCallbackMap m_mapTimerID2Callback;
 	UINT m_nNextTimerId;
 };
-
