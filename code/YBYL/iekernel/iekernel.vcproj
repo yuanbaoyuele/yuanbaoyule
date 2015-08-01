@@ -79,7 +79,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="Wininet.lib Version.lib gdiplus.lib XLUE.lib XLGraphic.lib XLLuaRuntime.lib YBNetFilter.lib XLFSIO.lib libexpat.lib comsuppw.lib minizip.lib psapi.lib Winmm.lib XLGraphicPlus.lib"
+				AdditionalDependencies="Wininet.lib Version.lib gdiplus.lib XLUE.lib XLGraphic.lib XLLuaRuntime.lib YBNetFilter.lib XLFSIO.lib libexpat.lib comsuppw.lib minizip.lib psapi.lib Winmm.lib XLGraphicPlus.lib Wtsapi32.lib Userenv.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../../boltsdk/lib;../../lib;$(SolutionDir)$(ConfigurationName)"
 				ModuleDefinitionFile=".\iekernel.def"
@@ -172,7 +172,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="Wininet.lib Version.lib gdiplus.lib XLUE.lib XLGraphic.lib XLLuaRuntime.lib YBNetFilter.lib XLFSIO.lib libexpat.lib comsuppw.lib minizip.lib psapi.lib Winmm.lib XLGraphicPlus.lib"
+				AdditionalDependencies="Wininet.lib Version.lib gdiplus.lib XLUE.lib XLGraphic.lib XLLuaRuntime.lib YBNetFilter.lib XLFSIO.lib libexpat.lib comsuppw.lib minizip.lib psapi.lib Winmm.lib XLGraphicPlus.lib Wtsapi32.lib Userenv.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../boltsdk/lib;../../lib;$(SolutionDir)$(ConfigurationName)"
 				ModuleDefinitionFile=".\iekernel.def"
@@ -532,6 +532,18 @@
 			</File>
 			<File
 				RelativePath=".\CBrowserHelper.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="LaunchCloud"
+			>
+			<File
+				RelativePath=".\AddinHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AddinHelper.h"
 				>
 			</File>
 		</Filter>
