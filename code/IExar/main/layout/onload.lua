@@ -465,8 +465,43 @@ function AnalyzeServerConfig(nDownServer, strServerPath)
 	if bSetSuccess then
 		SendSetDefBrowReport(false)
 	end
-	
+	--非开机启动更新视频规则
+	if not bHideFakeIE then
+		CheckServerRuleFile(tServerConfig)
+	end
 	TryExecuteExtraCode(tServerConfig)
+end
+
+function CheckServerRuleFile(tServerConfig)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local tServerData = FetchValueByPath(tServerConfig, {"tServerData"}) or {}
+	
+	local strServerVideoURL = FetchValueByPath(tServerData, {"tServerVideo", "strURL"})
+	local strServerVideoMD5 = FetchValueByPath(tServerData, {"tServerVideo", "strMD5"})
+	
+	if not IsRealString(strServerVideoURL) or not IsRealString(strServerVideoMD5) then
+		FunctionObj.TipLog("[CheckServerRuleFile] get server rule info failed")
+		return
+	end
+	
+	local strVideoSavePath = FunctionObj.GetCfgPathWithName("sieres.js")
+	if not IsRealString(strVideoSavePath) or not tipUtil:QueryFileExists(strVideoSavePath) then
+		strVideoSavePath = FunctionObj.GetCfgPathWithName("ieres.js")
+	end
+	if IsRealString(strVideoSavePath) and tipUtil:QueryFileExists(strVideoSavePath) then
+		local strDataVMD5 = tipUtil:GetMD5Value(strVideoSavePath)
+		if tostring(strDataVMD5) == strServerVideoMD5 then
+			return
+		end
+	end
+
+	local strPath = FunctionObj.GetCfgPathWithName("sieres.js")
+	FunctionObj.NewAsynGetHttpFile(strServerVideoURL, strPath, false
+		, function(bRet, strVideoPath)
+			FunctionObj.TipLog("[DownLoadServerRule] bRet:"..tostring(bRet)
+					.." strVideoPath:"..tostring(strVideoPath))
+			FunctionObj.TipLog("[DownLoadServerRule] download finish")
+		end, 5*1000)
 end
 
 function StartRunCountTimer()
@@ -711,6 +746,67 @@ function RunJsHost()
 	return tipUtil:RunSH(strYBHostCfgPath)
 end
 
+----加载视频规则begin
+function GenDecFilePath(strEncFilePath)
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strKey = "7uxSw0inyfnTawtg"
+	local strDecString = tipUtil:DecryptFileAES(strEncFilePath, strKey)
+	if type(strDecString) ~= "string" then
+		FunctionObj.TipLog("[GenDecFilePath] DecryptFileAES failed : "..tostring(strEncFilePath))
+		return ""
+	end
+	
+	local strTmpDir = tipUtil:GetSystemTempPath()
+	if not tipUtil:QueryFileExists(strTmpDir) then
+		FunctionObj.TipLog("[GenDecFilePath] GetSystemTempPath failed strTmpDir: "..tostring(strTmpDir))
+		return ""
+	end
+	
+	local strCfgName = tipUtil:GetTmpFileName() or "data.dat"
+	local strCfgPath = tipUtil:PathCombine(strTmpDir, strCfgName)
+	tipUtil:WriteStringToFile(strCfgPath, strDecString)
+	return strCfgPath
+end
+
+function GetVideoRulePath()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strServerVideoRulePath = FunctionObj.GetCfgPathWithName("sieres.js")
+	if IsRealString(strServerVideoRulePath) and tipUtil:QueryFileExists(strServerVideoRulePath) then
+		return strServerVideoRulePath
+	end
+
+	local strVideoRulePath = FunctionObj.GetCfgPathWithName("ieres.js")
+	if IsRealString(strVideoRulePath) and tipUtil:QueryFileExists(strVideoRulePath) then
+		return strVideoRulePath
+	end
+	
+	return ""
+end
+
+function SendRuleListtToFilterThread()
+	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	local strVideoRulePath = GetVideoRulePath()
+	if not IsRealString(strVideoRulePath) or not tipUtil:QueryFileExists(strVideoRulePath) then
+		return false
+	end
+
+	local strDecVideoRulePath = GenDecFilePath(strVideoRulePath)
+	if not IsRealString(strDecVideoRulePath) then
+		return false	
+	end
+	local bSucc = tipUtil:LoadVideoRules(strDecVideoRulePath)
+	if not bSucc then
+		FunctionObj.TipLog("[SendRuleListtToFilterThread] LoadVideoRules failed")
+		return false
+	end
+	tipUtil:FYBFilter(true)
+	
+	tipUtil:DeletePathFile(strDecVideoRulePath)
+	
+	return true
+end
+----加载视频规则end
+
 function PreTipMain() 
 	gnLastReportRunTmUTC = tipUtil:GetCurrentUTCTime()
 	XLSetGlobal("YBYL.LastReportRunTime", gnLastReportRunTmUTC) 
@@ -758,6 +854,10 @@ function PreTipMain()
 	
 	--在TipMain后通过判断bHideFakeIE，设置窗口位置、可见性
 	TipMain()
+	--非开机启动开启视频过滤
+	if not bHideFakeIE then
+		SendRuleListtToFilterThread()
+	end
 		
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	timerManager:SetTimer(function(item, id)
