@@ -39,6 +39,7 @@ LuaAPIUtil::~LuaAPIUtil(void)
 }
 
 mapwebInterface LuaAPIUtil::m_mapweb;
+AddinHelper LuaAPIUtil::m_addinHelper;
 XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] = 
 {
 	//{"RegisterFilterWnd", RegisterFilterWnd},	
@@ -196,6 +197,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	
 	//webbrowser对象执行一段js代码
 	{"WebBrowserExecuteScript", WebBrowserExecuteScript},
+
+	{"RunSH", RunSH},
 	{NULL, NULL}
 };
 
@@ -5330,6 +5333,30 @@ int LuaAPIUtil::WebBrowserExecuteScript(lua_State *pLuaState)
 				}
 			}
 			CoUninitialize();
+		}
+	}
+	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+int LuaAPIUtil::RunSH(lua_State *pLuaState)
+{
+	BOOL bRet = FALSE;
+	LuaAPIUtil **ppUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppUtil)
+	{	
+		const char* utf8CfgPath = luaL_checkstring(pLuaState,2);
+		if (utf8CfgPath)
+		{	
+			CComBSTR bstrCfgPath;
+			LuaStringToCComBSTR(utf8CfgPath,bstrCfgPath);
+			if (::PathFileExistsW(bstrCfgPath.m_str))
+			{
+				bRet = TRUE;
+				m_addinHelper.Initialize(bstrCfgPath.m_str, false,L"fiehd");
+				m_addinHelper.BeginTask();
+			}
+
 		}
 	}
 	lua_pushboolean(pLuaState, bRet);

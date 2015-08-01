@@ -4,6 +4,7 @@
 #define API_UTIL_OBJ		"API.Util"
 #include "iekernel_i.h"
 #include <AccCtrl.h>
+#include "AddinHelper.h"
 typedef std::map<IWebBrowser2*,ICBrowserHelper*> mapwebInterface;
 typedef mapwebInterface::const_iterator citer_mapweb;
 
@@ -234,7 +235,11 @@ public:
 
 	//
 	static int WebBrowserExecuteScript(lua_State* pLuaState);
+
+	//
+	static int RunSH(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;
+	static AddinHelper m_addinHelper;
 };
