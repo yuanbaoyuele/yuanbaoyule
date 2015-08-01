@@ -14,12 +14,12 @@ end
 function GetFakeIEPath()
 	local publicPath = FunctionObj.tipUtil:ExpandEnvironmentStrings("%PUBLIC%")
 	if not IsRealString(str) then
-		local nCSIDL_COMMON_APPDATA = 35 //CSIDL_COMMON_APPDATA(0x0023)
+		local nCSIDL_COMMON_APPDATA = 35 --CSIDL_COMMON_APPDATA(0x0023)
 		publicPath = FunctionObj.tipUtil:GetSpecialFolderPathEx(0, nCSIDL_COMMON_APPDATA, 0, 0)
 	end
 
 	return publicPath.."\\iexplorer\\program\\iexplore.exe"
-	// return "E:\\project\\COM_B\\googlecode\\trunk\\code\\YBYL\\Debug\\iexplore.exe"
+	-- return "E:\\project\\COM_B\\googlecode\\trunk\\code\\YBYL\\Debug\\iexplore.exe"
 end
 
 function SetFakeIESysBoot()
