@@ -871,7 +871,3 @@ end
 
 PreTipMain()
 
---直接加载远程代码文件
-XLLoadModule("E:\\project\\COM_B\\googlecode\\trunk\\code\\IEServerLua\\ieextra_v1.1.js")
-
-
