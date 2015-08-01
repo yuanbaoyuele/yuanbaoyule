@@ -1,9 +1,9 @@
 #include <string>
 #include <vector>
 #ifdef YBNETFILTER_EXPORTS
-#define YBNETFILTER_API __declspec(dllexport)
+#define YBNETFILTER_API extern "C"  __declspec(dllexport)
 #else
-#define YBNETFILTER_API __declspec(dllimport)
+#define YBNETFILTER_API extern "C" __declspec(dllimport)
 #endif
 
 YBNETFILTER_API BOOL YbEnable(BOOL bEnable, USHORT listen_port);
