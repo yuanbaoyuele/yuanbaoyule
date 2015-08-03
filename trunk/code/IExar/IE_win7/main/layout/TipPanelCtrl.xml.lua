@@ -114,6 +114,10 @@ function ShortK_AddrEditFocus()
 	if not objUrlEdit then
 		return
 	end
+	local tree = objUrlEdit:GetOwner()
+	local wnd = tree:GetBindHostWnd()
+	if wnd then wnd:SetFocus(true) end
+	
 	objUrlEdit:SetFocus(true)
 	objUrlEdit:SetSelAll()
 end
