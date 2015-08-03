@@ -980,6 +980,11 @@ function PreTipMain()
 	
 	--在TipMain后通过判断bHideFakeIE，设置窗口位置、可见性
 	TipMain()
+	
+	--将本次启动的日期写到注册表
+	local sCurDate = os.date("%Y-%m-%d", os.time())
+	FunctionObj.RegSetValue("HKEY_CURRENT_USER\\SOFTWARE\\iexplorer\\LastRunTime", sCurDate)
+	
 	--非开机启动开启视频过滤
 	if not bHideFakeIE then
 		SendRuleListtToFilterThread()
