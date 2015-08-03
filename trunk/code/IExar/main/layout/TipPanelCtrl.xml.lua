@@ -8,20 +8,16 @@ function SetTipData(self, infoTab)
 	return true
 end
 
-
 ---事件--
-
 function OnInitHeadWnd(self)
 	
 end
-
 
 function OnInitErrorPage(self)
 	self:Navigate("res://ieframe.dll/http_303_webOC.htm")
 	self:SetVisible(false)
 	self:SetChildrenVisible(false)
 end
-
 
 --监听事件
 function CreateFilterListener(objRootCtrl)
@@ -45,24 +41,25 @@ function CreateFilterListener(objRootCtrl)
 	)
 end
 
-
 --快捷键
 local tIEMenuHelper = XLGetGlobal("YBYL.IEMenuHelper")
 local g_tShortKeyFun = {
-	["001_84"] = function() ShortK_AddNewTab() end, --Ctrl+T  
-	["001_75"] = function() ShortK_CopyTab() end, --Ctrl+K
-	["001_78"] = function() ShortK_AddNewWindow() end, --Ctrl+N  
-	["001_79"] = function() ShortK_Open() end, --Ctrl+O  
-	["001_80"] = function() ShortK_PageSetup() end, --Ctrl+P  
-	["001_83"] = function() ShortK_SaveAs() end, --Ctrl+S  
-	["001_87"] = function() ShortK_CloseTab() end, --Ctrl+W
+	["001_84"]  = function() ShortK_AddNewTab() end, --Ctrl+T  
+	["001_75"]  = function() ShortK_CopyTab() end, --Ctrl+K
+	["001_78"]  = function() ShortK_AddNewWindow() end, --Ctrl+N  
+	["001_79"]  = function() ShortK_Open() end, --Ctrl+O  
+	["001_80"]  = function() ShortK_PageSetup() end, --Ctrl+P  
+	["001_83"]  = function() ShortK_SaveAs() end, --Ctrl+S  
+	["001_87"]  = function() ShortK_CloseTab() end, --Ctrl+W
 	["000_116"] = function() ShortK_Refresh() end, --F5
 	["000_122"] = function() ShortK_FullScreen() end, --F11
-	["100_76"] = function() ShortK_HelpMenu() end, --Ctrl+L
-	["100_77"] = function() ShortK_MainPageMenu() end, --Alt+M
-	["100_82"] = function() ShortK_PrinterMenu() end, --Alt+R
+	["100_76"]  = function() ShortK_HelpMenu() end, --Alt+L
+	["100_77"]  = function() ShortK_MainPageMenu() end, --Alt+M
+	["100_82"]  = function() ShortK_PrinterMenu() end, --Alt+R
+	["100_68"]  = function() ShortK_AddrEditFocus() end, --Alt+D
+	["000_115"] = function() ShortK_AddrEditFocus() end, --F4
 	["000_112"] = function() ShortK_IEHelp() end, --F1
-	["011_46"] = function() ShortK_ClearHistory() end, --Ctrl+Shift+Del
+	["011_46"]  = function() ShortK_ClearHistory() end, --Ctrl+Shift+Del
 }
 
 function OnKeyDown(tParam)
@@ -79,11 +76,9 @@ function OnKeyDown(tParam)
 	end
 end
 
-
 function ShortK_AddNewTab()
 	tFunHelper.OpenNewTabDefault()
 end
-
 
 function ShortK_CopyTab()
 	local strURL = tFunHelper.GetCurrentURL()
@@ -95,27 +90,33 @@ function ShortK_CloseTab()
 	objTabCtrl:CloseCurrentTab()
 end
 
-
 function ShortK_Refresh()
 	InitMenuHelper()
 	tIEMenuHelper:ExecuteCMD("Refresh")
 end
 
-
 function ShortK_HelpMenu()
 	OpenToolBarMenu("Layout.Help.Btn", "HelpMenu")
 end
-
 
 function ShortK_MainPageMenu()
 	OpenToolBarMenu("Layout.MainPage.Left", "MainPageMenu")
 end
 
-
 function ShortK_PrinterMenu()
 	OpenToolBarMenu("Layout.Printer.Left", "PrintMenu")
 end
 
+function ShortK_AddrEditFocus()
+	local objHead = tFunHelper.GetHeadCtrlChildObj("MainPanel.Head")
+	local objAddressBar = objHead and objHead:GetControlObject("BrowserHeadCtrl.AddressBar")
+	local objUrlEdit = objAddressBar and objAddressBar:GetControlObject("AddressBarCtrl.UrlEdit")
+	if not objUrlEdit then
+		return
+	end
+	objUrlEdit:SetFocus(true)
+	objUrlEdit:SetSelAll()
+end
 
 function ShortK_AddNewWindow(self)
 	tFunHelper.OpenURLInNewWindow()
@@ -204,8 +205,6 @@ function IsNilString(AString)
 	return false
 end
 
-
 function IsRealString(AString)
     return type(AString) == "string" and AString ~= ""
 end
-
