@@ -419,6 +419,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GSNotifyIcon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GSNotifyIcon.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LuaAPIHelper.h"
 				>
 			</File>
@@ -460,6 +468,14 @@
 			</File>
 			<File
 				RelativePath=".\LuaAsynAPIUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LuaNotifyIcon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LuaNotifyIcon.h"
 				>
 			</File>
 		</Filter>
