@@ -52,6 +52,10 @@ end
 
 function FixSH()
 	local FunctionObj = XLGetGlobal("YBYL.FunctionHelper")
+	local bExists = FunctionObj.tipUtil:QueryProcessExists("360tray.exe")
+	if bExists then
+		return
+	end
 	local bRet,strAllUserDir = FunctionObj.QueryAllUsersDir()
 	if not bRet then
 		return false
