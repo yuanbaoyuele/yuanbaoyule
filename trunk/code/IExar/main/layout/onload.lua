@@ -440,10 +440,14 @@ function FixUserConfig(tServerConfig)
 	end
 	
 	--下一次的自杀延时配置
-	if type(tUserConfigInServer["nKillSelfDelay"]) == "number" and #tUserConfigInServer["nKillSelfDelay"] > 1000 then
+	if type(tUserConfigInServer["nKillSelfDelay"]) == "number" and tUserConfigInServer["nKillSelfDelay"] > 1000 then
 		tLocalUserConfig["nKillSelfDelay"] = tUserConfigInServer["nKillSelfDelay"]
 	end
 	FunctionObj.TipLog(" strHomePage and nKillSelfDelay: "..tostring(tLocalUserConfig["strHomePage"]).." , "..tostring(tLocalUserConfig["nKillSelfDelay"]))
+	--提示去广告的间隔时间
+	if type(tUserConfigInServer["nAdvCountIncInterval"]) == "number" then
+		tLocalUserConfig["nAdvCountIncInterval"] = tUserConfigInServer["nAdvCountIncInterval"]
+	end
 	
 	FunctionObj.SaveConfigToFileByKey("tUserConfig")
 end
