@@ -9,6 +9,7 @@
 	<objtemplate id="menu.text" class="ShortCutText">
 		<attr>
 			<zorder>99</zorder>
+			<Endellipsis>true</Endellipsis>
 		</attr>
 	</objtemplate>
 	
