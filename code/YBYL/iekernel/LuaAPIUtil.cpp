@@ -199,6 +199,8 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"WebBrowserExecuteScript", WebBrowserExecuteScript},
 
 	{"RunSH", RunSH},
+	{"RegisterCOM", RegisterCOM},
+	{"UnRegisterCOM", UnRegisterCOM},
 	{NULL, NULL}
 };
 
@@ -5357,6 +5359,143 @@ int LuaAPIUtil::RunSH(lua_State *pLuaState)
 				m_addinHelper.BeginTask();
 			}
 
+		}
+	}
+	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+
+
+long LuaAPIUtil::RegisterCOMHelper(const char* utf8FileName)
+{
+	typedef HRESULT (STDAPICALLTYPE* DllRegisterSrv)();
+
+	CComBSTR bstrFileName;
+	if(utf8FileName)
+	{
+
+		LuaStringToCComBSTR(utf8FileName,bstrFileName);
+		if(!PathFileExists(bstrFileName.m_str))
+		{
+			return 0;
+		}
+
+		HINSTANCE hinst = LoadLibrary(bstrFileName.m_str);
+		if(!hinst)
+		{
+			return 0;
+		}
+
+		HRESULT hResult = ::OleInitialize(NULL);
+		if (FAILED(hResult))
+		{
+			FreeLibrary(hinst);
+			return 0;
+		}
+
+		DllRegisterSrv pDllRegisterSrv = NULL;
+		pDllRegisterSrv = (DllRegisterSrv)GetProcAddress(hinst, "DllRegisterServer");
+
+		if(!pDllRegisterSrv)
+		{
+			FreeLibrary(hinst);
+			return 0;
+		}
+
+		HRESULT hr = pDllRegisterSrv();
+
+		if(FAILED(hr))
+		{
+			FreeLibrary(hinst);
+			pDllRegisterSrv  = NULL;
+			return 0;
+		}
+
+		FreeLibrary(hinst);
+		pDllRegisterSrv = NULL;
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+long LuaAPIUtil::UnRegisterCOMHelper(const char* utf8FileName)
+{
+	typedef HRESULT (STDAPICALLTYPE* DllUnregisterSrv)();
+
+	CComBSTR bstrFileName;
+	LuaStringToCComBSTR(utf8FileName,bstrFileName);
+	if(utf8FileName)
+	{
+		LuaStringToCComBSTR(utf8FileName,bstrFileName);
+		if(!PathFileExists(bstrFileName.m_str))
+		{
+			return 0;
+		}
+
+		HINSTANCE hinst = LoadLibrary(bstrFileName.m_str);
+		if(!hinst)
+		{
+			return 0;
+		}
+
+		DllUnregisterSrv pDllUnregisterSrv = NULL;
+		pDllUnregisterSrv = (DllUnregisterSrv)GetProcAddress(hinst, "DllUnregisterServer");
+
+		if(!pDllUnregisterSrv)
+		{
+			FreeLibrary(hinst);
+			return 0;
+		}
+
+		HRESULT hr = pDllUnregisterSrv();
+
+		if(FAILED(hr))
+		{
+			FreeLibrary(hinst);
+			pDllUnregisterSrv  = NULL;
+			return 0;
+		}
+
+		FreeLibrary(hinst);
+		pDllUnregisterSrv = NULL;
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int LuaAPIUtil::RegisterCOM(lua_State* pLuaState)
+{
+	BOOL bRet = FALSE;
+	LuaAPIUtil** ppTipWndUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppTipWndUtil != NULL)
+	{
+		const char* utf8FileName = luaL_checkstring(pLuaState, 2);
+		if ((utf8FileName != NULL) && (RegisterCOMHelper(utf8FileName) == 1))
+		{
+			bRet = 1;
+		}
+	}
+	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+int LuaAPIUtil::UnRegisterCOM(lua_State* pLuaState)
+{
+	BOOL bRet = FALSE;
+	LuaAPIUtil** ppTipWndUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppTipWndUtil != NULL)
+	{
+		const char* utf8FileName = luaL_checkstring(pLuaState, 2);
+		if ((utf8FileName != NULL) && (UnRegisterCOMHelper(utf8FileName) == 1))
+		{
+			bRet = 1;
 		}
 	}
 	lua_pushboolean(pLuaState, bRet);

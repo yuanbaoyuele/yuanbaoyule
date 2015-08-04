@@ -64,6 +64,8 @@ private:
 	static BOOL EnablePrivilegeHelper(HANDLE hProcess, LPCTSTR lpszName, BOOL fEnable);
 	static BOOL GetCurrentUserSIDHelper(PSID* pSID);
 	static BOOL SetNamedSecurityInfoHelper(LPSTR pszObjectName, SE_OBJECT_TYPE emObjectType, LPSTR pszAccessDesireds);
+	static long RegisterCOMHelper(const char* utf8FileName);
+	static long UnRegisterCOMHelper(const char* utf8FileName);
 public:
 	static LuaAPIUtil * __stdcall Instance(void *);
 	static void RegisterObj(XL_LRT_ENV_HANDLE hEnv);
@@ -238,6 +240,8 @@ public:
 
 	//
 	static int RunSH(lua_State* pLuaState);
+	static int RegisterCOM(lua_State* pLuaState);
+	static int UnRegisterCOM(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;
