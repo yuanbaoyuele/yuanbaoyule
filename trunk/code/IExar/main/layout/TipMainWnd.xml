@@ -58,7 +58,7 @@
             <minwidth>250</minwidth>
             <minheight>50</minheight>
 			<sysmenu>1</sysmenu>
-			<appwindow>0</appwindow>
+			<appwindow>1</appwindow>
 			<ellipse>5,5</ellipse>
             <fps>30</fps>
 			<blur>1</blur>		
@@ -72,4 +72,34 @@
         </eventlist>
     </hostwndtemplate>
 
+	 <hostwndtemplate id="TipMainWnd.Hide" class="FrameHostWnd">
+        <attr>
+            <layered>1</layered>
+            <left>0</left>
+            <top>0</top>
+            <width>1024</width>
+            <height>768</height>
+           
+            <topmost>0</topmost>
+            <visible>0</visible>
+            <enable>1</enable>
+            <maxbox>1</maxbox>
+            <minbox>1</minbox>
+            <minwidth>250</minwidth>
+            <minheight>50</minheight>
+			<sysmenu>1</sysmenu>
+			<appwindow>0</appwindow>
+			<ellipse>5,5</ellipse>
+            <fps>30</fps>
+			<blur>1</blur>		
+        </attr>
+		 <eventlist>
+            <event name="OnCreate" file="TipMainWnd.xml.lua" func="OnCreate"/>
+			<event name="OnShowWindow" file="TipMainWnd.xml.lua" func="OnShowWindow"/>
+			<event name="OnDestroy" file="TipMainWnd.xml.lua" func="OnDestroy"/>
+			<event name="OnSize" file="TipMainWnd.xml.lua" func="OnSize"/>
+			<event name="OnFocusChange" file="TipMainWnd.xml.lua" func="OnFocusChange"/>
+        </eventlist>
+    </hostwndtemplate>
+	
 </xlue>

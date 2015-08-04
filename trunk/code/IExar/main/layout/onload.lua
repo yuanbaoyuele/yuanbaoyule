@@ -51,7 +51,7 @@ function ShowMainTipWnd(objMainWnd)
 		objMainWnd:Show(5)
 		FunctionObj.RestoreWndSize()
 		SendStartupReport(true)
-		objMainWnd:SetAppWindow(1)
+		
 	else
 		-- 将窗口区域移到屏幕外面,防止机器卡机时屏幕出现虚框
 		
@@ -59,6 +59,7 @@ function ShowMainTipWnd(objMainWnd)
 		objMainWnd:Move(screenWidth + 100, screenHeight + 100, 100, 100)
 		
 		objMainWnd:Show(4)
+		-- objMainWnd:SetAppWindow(0)
 	end
 	
 	objMainWnd:SetTitle("Internet Explorer")
@@ -583,7 +584,8 @@ end
 function PopTipWnd(OnCreateFunc)
 	local bSuccess = false
 	local templateMananger = XLGetObject("Xunlei.UIEngine.TemplateManager")
-	local frameHostWndTemplate = templateMananger:GetTemplate("TipMainWnd", "HostWndTemplate" )
+	local mainWndID = bHideFakeIE and "TipMainWnd.Hide" or "TipMainWnd"
+	local frameHostWndTemplate = templateMananger:GetTemplate(mainWndID, "HostWndTemplate" )
 	local frameHostWnd = nil
 	if frameHostWndTemplate then
 		frameHostWnd = frameHostWndTemplate:CreateInstance("YBYLTipWnd.MainFrame")
