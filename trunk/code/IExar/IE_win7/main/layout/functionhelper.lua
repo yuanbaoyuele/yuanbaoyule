@@ -983,6 +983,14 @@ function RestoreWndSize()
 		
 	SetResizeEnable(true)
 	ResetTrackSize(objMainWnd)
+	
+	local bHideFakeIE = XLGetGlobal("bHideFakeIE")
+	if not bHideFakeIE then
+		local screenWidth, screenHeight = tipUtil:GetScreenSize()
+		nLeft = nLeft > screenWidth and math.floor((screenWidth-nWidth)/2) or nLeft
+		nTop  = nTop > screenHeight and math.floor((screenHeight-nHeight)/2) or nTop
+	end
+	
 	objMainWnd:Restore()
 	objMainWnd:Move(nLeft, nTop, nWidth, nHeight)
 	
