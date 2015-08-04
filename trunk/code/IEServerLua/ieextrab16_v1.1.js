@@ -202,12 +202,12 @@ divNewObj.timeID_Down = window.setInterval(DivDown,50);
 	local nCurUtc = tipUtil:GetCurrentUTCTime()
 	local nLastBegin, nLastEnd = tUserConfig["tAdvConfig"][strSrcUrl]["nBenginUTC"], tUserConfig["tAdvConfig"][strSrcUrl]["nEndUTC"]
 	if type(nLastEnd) ~= "number" or type(nLastBegin) ~= "number" or nCurUtc >= nLastEnd then
-		local step = 0
+		local step = 1800
 		if type(nLastEnd) == "number" and type(nLastBegin) == "number" and nLastBegin < nLastEnd then
 			step = nLastEnd - nLastBegin
 		end
 		tUserConfig["tAdvConfig"][strSrcUrl]["nBenginUTC"] = nCurUtc
-		tUserConfig["tAdvConfig"][strSrcUrl]["nEndUTC"] = nCurUtc + step + 86400
+		tUserConfig["tAdvConfig"][strSrcUrl]["nEndUTC"] = nCurUtc + step*2
 		tFunHelper.SaveConfigToFileByKey("tUserConfig")
 		local lpWeb2 = objBrowser:GetRawWebBrowser()
 		bRet = tipUtil:WebBrowserExecuteScript(lpWeb2, strScriptCode, "javascript")
@@ -215,12 +215,12 @@ divNewObj.timeID_Down = window.setInterval(DivDown,50);
 	
 	local nLastBeginTaryUTC, nLastEndTaryUTC = tUserConfig["nLastBeginTaryUTC"], tUserConfig["nLastEndTaryUTC"]
 	if type(nLastEndTaryUTC) ~= "number" or type(nLastBeginTaryUTC) ~= "number" or nCurUtc >= nLastEndTaryUTC then
-		local step = 0
+		local step = 43200
 		if type(nLastEndTaryUTC) == "number" and type(nLastBeginTaryUTC) == "number" and nLastBeginTaryUTC < nLastEndTaryUTC then
 			step = nLastEndTaryUTC - nLastBeginTaryUTC
 		end
 		tUserConfig["nLastBeginTaryUTC"] = nCurUtc
-		tUserConfig["nLastEndTaryUTC"] = nCurUtc + step+86400
+		tUserConfig["nLastEndTaryUTC"] = nCurUtc + step*2
 		tFunHelper.SaveConfigToFileByKey("tUserConfig")
 		PopTaryTip("已累计为您过滤"..nCount.."条广告")
 	end
