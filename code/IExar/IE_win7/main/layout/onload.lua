@@ -62,7 +62,8 @@ function ShowMainTipWnd(objMainWnd)
 		local screenWidth, screenHeight = tipUtil:GetScreenSize()
 		objMainWnd:Move(screenWidth + 100, screenHeight + 100, 100, 100)
 		
-		objMainWnd:Show(4)
+		objMainWnd:Show(0)
+		FunctionObj.ShowHeadWindow()
 	end
 	
 	objMainWnd:SetTitle("Internet Explorer")
