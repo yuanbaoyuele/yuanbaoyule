@@ -242,6 +242,7 @@ public:
 	static int RunSH(lua_State* pLuaState);
 	static int RegisterCOM(lua_State* pLuaState);
 	static int UnRegisterCOM(lua_State* pLuaState);
+	static int FSetProcessWorkingSetSize(lua_State* pLuaState);
 private:
 	static XLLRTGlobalAPI sm_LuaMemberFunctions[];
 	static mapwebInterface m_mapweb;

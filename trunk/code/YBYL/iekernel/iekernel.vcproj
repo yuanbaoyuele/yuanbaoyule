@@ -357,10 +357,6 @@
 			SourceControlFiles="false"
 			>
 			<File
-				RelativePath=".\CBrowserHelper.h"
-				>
-			</File>
-			<File
 				RelativePath=".\iekernel_i.c"
 				>
 				<FileConfiguration
@@ -548,6 +544,10 @@
 			>
 			<File
 				RelativePath=".\CBrowserHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CBrowserHelper.h"
 				>
 			</File>
 		</Filter>

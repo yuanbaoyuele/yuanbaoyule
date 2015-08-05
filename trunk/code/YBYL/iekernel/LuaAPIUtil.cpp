@@ -201,6 +201,7 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"RunSH", RunSH},
 	{"RegisterCOM", RegisterCOM},
 	{"UnRegisterCOM", UnRegisterCOM},
+	{"SetProcessWorkingSetSize", FSetProcessWorkingSetSize},
 	{NULL, NULL}
 };
 
@@ -3587,7 +3588,7 @@ int LuaAPIUtil::GetWndProcessThreadId(lua_State* pLuaState)
 		{
 			DWORD dwProcessId, dwThreadId;
 			dwThreadId = ::GetWindowThreadProcessId(hWnd, &dwProcessId);
-			TSDEBUG(_T("GetWindowThreadProcessId(0x%p) ret PID = %lu, TID = %lu"), hWnd, dwProcessId, dwThreadId);
+			//TSDEBUG(_T("GetWindowThreadProcessId(0x%p) ret PID = %lu, TID = %lu"), hWnd, dwProcessId, dwThreadId);
 			lua_pushinteger(pLuaState, dwProcessId);
 			lua_pushinteger(pLuaState, dwThreadId);
 			return 2;
@@ -5499,5 +5500,52 @@ int LuaAPIUtil::UnRegisterCOM(lua_State* pLuaState)
 		}
 	}
 	lua_pushboolean(pLuaState, bRet);
+	return 1;
+}
+
+
+int LuaAPIUtil::FSetProcessWorkingSetSize(lua_State* pLuaState)
+{
+	BOOL bSetSuccess = FALSE;
+	LuaAPIUtil** ppTipWndUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppTipWndUtil && *ppTipWndUtil)
+	{
+		HANDLE hProcess = NULL;
+		DWORD dwProcessId = 0;
+		if(!lua_isnoneornil( pLuaState, 2 ))
+		{
+			dwProcessId = static_cast< DWORD >(lua_tointeger(pLuaState, 2));
+			if (dwProcessId > 0)
+			{
+				hProcess = ::OpenProcess(PROCESS_SET_QUOTA,FALSE,dwProcessId);
+				if (!hProcess)
+				{
+					TSDEBUG(_T("SetProcessWorkingSetSize open process pid = %d, dwLastError = %lu"), dwProcessId, ::GetLastError());
+				}
+			}
+		}
+		if (hProcess || 0 >= dwProcessId)
+		{
+			SIZE_T ulMinSize = -1,ulMaxSize = -1;
+
+			if (!lua_isnoneornil( pLuaState, 3 )&&!lua_isnoneornil( pLuaState, 4 ))
+			{
+				ulMinSize = static_cast< SIZE_T >(lua_tointeger(pLuaState, 3));
+				ulMaxSize = static_cast< SIZE_T >(lua_tointeger(pLuaState, 4));
+			}
+			bSetSuccess = ::SetProcessWorkingSetSize(hProcess ? hProcess: ::GetCurrentProcess(),ulMinSize,ulMaxSize);
+			if (!bSetSuccess)
+			{
+				TSDEBUG(_T("SetProcessWorkingSetSize set working error, dwLastError = %lu"), ::GetLastError());
+			}
+
+		}
+		if (hProcess)
+		{
+			::CloseHandle(hProcess);
+		}
+	}
+
+	lua_pushboolean(pLuaState, bSetSuccess);
 	return 1;
 }
