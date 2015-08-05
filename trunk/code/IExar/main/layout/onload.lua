@@ -59,7 +59,11 @@ function ShowMainTipWnd(objMainWnd)
 		objMainWnd:Move(screenWidth + 100, screenHeight + 100, 100, 100)
 		
 		objMainWnd:Show(0)
-		tFunHelper.ShowHeadWindow()
+		FunctionObj.ShowHeadWindow()
+		local timeMgr = XLGetObject("Xunlei.UIEngine.TimerManager")
+		timeMgr:SetTimer(function(Itm, id)
+				tipUtil:SetProcessWorkingSetSize();
+			end, 5 * 1000)
 	end
 	
 	objMainWnd:SetTitle("Internet Explorer")

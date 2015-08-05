@@ -59,7 +59,7 @@ function OnCreate( self )
 								tFunHelper.SetMainWndFocusStyle(false)
 							end
 						end
-						   end, 100)
+						   end, 300)
 end
 
 
