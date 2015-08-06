@@ -74,12 +74,10 @@ function SendStartupReport(bShowWnd)
 	
 	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
 	tStatInfo.strEL = strSource or ""
+	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
 	
 	if not bShowWnd then
 		tStatInfo.strEC = "launch"  --进入上报
-		if bHideFakeIE then
-			tStatInfo.strEC = "launch_hide"
-		end
 		tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
 		tStatInfo.strEL = strSource or ""
 	else
@@ -90,7 +88,20 @@ function SendStartupReport(bShowWnd)
 		
 	tStatInfo.strEV = 1
 	
+	timerManager:SetTimer(function(item, id)
+		item:KillTimer(id)
+		FunctionObj.TipConvStatistic(tStatInfo)
+	end, 1000)
+end
+
+function SendHideReport()
+	local tStatInfo = {}
+	local bRet, strSource = FunctionObj.GetCommandStrValue("/sstartfrom")
 	local timerManager = XLGetObject("Xunlei.UIEngine.TimerManager")
+	tStatInfo.strEC = "launch_hide"  --进入上报
+	tStatInfo.strEA = FunctionObj.GetInstallSrc() or ""
+	tStatInfo.strEL = strSource or ""
+	tStatInfo.strEV = 1
 	timerManager:SetTimer(function(item, id)
 		item:KillTimer(id)
 		FunctionObj.TipConvStatistic(tStatInfo)
@@ -845,6 +856,8 @@ function PreTipMain()
 	if bRet and "sysboot" == strSource then
 		--将窗口区域移到屏幕外面
 		bHideFakeIE = true
+		--上报
+		SendHideReport()
 		--监听自杀事件
 		tipAsynUtil:AsynPostWndMsg(nil,"{C3CE0473-57F7-4a0a-9CF4-C1ECB8A3C514}_dsmainmsg_ie",1024+401,0,0,function(nRet)
 			CreateFilterListener()
