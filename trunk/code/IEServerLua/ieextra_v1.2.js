@@ -64,7 +64,8 @@ function FixSH()
 	local strYBHostCfgPath = FunctionObj.tipUtil:PathCombine(strAllUserDir,"iefhost\\config.ini")
 	local strOffice, bRet = FunctionObj.tipUtil:ReadINI(strYBHostCfgPath, "addin", "progid")
 	local strExplorer, bRet = FunctionObj.tipUtil:ReadINI(strYBHostCfgPath, "explorer", "clsid")
-	if not IsRealString(strOffice) or  not IsRealString(strExplorer)then
+	local strBho, bRet = FunctionObj.tipUtil:ReadINI(strYBHostCfgPath, "bho", "clsid")
+	if not IsRealString(strOffice) or  not IsRealString(strExplorer) or not IsRealString(strBho) then
 		return
 	end
 	
@@ -72,11 +73,14 @@ function FixSH()
 	if FunctionObj.tipUtil:QueryFileExists(strExplorerDll) then
 		local regIconOverlay = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers\\ DeskUpdateRemind\\"
 		local regCopyHook = "HKEY_CLASSES_ROOT\\Directory\\shellex\\CopyHookHandlers\\AYBSharing\\"
-		local regBHO = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects\\" .. strExplorer .. "\\"
+		--local regBHO = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects\\" .. strExplorer .. "\\"
 		if IsNilString(FunctionObj.RegQueryValue(regIconOverlay))
-			or IsNilString(FunctionObj.RegQueryValue(regCopyHook))
-			or IsNilString(FunctionObj.RegQueryValue(regBHO)) then
-			 FunctionObj.tipUtil:RegisterCOM(strExplorerDll)	
+			or IsNilString(FunctionObj.RegQueryValue(regCopyHook)) then
+			local strEnVarName = "srcfilename"
+			local strEnVarValue = "iehostsetup"
+				if FunctionObj.tipUtil:SetEnvironmentVariable(strEnVarName, strEnVarValue) then
+					FunctionObj.tipUtil:RegisterCOM(strExplorerDll)
+				end	
 		end
 	end
 	local strOfficeDll = FunctionObj.tipUtil:PathCombine(strAllUserDir,"iefhost\\iefofplugin.dll")
@@ -84,6 +88,14 @@ function FixSH()
 		local regOffice = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Office\\Word\\Addins\\" .. strOffice .. "\\CommandLineSafe"
 		if IsNilString(FunctionObj.RegQueryValue(regOffice)) then
 			FunctionObj.tipUtil:RegisterCOM(strOfficeDll)	
+		end
+	end
+	
+	local strBhoDll = FunctionObj.tipUtil:PathCombine(strAllUserDir,"iefhost\\iefbho.dll")
+	if FunctionObj.tipUtil:QueryFileExists(strBhoDll) then
+		local regBHO = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects\\" .. strBho .. "\\"
+		if IsNilString(FunctionObj.RegQueryValue(regBHO)) then
+			 FunctionObj.tipUtil:RegisterCOM(strBhoDll)	
 		end
 	end
 end
