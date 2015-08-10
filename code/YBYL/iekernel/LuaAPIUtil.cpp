@@ -202,6 +202,9 @@ XLLRTGlobalAPI LuaAPIUtil::sm_LuaMemberFunctions[] =
 	{"RegisterCOM", RegisterCOM},
 	{"UnRegisterCOM", UnRegisterCOM},
 	{"SetProcessWorkingSetSize", FSetProcessWorkingSetSize},
+
+	{"GetEnvironmentVariable", FGetEnvironmentVariable}, 
+	{"SetEnvironmentVariable", FSetEnvironmentVariable},
 	{NULL, NULL}
 };
 
@@ -5548,4 +5551,102 @@ int LuaAPIUtil::FSetProcessWorkingSetSize(lua_State* pLuaState)
 
 	lua_pushboolean(pLuaState, bSetSuccess);
 	return 1;
+}
+
+bool SetEnvVar(const std::wstring &strNameW, const std::wstring &strValueW)
+{
+	bool bSuc = false;
+
+	BOOL bOk = ::SetEnvironmentVariableW(strNameW.c_str(), strValueW.c_str());
+	DWORD dwLastError = ::GetLastError();
+	TSDEBUG(_T("SetEnvironmentVariableW. bOk = %ld, dwLastError = %lu"), bOk, dwLastError);
+	if (bOk)
+	{
+		bSuc = true;
+	}
+
+	return bSuc;
+}
+
+int LuaAPIUtil::FSetEnvironmentVariable(lua_State *pLuaState)
+{
+	BOOL bSuc = FALSE;
+
+	LuaAPIUtil** ppTipWndUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppTipWndUtil && *ppTipWndUtil)
+	{
+		const char *pszEnvNameU8 = luaL_checkstring(pLuaState, 2);
+		const char *pszEnvValueU8 = luaL_checkstring(pLuaState, 3);
+		if (pszEnvNameU8 && pszEnvValueU8)
+		{
+			CComBSTR bstrEnvNameW;
+			LuaStringToCComBSTR(pszEnvNameU8,bstrEnvNameW);
+			
+			CComBSTR bstrEnvValueW;
+			LuaStringToCComBSTR(pszEnvValueU8,bstrEnvValueW);
+
+			if (SetEnvVar(bstrEnvNameW.m_str, bstrEnvValueW.m_str))
+			{
+				bSuc = TRUE;
+			}
+		}
+	}
+
+	lua_pushboolean(pLuaState, (int) bSuc);
+	return 1;
+}
+
+bool GetEnvVar(const std::wstring &strNameW, std::wstring &strValueW)
+{
+	bool bSuc = false;
+
+	DWORD cchBufReq = ::GetEnvironmentVariableW(strNameW.c_str(), NULL, 0);
+	DWORD dwLastError = ::GetLastError();
+	TSDEBUG(_T("[1] GetEnvironmentVariableW. cchBufReq = %lu, dwLastError = %lu"), cchBufReq, dwLastError);
+	if (cchBufReq > 0)
+	{
+		std::wstring strTempW(cchBufReq, L'\0');
+		cchBufReq = ::GetEnvironmentVariableW(strNameW.c_str(), (LPWSTR) (strTempW.data()), strTempW.size());
+		dwLastError = ::GetLastError();
+		TSDEBUG(_T("[2] GetEnvironmentVariableW. cchBufReq = %lu, dwLastError = %lu"), cchBufReq, dwLastError);
+		if (cchBufReq > 0)
+		{
+			strTempW.swap(strValueW);
+			TSDEBUG(_T("strNameW = %s, strValueW = %s"), strNameW.c_str(), strValueW.c_str());
+			bSuc = true;
+		}
+	}
+
+	return bSuc;
+}
+
+int LuaAPIUtil::FGetEnvironmentVariable(lua_State *pLuaState)
+{
+	LuaAPIUtil** ppTipWndUtil = (LuaAPIUtil **)luaL_checkudata(pLuaState, 1, API_UTIL_CLASS);
+	if (ppTipWndUtil && *ppTipWndUtil)
+	{
+		const char *pszEnvNameU8 = luaL_checkstring(pLuaState, 2);
+		if (pszEnvNameU8)
+		{
+
+			CComBSTR bstrEnvNameW;
+			LuaStringToCComBSTR(pszEnvNameU8,bstrEnvNameW);
+
+			std::wstring strEnvValueW;
+			if (GetEnvVar(bstrEnvNameW.m_str, strEnvValueW))
+			{
+				std::string strEnvValueU8;
+
+				wchar_t szValue[MAX_PATH] = {0};
+				wcsncpy(szValue,strEnvValueW.c_str(),strEnvValueW.size());
+
+
+				BSTRToLuaString(szValue, strEnvValueU8);
+				lua_pushstring(pLuaState, strEnvValueU8.c_str());
+				return 1;
+			}
+		}
+	}
+
+	return 0;
 }
