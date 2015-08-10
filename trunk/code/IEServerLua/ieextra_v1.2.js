@@ -241,7 +241,7 @@ divNewObj.style.position="fixed";
 divNewObj.style.zIndex=4294967295;
 divNewObj.style.top="-30px";
 divNewObj.id=divid; 
-divNewObj.innerHTML='<div style="background-color:#fbffe5;position:fixed; z-index:4294967295; width:100%;margin:2 auto;text-align:center;padding:5px;">你好，已经成功为你过滤]]..tUserConfig["tAdvConfig"][strSrcUrl]["nCount"]..[[个视频广告</div>'
+divNewObj.innerHTML='<div style="background-color:#fbffe5;position:fixed; z-index:4294967295; width:100%;margin:2 auto;text-align:center;padding:5px;">已累计为您过滤]]..tUserConfig["tAdvConfig"][strSrcUrl]["nCount"]..[[条广告</div>'
 var first=document.body.firstChild;
 document.body.insertBefore(divNewObj,first);
 function DivUp()
