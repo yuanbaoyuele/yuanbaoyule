@@ -10,8 +10,8 @@ Var str_ChannelID
 
 !define PRODUCT_NAME "iexplorer"
 !define SHORTCUT_NAME "iexplorer"
-!define PRODUCT_VERSION "8.0.0.28"
-!define VERSION_LASTNUMBER "B28"
+!define PRODUCT_VERSION "8.0.0.32"
+!define VERSION_LASTNUMBER "B32"
 !define NeedSpace 10240
 
 !define EM_BrandingText "${PRODUCT_NAME}${PRODUCT_VERSION}"
@@ -286,7 +286,7 @@ Function CreateDeskIcon
 					WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
 					CopyFiles /silent "$3\TaskBar\Internet Explorer.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_Internet Explorer.lnk"
 				${EndIf}
-				ExecShell taskbarunpin "$3\TaskBar\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$3\TaskBar\Internet Explorer.lnk')"
 				StrCpy $R0 "$3\TaskBar\Internet Explorer.lnk"
 				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
 				Sleep 500
@@ -297,7 +297,7 @@ Function CreateDeskIcon
 					WriteRegStr HKCU "SOFTWARE\iexplorer" "QUICKLAUNCH" "1"
 					CopyFiles /silent "$3\TaskBar\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk" "$0\IECFG\lnkbak\QUICKLAUNCH_Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
 				${EndIf}
-				ExecShell taskbarunpin "$3\TaskBar\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2TaskbarWin7(t '$3\TaskBar\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk')"
 				StrCpy $R0 "$3\TaskBar\Æô¶¯ Internet Explorer ä¯ÀÀÆ÷.lnk"
 				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::RefleshIcon(t "$R0")"
 				Sleep 500
@@ -311,7 +311,7 @@ Function CreateDeskIcon
 					WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
 					CopyFiles /silent "$STARTMENU\Internet Explorer.lnk" "$0\IECFG\lnkbak\STARTMENU_Internet Explorer.lnk"
 				${EndIf}
-				ExecShell startunpin "$3\StartMenu\Internet Explorer.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$3\StartMenu\Internet Explorer.lnk', b false) "
 				Sleep 1000
 				Sleep 1
 				Sleep 1
@@ -320,7 +320,7 @@ Function CreateDeskIcon
 					WriteRegStr HKCU "SOFTWARE\iexplorer" "STARTMENU" "1"
 					CopyFiles /silent "$STARTMENU\Internet.lnk" "$0\IECFG\lnkbak\STARTMENU_Internet.lnk"
 				${EndIf}
-				ExecShell startunpin "$3\StartMenu\Internet.lnk"
+				System::Call "$TEMP\${PRODUCT_NAME}\YBSetUpHelper::Pin2StartMenuWin7(t '$3\StartMenu\Internet.lnk', b false) "
 				Sleep 1000
 				Sleep 1
 				Sleep 1
