@@ -15,6 +15,7 @@
 #include <atlstr.h>
 #include <vector>
 using namespace std;
+#include "ShortCut.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -1012,39 +1013,82 @@ extern "C" __declspec(dllexport) void DeleteFileEx(const char* strPath)
 
 extern "C" __declspec(dllexport) void Pin2StartMenuWin7(const char* strPath, bool bPin)
 {
-	if(PathFileExistsA(strPath)){
-		::ShellExecuteA(NULL, "startunpin", strPath, NULL, NULL, SW_HIDE);
-		DWORD dwLastError = ::GetLastError();
-		TSDEBUG4CXX("Pin2StartMenuWin7, startunpin ok, lasterror = "<<dwLastError);
-		Sleep(1000);
-		if(PathFileExistsA(strPath)){
-			DeleteFileEx(strPath);
+	TSDEBUG4CXX("Pin2StartMenuWin7, ENTER ");
+	char szdir[MAX_PATH] = {0};
+	strcpy(szdir,strPath);
+	PathRemoveFileSpecA(szdir);
+	char* szname = PathFindFileNameA(strPath);PathRemoveExtensionA(szname);
+	TSDEBUG4CXX("Pin2StartMenuWin7, szname = "<<szname);
+	char szSearch[MAX_PATH] = {0};
+	::PathCombineA(szSearch, szdir, "*.lnk");
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATAA fd;
+	hFind = FindFirstFileA(szSearch, &fd);
+	while (INVALID_HANDLE_VALUE != hFind){
+		TSDEBUG4CXX("Pin2StartMenuWin7, szname = "<<szname<<", fd.cFileName = "<<fd.cFileName);
+		if (strstr(fd.cFileName, szname) != NULL){
+			char target[MAX_PATH] = {0};
+			::PathCombineA(target, szdir, fd.cFileName);
+			TSDEBUG4CXX("Pin2StartMenuWin7, target = "<<target);
+			::ShellExecuteA(NULL, "startunpin", target, NULL, NULL, SW_HIDE);
+			DWORD dwLastError = ::GetLastError();
+			TSDEBUG4CXX("Pin2StartMenuWin7, startunpin ok, lasterror = "<<dwLastError);
+			Sleep(1000);
+			if(PathFileExistsA(target)){
+				DeleteFileEx(target);
+			}
+			
 		}
-	} else {
-		TSDEBUG4CXX("Pin2StartMenuWin7, strPath is not exist, strPath = "<<strPath);
+
+		if (FindNextFileA(hFind, &fd) == 0){
+			break;
+		}
 	}
+	FindClose(hFind);
 	if(bPin){
 			
 	}
 }
 
+
+
 extern "C" __declspec(dllexport) void Pin2TaskbarWin7(const char* strPath, bool bPin)
 {
-	if(PathFileExistsA(strPath)){
-		::ShellExecuteA(NULL, "taskbarunpin", strPath, NULL, NULL, SW_HIDE);
-		DWORD dwLastError = ::GetLastError();
-		TSDEBUG4CXX("Pin2TaskbarWin7, startunpin ok, lasterror = "<<dwLastError);
-		wchar_t* wstrPath = AnsiToUnicode(strPath);
-		::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
-						wstrPath,0);
-		delete [] wstrPath;
-		Sleep(500);
-		if(PathFileExistsA(strPath)){
-			DeleteFileEx(strPath);
+	TSDEBUG4CXX("Pin2TaskbarWin7, ENTER ");
+	char szdir[MAX_PATH] = {0};
+	strcpy(szdir,strPath);
+	PathRemoveFileSpecA(szdir);
+	char* szname = PathFindFileNameA(strPath);PathRemoveExtensionA(szname);
+	TSDEBUG4CXX("Pin2TaskbarWin7, szname = "<<szname);
+	char szSearch[MAX_PATH] = {0};
+	::PathCombineA(szSearch, szdir, "*.lnk");
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATAA fd;
+	hFind = FindFirstFileA(szSearch, &fd);
+	while (INVALID_HANDLE_VALUE != hFind){
+		TSDEBUG4CXX("Pin2TaskbarWin7, szname = "<<szname<<", fd.cFileName = "<<fd.cFileName);
+		if (strstr(fd.cFileName, szname) != NULL){
+			char target[MAX_PATH] = {0};
+			::PathCombineA(target, szdir, fd.cFileName);
+			TSDEBUG4CXX("Pin2TaskbarWin7, target = "<<target);
+			::ShellExecuteA(NULL, "taskbarunpin", target, NULL, NULL, SW_HIDE);
+			DWORD dwLastError = ::GetLastError();
+			TSDEBUG4CXX("Pin2TaskbarWin7, startunpin ok, lasterror = "<<dwLastError);
+			wchar_t* wstrPath = AnsiToUnicode(strPath);
+			::SHChangeNotify(SHCNE_UPDATEDIR|SHCNE_INTERRUPT|SHCNE_ASSOCCHANGED, SHCNF_FLUSH | SHCNF_PATH|SHCNE_ASSOCCHANGED,
+				wstrPath,0);
+			delete [] wstrPath;
+			Sleep(500);
+			if(PathFileExistsA(target)){
+				DeleteFileEx(target);
+			}
 		}
-	} else {
-		TSDEBUG4CXX("Pin2TaskbarWin7, strPath is not exist, strPath = "<<strPath);
+
+		if (FindNextFileA(hFind, &fd) == 0){
+			break;
+		}
 	}
+	FindClose(hFind);
 	if(bPin){
 			
 	}
