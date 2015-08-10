@@ -21,14 +21,15 @@ function OnCreate( self )
 	objRootCtrl:SetObjPos(0, 0, nSelfR-nSelfL, nSelfB-nSelfT)
 	
 	objMainWnd:AttachListener("OnSize", true, function( self, _type, width, height)	
-	
-		local HeadL, HeadT, HeadR, HeadB = objMainPanelHead:GetAbsPos()
-	
-		local mainleft, maintop, mainright, mainbottom = objMainWnd:GetWindowRect()
-		objSelfWnd:SetTopMost(false)
-		objSelfWnd:SetMaxTrackSize(width+100, 120)
-		objSelfWnd:Move( mainleft+HeadL, maintop+HeadT, width-21*2, 120)
-		objRootCtrl:SetObjPos(0, 0, width-21*2, 120)
+		AsynCall(function()
+			local HeadL, HeadT, HeadR, HeadB = objMainPanelHead:GetAbsPos()
+		
+			local mainleft, maintop, mainright, mainbottom = objMainWnd:GetWindowRect()
+			objSelfWnd:SetTopMost(false)
+			objSelfWnd:SetMaxTrackSize(width+100, 120)
+			objSelfWnd:Move( mainleft+HeadL, maintop+HeadT, width-21*2, 120)
+			objRootCtrl:SetObjPos(0, 0, width-21*2, 120)
+		end)
 	end)	
 end
 
