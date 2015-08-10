@@ -329,6 +329,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShortCut.h"
+				>
+			</File>
+			<File
 				RelativePath=".\StringUtil.h"
 				>
 			</File>

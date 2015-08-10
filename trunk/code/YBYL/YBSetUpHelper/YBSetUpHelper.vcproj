@@ -237,6 +237,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShortCut.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
